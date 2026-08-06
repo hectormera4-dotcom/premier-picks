@@ -1,0 +1,36 @@
+name: Actualizar picks diariamente
+
+on:
+  schedule:
+    # Corre todos los dias a las 12:00 UTC (ajusta segun tu zona horaria si quieres otra hora)
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+    # Esto permite correrlo manualmente desde GitHub cuando quieras, ademas del horario automatico
+
+jobs:
+  actualizar-picks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Correr el script de actualizacion
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+        run: python actualizar_y_predecir.py
+
+      - name: Guardar los cambios de vuelta en el repositorio
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add premier_league_combinado.csv picks_del_dia.csv
+          git diff --staged --quiet || git commit -m "Actualizacion automatica de picks"
+          git push

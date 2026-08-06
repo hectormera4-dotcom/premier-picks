@@ -15,7 +15,7 @@ from scipy.stats import poisson
 from datetime import datetime, timedelta
 import os
 
-API_TOKEN = "98cececafb38425e9ace0546b73ffcff"
+API_TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "TU_TOKEN_AQUI")
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
