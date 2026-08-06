@@ -293,6 +293,88 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65):
     cuota = 1 / prob if prob > 0 else None
     return nombres_pick, prob, cuota, cumple_umbral
 
+ARCHIVO_HISTORIAL_PICKS = "historial_picks.csv"
+
+# ---------- Track record: registrar y verificar picks ----------
+
+def cargar_historial_picks():
+    if os.path.exists(ARCHIVO_HISTORIAL_PICKS):
+        h = pd.read_csv(ARCHIVO_HISTORIAL_PICKS)
+        h["fecha_partido"] = pd.to_datetime(h["fecha_partido"])
+        # Forzamos estas columnas a tipo "objeto" (texto) para evitar errores
+        # cuando pandas las infiere como numericas por estar vacias (NaN)
+        h["resultado_real"] = h["resultado_real"].astype(object)
+        h["acierto"] = h["acierto"].astype(object)
+        return h
+    return pd.DataFrame(columns=[
+        "fecha_partido", "local", "visitante", "pick_recomendado", "es_combo",
+        "pick_probabilidad", "pick_cuota_aprox", "fecha_generado",
+        "resultado_real", "acierto"
+    ])
+
+def registrar_picks_nuevos(picks_actuales, historial):
+    """Agrega a historial los partidos que todavia no estaban registrados
+    (asi el pick queda 'congelado' la primera vez que se genero, sin
+    sobreescribirse cada dia con nueva informacion)."""
+    nuevos = []
+    for _, pick in picks_actuales.iterrows():
+        ya_existe = ((historial["fecha_partido"] == pick["fecha"]) &
+                     (historial["local"] == pick["local"]) &
+                     (historial["visitante"] == pick["visitante"])).any()
+        if ya_existe:
+            continue
+        nuevos.append({
+            "fecha_partido": pick["fecha"], "local": pick["local"], "visitante": pick["visitante"],
+            "pick_recomendado": pick["pick_recomendado"], "es_combo": pick["es_combo"],
+            "pick_probabilidad": pick["pick_probabilidad"], "pick_cuota_aprox": pick["pick_cuota_aprox"],
+            "fecha_generado": datetime.utcnow().strftime("%Y-%m-%d"),
+            "resultado_real": None, "acierto": None,
+        })
+    if nuevos:
+        historial = pd.concat([historial, pd.DataFrame(nuevos)], ignore_index=True)
+        print(f"Se registraron {len(nuevos)} picks nuevos en el historial.")
+    return historial
+
+def verificar_picks_resueltos(historial, historico_partidos):
+    """Revisa los picks pendientes (sin resultado) y, si el partido ya se jugo
+    (aparece en el historico con resultado), calcula si el pick acerto o no."""
+    pendientes = historial[historial["acierto"].isna()]
+    resueltos_ahora = 0
+
+    for idx, pick in pendientes.iterrows():
+        match = historico_partidos[
+            (historico_partidos["Date"] == pick["fecha_partido"]) &
+            (historico_partidos["HomeTeam"] == pick["local"]) &
+            (historico_partidos["AwayTeam"] == pick["visitante"])
+        ]
+        if match.empty:
+            continue  # el partido todavia no se ha jugado
+
+        gh = int(match.iloc[0]["FTHG"])
+        ga = int(match.iloc[0]["FTAG"])
+        condiciones_pick = pick["pick_recomendado"].split(" + ")
+
+        acierto = all(CONDICIONES[c](gh, ga) for c in condiciones_pick)
+
+        historial.at[idx, "resultado_real"] = f"{gh}-{ga}"
+        historial.at[idx, "acierto"] = acierto
+        resueltos_ahora += 1
+
+    if resueltos_ahora:
+        print(f"Se verificaron {resueltos_ahora} picks que ya se jugaron.")
+    return historial
+
+def resumen_track_record(historial):
+    resueltos = historial[historial["acierto"].notna()]
+    if len(resueltos) == 0:
+        print("Todavia no hay picks resueltos (ningun partido registrado se ha jugado aun).")
+        return
+    aciertos = resueltos["acierto"].astype(bool).sum()
+    total = len(resueltos)
+    print(f"\n=== TRACK RECORD ===")
+    print(f"Picks resueltos: {total}")
+    print(f"Aciertos: {aciertos} ({aciertos/total*100:.1f}%)")
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=20, umbral_seguro=0.65):
@@ -357,5 +439,16 @@ if __name__ == "__main__":
             print("=== PICKS RECOMENDADOS (mercado mas seguro por partido) ===")
             print(picks[["fecha", "local", "visitante", "pick_recomendado", "es_combo",
                           "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro"]].to_string(index=False))
+
+            print("\nActualizando el registro de historial (track record)...")
+            historial = cargar_historial_picks()
+            historial = registrar_picks_nuevos(picks, historial)
+            historial = verificar_picks_resueltos(historial, historico)
+
+            historial_a_guardar = historial.copy()
+            historial_a_guardar["fecha_partido"] = pd.to_datetime(historial_a_guardar["fecha_partido"]).dt.strftime("%Y-%m-%d %H:%M:%S")
+            historial_a_guardar.to_csv(ARCHIVO_HISTORIAL_PICKS, index=False)
+
+            resumen_track_record(historial)
         else:
             print("No hay partidos programados en los proximos dias.")
