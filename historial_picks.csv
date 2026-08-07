@@ -1,0 +1,11 @@
+fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_cuota_aprox,fecha_generado,resultado_real,acierto
+2026-08-21 19:00:00,Arsenal,Coventry,Local gana + Over 2.5 goles,True,72.7,1.37,2026-08-06,,
+2026-08-22 11:30:00,Hull,Man United,Visitante gana,False,70.2,1.43,2026-08-06,,
+2026-08-22 14:00:00,Ipswich,Sunderland,Over 1.5 goles,False,73.0,1.37,2026-08-06,,
+2026-08-22 14:00:00,Nott'm Forest,Leeds,Over 1.5 goles,False,70.2,1.43,2026-08-06,,
+2026-08-22 14:00:00,Everton,Crystal Palace,Doble oportunidad 1X,False,67.2,1.49,2026-08-06,,
+2026-08-22 16:30:00,Brentford,Tottenham,Over 2.5 goles,False,67.6,1.48,2026-08-06,,
+2026-08-23 13:00:00,Man City,Bournemouth,Ambos anotan - Si,False,66.0,1.51,2026-08-06,,
+2026-08-23 13:00:00,Brighton,Aston Villa,Doble oportunidad 1X,False,72.8,1.37,2026-08-06,,
+2026-08-23 15:30:00,Newcastle,Liverpool,Doble oportunidad 1X,False,67.1,1.49,2026-08-06,,
+2026-08-24 19:00:00,Fulham,Chelsea,Ambos anotan - Si,False,65.6,1.53,2026-08-06,,
