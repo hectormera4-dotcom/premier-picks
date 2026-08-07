@@ -375,9 +375,129 @@ def resumen_track_record(historial):
     print(f"Picks resueltos: {total}")
     print(f"Aciertos: {aciertos} ({aciertos/total*100:.1f}%)")
 
+def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.60, max_combinadas=3, max_partidos_por_combinada=5):
+    """
+    Genera varias combinadas SIN repetir partidos entre ellas. Apunta a
+    cuota_objetivo (1.70 por defecto); si un dia no hay suficientes picks
+    seguros para llegar ahi, acepta hasta cuota_minima (1.60) antes de
+    avisar que ese dia el mercado esta mas parejo de lo normal.
+    """
+    seguros = picks_df[picks_df["pick_es_seguro"] == True].copy()
+    seguros = seguros.sort_values("pick_probabilidad", ascending=False).reset_index(drop=True)
+
+    disponibles = seguros.copy()
+    combinadas = []
+
+    for n in range(max_combinadas):
+        if len(disponibles) < 2:
+            break
+
+        prob_acumulada = 1.0
+        elegidos = []
+        indices_usados = []
+
+        for idx, partido in disponibles.iterrows():
+            prob_acumulada *= partido["pick_probabilidad"] / 100
+            elegidos.append(partido)
+            indices_usados.append(idx)
+            cuota_actual = 1 / prob_acumulada
+            if cuota_actual >= cuota_objetivo or len(elegidos) >= max_partidos_por_combinada:
+                break
+
+        if len(elegidos) < 2:
+            break  # no alcanzo para armar una combinada completa
+
+        elegidos_df = pd.DataFrame(elegidos)
+        combinadas.append({
+            "nombre": f"Combinada #{n+1}",
+            "es_gratis": (n == 0),  # la primera combinada generada es la gratuita
+            "partidos": elegidos_df[["local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
+            "probabilidad_combinada": round(prob_acumulada*100, 1),
+            "cuota_combinada": round(1/prob_acumulada, 2),
+        })
+
+        # Quitamos esos partidos del pool para que la siguiente combinada use otros
+        disponibles = disponibles.drop(indices_usados)
+
+    print(f"\n=== {len(combinadas)} COMBINADAS GENERADAS ===")
+    for c in combinadas:
+        nombres = ", ".join(f"{p['local']} vs {p['visitante']}" for p in c["partidos"])
+        etiqueta = "GRATIS" if c["es_gratis"] else "VIP"
+        aviso = "" if c["cuota_combinada"] >= cuota_minima else "  <-- POR DEBAJO DEL PISO MINIMO"
+        print(f"{c['nombre']} [{etiqueta}]: {nombres} -> cuota {c['cuota_combinada']}{aviso}")
+
+    return combinadas
+    """
+    Arma una combinada agregando partidos SEGUROS uno por uno, empezando
+    por los mas seguros (mayor probabilidad individual), hasta alcanzar
+    la cuota objetivo. Asi se usan el menor numero de partidos posible
+    (y los mas seguros disponibles) para llegar al nivel de riesgo deseado,
+    en vez de maximizar la cuota sin control.
+    """
+    seguros = picks_df[picks_df["pick_es_seguro"] == True].copy()
+    if len(seguros) < 2:
+        print("No hay suficientes picks seguros hoy para armar una combinada.")
+        return None
+
+    # Empezamos por los mas seguros (mayor probabilidad individual) y vamos
+    # agregando de a uno hasta alcanzar la cuota objetivo
+    seguros = seguros.sort_values("pick_probabilidad", ascending=False).reset_index(drop=True)
+
+    prob_acumulada = 1.0
+    elegidos = []
+    for _, partido in seguros.iterrows():
+        prob_acumulada *= partido["pick_probabilidad"] / 100
+        elegidos.append(partido)
+        cuota_actual = 1 / prob_acumulada
+        if cuota_actual >= cuota_objetivo or len(elegidos) >= max_partidos:
+            break
+
+    elegidos_df = pd.DataFrame(elegidos)
+    cuota_final = 1 / prob_acumulada
+
+    print(f"\n=== COMBINADA DEL DIA ({len(elegidos_df)} partidos, objetivo {cuota_objetivo}) ===")
+    for _, p in elegidos_df.iterrows():
+        print(f"  {p['local']} vs {p['visitante']}: {p['pick_recomendado']} ({p['pick_probabilidad']}%)")
+    print(f"Probabilidad combinada: {prob_acumulada*100:.1f}%")
+    print(f"Cuota combinada aproximada: {cuota_final:.2f}")
+
+    if cuota_final < cuota_objetivo:
+        print(f"Aviso: no hay suficientes picks seguros hoy para alcanzar la cuota objetivo ({cuota_objetivo}).")
+
+    return {
+        "partidos": elegidos_df[["local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
+        "probabilidad_combinada": round(prob_acumulada*100, 1),
+        "cuota_combinada": round(cuota_final, 2),
+    }
+
+def calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80, ventana=10):
+    """
+    Revisa los ultimos picks resueltos (aprox. 1 fecha completa, ~10 partidos).
+    Si la tasa de acierto reciente esta por debajo del 50%, sube el umbral
+    de seguridad a umbral_alto como medida de precaucion real para la
+    siguiente fecha. Esto NO es "esforzarse mas" ni reaccionar por panico --
+    es simplemente exigir mayor probabilidad individual antes de recomendar
+    un pick, que es la unica palanca honesta que existe.
+    """
+    resueltos = historial[historial["acierto"].notna()].sort_values("fecha_partido")
+    if len(resueltos) < ventana:
+        print(f"Historial insuficiente para evaluar racha reciente (se necesitan {ventana} picks resueltos). Usando umbral base {umbral_base*100:.0f}%.")
+        return umbral_base
+
+    ultimos = resueltos.tail(ventana)
+    tasa_acierto = ultimos["acierto"].astype(bool).mean()
+
+    if tasa_acierto < 0.5:
+        print(f"Aviso: tasa de acierto de los ultimos {ventana} picks fue {tasa_acierto*100:.1f}% "
+              f"(por debajo del 50%). Subiendo umbral de seguridad a {umbral_alto*100:.0f}% como precaucion.")
+        return umbral_alto
+
+    print(f"Tasa de acierto de los ultimos {ventana} picks: {tasa_acierto*100:.1f}%. Umbral se mantiene en {umbral_base*100:.0f}%.")
+    return umbral_base
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
-def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=20, umbral_seguro=0.65):
+def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=20, umbral_seguro=0.75):
     ahora = datetime.utcnow()
     limite = ahora + timedelta(days=dias_adelante)
 
@@ -430,8 +550,14 @@ if __name__ == "__main__":
         rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
         print(f"Rho: {rho:.3f}")
 
-        print("Generando picks de los proximos 10 dias...")
-        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho)
+        print("Actualizando el registro de historial (track record)...")
+        historial = cargar_historial_picks()
+        historial = verificar_picks_resueltos(historial, historico)
+
+        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80)
+
+        print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
+        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico)
 
         if len(picks) > 0:
             picks.to_csv(ARCHIVO_PICKS, index=False)
@@ -440,15 +566,14 @@ if __name__ == "__main__":
             print(picks[["fecha", "local", "visitante", "pick_recomendado", "es_combo",
                           "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro"]].to_string(index=False))
 
-            print("\nActualizando el registro de historial (track record)...")
-            historial = cargar_historial_picks()
             historial = registrar_picks_nuevos(picks, historial)
-            historial = verificar_picks_resueltos(historial, historico)
 
             historial_a_guardar = historial.copy()
             historial_a_guardar["fecha_partido"] = pd.to_datetime(historial_a_guardar["fecha_partido"]).dt.strftime("%Y-%m-%d %H:%M:%S")
             historial_a_guardar.to_csv(ARCHIVO_HISTORIAL_PICKS, index=False)
 
             resumen_track_record(historial)
+
+            calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3)
         else:
             print("No hay partidos programados en los proximos dias.")
