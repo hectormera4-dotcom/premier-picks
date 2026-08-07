@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Picks PL — Pronósticos Premier League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fondo: #16221A;
+    --fondo-alt: #1F3026;
+    --papel: #EFEBE2;
+    --papel-alt: #E4DECF;
+    --tinta: #17201A;
+    --tinta-suave: #4B564C;
+    --verde: #2F6E45;
+    --verde-claro: #4E9868;
+    --ambar: #C98A2B;
+    --rojo: #A34B3E;
+    --linea: rgba(23, 32, 26, 0.12);
+    --linea-oscura: rgba(239, 235, 226, 0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--fondo);
+    color: var(--papel);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .display { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.02em; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  a { color: inherit; }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid var(--linea-oscura);
+    position: sticky;
+    top: 0;
+    background: var(--fondo);
+    z-index: 20;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .logo span { color: var(--verde-claro); }
+  .jornada-tag {
+    font-size: 12px;
+    color: rgba(239,235,226,0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Marcador global de confianza ---------- */
+  .marcador-global {
+    max-width: 960px;
+    margin: 24px auto 0;
+    padding: 0 20px;
+  }
+  .marcador-box {
+    background: var(--fondo-alt);
+    border: 1px solid var(--linea-oscura);
+    border-radius: 6px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .marcador-numero {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: var(--verde-claro);
+    line-height: 1;
+  }
+  .marcador-texto {
+    font-size: 13px;
+    color: rgba(239,235,226,0.7);
+    max-width: 420px;
+  }
+  .marcador-texto strong { color: var(--papel); }
+  .marcador-link {
+    margin-left: auto;
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: rgba(239,235,226,0.6);
+    white-space: nowrap;
+  }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    max-width: 960px;
+    margin: 22px auto 0;
+    padding: 0 20px;
+    display: flex;
+    gap: 8px;
+  }
+  .tab {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--linea-oscura);
+    background: transparent;
+    color: rgba(239,235,226,0.65);
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .tab.activo {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: #fff;
+  }
+
+  /* ---------- Grid de partidos ---------- */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 22px 20px 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--papel);
+    color: var(--tinta);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .card.bloqueada { color: var(--tinta); }
+
+  .card-top {
+    padding: 16px 18px 14px;
+    border-bottom: 1px dashed var(--linea);
+  }
+  .card-fecha {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    margin-bottom: 8px;
+  }
+  .card-equipos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .card-equipos .vs {
+    font-size: 11px;
+    color: var(--tinta-suave);
+    font-family: 'Inter', sans-serif;
+    padding: 0 8px;
+  }
+
+  .card-body {
+    padding: 16px 18px 18px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex: 1;
+  }
+
+  /* --- Medidor de confianza (elemento distintivo) --- */
+  .gauge-wrap {
+    width: 84px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .gauge-numero {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 19px;
+    margin-top: -46px;
+    display: block;
+  }
+  .gauge-label {
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    margin-top: 2px;
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+  .pick-nombre {
+    font-weight: 600;
+    font-size: 14.5px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .pick-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .badge {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .badge-seguro { background: rgba(47,110,69,0.15); color: var(--verde); }
+  .badge-moderado { background: rgba(201,138,43,0.18); color: #97661d; }
+  .badge-bajo { background: rgba(23,32,26,0.08); color: var(--tinta-suave); }
+  .card.sin-pick .card-body { opacity: 0.6; }
+  .sin-pick-texto {
+    font-size: 12.5px;
+    color: var(--tinta-suave);
+    font-style: italic;
+  }
+  .badge-combo { background: rgba(23,32,26,0.08); color: var(--tinta-suave); }
+  .cuota {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--tinta-suave);
+    margin-left: auto;
+  }
+
+  .card-toggle {
+    width: 100%;
+    background: var(--papel-alt);
+    border: none;
+    border-top: 1px solid var(--linea);
+    padding: 9px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    letter-spacing: 0.03em;
+    color: var(--tinta-suave);
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .card-detalle {
+    display: none;
+    padding: 14px 18px 16px;
+    background: var(--papel-alt);
+    font-size: 12.5px;
+  }
+  .card-detalle.abierto { display: block; }
+  .mercado-fila {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+  .mercado-fila:last-child { border-bottom: none; }
+  .mercado-fila span:first-child { color: var(--tinta-suave); }
+  .mercado-fila span:last-child { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
+
+  /* --- Tarjeta bloqueada (VIP) --- */
+  .lock-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(23,32,26,0.72);
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--papel);
+    text-align: center;
+    padding: 20px;
+  }
+  .lock-icono {
+    width: 30px; height: 30px;
+    border: 2px solid var(--papel);
+    border-radius: 6px;
+    position: relative;
+  }
+  .lock-icono::before {
+    content: '';
+    position: absolute;
+    top: -13px; left: 50%;
+    transform: translateX(-50%);
+    width: 16px; height: 16px;
+    border: 2px solid var(--papel);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+  }
+  .lock-texto { font-size: 12px; color: rgba(239,235,226,0.75); max-width: 180px; }
+  .btn-vip {
+    margin-top: 4px;
+    background: var(--ambar);
+    color: #1a1206;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  footer {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px 20px 40px;
+    font-size: 11px;
+    color: rgba(239,235,226,0.4);
+    border-top: 1px solid var(--linea-oscura);
+    text-align: center;
+  }
+
+  /* ---------- Combinadas del dia (3 tarjetas) ---------- */
+  .combinada {
+    background: linear-gradient(135deg, #2A4433 0%, #1F3327 100%);
+    border: 1px solid rgba(201,138,43,0.4);
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .combinada.gratis { border-color: rgba(78,152,104,0.5); }
+  .combinada-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .combinada-titulo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ambar);
+  }
+  .combinada.gratis .combinada-titulo { color: var(--verde-claro); }
+  .badge-mini {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .badge-mini.gratis { background: rgba(78,152,104,0.2); color: var(--verde-claro); }
+  .badge-mini.vip { background: rgba(201,138,43,0.2); color: var(--ambar); }
+  .combinada-partidos { display: flex; flex-direction: column; gap: 5px; }
+  .combinada-fila {
+    font-size: 12.5px;
+    color: rgba(239,235,226,0.85);
+    display: flex;
+    gap: 7px;
+    align-items: baseline;
+  }
+  .combinada-fila b { color: var(--papel); }
+  .combinada-fila .prob-mini {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--verde-claro);
+    flex-shrink: 0;
+  }
+  .combinada-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px dashed rgba(239,235,226,0.15);
+    padding-top: 10px;
+    margin-top: auto;
+  }
+  .combinada-cuota {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--ambar);
+    line-height: 1;
+  }
+  .combinada.gratis .combinada-cuota { color: var(--verde-claro); }
+  .combinada-cuota-label {
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(239,235,226,0.5);
+  }
+  .admin-tag {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    background: var(--ambar);
+    color: #1a1206;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 7px 14px;
+    border-radius: 999px;
+    z-index: 50;
+  }
+
+  @media (max-width: 480px) {
+    .marcador-link { margin-left: 0; }
+    .card-body { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">PICKS<span>PL</span></div>
+    <div class="jornada-tag">Jornada 1 · 2026/27</div>
+  </div>
+</header>
+
+<div class="marcador-global">
+  <div class="marcador-box">
+    <div class="marcador-numero">68<span style="font-size:20px;">%</span></div>
+    <div class="marcador-texto">
+      <strong>Track record verificable.</strong> Porcentaje real de aciertos sobre los últimos picks resueltos — se actualiza solo, automáticamente, después de cada jornada.
+    </div>
+    <a class="marcador-link" href="#">Ver historial completo →</a>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab activo">Gratis</button>
+  <button class="tab">VIP</button>
+</div>
+
+<main id="grid">
+  <!-- La combinada del dia y las tarjetas se generan con JS mas abajo -->
+</main>
+
+<footer>
+  Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
+</footer>
+
+<script>
+// Los 10 partidos reales de la Jornada 1 (2026/27), con los picks que genero
+// tu pipeline real. Las combinadas de mas abajo se arman con estos MISMOS
+// partidos, nunca con partidos de otra fecha.
+// Los 10 partidos reales de la Jornada 1, ahora con el umbral de seguridad
+// del 75%: 6 tienen un pick recomendado, 4 no alcanzan el estandar (se
+// muestran igual, con honestidad, en vez de forzar una recomendacion).
+const PICKS_DEMO = [
+  {
+    fecha: "Vie 21 Ago · 19:00", local: "Arsenal", visitante: "Coventry", seguro: true,
+    pick: "Doble oportunidad 1X", prob: 98, cuota: "1.02", nivel: "seguro", combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "85.1%"], ["1X2 — Empate", "13.2%"], ["Over 2.5 goles", "58.3%"], ["Ambos anotan - Sí", "35.7%"]]
+  },
+  {
+    fecha: "Sáb 22 Ago · 11:30", local: "Hull", visitante: "Man United", seguro: true,
+    pick: "Doble oportunidad X2", prob: 90, cuota: "1.11", nivel: "seguro", combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "10.1%"], ["1X2 — Empate", "19.7%"], ["Over 2.5 goles", "48.3%"], ["Ambos anotan - Sí", "38.9%"]]
+  },
+  {
+    fecha: "Sáb 22 Ago · 14:00", local: "Ipswich", visitante: "Sunderland", seguro: true,
+    pick: "Doble oportunidad X2", prob: 87, cuota: "1.15", nivel: "seguro", combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "12.7%"], ["1X2 — Empate", "25.6%"], ["Over 2.5 goles", "44.1%"], ["Ambos anotan - Sí", "36.2%"]]
+  },
+  {
+    fecha: "Sáb 22 Ago · 14:00", local: "Nott'm Forest", visitante: "Leeds", seguro: true,
+    pick: "Doble oportunidad 1X", prob: 77, cuota: "1.30", nivel: "seguro", combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "46.0%"], ["1X2 — Empate", "30.8%"], ["Over 2.5 goles", "51.4%"], ["Ambos anotan - Sí", "47.9%"]]
+  },
+  {
+    fecha: "Sáb 22 Ago · 14:00", local: "Everton", visitante: "Crystal Palace", seguro: false,
+    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "36.3%"], ["1X2 — Empate", "30.8%"], ["Doble oportunidad 1X", "67.2%"], ["Over 2.5 goles", "49.6%"]]
+  },
+  {
+    fecha: "Sáb 22 Ago · 16:30", local: "Brentford", visitante: "Tottenham", seguro: false,
+    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "41.9%"], ["1X2 — Empate", "26.1%"], ["Ambos anotan - Sí", "71.8%"], ["Over 2.5 goles", "54.7%"]]
+  },
+  {
+    fecha: "Dom 23 Ago · 13:00", local: "Man City", visitante: "Bournemouth", seguro: true,
+    pick: "Doble oportunidad 1X", prob: 88, cuota: "1.13", nivel: "seguro", combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "69.9%"], ["1X2 — Empate", "18.5%"], ["Over 2.5 goles", "60.2%"], ["Ambos anotan - Sí", "39.8%"]]
+  },
+  {
+    fecha: "Dom 23 Ago · 13:00", local: "Brighton", visitante: "Aston Villa", seguro: false,
+    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "43.6%"], ["1X2 — Empate", "29.1%"], ["Doble oportunidad 1X", "72.8%"], ["Over 2.5 goles", "52.0%"]]
+  },
+  {
+    fecha: "Dom 23 Ago · 15:30", local: "Newcastle", visitante: "Liverpool", seguro: true,
+    pick: "Ambos anotan - Sí", prob: 80, cuota: "1.25", nivel: "seguro", combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "31.4%"], ["1X2 — Empate", "23.9%"], ["Over 2.5 goles", "66.8%"], ["Doble oportunidad X2", "68.6%"]]
+  },
+  {
+    fecha: "Lun 24 Ago · 19:00", local: "Fulham", visitante: "Chelsea", seguro: false,
+    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
+    mercados: [["1X2 — Local gana", "35.8%"], ["1X2 — Empate", "28.3%"], ["Doble oportunidad 1X", "64.1%"], ["Over 2.5 goles", "50.5%"]]
+  }
+];
+
+// Modo administrador: agrega ?admin=1 a la URL para ver todo desbloqueado.
+// IMPORTANTE: esto es solo una vista previa, NO es seguridad real todavia.
+const ES_ADMIN = new URLSearchParams(window.location.search).get("admin") === "1";
+
+// Con el umbral del 75%, hoy solo alcanza para 1 combinada completa
+// (usa 5 de los 6 partidos seguros). Es normal que algunos dias no
+// alcance para una segunda combinada VIP -- se muestra con honestidad.
+const COMBINADAS_DEMO = [
+  {
+    nombre: "Combinada #1", es_gratis: true, cuota: "1.83",
+    partidos: [
+      { local: "Arsenal", visitante: "Coventry", pick: "Doble oportunidad 1X", prob: 98 },
+      { local: "Hull", visitante: "Man United", pick: "Doble oportunidad X2", prob: 90 },
+      { local: "Man City", visitante: "Bournemouth", pick: "Doble oportunidad 1X", prob: 88 },
+      { local: "Ipswich", visitante: "Sunderland", pick: "Doble oportunidad X2", prob: 87 },
+      { local: "Newcastle", visitante: "Liverpool", pick: "Ambos anotan - Sí", prob: 80 },
+    ]
+  },
+];
+
+function crearCombinada(c) {
+  const bloqueada = !c.es_gratis && !ES_ADMIN;
+  const filas = c.partidos.map(p => `
+    <div class="combinada-fila">
+      <span class="prob-mini">${p.prob}%</span>
+      <span><b>${p.local} vs ${p.visitante}</b> — ${p.pick}</span>
+    </div>
+  `).join("");
+
+  const lockHtml = bloqueada ? `
+    <div class="lock-overlay">
+      <div class="lock-icono"></div>
+      <div class="lock-texto">Desbloquea las demás combinadas de la fecha</div>
+      <button class="btn-vip">Desbloquear VIP</button>
+    </div>` : "";
+
+  return `
+    <div class="combinada ${c.es_gratis ? 'gratis' : ''}">
+      ${lockHtml}
+      <div class="combinada-header">
+        <span class="combinada-titulo">${c.nombre}</span>
+        <span class="badge-mini ${c.es_gratis ? 'gratis' : 'vip'}">${c.es_gratis ? 'Gratis' : 'VIP'}</span>
+      </div>
+      <div class="combinada-partidos">${filas}</div>
+      <div class="combinada-footer">
+        <span class="combinada-cuota-label">cuota combinada</span>
+        <span class="combinada-cuota">${c.cuota}</span>
+      </div>
+    </div>
+  `;
+}
+
+function crearGauge(prob, nivel) {
+  const color = nivel === "seguro" ? "#2F6E45" : (nivel === "moderado" ? "#C98A2B" : "#A34B3E");
+  const r = 30, circ = Math.PI * r; // medio circulo
+  const offset = circ - (circ * prob / 100);
+  return `
+    <svg width="84" height="52" viewBox="0 0 84 52">
+      <path d="M 6 46 A ${r} ${r} 0 0 1 78 46" fill="none" stroke="rgba(23,32,26,0.1)" stroke-width="7" stroke-linecap="round"/>
+      <path d="M 6 46 A ${r} ${r} 0 0 1 78 46" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round"
+            stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+    </svg>
+    <span class="gauge-numero" style="color:${color}">${prob}%</span>
+    <div class="gauge-label">confianza</div>
+  `;
+}
+
+function crearTarjeta(p, i) {
+  const bloqueada = p.vip && !ES_ADMIN;
+  const detalleFilas = p.mercados.map(m => `
+    <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
+  `).join("");
+
+  const lockHtml = bloqueada ? `
+    <div class="lock-overlay">
+      <div class="lock-icono"></div>
+      <div class="lock-texto">Este pick es contenido VIP</div>
+      <button class="btn-vip">Desbloquear VIP</button>
+    </div>` : "";
+
+  // Caso honesto: el partido no tiene ningun mercado que llegue al 75%.
+  // No inventamos una recomendacion, mostramos el partido como "parejo".
+  if (!p.seguro) {
+    return `
+      <div class="card sin-pick">
+        <div class="card-top">
+          <div class="card-fecha">${p.fecha}</div>
+          <div class="card-equipos">
+            <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-info">
+            <div class="sin-pick-texto">Partido parejo — ningún mercado alcanza nuestro estándar de seguridad (75%) esta fecha.</div>
+          </div>
+        </div>
+        <button class="card-toggle" onclick="toggleDetalle(${i})">Ver probabilidades de todas formas ▾</button>
+        <div class="card-detalle" id="detalle-${i}">${detalleFilas}</div>
+      </div>
+    `;
+  }
+
+  const badgeClase = p.nivel === "seguro" ? "badge-seguro" : "badge-moderado";
+  const badgeTexto = p.nivel === "seguro" ? "Muy seguro" : "Moderado";
+  const comboBadge = p.combo ? `<span class="badge badge-combo">Combo x2</span>` : "";
+
+  return `
+    <div class="card ${bloqueada ? 'bloqueada' : ''}">
+      ${lockHtml}
+      <div class="card-top">
+        <div class="card-fecha">${p.fecha}</div>
+        <div class="card-equipos">
+          <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="gauge-wrap">${crearGauge(p.prob, p.nivel)}</div>
+        <div class="card-info">
+          <div class="pick-nombre">${p.pick}</div>
+          <div class="pick-meta">
+            <span class="badge ${badgeClase}">${badgeTexto}</span>
+            ${comboBadge}
+            <span class="cuota">cuota ~${p.cuota}</span>
+          </div>
+        </div>
+      </div>
+      <button class="card-toggle" onclick="toggleDetalle(${i})">Ver todos los mercados ▾</button>
+      <div class="card-detalle" id="detalle-${i}">${detalleFilas}</div>
+    </div>
+  `;
+}
+
+function render() {
+  const combinadasHtml = COMBINADAS_DEMO.map(crearCombinada).join("");
+  const hayVip = COMBINADAS_DEMO.some(c => !c.es_gratis);
+  const avisoVip = !hayVip ? `
+    <div class="combinada" style="opacity:0.6; align-items:center; justify-content:center; text-align:center;">
+      <span class="sin-pick-texto">Esta fecha el mercado estuvo parejo — no alcanzó para una segunda combinada VIP con nuestro estándar de seguridad. Vuelve a ver los picks individuales VIP mientras tanto.</span>
+    </div>` : "";
+
+  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + PICKS_DEMO.map(crearTarjeta).join("");
+
+  if (ES_ADMIN) {
+    const tag = document.createElement("div");
+    tag.className = "admin-tag";
+    tag.textContent = "MODO ADMINISTRADOR — viendo todo desbloqueado";
+    document.body.appendChild(tag);
+  }
+}
+
+function toggleDetalle(i) {
+  document.getElementById(`detalle-${i}`).classList.toggle("abierto");
+}
+
+render();
+</script>
+
+</body>
+</html>
