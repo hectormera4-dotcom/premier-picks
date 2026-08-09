@@ -9,3 +9,7 @@ fecha,local,visitante,goles_esperados_local,goles_esperados_visitante,pick_recom
 2026-08-23 13:00:00,Brighton,Aston Villa,1.52,1.16,Over 1.5 goles,False,77.1,1.3,True,43.6,29.1,27.2,72.8,56.4,60.1,39.9,53.5,46.5,61.6,38.4
 2026-08-23 15:30:00,Newcastle,Liverpool,2.12,1.83,Over 2.5 goles,False,78.2,1.28,True,43.7,23.5,32.9,67.1,56.3,80.2,19.8,78.2,21.8,57.0,43.0
 2026-08-24 19:00:00,Fulham,Chelsea,1.46,1.46,Over 1.5 goles,False,81.0,1.23,True,35.8,28.3,35.9,64.1,64.2,65.6,34.4,59.3,40.7,49.9,50.1
+2026-08-28 19:00:00,Crystal Palace,Man City,0.83,1.68,Doble oportunidad X2,False,83.2,1.2,True,16.8,27.5,55.7,44.3,83.2,51.6,48.4,48.6,51.4,23.2,76.8
+2026-08-29 11:30:00,Liverpool,Nott'm Forest,2.12,1.12,Doble oportunidad 1X,False,81.9,1.22,True,58.3,23.6,18.1,81.9,41.7,65.8,34.2,65.7,34.3,76.3,23.7
+2026-08-29 14:00:00,Bournemouth,Everton,1.14,0.85,Doble oportunidad 1X,False,74.8,1.34,False,40.4,34.3,25.2,74.8,59.6,44.1,55.9,34.7,65.3,61.6,38.4
+2026-08-29 14:00:00,Coventry,Hull,1.53,1.28,Over 1.5 goles,False,79.3,1.26,True,41.2,28.7,30.1,69.9,58.8,63.1,36.9,56.7,43.3,57.8,42.2
