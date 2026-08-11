@@ -34,6 +34,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add premier_league_combinado.csv picks_del_dia.csv historial_picks.csv
+          git add premier_league_combinado.csv picks_del_dia.csv historial_picks.csv combinadas_del_dia.json
           git diff --staged --quiet || git commit -m "Actualizacion automatica de picks"
           git push

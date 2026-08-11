@@ -11,6 +11,7 @@ Este script esta pensado para correr AUTOMATICAMENTE todos los dias
 import requests
 import pandas as pd
 import numpy as np
+import json
 from scipy.stats import poisson
 from datetime import datetime, timedelta
 import os
@@ -21,6 +22,7 @@ HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
 ARCHIVO_HISTORICO = "premier_league_combinado.csv"
 ARCHIVO_PICKS = "picks_del_dia.csv"
+ARCHIVO_COMBINADAS = "combinadas_del_dia.json"
 MAX_GOLES = 6
 
 # Traductor de nombres: football-data.org (izquierda) -> football-data.co.uk (derecha)
@@ -497,7 +499,7 @@ def calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80, vent
 
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
-def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=20, umbral_seguro=0.75):
+def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75):
     ahora = datetime.utcnow()
     limite = ahora + timedelta(days=dias_adelante)
 
@@ -574,6 +576,9 @@ if __name__ == "__main__":
 
             resumen_track_record(historial)
 
-            calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3)
+            combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3)
+            with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
+                json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
+            print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")
         else:
             print("No hay partidos programados en los proximos dias.")

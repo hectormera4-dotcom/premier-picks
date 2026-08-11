@@ -458,92 +458,121 @@
   Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script>
-// Los 10 partidos reales de la Jornada 1 (2026/27), con los picks que genero
-// tu pipeline real. Las combinadas de mas abajo se arman con estos MISMOS
-// partidos, nunca con partidos de otra fecha.
-// Los 10 partidos reales de la Jornada 1, ahora con el umbral de seguridad
-// del 75%: 6 tienen un pick recomendado, 4 no alcanzan el estandar (se
-// muestran igual, con honestidad, en vez de forzar una recomendacion).
-const PICKS_DEMO = [
-  {
-    fecha: "Vie 21 Ago · 19:00", local: "Arsenal", visitante: "Coventry", seguro: true,
-    pick: "Doble oportunidad 1X", prob: 98, cuota: "1.02", nivel: "seguro", combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "85.1%"], ["1X2 — Empate", "13.2%"], ["Over 2.5 goles", "58.3%"], ["Ambos anotan - Sí", "35.7%"]]
-  },
-  {
-    fecha: "Sáb 22 Ago · 11:30", local: "Hull", visitante: "Man United", seguro: true,
-    pick: "Doble oportunidad X2", prob: 90, cuota: "1.11", nivel: "seguro", combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "10.1%"], ["1X2 — Empate", "19.7%"], ["Over 2.5 goles", "48.3%"], ["Ambos anotan - Sí", "38.9%"]]
-  },
-  {
-    fecha: "Sáb 22 Ago · 14:00", local: "Ipswich", visitante: "Sunderland", seguro: true,
-    pick: "Doble oportunidad X2", prob: 87, cuota: "1.15", nivel: "seguro", combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "12.7%"], ["1X2 — Empate", "25.6%"], ["Over 2.5 goles", "44.1%"], ["Ambos anotan - Sí", "36.2%"]]
-  },
-  {
-    fecha: "Sáb 22 Ago · 14:00", local: "Nott'm Forest", visitante: "Leeds", seguro: true,
-    pick: "Doble oportunidad 1X", prob: 77, cuota: "1.30", nivel: "seguro", combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "46.0%"], ["1X2 — Empate", "30.8%"], ["Over 2.5 goles", "51.4%"], ["Ambos anotan - Sí", "47.9%"]]
-  },
-  {
-    fecha: "Sáb 22 Ago · 14:00", local: "Everton", visitante: "Crystal Palace", seguro: false,
-    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "36.3%"], ["1X2 — Empate", "30.8%"], ["Doble oportunidad 1X", "67.2%"], ["Over 2.5 goles", "49.6%"]]
-  },
-  {
-    fecha: "Sáb 22 Ago · 16:30", local: "Brentford", visitante: "Tottenham", seguro: false,
-    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "41.9%"], ["1X2 — Empate", "26.1%"], ["Ambos anotan - Sí", "71.8%"], ["Over 2.5 goles", "54.7%"]]
-  },
-  {
-    fecha: "Dom 23 Ago · 13:00", local: "Man City", visitante: "Bournemouth", seguro: true,
-    pick: "Doble oportunidad 1X", prob: 88, cuota: "1.13", nivel: "seguro", combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "69.9%"], ["1X2 — Empate", "18.5%"], ["Over 2.5 goles", "60.2%"], ["Ambos anotan - Sí", "39.8%"]]
-  },
-  {
-    fecha: "Dom 23 Ago · 13:00", local: "Brighton", visitante: "Aston Villa", seguro: false,
-    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "43.6%"], ["1X2 — Empate", "29.1%"], ["Doble oportunidad 1X", "72.8%"], ["Over 2.5 goles", "52.0%"]]
-  },
-  {
-    fecha: "Dom 23 Ago · 15:30", local: "Newcastle", visitante: "Liverpool", seguro: true,
-    pick: "Ambos anotan - Sí", prob: 80, cuota: "1.25", nivel: "seguro", combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "31.4%"], ["1X2 — Empate", "23.9%"], ["Over 2.5 goles", "66.8%"], ["Doble oportunidad X2", "68.6%"]]
-  },
-  {
-    fecha: "Lun 24 Ago · 19:00", local: "Fulham", visitante: "Chelsea", seguro: false,
-    pick: null, prob: null, cuota: null, nivel: null, combo: false, vip: false,
-    mercados: [["1X2 — Local gana", "35.8%"], ["1X2 — Empate", "28.3%"], ["Doble oportunidad 1X", "64.1%"], ["Over 2.5 goles", "50.5%"]]
-  }
-];
-
 // Modo administrador: agrega ?admin=1 a la URL para ver todo desbloqueado.
 // IMPORTANTE: esto es solo una vista previa, NO es seguridad real todavia.
 const ES_ADMIN = new URLSearchParams(window.location.search).get("admin") === "1";
 
-// Con el umbral del 75%, hoy solo alcanza para 1 combinada completa
-// (usa 5 de los 6 partidos seguros). Es normal que algunos dias no
-// alcance para una segunda combinada VIP -- se muestra con honestidad.
-const COMBINADAS_DEMO = [
-  {
-    nombre: "Combinada #1", es_gratis: true, cuota: "1.83",
-    partidos: [
-      { local: "Arsenal", visitante: "Coventry", pick: "Doble oportunidad 1X", prob: 98 },
-      { local: "Hull", visitante: "Man United", pick: "Doble oportunidad X2", prob: 90 },
-      { local: "Man City", visitante: "Bournemouth", pick: "Doble oportunidad 1X", prob: 88 },
-      { local: "Ipswich", visitante: "Sunderland", pick: "Doble oportunidad X2", prob: 87 },
-      { local: "Newcastle", visitante: "Liverpool", pick: "Ambos anotan - Sí", prob: 80 },
-    ]
-  },
-];
+const UMBRAL_SEGURO = 0.75; // debe coincidir con el umbral usado en el pipeline
+
+// Nombres de columnas del CSV -> etiqueta legible para el detalle de mercados
+const ETIQUETAS_MERCADOS = {
+  prob_local: "1X2 — Local gana",
+  prob_empate: "1X2 — Empate",
+  prob_visitante: "1X2 — Visitante gana",
+  "doble_op_1X": "Doble oportunidad 1X",
+  "doble_op_X2": "Doble oportunidad X2",
+  btts_si: "Ambos anotan - Sí",
+  btts_no: "Ambos anotan - No",
+  over_25: "Over 2.5 goles",
+  under_25: "Under 2.5 goles",
+};
+
+const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+function formatearFecha(fechaStr) {
+  const f = new Date(fechaStr.replace(" ", "T"));
+  if (isNaN(f)) return fechaStr;
+  const hh = String(f.getHours()).padStart(2, "0");
+  const mm = String(f.getMinutes()).padStart(2, "0");
+  return `${DIAS[f.getDay()]} ${f.getDate()} ${MESES[f.getMonth()]} · ${hh}:${mm}`;
+}
+
+async function cargarCSV(url) {
+  const resp = await fetch(url + "?_=" + Date.now()); // evita cache vieja
+  if (!resp.ok) throw new Error(`No se pudo cargar ${url}`);
+  const texto = await resp.text();
+  return Papa.parse(texto, { header: true, dynamicTyping: true, skipEmptyLines: true }).data;
+}
+
+async function cargarJSON(url) {
+  const resp = await fetch(url + "?_=" + Date.now());
+  if (!resp.ok) throw new Error(`No se pudo cargar ${url}`);
+  return resp.json();
+}
+
+function transformarPick(fila) {
+  const seguro = fila.pick_es_seguro === true || String(fila.pick_es_seguro).toLowerCase() === "true";
+  const combo = fila.es_combo === true || String(fila.es_combo).toLowerCase() === "true";
+
+  const mercados = Object.entries(ETIQUETAS_MERCADOS)
+    .filter(([col]) => fila[col] !== undefined && fila[col] !== null && fila[col] !== "")
+    .map(([col, etiqueta]) => [etiqueta, `${fila[col]}%`]);
+
+  return {
+    fecha: formatearFecha(String(fila.fecha)),
+    local: fila.local, visitante: fila.visitante,
+    seguro,
+    pick: seguro ? fila.pick_recomendado : null,
+    prob: seguro ? Math.round(fila.pick_probabilidad) : null,
+    cuota: seguro ? fila.pick_cuota_aprox : null,
+    nivel: seguro ? "seguro" : null,
+    combo, vip: false,
+    mercados,
+  };
+}
+
+async function cargarTodo() {
+  try {
+    const [picksRaw, historialRaw, combinadas] = await Promise.all([
+      cargarCSV("picks_del_dia.csv"),
+      cargarCSV("historial_picks.csv").catch(() => []),
+      cargarJSON("combinadas_del_dia.json").catch(() => []),
+    ]);
+
+    const picks = picksRaw.map(transformarPick);
+
+    // Track record global a partir del historial resuelto
+    const resueltos = historialRaw.filter(r => r.acierto === true || r.acierto === false ||
+                                                  r.acierto === "True" || r.acierto === "False");
+    let porcentaje = null;
+    if (resueltos.length > 0) {
+      const aciertos = resueltos.filter(r => r.acierto === true || r.acierto === "True").length;
+      porcentaje = Math.round((aciertos / resueltos.length) * 100);
+    }
+
+    renderMarcadorGlobal(porcentaje, resueltos.length);
+    render(picks, combinadas);
+  } catch (err) {
+    document.getElementById("grid").innerHTML = `
+      <div class="combinada" style="grid-column:1/-1; text-align:center; opacity:0.7;">
+        No se pudieron cargar los picks todavía. Si acabas de publicar la página,
+        espera a que el pipeline corra al menos una vez y recarga.
+      </div>`;
+    console.error(err);
+  }
+}
+
+function renderMarcadorGlobal(porcentaje, totalResueltos) {
+  const numeroEl = document.querySelector(".marcador-numero");
+  const textoEl = document.querySelector(".marcador-texto");
+  if (porcentaje === null) {
+    numeroEl.innerHTML = `—`;
+    textoEl.innerHTML = `<strong>Track record verificable.</strong> Todavía no hay picks resueltos — se actualizará automáticamente después de la primera fecha.`;
+  } else {
+    numeroEl.innerHTML = `${porcentaje}<span style="font-size:20px;">%</span>`;
+    textoEl.innerHTML = `<strong>Track record verificable.</strong> ${porcentaje}% de acierto sobre ${totalResueltos} picks resueltos — se actualiza solo, automáticamente, después de cada jornada.`;
+  }
+}
 
 function crearCombinada(c) {
   const bloqueada = !c.es_gratis && !ES_ADMIN;
   const filas = c.partidos.map(p => `
     <div class="combinada-fila">
-      <span class="prob-mini">${p.prob}%</span>
-      <span><b>${p.local} vs ${p.visitante}</b> — ${p.pick}</span>
+      <span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>
+      <span><b>${p.local} vs ${p.visitante}</b> — ${p.pick_recomendado}</span>
     </div>
   `).join("");
 
@@ -564,7 +593,7 @@ function crearCombinada(c) {
       <div class="combinada-partidos">${filas}</div>
       <div class="combinada-footer">
         <span class="combinada-cuota-label">cuota combinada</span>
-        <span class="combinada-cuota">${c.cuota}</span>
+        <span class="combinada-cuota">${c.cuota_combinada}</span>
       </div>
     </div>
   `;
@@ -650,17 +679,27 @@ function crearTarjeta(p, i) {
   `;
 }
 
-function render() {
-  const combinadasHtml = COMBINADAS_DEMO.map(crearCombinada).join("");
-  const hayVip = COMBINADAS_DEMO.some(c => !c.es_gratis);
-  const avisoVip = !hayVip ? `
-    <div class="combinada" style="opacity:0.6; align-items:center; justify-content:center; text-align:center;">
-      <span class="sin-pick-texto">Esta fecha el mercado estuvo parejo — no alcanzó para una segunda combinada VIP con nuestro estándar de seguridad. Vuelve a ver los picks individuales VIP mientras tanto.</span>
-    </div>` : "";
+function render(picks, combinadas) {
+  const combinadasHtml = combinadas.map(crearCombinada).join("");
+  const hayCombinadas = combinadas.length > 0;
+  const hayVip = combinadas.some(c => !c.es_gratis);
 
-  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + PICKS_DEMO.map(crearTarjeta).join("");
+  let avisoVip = "";
+  if (!hayCombinadas) {
+    avisoVip = `
+      <div class="combinada" style="opacity:0.6; align-items:center; justify-content:center; text-align:center;">
+        <span class="sin-pick-texto">Esta fecha no hay suficientes picks seguros para armar una combinada. Revisa los picks individuales abajo.</span>
+      </div>`;
+  } else if (!hayVip) {
+    avisoVip = `
+      <div class="combinada" style="opacity:0.6; align-items:center; justify-content:center; text-align:center;">
+        <span class="sin-pick-texto">Esta fecha el mercado estuvo parejo — no alcanzó para una segunda combinada VIP con nuestro estándar de seguridad. Vuelve a ver los picks individuales VIP mientras tanto.</span>
+      </div>`;
+  }
 
-  if (ES_ADMIN) {
+  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picks.map(crearTarjeta).join("");
+
+  if (ES_ADMIN && !document.querySelector(".admin-tag")) {
     const tag = document.createElement("div");
     tag.className = "admin-tag";
     tag.textContent = "MODO ADMINISTRADOR — viendo todo desbloqueado";
@@ -672,7 +711,7 @@ function toggleDetalle(i) {
   document.getElementById(`detalle-${i}`).classList.toggle("abierto");
 }
 
-render();
+cargarTodo();
 </script>
 
 </body>
