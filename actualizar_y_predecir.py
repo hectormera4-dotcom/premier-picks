@@ -559,7 +559,7 @@ if __name__ == "__main__":
         umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80)
 
         print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
-        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico)
+        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=15, umbral_seguro=umbral_dinamico)
 
         if len(picks) > 0:
             picks.to_csv(ARCHIVO_PICKS, index=False)
