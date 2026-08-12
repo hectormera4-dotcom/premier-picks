@@ -1,1 +1,80 @@
-[]
+[
+  {
+    "nombre": "Combinada #1",
+    "es_gratis": true,
+    "partidos": [
+      {
+        "local": "Ipswich",
+        "visitante": "Sunderland",
+        "pick_recomendado": "Doble oportunidad X2",
+        "pick_probabilidad": 87.3
+      },
+      {
+        "local": "Brentford",
+        "visitante": "Tottenham",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 86.1
+      },
+      {
+        "local": "Fulham",
+        "visitante": "Chelsea",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 81.0
+      },
+      {
+        "local": "Man City",
+        "visitante": "Bournemouth",
+        "pick_recomendado": "Doble oportunidad 1X + Over 1.5 goles",
+        "pick_probabilidad": 79.2
+      }
+    ],
+    "probabilidad_combinada": 48.2,
+    "cuota_combinada": 2.07
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "local": "Newcastle",
+        "visitante": "Liverpool",
+        "pick_recomendado": "Over 2.5 goles",
+        "pick_probabilidad": 78.2
+      },
+      {
+        "local": "Brighton",
+        "visitante": "Aston Villa",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 77.1
+      },
+      {
+        "local": "Nott'm Forest",
+        "visitante": "Leeds",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 76.9
+      }
+    ],
+    "probabilidad_combinada": 46.4,
+    "cuota_combinada": 2.16
+  },
+  {
+    "nombre": "Combinada #3",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "local": "Hull",
+        "visitante": "Man United",
+        "pick_recomendado": "Doble oportunidad X2 + Over 1.5 goles",
+        "pick_probabilidad": 76.0
+      },
+      {
+        "local": "Arsenal",
+        "visitante": "Coventry",
+        "pick_recomendado": "Over 2.5 goles",
+        "pick_probabilidad": 75.5
+      }
+    ],
+    "probabilidad_combinada": 57.4,
+    "cuota_combinada": 1.74
+  }
+]
