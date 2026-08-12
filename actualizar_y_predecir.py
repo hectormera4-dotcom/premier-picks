@@ -12,7 +12,7 @@ import requests
 import pandas as pd
 import numpy as np
 import json
-from scipy.stats import poisson
+from scipy.stats import poisson, skellam
 from datetime import datetime, timedelta
 import os
 
@@ -107,6 +107,66 @@ def actualizar_historico(partidos):
         print(f"Se agregaron {len(nuevos)} partidos nuevos al historico.")
     else:
         print("No hay partidos nuevos que agregar (nadie ha jugado desde la ultima actualizacion).")
+
+    return historico
+
+TEMPORADA_CODIGO_FDCOUK = "2627"  # temporada 2026/27 en el formato de football-data.co.uk
+
+def actualizar_estadisticas_extra(historico):
+    """
+    football-data.org (usado arriba) NO incluye corners/tarjetas en el plan
+    gratuito. Para mantener esos datos frescos durante la temporada, volvemos
+    a descargar el archivo de la temporada actual desde football-data.co.uk
+    (se actualiza dos veces por semana) y completamos corners/tarjetas/arbitro
+    para los partidos que ya tenemos, cuando esten disponibles.
+    """
+    url = f"https://www.football-data.co.uk/mmz4281/{TEMPORADA_CODIGO_FDCOUK}/E0.csv"
+    try:
+        resp = requests.get(url, timeout=15)
+        resp.raise_for_status()
+    except Exception as e:
+        print(f"Aviso: no se pudo descargar estadisticas extra de football-data.co.uk todavia ({e}). "
+              f"Es normal si la temporada aun no ha empezado.")
+        return historico
+
+    import io
+    columnas_extra = ["HC", "AC", "HY", "AY", "Referee"]
+    try:
+        actual = pd.read_csv(io.StringIO(resp.text))
+    except Exception as e:
+        print(f"Aviso: el archivo de football-data.co.uk no se pudo leer todavia ({e}).")
+        return historico
+
+    columnas_disponibles = [c for c in columnas_extra if c in actual.columns]
+    if not columnas_disponibles:
+        print("Aviso: el archivo de la temporada actual todavia no trae corners/tarjetas.")
+        return historico
+
+    actual["Date"] = pd.to_datetime(actual["Date"], dayfirst=True)
+
+    # Nos aseguramos de que las columnas extra existan en el historico
+    for col in columnas_disponibles:
+        if col not in historico.columns:
+            historico[col] = pd.NA
+
+    actualizados = 0
+    for _, fila in actual.iterrows():
+        mask = ((historico["Date"] == fila["Date"]) &
+                 (historico["HomeTeam"] == fila["HomeTeam"]) &
+                 (historico["AwayTeam"] == fila["AwayTeam"]))
+        if mask.any():
+            for col in columnas_disponibles:
+                if pd.notna(fila.get(col)):
+                    historico.loc[mask, col] = fila[col]
+            actualizados += 1
+
+    if actualizados:
+        historico_a_guardar = historico.copy()
+        historico_a_guardar["Date"] = pd.to_datetime(historico_a_guardar["Date"]).dt.strftime("%d/%m/%Y")
+        historico_a_guardar.to_csv(ARCHIVO_HISTORICO, index=False)
+        print(f"Estadisticas extra (corners/tarjetas) actualizadas para {actualizados} partidos.")
+    else:
+        print("Sin cambios en corners/tarjetas esta vez.")
 
     return historico
 
@@ -254,40 +314,54 @@ def calcular_combo(matriz, lista_condiciones):
         if all(CONDICIONES[c](i, j) for c in lista_condiciones)
     )
 
-def elegir_mejor_pick(matriz, umbral_minimo=0.65):
+def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, permitir_combo_extra=False):
     """
     Evalua todos los mercados individuales y todas las combinaciones validas
-    de 2 mercados (de categorias distintas). De las que superan el umbral de
-    seguridad, elige la de MEJOR CUOTA (menor probabilidad, mayor pago) --
-    es decir, la combinacion mas rentable que sigue siendo "segura".
-    Si ninguna supera el umbral, devuelve la de mayor probabilidad disponible.
+    de 2 mercados de goles/resultado (de categorias distintas). Ademas, si se
+    pasan mercados_extra (ej. corners):
+      - Siempre se agregan como candidatos INDIVIDUALES.
+      - Si permitir_combo_extra=True (solo cuando se valido con datos reales
+        que goles y corners son razonablemente independientes en la practica),
+        tambien se prueban combos de 1 mercado de goles + 1 de corners.
+    De todos los candidatos que superan el umbral de seguridad, elige la de
+    MEJOR CUOTA (menor probabilidad, mayor pago). Si ninguno lo supera,
+    devuelve el de mayor probabilidad disponible.
     """
     candidatos = []
 
-    # Mercados individuales
+    # Mercados individuales (goles/resultado)
     for nombre, cond in CONDICIONES.items():
         prob = calcular_combo(matriz, [nombre])
         candidatos.append(([nombre], prob))
 
-    # Combos de 2 mercados de categorias distintas
+    # Combos de 2 mercados de categorias distintas (goles/resultado)
     nombres = list(CONDICIONES.keys())
     for i in range(len(nombres)):
         for j in range(i+1, len(nombres)):
             n1, n2 = nombres[i], nombres[j]
             if CATEGORIAS[n1] == CATEGORIAS[n2]:
-                continue  # misma categoria, se descarta (redundante o contradictorio)
+                continue
             prob = calcular_combo(matriz, [n1, n2])
             candidatos.append(([n1, n2], prob))
 
-    # Filtramos los que cumplen el umbral de seguridad
+    # Mercados adicionales (corners, etc.) -- individuales siempre
+    if mercados_extra:
+        for nombre, prob in mercados_extra.items():
+            candidatos.append(([nombre], prob))
+
+        # Combos goles + corners -- SOLO si la correlacion real lo valido
+        if permitir_combo_extra:
+            for nombre_goles, prob_goles in [(n, calcular_combo(matriz, [n])) for n in CONDICIONES]:
+                for nombre_extra, prob_extra in mercados_extra.items():
+                    prob_conjunta = prob_goles * prob_extra
+                    candidatos.append(([nombre_goles, nombre_extra], prob_conjunta))
+
     seguros = [c for c in candidatos if c[1] >= umbral_minimo]
 
     if seguros:
-        # De los seguros, elegimos el de MENOR probabilidad (= mejor cuota, mas rentable)
         mejor = min(seguros, key=lambda c: c[1])
         cumple_umbral = True
     else:
-        # Si ninguno es "seguro", devolvemos el de mayor probabilidad disponible
         mejor = max(candidatos, key=lambda c: c[1])
         cumple_umbral = False
 
@@ -497,9 +571,62 @@ def calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80, vent
     print(f"Tasa de acierto de los ultimos {ventana} picks: {tasa_acierto*100:.1f}%. Umbral se mantiene en {umbral_base*100:.0f}%.")
     return umbral_base
 
+# ---------- Mercado de corners (mismo patron que goles, columna distinta) ----------
+
+def calcular_fuerzas_corners(df):
+    if "HC" not in df.columns or "AC" not in df.columns:
+        return {}, None, None
+    df = df.dropna(subset=["HC", "AC"])
+    if len(df) < 20:  # muy pocos datos con corners todavia, no vale la pena
+        return {}, None, None
+
+    fecha_max = df["Date"].max()
+    dias_desde = (fecha_max - df["Date"]).dt.days
+    peso = 0.5 ** (dias_desde / 365)
+    df = df.copy()
+    df["peso"] = peso
+
+    prom_local = (df["HC"] * df["peso"]).sum() / df["peso"].sum()
+    prom_visit = (df["AC"] * df["peso"]).sum() / df["peso"].sum()
+
+    equipos = pd.unique(df[["HomeTeam", "AwayTeam"]].values.ravel())
+    fuerzas = {}
+    for equipo in equipos:
+        pl = df[df["HomeTeam"] == equipo]
+        pv = df[df["AwayTeam"] == equipo]
+        if pl["peso"].sum() == 0 or pv["peso"].sum() == 0:
+            continue
+        fuerzas[equipo] = {
+            "ataque_local": (pl["HC"]*pl["peso"]).sum()/pl["peso"].sum() / prom_local,
+            "defensa_local": (pl["AC"]*pl["peso"]).sum()/pl["peso"].sum() / prom_visit,
+            "ataque_visitante": (pv["AC"]*pv["peso"]).sum()/pv["peso"].sum() / prom_visit,
+            "defensa_visitante": (pv["HC"]*pv["peso"]).sum()/pv["peso"].sum() / prom_local,
+        }
+    return fuerzas, prom_local, prom_visit
+
+def calcular_mercados_corners(local, visitante, fuerzas, prom_local, prom_visit, lineas=(8.5, 9.5, 10.5)):
+    if not fuerzas or local not in fuerzas or visitante not in fuerzas:
+        return {}
+    fl, fv = fuerzas[local], fuerzas[visitante]
+    lam = prom_local * fl["ataque_local"] * fv["defensa_visitante"]
+    mu = prom_visit * fv["ataque_visitante"] * fl["defensa_local"]
+    total = lam + mu
+
+    mercados = {}
+    for linea in lineas:
+        p_over = 1 - poisson.cdf(linea, total)
+        mercados[f"Over {linea} corners"] = p_over
+        mercados[f"Under {linea} corners"] = 1 - p_over
+
+    mercados[f"Más corners: {local}"] = 1 - skellam.cdf(0, lam, mu)
+    mercados[f"Más corners: {visitante}"] = skellam.cdf(-1, lam, mu)
+
+    return mercados
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
-def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75):
+def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75,
+                   fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, permitir_combo_extra=False):
     ahora = datetime.utcnow()
     limite = ahora + timedelta(days=dias_adelante)
 
@@ -518,7 +645,14 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
         if matriz is None:
             continue
         mercados = calcular_mercados(matriz)
-        nombres_pick, pick_prob, pick_cuota, cumple_umbral = elegir_mejor_pick(matriz, umbral_seguro)
+
+        mercados_corners = {}
+        if fuerzas_corners:
+            mercados_corners = calcular_mercados_corners(local, visitante, fuerzas_corners,
+                                                           prom_l_corners, prom_v_corners)
+
+        nombres_pick, pick_prob, pick_cuota, cumple_umbral = elegir_mejor_pick(
+            matriz, umbral_seguro, mercados_extra=mercados_corners, permitir_combo_extra=permitir_combo_extra)
         es_combo = len(nombres_pick) > 1
 
         picks.append({
@@ -529,12 +663,53 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
             "pick_probabilidad": round(pick_prob*100, 1),
             "pick_cuota_aprox": round(pick_cuota, 2) if pick_cuota else None,
             "pick_es_seguro": cumple_umbral,
-            **{k: round(v*100, 1) for k, v in mercados.items()}
+            **{k: round(v*100, 1) for k, v in mercados.items()},
+            **{k: round(v*100, 1) for k, v in mercados_corners.items()},
         })
 
     return pd.DataFrame(picks)
 
 # ---------- Programa principal ----------
+
+# ---------- Herramienta: verificar correlacion real entre goles y corners ----------
+
+def verificar_correlacion_goles_corners(df, linea_goles=1.5, linea_corners=10.5):
+    """
+    Mide, con datos historicos REALES, si 'Over/Under X goles' y
+    'Over/Under Y corners' son razonablemente independientes en el mismo
+    partido. Si lo son, es seguro combinarlos multiplicando probabilidades.
+    Si no, NO se deben combinar sin un modelo conjunto.
+    """
+    df = df.dropna(subset=["HC", "AC", "FTHG", "FTAG"])
+    if len(df) < 50:
+        print("No hay suficientes partidos con corners para medir la correlacion todavia.")
+        return None
+
+    goles_total = df["FTHG"] + df["FTAG"]
+    corners_total = df["HC"] + df["AC"]
+
+    over_goles = goles_total > linea_goles
+    under_corners = corners_total < linea_corners
+
+    p_a = over_goles.mean()
+    p_b = under_corners.mean()
+    p_conjunta_real = (over_goles & under_corners).mean()
+    p_conjunta_si_independientes = p_a * p_b
+
+    diferencia = p_conjunta_real - p_conjunta_si_independientes
+    correlacion = df[["FTHG","FTAG"]].sum(axis=1).corr(df[["HC","AC"]].sum(axis=1))
+
+    print(f"P(Over {linea_goles} goles) = {p_a*100:.1f}%")
+    print(f"P(Under {linea_corners} corners) = {p_b*100:.1f}%")
+    print(f"P(ambos) REAL en tus datos = {p_conjunta_real*100:.1f}%")
+    print(f"P(ambos) SI fueran independientes = {p_conjunta_si_independientes*100:.1f}%")
+    print(f"Diferencia: {diferencia*100:+.1f} puntos porcentuales")
+    print(f"Correlacion (goles totales vs corners totales): {correlacion:.3f}")
+
+    # Umbral practico: si la diferencia es chica, tratamos como independientes
+    independientes = abs(diferencia) < 0.03  # menos de 3 puntos porcentuales de diferencia
+    print(f"\n¿Se pueden combinar con multiplicacion simple? {'SI' if independientes else 'NO'}")
+    return independientes
 
 if __name__ == "__main__":
     print("Descargando datos de football-data.org...")
@@ -545,8 +720,23 @@ if __name__ == "__main__":
 
     if historico is not None and len(historico) > 0:
         historico["Date"] = pd.to_datetime(historico["Date"])
+
+        print("Actualizando corners/tarjetas desde football-data.co.uk...")
+        historico = actualizar_estadisticas_extra(historico)
+
         print("Calculando fuerzas de equipos...")
         fuerzas, prom_l, prom_v = calcular_fuerzas(historico)
+
+        print("Calculando fuerzas de corners (si hay datos disponibles)...")
+        fuerzas_corners, prom_l_corners, prom_v_corners = calcular_fuerzas_corners(historico)
+        permitir_combo_extra = False
+        if fuerzas_corners:
+            print(f"  Corners disponibles para {len(fuerzas_corners)} equipos.")
+            print("  Verificando si es seguro combinar goles+corners con datos reales...")
+            resultado_correlacion = verificar_correlacion_goles_corners(historico)
+            permitir_combo_extra = bool(resultado_correlacion)
+        else:
+            print("  Sin datos de corners todavia (se activara solo cuando esten disponibles).")
 
         print("Ajustando Dixon-Coles...")
         rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
@@ -556,10 +746,12 @@ if __name__ == "__main__":
         historial = cargar_historial_picks()
         historial = verificar_picks_resueltos(historial, historico)
 
-        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80)
+        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
 
         print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
-        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=15, umbral_seguro=umbral_dinamico)
+        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=15, umbral_seguro=umbral_dinamico,
+                               fuerzas_corners=fuerzas_corners, prom_l_corners=prom_l_corners, prom_v_corners=prom_v_corners,
+                               permitir_combo_extra=permitir_combo_extra)
 
         if len(picks) > 0:
             picks.to_csv(ARCHIVO_PICKS, index=False)
