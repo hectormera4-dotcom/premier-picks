@@ -314,27 +314,21 @@ def calcular_combo(matriz, lista_condiciones):
         if all(CONDICIONES[c](i, j) for c in lista_condiciones)
     )
 
-def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, permitir_combo_extra=False):
+def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None):
     """
-    Evalua todos los mercados individuales y todas las combinaciones validas
-    de 2 mercados de goles/resultado (de categorias distintas). Ademas, si se
-    pasan mercados_extra (ej. corners):
-      - Siempre se agregan como candidatos INDIVIDUALES.
-      - Si permitir_combo_extra=True (solo cuando se valido con datos reales
-        que goles y corners son razonablemente independientes en la practica),
-        tambien se prueban combos de 1 mercado de goles + 1 de corners.
-    De todos los candidatos que superan el umbral de seguridad, elige la de
-    MEJOR CUOTA (menor probabilidad, mayor pago). Si ninguno lo supera,
-    devuelve el de mayor probabilidad disponible.
+    Evalua mercados de goles/resultado (individuales + combos de 2 validos).
+    mercados_extra: TODOS los mercados adicionales (corners, tarjetas, etc.)
+    se agregan como candidatos individuales.
+    mercados_extra_combinables: SOLO el subconjunto de esos que ya se valido
+    con datos reales como razonablemente independiente de los goles -- esos
+    tambien se prueban en combo de 1 mercado de goles + 1 de este subconjunto.
     """
     candidatos = []
 
-    # Mercados individuales (goles/resultado)
     for nombre, cond in CONDICIONES.items():
         prob = calcular_combo(matriz, [nombre])
         candidatos.append(([nombre], prob))
 
-    # Combos de 2 mercados de categorias distintas (goles/resultado)
     nombres = list(CONDICIONES.keys())
     for i in range(len(nombres)):
         for j in range(i+1, len(nombres)):
@@ -344,17 +338,15 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, permitir_
             prob = calcular_combo(matriz, [n1, n2])
             candidatos.append(([n1, n2], prob))
 
-    # Mercados adicionales (corners, etc.) -- individuales siempre
     if mercados_extra:
         for nombre, prob in mercados_extra.items():
             candidatos.append(([nombre], prob))
 
-        # Combos goles + corners -- SOLO si la correlacion real lo valido
-        if permitir_combo_extra:
-            for nombre_goles, prob_goles in [(n, calcular_combo(matriz, [n])) for n in CONDICIONES]:
-                for nombre_extra, prob_extra in mercados_extra.items():
-                    prob_conjunta = prob_goles * prob_extra
-                    candidatos.append(([nombre_goles, nombre_extra], prob_conjunta))
+    if mercados_extra_combinables:
+        for nombre_goles in CONDICIONES:
+            prob_goles = calcular_combo(matriz, [nombre_goles])
+            for nombre_extra, prob_extra in mercados_extra_combinables.items():
+                candidatos.append(([nombre_goles, nombre_extra], prob_goles * prob_extra))
 
     seguros = [c for c in candidatos if c[1] >= umbral_minimo]
 
@@ -623,10 +615,94 @@ def calcular_mercados_corners(local, visitante, fuerzas, prom_local, prom_visit,
 
     return mercados
 
+# ---------- Mercado de tarjetas amarillas (con factor de arbitro) ----------
+
+def calcular_fuerzas_tarjetas(df):
+    """
+    Similar al modelo de corners, pero ademas calcula un factor por arbitro:
+    algunos arbitros pitan sistematicamente mas/menos tarjetas que el promedio.
+    """
+    if "HY" not in df.columns or "AY" not in df.columns:
+        return {}, {}, None, None
+    df = df.dropna(subset=["HY", "AY"])
+    if len(df) < 20:
+        return {}, {}, None, None
+
+    fecha_max = df["Date"].max()
+    dias_desde = (fecha_max - df["Date"]).dt.days
+    peso = 0.5 ** (dias_desde / 365)
+    df = df.copy()
+    df["peso"] = peso
+
+    prom_local = (df["HY"] * df["peso"]).sum() / df["peso"].sum()
+    prom_visit = (df["AY"] * df["peso"]).sum() / df["peso"].sum()
+    prom_total = prom_local + prom_visit
+
+    equipos = pd.unique(df[["HomeTeam", "AwayTeam"]].values.ravel())
+    fuerzas = {}
+    for equipo in equipos:
+        pl = df[df["HomeTeam"] == equipo]
+        pv = df[df["AwayTeam"] == equipo]
+        if pl["peso"].sum() == 0 or pv["peso"].sum() == 0:
+            continue
+        fuerzas[equipo] = {
+            "ataque_local": (pl["HY"]*pl["peso"]).sum()/pl["peso"].sum() / prom_local,
+            "defensa_local": (pl["AY"]*pl["peso"]).sum()/pl["peso"].sum() / prom_visit,
+            "ataque_visitante": (pv["AY"]*pv["peso"]).sum()/pv["peso"].sum() / prom_visit,
+            "defensa_visitante": (pv["HY"]*pv["peso"]).sum()/pv["peso"].sum() / prom_local,
+        }
+
+    # Factor por arbitro: cuanto mas/menos pita respecto al promedio de la liga
+    factores_arbitro = {}
+    if "Referee" in df.columns:
+        for arbitro in df["Referee"].dropna().unique():
+            partidos_arbitro = df[df["Referee"] == arbitro]
+            if partidos_arbitro["peso"].sum() < 3:  # muy pocos partidos, no confiable
+                continue
+            total_arbitro = ((partidos_arbitro["HY"] + partidos_arbitro["AY"]) * partidos_arbitro["peso"]).sum() / partidos_arbitro["peso"].sum()
+            factores_arbitro[arbitro] = total_arbitro / prom_total
+
+    return fuerzas, factores_arbitro, prom_local, prom_visit
+
+def calcular_mercados_tarjetas(local, visitante, fuerzas, factores_arbitro, prom_local, prom_visit,
+                                 arbitro=None, lineas=(3.5, 4.5, 5.5)):
+    if not fuerzas or local not in fuerzas or visitante not in fuerzas:
+        return {}
+    fl, fv = fuerzas[local], fuerzas[visitante]
+
+    factor_ref = 1.0  # neutral por defecto: no sabemos el arbitro o no tenemos su historial
+    if arbitro and arbitro in factores_arbitro:
+        factor_ref = factores_arbitro[arbitro]
+
+    lam = prom_local * fl["ataque_local"] * fv["defensa_visitante"] * factor_ref
+    mu = prom_visit * fv["ataque_visitante"] * fl["defensa_local"] * factor_ref
+    total = lam + mu
+
+    mercados = {}
+    for linea in lineas:
+        p_over = 1 - poisson.cdf(linea, total)
+        mercados[f"Over {linea} tarjetas"] = p_over
+        mercados[f"Under {linea} tarjetas"] = 1 - p_over
+
+    return mercados
+
+def obtener_arbitro_partido(p):
+    """
+    Intenta extraer el nombre del arbitro desde la respuesta de football-data.org.
+    Devuelve None si no esta disponible (partidos lejanos casi nunca lo tienen
+    asignado todavia) -- en ese caso el modelo de tarjetas usa un arbitro
+    "promedio" en vez de inventar un dato que no existe.
+    """
+    for oficial in p.get("referees", []) or []:
+        if oficial.get("role") == "REFEREE" and oficial.get("name"):
+            return oficial["name"]
+    return None
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75,
-                   fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, permitir_combo_extra=False):
+                   fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, corners_combinable=False,
+                   fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False):
     ahora = datetime.utcnow()
     limite = ahora + timedelta(days=dias_adelante)
 
@@ -651,8 +727,28 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
             mercados_corners = calcular_mercados_corners(local, visitante, fuerzas_corners,
                                                            prom_l_corners, prom_v_corners)
 
+        mercados_tarjetas = {}
+        if fuerzas_tarjetas:
+            arbitro_partido = obtener_arbitro_partido(p)  # None si no esta asignado todavia
+            # Decision del CEO: el mercado de tarjetas SOLO se usa cuando el
+            # arbitro esta confirmado Y reconocido en nuestro historial.
+            # Si no hay arbitro asignado, o su nombre no coincide con ninguno
+            # de los que ya conocemos, este mercado queda descartado por
+            # completo para ese partido (no se usa un valor "promedio").
+            if arbitro_partido and arbitro_partido in (factores_arbitro or {}):
+                mercados_tarjetas = calcular_mercados_tarjetas(
+                    local, visitante, fuerzas_tarjetas, factores_arbitro,
+                    prom_l_tarjetas, prom_v_tarjetas, arbitro=arbitro_partido)
+
+        mercados_extra_todos = {**mercados_corners, **mercados_tarjetas}
+        mercados_extra_combinables = {}
+        if corners_combinable:
+            mercados_extra_combinables.update(mercados_corners)
+        if tarjetas_combinable:
+            mercados_extra_combinables.update(mercados_tarjetas)
+
         nombres_pick, pick_prob, pick_cuota, cumple_umbral = elegir_mejor_pick(
-            matriz, umbral_seguro, mercados_extra=mercados_corners, permitir_combo_extra=permitir_combo_extra)
+            matriz, umbral_seguro, mercados_extra=mercados_extra_todos, mercados_extra_combinables=mercados_extra_combinables)
         es_combo = len(nombres_pick) > 1
 
         picks.append({
@@ -665,6 +761,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
             "pick_es_seguro": cumple_umbral,
             **{k: round(v*100, 1) for k, v in mercados.items()},
             **{k: round(v*100, 1) for k, v in mercados_corners.items()},
+            **{k: round(v*100, 1) for k, v in mercados_tarjetas.items()},
         })
 
     return pd.DataFrame(picks)
@@ -673,42 +770,32 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
 
 # ---------- Herramienta: verificar correlacion real entre goles y corners ----------
 
-def verificar_correlacion_goles_corners(df, linea_goles=1.5, linea_corners=10.5):
+def verificar_correlacion_goles_metrica(df, columna_local, columna_visitante, linea_goles=1.5, linea_metrica=10.5, nombre_metrica="metrica"):
     """
-    Mide, con datos historicos REALES, si 'Over/Under X goles' y
-    'Over/Under Y corners' son razonablemente independientes en el mismo
-    partido. Si lo son, es seguro combinarlos multiplicando probabilidades.
-    Si no, NO se deben combinar sin un modelo conjunto.
+    Version generica de la verificacion de correlacion: sirve para corners,
+    tarjetas, o cualquier otra metrica nueva que se agregue despues.
     """
-    df = df.dropna(subset=["HC", "AC", "FTHG", "FTAG"])
+    df = df.dropna(subset=[columna_local, columna_visitante, "FTHG", "FTAG"])
     if len(df) < 50:
-        print("No hay suficientes partidos con corners para medir la correlacion todavia.")
+        print(f"No hay suficientes partidos con {nombre_metrica} para medir la correlacion todavia.")
         return None
 
     goles_total = df["FTHG"] + df["FTAG"]
-    corners_total = df["HC"] + df["AC"]
+    metrica_total = df[columna_local] + df[columna_visitante]
 
     over_goles = goles_total > linea_goles
-    under_corners = corners_total < linea_corners
+    under_metrica = metrica_total < linea_metrica
 
     p_a = over_goles.mean()
-    p_b = under_corners.mean()
-    p_conjunta_real = (over_goles & under_corners).mean()
+    p_b = under_metrica.mean()
+    p_conjunta_real = (over_goles & under_metrica).mean()
     p_conjunta_si_independientes = p_a * p_b
-
     diferencia = p_conjunta_real - p_conjunta_si_independientes
-    correlacion = df[["FTHG","FTAG"]].sum(axis=1).corr(df[["HC","AC"]].sum(axis=1))
+    correlacion = goles_total.corr(metrica_total)
 
-    print(f"P(Over {linea_goles} goles) = {p_a*100:.1f}%")
-    print(f"P(Under {linea_corners} corners) = {p_b*100:.1f}%")
-    print(f"P(ambos) REAL en tus datos = {p_conjunta_real*100:.1f}%")
-    print(f"P(ambos) SI fueran independientes = {p_conjunta_si_independientes*100:.1f}%")
-    print(f"Diferencia: {diferencia*100:+.1f} puntos porcentuales")
-    print(f"Correlacion (goles totales vs corners totales): {correlacion:.3f}")
-
-    # Umbral practico: si la diferencia es chica, tratamos como independientes
-    independientes = abs(diferencia) < 0.03  # menos de 3 puntos porcentuales de diferencia
-    print(f"\n¿Se pueden combinar con multiplicacion simple? {'SI' if independientes else 'NO'}")
+    print(f"[{nombre_metrica}] Diferencia real vs independiente: {diferencia*100:+.1f} pp | Correlacion: {correlacion:.3f}")
+    independientes = abs(diferencia) < 0.03
+    print(f"[{nombre_metrica}] ¿Se puede combinar con goles? {'SI' if independientes else 'NO'}")
     return independientes
 
 if __name__ == "__main__":
@@ -729,14 +816,26 @@ if __name__ == "__main__":
 
         print("Calculando fuerzas de corners (si hay datos disponibles)...")
         fuerzas_corners, prom_l_corners, prom_v_corners = calcular_fuerzas_corners(historico)
-        permitir_combo_extra = False
+        corners_combinable = False
         if fuerzas_corners:
             print(f"  Corners disponibles para {len(fuerzas_corners)} equipos.")
             print("  Verificando si es seguro combinar goles+corners con datos reales...")
-            resultado_correlacion = verificar_correlacion_goles_corners(historico)
-            permitir_combo_extra = bool(resultado_correlacion)
+            corners_combinable = bool(verificar_correlacion_goles_metrica(
+                historico, "HC", "AC", nombre_metrica="corners"))
         else:
             print("  Sin datos de corners todavia (se activara solo cuando esten disponibles).")
+
+        print("Calculando fuerzas de tarjetas (si hay datos disponibles)...")
+        fuerzas_tarjetas, factores_arbitro, prom_l_tarjetas, prom_v_tarjetas = calcular_fuerzas_tarjetas(historico)
+        tarjetas_combinable = False
+        if fuerzas_tarjetas:
+            print(f"  Tarjetas disponibles para {len(fuerzas_tarjetas)} equipos, "
+                  f"{len(factores_arbitro)} arbitros con historial suficiente.")
+            print("  Verificando si es seguro combinar goles+tarjetas con datos reales...")
+            tarjetas_combinable = bool(verificar_correlacion_goles_metrica(
+                historico, "HY", "AY", linea_metrica=3.5, nombre_metrica="tarjetas"))
+        else:
+            print("  Sin datos de tarjetas todavia (se activara solo cuando esten disponibles).")
 
         print("Ajustando Dixon-Coles...")
         rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
@@ -751,7 +850,10 @@ if __name__ == "__main__":
         print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
         picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=15, umbral_seguro=umbral_dinamico,
                                fuerzas_corners=fuerzas_corners, prom_l_corners=prom_l_corners, prom_v_corners=prom_v_corners,
-                               permitir_combo_extra=permitir_combo_extra)
+                               corners_combinable=corners_combinable,
+                               fuerzas_tarjetas=fuerzas_tarjetas, factores_arbitro=factores_arbitro,
+                               prom_l_tarjetas=prom_l_tarjetas, prom_v_tarjetas=prom_v_tarjetas,
+                               tarjetas_combinable=tarjetas_combinable)
 
         if len(picks) > 0:
             picks.to_csv(ARCHIVO_PICKS, index=False)
