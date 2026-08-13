@@ -16,6 +16,26 @@
         "pick_probabilidad": 86.1
       },
       {
+        "local": "Arsenal",
+        "visitante": "Coventry",
+        "pick_recomendado": "Local gana + Over 1.5 goles",
+        "pick_probabilidad": 84.3
+      },
+      {
+        "local": "Hull",
+        "visitante": "Man United",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 83.8
+      }
+    ],
+    "probabilidad_combinada": 53.1,
+    "cuota_combinada": 1.88
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
         "local": "Fulham",
         "visitante": "Chelsea",
         "pick_recomendado": "Over 1.5 goles",
@@ -24,57 +44,17 @@
       {
         "local": "Man City",
         "visitante": "Bournemouth",
-        "pick_recomendado": "Doble oportunidad 1X + Over 1.5 goles",
-        "pick_probabilidad": 79.2
-      }
-    ],
-    "probabilidad_combinada": 48.2,
-    "cuota_combinada": 2.07
-  },
-  {
-    "nombre": "Combinada #2",
-    "es_gratis": false,
-    "partidos": [
+        "pick_recomendado": "Over 1.5 goles + Más corners: Man City",
+        "pick_probabilidad": 80.5
+      },
       {
         "local": "Newcastle",
         "visitante": "Liverpool",
-        "pick_recomendado": "Over 2.5 goles",
-        "pick_probabilidad": 78.2
-      },
-      {
-        "local": "Brighton",
-        "visitante": "Aston Villa",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 77.1
-      },
-      {
-        "local": "Nott'm Forest",
-        "visitante": "Leeds",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 76.9
+        "pick_recomendado": "Ambos anotan - Si",
+        "pick_probabilidad": 80.2
       }
     ],
-    "probabilidad_combinada": 46.4,
-    "cuota_combinada": 2.16
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "local": "Hull",
-        "visitante": "Man United",
-        "pick_recomendado": "Doble oportunidad X2 + Over 1.5 goles",
-        "pick_probabilidad": 76.0
-      },
-      {
-        "local": "Arsenal",
-        "visitante": "Coventry",
-        "pick_recomendado": "Over 2.5 goles",
-        "pick_probabilidad": 75.5
-      }
-    ],
-    "probabilidad_combinada": 57.4,
-    "cuota_combinada": 1.74
+    "probabilidad_combinada": 52.3,
+    "cuota_combinada": 1.91
   }
 ]
