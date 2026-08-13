@@ -596,7 +596,7 @@ def calcular_fuerzas_corners(df):
         }
     return fuerzas, prom_local, prom_visit
 
-def calcular_mercados_corners(local, visitante, fuerzas, prom_local, prom_visit, lineas=(8.5, 9.5, 10.5)):
+def calcular_mercados_corners(local, visitante, fuerzas, prom_local, prom_visit, lineas=(5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5)):
     if not fuerzas or local not in fuerzas or visitante not in fuerzas:
         return {}
     fl, fv = fuerzas[local], fuerzas[visitante]
@@ -686,6 +686,58 @@ def calcular_mercados_tarjetas(local, visitante, fuerzas, factores_arbitro, prom
 
     return mercados
 
+# ---------- Mercado de tiros a puerta (mismo patron que corners) ----------
+
+def calcular_fuerzas_tiros(df):
+    if "HST" not in df.columns or "AST" not in df.columns:
+        return {}, None, None
+    df = df.dropna(subset=["HST", "AST"])
+    if len(df) < 20:
+        return {}, None, None
+
+    fecha_max = df["Date"].max()
+    dias_desde = (fecha_max - df["Date"]).dt.days
+    peso = 0.5 ** (dias_desde / 365)
+    df = df.copy()
+    df["peso"] = peso
+
+    prom_local = (df["HST"] * df["peso"]).sum() / df["peso"].sum()
+    prom_visit = (df["AST"] * df["peso"]).sum() / df["peso"].sum()
+
+    equipos = pd.unique(df[["HomeTeam", "AwayTeam"]].values.ravel())
+    fuerzas = {}
+    for equipo in equipos:
+        pl = df[df["HomeTeam"] == equipo]
+        pv = df[df["AwayTeam"] == equipo]
+        if pl["peso"].sum() == 0 or pv["peso"].sum() == 0:
+            continue
+        fuerzas[equipo] = {
+            "ataque_local": (pl["HST"]*pl["peso"]).sum()/pl["peso"].sum() / prom_local,
+            "defensa_local": (pl["AST"]*pl["peso"]).sum()/pl["peso"].sum() / prom_visit,
+            "ataque_visitante": (pv["AST"]*pv["peso"]).sum()/pv["peso"].sum() / prom_visit,
+            "defensa_visitante": (pv["HST"]*pv["peso"]).sum()/pv["peso"].sum() / prom_local,
+        }
+    return fuerzas, prom_local, prom_visit
+
+def calcular_mercados_tiros(local, visitante, fuerzas, prom_local, prom_visit, lineas=(3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5)):
+    if not fuerzas or local not in fuerzas or visitante not in fuerzas:
+        return {}
+    fl, fv = fuerzas[local], fuerzas[visitante]
+    lam = prom_local * fl["ataque_local"] * fv["defensa_visitante"]
+    mu = prom_visit * fv["ataque_visitante"] * fl["defensa_local"]
+    total = lam + mu
+
+    mercados = {}
+    for linea in lineas:
+        p_over = 1 - poisson.cdf(linea, total)
+        mercados[f"Over {linea} tiros a puerta"] = p_over
+        mercados[f"Under {linea} tiros a puerta"] = 1 - p_over
+
+    mercados[f"Más tiros a puerta: {local}"] = 1 - skellam.cdf(0, lam, mu)
+    mercados[f"Más tiros a puerta: {visitante}"] = skellam.cdf(-1, lam, mu)
+
+    return mercados
+
 def obtener_arbitro_partido(p):
     """
     Intenta extraer el nombre del arbitro desde la respuesta de football-data.org.
@@ -702,7 +754,8 @@ def obtener_arbitro_partido(p):
 
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75,
                    fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, corners_combinable=False,
-                   fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False):
+                   fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False,
+                   fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False):
     ahora = datetime.utcnow()
     limite = ahora + timedelta(days=dias_adelante)
 
@@ -740,12 +793,18 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
                     local, visitante, fuerzas_tarjetas, factores_arbitro,
                     prom_l_tarjetas, prom_v_tarjetas, arbitro=arbitro_partido)
 
-        mercados_extra_todos = {**mercados_corners, **mercados_tarjetas}
+        mercados_tiros = {}
+        if fuerzas_tiros:
+            mercados_tiros = calcular_mercados_tiros(local, visitante, fuerzas_tiros, prom_l_tiros, prom_v_tiros)
+
+        mercados_extra_todos = {**mercados_corners, **mercados_tarjetas, **mercados_tiros}
         mercados_extra_combinables = {}
         if corners_combinable:
             mercados_extra_combinables.update(mercados_corners)
         if tarjetas_combinable:
             mercados_extra_combinables.update(mercados_tarjetas)
+        if tiros_combinable:
+            mercados_extra_combinables.update(mercados_tiros)
 
         nombres_pick, pick_prob, pick_cuota, cumple_umbral = elegir_mejor_pick(
             matriz, umbral_seguro, mercados_extra=mercados_extra_todos, mercados_extra_combinables=mercados_extra_combinables)
@@ -762,6 +821,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbr
             **{k: round(v*100, 1) for k, v in mercados.items()},
             **{k: round(v*100, 1) for k, v in mercados_corners.items()},
             **{k: round(v*100, 1) for k, v in mercados_tarjetas.items()},
+            **{k: round(v*100, 1) for k, v in mercados_tiros.items()},
         })
 
     return pd.DataFrame(picks)
@@ -837,6 +897,17 @@ if __name__ == "__main__":
         else:
             print("  Sin datos de tarjetas todavia (se activara solo cuando esten disponibles).")
 
+        print("Calculando fuerzas de tiros a puerta (si hay datos disponibles)...")
+        fuerzas_tiros, prom_l_tiros, prom_v_tiros = calcular_fuerzas_tiros(historico)
+        tiros_combinable = False
+        if fuerzas_tiros:
+            print(f"  Tiros a puerta disponibles para {len(fuerzas_tiros)} equipos.")
+            print("  Verificando si es seguro combinar goles+tiros a puerta con datos reales...")
+            tiros_combinable = bool(verificar_correlacion_goles_metrica(
+                historico, "HST", "AST", linea_metrica=8.5, nombre_metrica="tiros a puerta"))
+        else:
+            print("  Sin datos de tiros a puerta todavia (se activara solo cuando esten disponibles).")
+
         print("Ajustando Dixon-Coles...")
         rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
         print(f"Rho: {rho:.3f}")
@@ -853,7 +924,9 @@ if __name__ == "__main__":
                                corners_combinable=corners_combinable,
                                fuerzas_tarjetas=fuerzas_tarjetas, factores_arbitro=factores_arbitro,
                                prom_l_tarjetas=prom_l_tarjetas, prom_v_tarjetas=prom_v_tarjetas,
-                               tarjetas_combinable=tarjetas_combinable)
+                               tarjetas_combinable=tarjetas_combinable,
+                               fuerzas_tiros=fuerzas_tiros, prom_l_tiros=prom_l_tiros, prom_v_tiros=prom_v_tiros,
+                               tiros_combinable=tiros_combinable)
 
         if len(picks) > 0:
             picks.to_csv(ARCHIVO_PICKS, index=False)
