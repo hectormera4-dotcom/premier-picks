@@ -109,6 +109,89 @@
   }
 
   /* ---------- Tabs ---------- */
+  /* ---------- Navegacion principal (Picks / Historial) ---------- */
+  .nav-principal {
+    max-width: 960px;
+    margin: 22px auto 0;
+    padding: 0 20px;
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+  .nav-tab {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: rgba(239,235,226,0.5);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .nav-tab.activo {
+    color: var(--papel);
+    border-bottom: 2px solid var(--verde-claro);
+  }
+
+  /* ---------- Historial de combinadas por fecha ---------- */
+  .fecha-grupo {
+    max-width: 960px;
+    margin: 0 auto 22px;
+    padding: 0 20px;
+  }
+  .fecha-titulo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(239,235,226,0.55);
+    margin-bottom: 10px;
+  }
+  .combinada-card {
+    background: var(--papel);
+    color: var(--tinta);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .combinada-card.pendiente { opacity: 0.75; }
+  .icono-resultado {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .icono-cumplida { background: rgba(47,110,69,0.15); color: var(--verde); }
+  .icono-fallada { background: rgba(163,75,62,0.15); color: var(--rojo); }
+  .icono-pendiente { background: rgba(23,32,26,0.08); color: var(--tinta-suave); }
+  .combinada-detalle { flex: 1; min-width: 0; }
+  .combinada-partidos-mini {
+    font-size: 12.5px;
+    color: var(--tinta-suave);
+    line-height: 1.5;
+  }
+  .combinada-partidos-mini b { color: var(--tinta); }
+  .combinada-meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+  .badge-tipo {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    background: rgba(23,32,26,0.08);
+    color: var(--tinta-suave);
+  }
+  .cuota-mini { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--tinta-suave); }
+  .vacio { text-align: center; padding: 60px 20px; color: rgba(239,235,226,0.5); font-size: 14px; }
+
   .tabs {
     max-width: 960px;
     margin: 22px auto 0;
@@ -441,10 +524,16 @@
     <div class="marcador-texto">
       <strong>Track record verificable.</strong> Porcentaje real de aciertos sobre los últimos picks resueltos — se actualiza solo, automáticamente, después de cada jornada.
     </div>
-    <a class="marcador-link" href="#">Ver historial completo →</a>
+    <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
   </div>
 </div>
 
+<div class="nav-principal">
+  <button class="nav-tab activo" id="nav-picks" onclick="cambiarVista('picks')">Picks del día</button>
+  <button class="nav-tab" id="nav-historial" onclick="cambiarVista('historial')">Historial</button>
+</div>
+
+<div id="vista-picks">
 <div class="tabs">
   <button class="tab activo">Gratis</button>
   <button class="tab">VIP</button>
@@ -453,6 +542,18 @@
 <main id="grid">
   <!-- La combinada del dia y las tarjetas se generan con JS mas abajo -->
 </main>
+</div>
+
+<div id="vista-historial" style="display:none;">
+  <div class="marcador-global" style="margin-top:0;">
+    <div class="marcador-box">
+      <span class="marcador-numero" id="resumen-numero-historial">—</span>
+      <span class="marcador-texto" id="resumen-texto-historial">Cargando historial...</span>
+    </div>
+  </div>
+  <main id="contenedor-fechas" style="padding-top: 18px;">
+  </main>
+</div>
 
 <footer>
   Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
@@ -709,6 +810,88 @@ function render(picks, combinadas) {
 
 function toggleDetalle(i) {
   document.getElementById(`detalle-${i}`).classList.toggle("abierto");
+}
+
+// ---------- Pestaña de Historial ----------
+
+let historialYaCargado = false;
+
+function cambiarVista(vista) {
+  document.getElementById("nav-picks").classList.toggle("activo", vista === "picks");
+  document.getElementById("nav-historial").classList.toggle("activo", vista === "historial");
+  document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
+  document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
+
+  if (vista === "historial" && !historialYaCargado) {
+    historialYaCargado = true;
+    cargarHistorialCombinadas();
+  }
+}
+
+function crearTarjetaCombinadaHistorial(c) {
+  let clase = "pendiente", icono = "⏳", claseIcono = "icono-pendiente";
+  if (c.resultado === "Cumplida") { clase = ""; icono = "✓"; claseIcono = "icono-cumplida"; }
+  else if (c.resultado === "Fallada") { clase = ""; icono = "✕"; claseIcono = "icono-fallada"; }
+
+  let partidos = [];
+  try { partidos = JSON.parse(c.partidos_json); } catch (e) { partidos = []; }
+  const filasPartidos = partidos.map(p => `<b>${p.local} vs ${p.visitante}</b> — ${p.pick_recomendado}`).join(" · ");
+  const tipo = (c.es_gratis === true || c.es_gratis === "True") ? "Gratis" : "VIP";
+
+  return `
+    <div class="combinada-card ${clase}">
+      <div class="icono-resultado ${claseIcono}">${icono}</div>
+      <div class="combinada-detalle">
+        <div class="combinada-partidos-mini">${filasPartidos}</div>
+        <div class="combinada-meta">
+          <span class="badge-tipo">${tipo}</span>
+          <span class="cuota-mini">cuota ${c.cuota_combinada}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function cargarHistorialCombinadas() {
+  const contenedor = document.getElementById("contenedor-fechas");
+  try {
+    const datos = await cargarCSV("historial_combinadas.csv");
+
+    if (!datos.length) {
+      contenedor.innerHTML = `<div class="vacio">Todavía no hay combinadas registradas. Vuelve después de la primera fecha.</div>`;
+      document.getElementById("resumen-texto-historial").textContent = "Sin historial todavía.";
+      return;
+    }
+
+    const resueltas = datos.filter(d => d.resultado === "Cumplida" || d.resultado === "Fallada");
+    if (resueltas.length > 0) {
+      const cumplidas = resueltas.filter(d => d.resultado === "Cumplida").length;
+      const porcentaje = Math.round((cumplidas / resueltas.length) * 100);
+      document.getElementById("resumen-numero-historial").innerHTML = `${porcentaje}<span style="font-size:20px;">%</span>`;
+      document.getElementById("resumen-texto-historial").innerHTML =
+        `<strong>${cumplidas} de ${resueltas.length}</strong> combinadas cumplidas — historial 100% real y verificable.`;
+    } else {
+      document.getElementById("resumen-texto-historial").textContent = "Todavía no hay combinadas resueltas.";
+    }
+
+    const grupos = {};
+    for (const fila of datos) {
+      const n = fila.numero_fecha;
+      if (!grupos[n]) grupos[n] = [];
+      grupos[n].push(fila);
+    }
+    const numerosFecha = Object.keys(grupos).map(Number).sort((a, b) => b - a);
+
+    contenedor.innerHTML = numerosFecha.map(n => `
+      <div class="fecha-grupo">
+        <div class="fecha-titulo">Fecha ${n}</div>
+        ${grupos[n].map(crearTarjetaCombinadaHistorial).join("")}
+      </div>
+    `).join("");
+  } catch (err) {
+    contenedor.innerHTML = `<div class="vacio">No se pudo cargar el historial todavía. Intenta de nuevo más tarde.</div>`;
+    console.error(err);
+  }
 }
 
 cargarTodo();
