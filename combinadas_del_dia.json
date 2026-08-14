@@ -62,6 +62,12 @@
     "es_gratis": false,
     "partidos": [
       {
+        "local": "Bournemouth",
+        "visitante": "Everton",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 80.6
+      },
+      {
         "local": "Man City",
         "visitante": "Bournemouth",
         "pick_recomendado": "Over 1.5 goles + Más corners: Man City",
@@ -72,15 +78,9 @@
         "visitante": "Aston Villa",
         "pick_recomendado": "Under 11.5 tiros a puerta",
         "pick_probabilidad": 80.3
-      },
-      {
-        "local": "Newcastle",
-        "visitante": "Liverpool",
-        "pick_recomendado": "Ambos anotan - Si",
-        "pick_probabilidad": 80.2
       }
     ],
-    "probabilidad_combinada": 51.8,
-    "cuota_combinada": 1.93
+    "probabilidad_combinada": 52.1,
+    "cuota_combinada": 1.92
   }
 ]
