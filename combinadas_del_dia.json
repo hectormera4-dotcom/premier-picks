@@ -48,9 +48,9 @@
         "pick_probabilidad": 81.0
       },
       {
-        "local": "Ipswich",
-        "visitante": "Sunderland",
-        "pick_recomendado": "Doble oportunidad X2 + Under 12.5 corners",
+        "local": "Bournemouth",
+        "visitante": "Everton",
+        "pick_recomendado": "Under 13.5 corners",
         "pick_probabilidad": 80.6
       }
     ],
@@ -62,9 +62,9 @@
     "es_gratis": false,
     "partidos": [
       {
-        "local": "Bournemouth",
-        "visitante": "Everton",
-        "pick_recomendado": "Under 13.5 corners",
+        "local": "Ipswich",
+        "visitante": "Sunderland",
+        "pick_recomendado": "Doble oportunidad X2 + Under 12.5 corners",
         "pick_probabilidad": 80.6
       },
       {
