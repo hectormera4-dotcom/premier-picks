@@ -9,6 +9,7 @@ Este script esta pensado para correr AUTOMATICAMENTE todos los dias
 (se configura con el Programador de Tareas de Windows).
 """
 import requests
+import re
 import pandas as pd
 import numpy as np
 import json
@@ -314,6 +315,114 @@ def calcular_combo(matriz, lista_condiciones):
         if all(CONDICIONES[c](i, j) for c in lista_condiciones)
     )
 
+ARCHIVO_HISTORIAL_COMBINADAS = "historial_combinadas.csv"
+ARCHIVO_CONTADOR_FECHAS = "contador_fechas.json"
+
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
+
+def obtener_numero_fecha(fecha_partido):
+    """
+    Asigna un numero de 'Fecha' (jornada) secuencial segun la semana del
+    calendario en la que cae el partido. La primera semana que se ve se
+    numera como Fecha 1, la siguiente semana nueva como Fecha 2, etc.
+    Se guarda en un archivo para que el conteo sea consistente entre corridas.
+    """
+    semana = fecha_partido.strftime("%G-W%V")  # ej. "2026-W34"
+
+    if os.path.exists(ARCHIVO_CONTADOR_FECHAS):
+        with open(ARCHIVO_CONTADOR_FECHAS, "r", encoding="utf-8") as f:
+            mapa = json.load(f)
+    else:
+        mapa = {}
+
+    if semana not in mapa:
+        mapa[semana] = max(mapa.values(), default=0) + 1
+        with open(ARCHIVO_CONTADOR_FECHAS, "w", encoding="utf-8") as f:
+            json.dump(mapa, f, ensure_ascii=False, indent=2)
+
+    return mapa[semana]
+
+def cargar_historial_combinadas():
+    if os.path.exists(ARCHIVO_HISTORIAL_COMBINADAS):
+        h = pd.read_csv(ARCHIVO_HISTORIAL_COMBINADAS)
+        h["resultado"] = h["resultado"].astype(object)
+        return h
+    return pd.DataFrame(columns=["id_combinada", "numero_fecha", "fecha_generado", "es_gratis",
+                                   "partidos_json", "cuota_combinada", "resultado"])
+
+def registrar_combinadas_historial(combinadas, picks_df, historial_combinadas):
+    """Guarda cada combinada nueva (identificada por su conjunto exacto de
+    partidos) para que quede registrada permanentemente, aunque el dia
+    siguiente se recalculen combinadas distintas."""
+    nuevas = []
+    for c in combinadas:
+        partidos_ids = sorted(f"{p['local']}|{p['visitante']}" for p in c["partidos"])
+        id_combinada = "+".join(partidos_ids)
+
+        if (historial_combinadas["id_combinada"] == id_combinada).any():
+            continue  # ya estaba registrada
+
+        # Buscamos la fecha del primer partido de la combinada para asignar el numero de fecha
+        primer_partido = c["partidos"][0]
+        fila_pick = picks_df[(picks_df["local"] == primer_partido["local"]) &
+                               (picks_df["visitante"] == primer_partido["visitante"])]
+        fecha_ref = fila_pick.iloc[0]["fecha"] if not fila_pick.empty else datetime.utcnow()
+        numero_fecha = obtener_numero_fecha(pd.Timestamp(fecha_ref))
+
+        nuevas.append({
+            "id_combinada": id_combinada,
+            "numero_fecha": numero_fecha,
+            "fecha_generado": datetime.utcnow().strftime("%Y-%m-%d"),
+            "es_gratis": c["es_gratis"],
+            "partidos_json": json.dumps(c["partidos"], ensure_ascii=False, default=str),
+            "cuota_combinada": c["cuota_combinada"],
+            "resultado": None,
+        })
+
+    if nuevas:
+        historial_combinadas = pd.concat([historial_combinadas, pd.DataFrame(nuevas)], ignore_index=True)
+        print(f"Se registraron {len(nuevas)} combinadas nuevas en el historial.")
+    return historial_combinadas
+
+def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
+    """Una combinada se marca 'Cumplida' solo si TODOS sus partidos ganaron
+    su pick; 'Fallada' si al menos uno perdio. Si algun partido de la
+    combinada todavia no se juega, se queda 'Pendiente'."""
+    pendientes = historial_combinadas[historial_combinadas["resultado"].isna()]
+    resueltas_ahora = 0
+
+    for idx, combinada in pendientes.iterrows():
+        partidos = json.loads(combinada["partidos_json"])
+        resultados_legs = []
+        completa = True
+
+        for p in partidos:
+            fecha_partido = pd.Timestamp(p["fecha"])
+            match = historico_partidos[
+                (historico_partidos["Date"] == fecha_partido) &
+                (historico_partidos["HomeTeam"] == p["local"]) &
+                (historico_partidos["AwayTeam"] == p["visitante"])
+            ]
+            if match.empty or pd.isna(match.iloc[0].get("FTHG")):
+                completa = False
+                break
+            resultado_leg = verificar_pick_individual(p["pick_recomendado"], match.iloc[0])
+            if resultado_leg is None:
+                completa = False
+                break
+            resultados_legs.append(resultado_leg)
+
+        if not completa:
+            continue  # todavia falta algun partido de esta combinada
+
+        historial_combinadas.at[idx, "resultado"] = "Cumplida" if all(resultados_legs) else "Fallada"
+        resueltas_ahora += 1
+
+    if resueltas_ahora:
+        print(f"Se verificaron {resueltas_ahora} combinadas que ya se completaron.")
+    return historial_combinadas
+
 def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None):
     """
     Evalua mercados de goles/resultado (individuales + combos de 2 validos).
@@ -403,9 +512,55 @@ def registrar_picks_nuevos(picks_actuales, historial):
         print(f"Se registraron {len(nuevos)} picks nuevos en el historial.")
     return historial
 
+def verificar_pick_individual(nombre, fila_resultado):
+    """
+    Verifica si UN mercado especifico se cumplio, usando el resultado real
+    del partido. Entiende mercados de goles (via CONDICIONES), y tambien
+    los mercados dinamicos de corners/tarjetas/tiros a puerta (Over/Under
+    y "Mas X: Equipo"). Devuelve True/False, o None si no se pudo verificar
+    (ej. falta el dato de esa metrica para ese partido).
+    """
+    gh, ga = fila_resultado.get("FTHG"), fila_resultado.get("FTAG")
+
+    if nombre in CONDICIONES:
+        if pd.isna(gh) or pd.isna(ga):
+            return None
+        return CONDICIONES[nombre](int(gh), int(ga))
+
+    columnas_por_tipo = {
+        "corners": ("HC", "AC"),
+        "tarjetas": ("HY", "AY"),
+        "tiros a puerta": ("HST", "AST"),
+    }
+
+    m = re.match(r"(Over|Under) ([\d.]+) (corners|tarjetas|tiros a puerta)", nombre)
+    if m:
+        direccion, linea, tipo = m.group(1), float(m.group(2)), m.group(3)
+        col_l, col_v = columnas_por_tipo[tipo]
+        val_l, val_v = fila_resultado.get(col_l), fila_resultado.get(col_v)
+        if pd.isna(val_l) or pd.isna(val_v):
+            return None
+        total = val_l + val_v
+        return (total > linea) if direccion == "Over" else (total < linea)
+
+    m2 = re.match(r"Más (corners|tarjetas|tiros a puerta): (.+)", nombre)
+    if m2:
+        tipo, equipo = m2.group(1), m2.group(2)
+        col_l, col_v = columnas_por_tipo[tipo]
+        val_l, val_v = fila_resultado.get(col_l), fila_resultado.get(col_v)
+        if pd.isna(val_l) or pd.isna(val_v):
+            return None
+        if equipo == fila_resultado.get("HomeTeam"):
+            return val_l > val_v
+        elif equipo == fila_resultado.get("AwayTeam"):
+            return val_v > val_l
+
+    return None  # nombre de mercado no reconocido
+
 def verificar_picks_resueltos(historial, historico_partidos):
     """Revisa los picks pendientes (sin resultado) y, si el partido ya se jugo
-    (aparece en el historico con resultado), calcula si el pick acerto o no."""
+    (aparece en el historico con resultado), calcula si el pick acerto o no.
+    Ahora entiende TODOS los tipos de mercado (goles, corners, tarjetas, tiros)."""
     pendientes = historial[historial["acierto"].isna()]
     resueltos_ahora = 0
 
@@ -418,11 +573,18 @@ def verificar_picks_resueltos(historial, historico_partidos):
         if match.empty:
             continue  # el partido todavia no se ha jugado
 
-        gh = int(match.iloc[0]["FTHG"])
-        ga = int(match.iloc[0]["FTAG"])
-        condiciones_pick = pick["pick_recomendado"].split(" + ")
+        fila = match.iloc[0]
+        gh, ga = fila.get("FTHG"), fila.get("FTAG")
+        if pd.isna(gh) or pd.isna(ga):
+            continue  # resultado de goles incompleto, esperamos
 
-        acierto = all(CONDICIONES[c](gh, ga) for c in condiciones_pick)
+        condiciones_pick = pick["pick_recomendado"].split(" + ")
+        resultados_leg = [verificar_pick_individual(c, fila) for c in condiciones_pick]
+
+        if any(r is None for r in resultados_leg):
+            continue  # falta algun dato (ej. corners no disponibles ese partido), esperamos
+
+        acierto = all(resultados_leg)
 
         historial.at[idx, "resultado_real"] = f"{gh}-{ga}"
         historial.at[idx, "acierto"] = acierto
@@ -469,17 +631,19 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
             elegidos.append(partido)
             indices_usados.append(idx)
             cuota_actual = 1 / prob_acumulada
-            if cuota_actual >= cuota_objetivo or len(elegidos) >= max_partidos_por_combinada:
+            # Solo permitimos detenernos por cuota objetivo si YA hay al menos
+            # 2 partidos -- una combinada de 1 solo partido no es una combinada
+            if (len(elegidos) >= 2 and cuota_actual >= cuota_objetivo) or len(elegidos) >= max_partidos_por_combinada:
                 break
 
         if len(elegidos) < 2:
-            break  # no alcanzo para armar una combinada completa
+            break  # no hay suficientes partidos disponibles para armar una combinada completa
 
         elegidos_df = pd.DataFrame(elegidos)
         combinadas.append({
             "nombre": f"Combinada #{n+1}",
             "es_gratis": (n == 0),  # la primera combinada generada es la gratuita
-            "partidos": elegidos_df[["local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
+            "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
             "probabilidad_combinada": round(prob_acumulada*100, 1),
             "cuota_combinada": round(1/prob_acumulada, 2),
         })
@@ -533,7 +697,7 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         print(f"Aviso: no hay suficientes picks seguros hoy para alcanzar la cuota objetivo ({cuota_objetivo}).")
 
     return {
-        "partidos": elegidos_df[["local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
+        "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
         "probabilidad_combinada": round(prob_acumulada*100, 1),
         "cuota_combinada": round(cuota_final, 2),
     }
@@ -750,6 +914,119 @@ def obtener_arbitro_partido(p):
             return oficial["name"]
     return None
 
+# ---------- Subida de datos a Supabase (reemplaza los archivos publicos) ----------
+
+def supabase_headers(upsert=False):
+    headers = {
+        "apikey": SUPABASE_SERVICE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}",
+        "Content-Type": "application/json",
+    }
+    if upsert:
+        headers["Prefer"] = "resolution=merge-duplicates"
+    return headers
+
+def supabase_configurado():
+    return bool(SUPABASE_URL and SUPABASE_SERVICE_KEY)
+
+def limpiar_tabla_supabase(tabla):
+    """Borra todas las filas de una tabla (usamos esto para picks/combinadas,
+    que se regeneran completas cada vez que corre el pipeline)."""
+    resp = requests.delete(f"{SUPABASE_URL}/rest/v1/{tabla}?id=gt.0", headers=supabase_headers())
+    if resp.status_code not in (200, 204):
+        print(f"Aviso: no se pudo limpiar la tabla '{tabla}' en Supabase ({resp.status_code}): {resp.text[:200]}")
+
+def subir_picks_supabase(picks_df, n_gratis=3):
+    """Sube los picks individuales a Supabase, marcando los N mas seguros
+    del dia como gratis (el resto queda VIP automaticamente)."""
+    if not supabase_configurado():
+        print("Supabase no configurado (faltan credenciales) -- se omite la subida.")
+        return
+    if len(picks_df) == 0:
+        return
+
+    df = picks_df.copy()
+    df["es_gratis"] = False
+    top_indices = df.sort_values("pick_probabilidad", ascending=False).head(n_gratis).index
+    df.loc[top_indices, "es_gratis"] = True
+
+    columnas_base = {"fecha", "local", "visitante", "pick_recomendado", "es_combo",
+                      "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis"}
+
+    registros = []
+    for _, fila in df.iterrows():
+        mercados = {k: v for k, v in fila.items() if k not in columnas_base and pd.notna(v)}
+        registros.append({
+            "fecha": str(fila["fecha"]),
+            "local": fila["local"],
+            "visitante": fila["visitante"],
+            "pick_recomendado": fila["pick_recomendado"],
+            "es_combo": bool(fila["es_combo"]),
+            "pick_probabilidad": float(fila["pick_probabilidad"]),
+            "pick_cuota_aprox": float(fila["pick_cuota_aprox"]) if pd.notna(fila["pick_cuota_aprox"]) else None,
+            "pick_es_seguro": bool(fila["pick_es_seguro"]),
+            "es_gratis": bool(fila["es_gratis"]),
+            "mercados_json": mercados,
+        })
+
+    limpiar_tabla_supabase("picks")
+    resp = requests.post(f"{SUPABASE_URL}/rest/v1/picks", headers=supabase_headers(), json=registros)
+    if resp.status_code in (200, 201):
+        gratis_n = sum(1 for r in registros if r["es_gratis"])
+        print(f"Subidos {len(registros)} picks a Supabase ({gratis_n} gratis, {len(registros)-gratis_n} VIP).")
+    else:
+        print(f"Aviso: fallo al subir picks a Supabase ({resp.status_code}): {resp.text[:300]}")
+
+def subir_combinadas_supabase(combinadas):
+    if not supabase_configurado():
+        return
+    if not combinadas:
+        return
+
+    registros = [{
+        "nombre": c["nombre"],
+        "es_gratis": bool(c["es_gratis"]),
+        "partidos_json": json.loads(json.dumps(c["partidos"], default=str)),
+        "probabilidad_combinada": float(c["probabilidad_combinada"]),
+        "cuota_combinada": float(c["cuota_combinada"]),
+    } for c in combinadas]
+
+    limpiar_tabla_supabase("combinadas")
+    resp = requests.post(f"{SUPABASE_URL}/rest/v1/combinadas", headers=supabase_headers(), json=registros)
+    if resp.status_code in (200, 201):
+        print(f"Subidas {len(registros)} combinadas a Supabase.")
+    else:
+        print(f"Aviso: fallo al subir combinadas a Supabase ({resp.status_code}): {resp.text[:300]}")
+
+def subir_historial_combinadas_supabase(historial_combinadas):
+    """A diferencia de picks/combinadas, el historial NUNCA se borra --
+    se actualiza (upsert) para ir agregando fechas nuevas y marcando
+    resultados sin perder lo que ya existia."""
+    if not supabase_configurado():
+        return
+    if len(historial_combinadas) == 0:
+        return
+
+    registros = []
+    for _, fila in historial_combinadas.iterrows():
+        registros.append({
+            "id_combinada": fila["id_combinada"],
+            "numero_fecha": int(fila["numero_fecha"]),
+            "fecha_generado": str(fila["fecha_generado"]),
+            "es_gratis": bool(fila["es_gratis"]),
+            "partidos_json": json.loads(fila["partidos_json"]),
+            "cuota_combinada": float(fila["cuota_combinada"]),
+            "resultado": fila["resultado"] if pd.notna(fila["resultado"]) else None,
+        })
+
+    resp = requests.post(
+        f"{SUPABASE_URL}/rest/v1/historial_combinadas?on_conflict=id_combinada",
+        headers=supabase_headers(upsert=True), json=registros)
+    if resp.status_code in (200, 201, 204):
+        print(f"Historial de combinadas sincronizado con Supabase ({len(registros)} registros).")
+    else:
+        print(f"Aviso: fallo al sincronizar historial en Supabase ({resp.status_code}): {resp.text[:300]}")
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75,
@@ -947,5 +1224,21 @@ if __name__ == "__main__":
             with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
                 json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
             print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")
+
+            print("\nActualizando historial de combinadas por fecha...")
+            historial_combinadas = cargar_historial_combinadas()
+            historial_combinadas = registrar_combinadas_historial(combinadas, picks, historial_combinadas)
+            historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, historico)
+            historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS, index=False)
+
+            resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
+            if len(resueltas) > 0:
+                cumplidas = (resueltas["resultado"] == "Cumplida").sum()
+                print(f"Historial de combinadas: {cumplidas}/{len(resueltas)} cumplidas ({cumplidas/len(resueltas)*100:.1f}%)")
+
+            print("\nSincronizando con Supabase...")
+            subir_picks_supabase(picks, n_gratis=3)
+            subir_combinadas_supabase(combinadas)
+            subir_historial_combinadas_supabase(historial_combinadas)
         else:
             print("No hay partidos programados en los proximos dias.")

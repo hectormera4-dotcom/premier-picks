@@ -28,12 +28,14 @@ jobs:
       - name: Correr el script de actualizacion
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: python actualizar_y_predecir.py
 
       - name: Guardar los cambios de vuelta en el repositorio
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add premier_league_combinado.csv picks_del_dia.csv historial_picks.csv combinadas_del_dia.json
+          git add premier_league_combinado.csv picks_del_dia.csv historial_picks.csv combinadas_del_dia.json historial_combinadas.csv contador_fechas.json
           git diff --staged --quiet || git commit -m "Actualizacion automatica de picks"
           git push
