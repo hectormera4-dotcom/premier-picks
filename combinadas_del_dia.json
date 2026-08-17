@@ -76,17 +76,17 @@
         "pick_probabilidad": 80.7
       },
       {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Bournemouth",
-        "visitante": "Everton",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 80.6
-      },
-      {
         "fecha": "2026-08-22 14:00:00",
         "local": "Ipswich",
         "visitante": "Sunderland",
         "pick_recomendado": "Doble oportunidad X2 + Under 12.5 corners",
+        "pick_probabilidad": 80.6
+      },
+      {
+        "fecha": "2026-08-29 14:00:00",
+        "local": "Bournemouth",
+        "visitante": "Everton",
+        "pick_recomendado": "Under 13.5 corners",
         "pick_probabilidad": 80.6
       }
     ],
