@@ -70,6 +70,53 @@
     text-transform: uppercase;
   }
 
+  /* ---------- Autenticacion ---------- */
+  .auth-barra { display: flex; align-items: center; gap: 10px; }
+  .auth-estado { font-size: 12.5px; color: rgba(239,235,226,0.7); }
+  .auth-estado b { color: var(--verde-claro); }
+  .auth-btn {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--linea-oscura);
+    background: transparent;
+    color: rgba(239,235,226,0.75);
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .auth-btn.destacado { background: var(--verde); border-color: var(--verde); color: #fff; }
+
+  .auth-modal-fondo {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .auth-modal {
+    background: var(--papel);
+    color: var(--tinta);
+    border-radius: 10px;
+    padding: 24px;
+    width: 300px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .auth-modal-titulo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .auth-input {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--linea);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+  .auth-error { font-size: 12px; color: var(--rojo); min-height: 14px; }
+
   /* ---------- Marcador global de confianza ---------- */
   .marcador-global {
     max-width: 960px;
@@ -514,7 +561,7 @@
 <header>
   <div class="header-inner">
     <div class="logo">PICKS<span>PL</span></div>
-    <div class="jornada-tag">Jornada 1 · 2026/27</div>
+    <div id="auth-barra" class="auth-barra"></div>
   </div>
 </header>
 
@@ -560,14 +607,21 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-// Modo administrador: agrega ?admin=1 a la URL para ver todo desbloqueado.
-// IMPORTANTE: esto es solo una vista previa, NO es seguridad real todavia.
-const ES_ADMIN = new URLSearchParams(window.location.search).get("admin") === "1";
+// ---------- Conexion a Supabase ----------
+// Reemplaza estos dos valores con los tuyos (Settings -> API Keys en Supabase).
+// La Publishable key es segura para el navegador siempre que RLS este activo.
+const SUPABASE_URL = "https://vkmugemzjvgucdmbkgvj.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_ROY7OYSprRvhtZJGGyqNEg_eV2PPAh0";
 
-const UMBRAL_SEGURO = 0.75; // debe coincidir con el umbral usado en el pipeline
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Nombres de columnas del CSV -> etiqueta legible para el detalle de mercados
+let sesionActual = null;
+let perfilActual = null;
+
+const UMBRAL_SEGURO = 0.80; // debe coincidir con el umbral usado en el pipeline
+
 const ETIQUETAS_MERCADOS = {
   prob_local: "1X2 — Local gana",
   prob_empate: "1X2 — Empate",
@@ -584,73 +638,142 @@ const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
 function formatearFecha(fechaStr) {
-  const f = new Date(fechaStr.replace(" ", "T"));
+  const f = new Date(String(fechaStr).replace(" ", "T"));
   if (isNaN(f)) return fechaStr;
   const hh = String(f.getHours()).padStart(2, "0");
   const mm = String(f.getMinutes()).padStart(2, "0");
   return `${DIAS[f.getDay()]} ${f.getDate()} ${MESES[f.getMonth()]} · ${hh}:${mm}`;
 }
 
-async function cargarCSV(url) {
-  const resp = await fetch(url + "?_=" + Date.now()); // evita cache vieja
-  if (!resp.ok) throw new Error(`No se pudo cargar ${url}`);
-  const texto = await resp.text();
-  return Papa.parse(texto, { header: true, dynamicTyping: true, skipEmptyLines: true }).data;
-}
-
-async function cargarJSON(url) {
-  const resp = await fetch(url + "?_=" + Date.now());
-  if (!resp.ok) throw new Error(`No se pudo cargar ${url}`);
-  return resp.json();
-}
-
 function transformarPick(fila) {
-  const seguro = fila.pick_es_seguro === true || String(fila.pick_es_seguro).toLowerCase() === "true";
-  const combo = fila.es_combo === true || String(fila.es_combo).toLowerCase() === "true";
-
+  const seguro = !!fila.pick_es_seguro;
+  const mercadosObj = fila.mercados_json || {};
   const mercados = Object.entries(ETIQUETAS_MERCADOS)
-    .filter(([col]) => fila[col] !== undefined && fila[col] !== null && fila[col] !== "")
-    .map(([col, etiqueta]) => [etiqueta, `${fila[col]}%`]);
+    .filter(([col]) => mercadosObj[col] !== undefined && mercadosObj[col] !== null)
+    .map(([col, etiqueta]) => [etiqueta, `${mercadosObj[col]}%`]);
 
   return {
-    fecha: formatearFecha(String(fila.fecha)),
+    fecha: formatearFecha(fila.fecha),
     local: fila.local, visitante: fila.visitante,
     seguro,
     pick: seguro ? fila.pick_recomendado : null,
     prob: seguro ? Math.round(fila.pick_probabilidad) : null,
     cuota: seguro ? fila.pick_cuota_aprox : null,
     nivel: seguro ? "seguro" : null,
-    combo, vip: false,
+    combo: !!fila.es_combo,
     mercados,
   };
 }
 
+// ---------- Autenticacion ----------
+
+async function actualizarSesion() {
+  const { data: { session } } = await sb.auth.getSession();
+  sesionActual = session;
+
+  if (session) {
+    const { data: perfil } = await sb.from("perfiles").select("*").eq("id", session.user.id).single();
+    perfilActual = perfil;
+  } else {
+    perfilActual = null;
+  }
+  renderBarraAuth();
+}
+
+function renderBarraAuth() {
+  const cont = document.getElementById("auth-barra");
+  if (sesionActual && perfilActual) {
+    const etiqueta = perfilActual.es_admin ? "Administrador" : (perfilActual.es_vip ? "VIP" : "Gratis");
+    cont.innerHTML = `
+      <span class="auth-estado">${sesionActual.user.email} · <b>${etiqueta}</b></span>
+      <button class="auth-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    `;
+  } else {
+    cont.innerHTML = `
+      <button class="auth-btn" onclick="mostrarFormAuth('login')">Iniciar sesión</button>
+      <button class="auth-btn destacado" onclick="mostrarFormAuth('signup')">Registrarse</button>
+    `;
+  }
+}
+
+function mostrarFormAuth(modo) {
+  const esLogin = modo === "login";
+  const html = `
+    <div class="auth-modal-fondo" onclick="cerrarFormAuth(event)">
+      <div class="auth-modal" onclick="event.stopPropagation()">
+        <div class="auth-modal-titulo">${esLogin ? "Iniciar sesión" : "Crear cuenta"}</div>
+        <input type="email" id="auth-email" placeholder="Correo electrónico" class="auth-input">
+        <input type="password" id="auth-password" placeholder="Contraseña" class="auth-input">
+        <button class="auth-btn destacado" style="width:100%; margin-top:8px;"
+                onclick="${esLogin ? 'hacerLogin()' : 'hacerSignup()'}">${esLogin ? "Entrar" : "Registrarme"}</button>
+        <div id="auth-error" class="auth-error"></div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+function cerrarFormAuth(event) {
+  if (event) event.currentTarget.remove();
+  else document.querySelector(".auth-modal-fondo")?.remove();
+}
+
+async function hacerLogin() {
+  const email = document.getElementById("auth-email").value;
+  const password = document.getElementById("auth-password").value;
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { document.getElementById("auth-error").textContent = error.message; return; }
+  cerrarFormAuth();
+  await actualizarSesion();
+  await cargarTodo();
+}
+
+async function hacerSignup() {
+  const email = document.getElementById("auth-email").value;
+  const password = document.getElementById("auth-password").value;
+  const { error } = await sb.auth.signUp({ email, password });
+  if (error) { document.getElementById("auth-error").textContent = error.message; return; }
+  document.getElementById("auth-error").style.color = "var(--verde-claro)";
+  document.getElementById("auth-error").textContent = "Cuenta creada. Ya puedes iniciar sesión.";
+}
+
+async function cerrarSesion() {
+  await sb.auth.signOut();
+  await actualizarSesion();
+  await cargarTodo();
+}
+
+// ---------- Carga de datos reales desde Supabase (protegidos por RLS) ----------
+
 async function cargarTodo() {
   try {
-    const [picksRaw, historialRaw, combinadas] = await Promise.all([
-      cargarCSV("picks_del_dia.csv"),
-      cargarCSV("historial_picks.csv").catch(() => []),
-      cargarJSON("combinadas_del_dia.json").catch(() => []),
+    const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }] = await Promise.all([
+      sb.from("picks").select("*").order("pick_probabilidad", { ascending: false }),
+      sb.from("combinadas").select("*"),
+      sb.from("historial_combinadas").select("*"),
     ]);
 
-    const picks = picksRaw.map(transformarPick);
+    const picks = (picksRaw || []).map(transformarPick);
+    const combinadas = (combinadasRaw || []).map(c => ({
+      nombre: c.nombre, es_gratis: c.es_gratis,
+      cuota_combinada: c.cuota_combinada,
+      partidos: c.partidos_json,
+    }));
 
-    // Track record global a partir del historial resuelto
-    const resueltos = historialRaw.filter(r => r.acierto === true || r.acierto === false ||
-                                                  r.acierto === "True" || r.acierto === "False");
+    const resueltas = (historialRaw || []).filter(h => h.resultado === "Cumplida" || h.resultado === "Fallada");
     let porcentaje = null;
-    if (resueltos.length > 0) {
-      const aciertos = resueltos.filter(r => r.acierto === true || r.acierto === "True").length;
-      porcentaje = Math.round((aciertos / resueltos.length) * 100);
+    if (resueltas.length > 0) {
+      const cumplidas = resueltas.filter(h => h.resultado === "Cumplida").length;
+      porcentaje = Math.round((cumplidas / resueltas.length) * 100);
     }
 
-    renderMarcadorGlobal(porcentaje, resueltos.length);
+    renderMarcadorGlobal(porcentaje, resueltas.length);
     render(picks, combinadas);
+    window._historialCombinadasCache = historialRaw || [];
   } catch (err) {
     document.getElementById("grid").innerHTML = `
       <div class="combinada" style="grid-column:1/-1; text-align:center; opacity:0.7;">
-        No se pudieron cargar los picks todavía. Si acabas de publicar la página,
-        espera a que el pipeline corra al menos una vez y recarga.
+        No se pudieron cargar los picks todavía. Verifica que SUPABASE_URL y SUPABASE_ANON_KEY
+        esten configurados correctamente, o espera a que el pipeline corra por primera vez.
       </div>`;
     console.error(err);
   }
@@ -669,7 +792,6 @@ function renderMarcadorGlobal(porcentaje, totalResueltos) {
 }
 
 function crearCombinada(c) {
-  const bloqueada = !c.es_gratis && !ES_ADMIN;
   const filas = c.partidos.map(p => `
     <div class="combinada-fila">
       <span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>
@@ -677,16 +799,8 @@ function crearCombinada(c) {
     </div>
   `).join("");
 
-  const lockHtml = bloqueada ? `
-    <div class="lock-overlay">
-      <div class="lock-icono"></div>
-      <div class="lock-texto">Desbloquea las demás combinadas de la fecha</div>
-      <button class="btn-vip">Desbloquear VIP</button>
-    </div>` : "";
-
   return `
     <div class="combinada ${c.es_gratis ? 'gratis' : ''}">
-      ${lockHtml}
       <div class="combinada-header">
         <span class="combinada-titulo">${c.nombre}</span>
         <span class="badge-mini ${c.es_gratis ? 'gratis' : 'vip'}">${c.es_gratis ? 'Gratis' : 'VIP'}</span>
@@ -716,19 +830,11 @@ function crearGauge(prob, nivel) {
 }
 
 function crearTarjeta(p, i) {
-  const bloqueada = p.vip && !ES_ADMIN;
   const detalleFilas = p.mercados.map(m => `
     <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
   `).join("");
 
-  const lockHtml = bloqueada ? `
-    <div class="lock-overlay">
-      <div class="lock-icono"></div>
-      <div class="lock-texto">Este pick es contenido VIP</div>
-      <button class="btn-vip">Desbloquear VIP</button>
-    </div>` : "";
-
-  // Caso honesto: el partido no tiene ningun mercado que llegue al 75%.
+  // Caso honesto: el partido no tiene ningun mercado que llegue al umbral.
   // No inventamos una recomendacion, mostramos el partido como "parejo".
   if (!p.seguro) {
     return `
@@ -741,7 +847,7 @@ function crearTarjeta(p, i) {
         </div>
         <div class="card-body">
           <div class="card-info">
-            <div class="sin-pick-texto">Partido parejo — ningún mercado alcanza nuestro estándar de seguridad (75%) esta fecha.</div>
+            <div class="sin-pick-texto">Partido parejo — ningún mercado alcanza nuestro estándar de seguridad esta fecha.</div>
           </div>
         </div>
         <button class="card-toggle" onclick="toggleDetalle(${i})">Ver probabilidades de todas formas ▾</button>
@@ -755,8 +861,7 @@ function crearTarjeta(p, i) {
   const comboBadge = p.combo ? `<span class="badge badge-combo">Combo x2</span>` : "";
 
   return `
-    <div class="card ${bloqueada ? 'bloqueada' : ''}">
-      ${lockHtml}
+    <div class="card">
       <div class="card-top">
         <div class="card-fecha">${p.fecha}</div>
         <div class="card-equipos">
@@ -780,10 +885,26 @@ function crearTarjeta(p, i) {
   `;
 }
 
+function crearTeaserVip() {
+  const yaEsVip = perfilActual && (perfilActual.es_vip || perfilActual.es_admin);
+  if (yaEsVip) return "";
+
+  const accion = sesionActual
+    ? `<button class="btn-vip" onclick="alert('Aqui conectamos Stripe en el siguiente paso')">Hazte VIP</button>`
+    : `<button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>`;
+
+  return `
+    <div class="combinada" style="align-items:center; text-align:center; gap:10px;">
+      <div class="lock-icono" style="margin:0 auto;"></div>
+      <div class="lock-texto">Hay más picks y combinadas disponibles solo para usuarios VIP</div>
+      ${accion}
+    </div>
+  `;
+}
+
 function render(picks, combinadas) {
   const combinadasHtml = combinadas.map(crearCombinada).join("");
   const hayCombinadas = combinadas.length > 0;
-  const hayVip = combinadas.some(c => !c.es_gratis);
 
   let avisoVip = "";
   if (!hayCombinadas) {
@@ -791,21 +912,10 @@ function render(picks, combinadas) {
       <div class="combinada" style="opacity:0.6; align-items:center; justify-content:center; text-align:center;">
         <span class="sin-pick-texto">Esta fecha no hay suficientes picks seguros para armar una combinada. Revisa los picks individuales abajo.</span>
       </div>`;
-  } else if (!hayVip) {
-    avisoVip = `
-      <div class="combinada" style="opacity:0.6; align-items:center; justify-content:center; text-align:center;">
-        <span class="sin-pick-texto">Esta fecha el mercado estuvo parejo — no alcanzó para una segunda combinada VIP con nuestro estándar de seguridad. Vuelve a ver los picks individuales VIP mientras tanto.</span>
-      </div>`;
   }
 
-  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picks.map(crearTarjeta).join("");
-
-  if (ES_ADMIN && !document.querySelector(".admin-tag")) {
-    const tag = document.createElement("div");
-    tag.className = "admin-tag";
-    tag.textContent = "MODO ADMINISTRADOR — viendo todo desbloqueado";
-    document.body.appendChild(tag);
-  }
+  document.getElementById("grid").innerHTML =
+    combinadasHtml + avisoVip + picks.map(crearTarjeta).join("") + crearTeaserVip();
 }
 
 function toggleDetalle(i) {
@@ -833,10 +943,9 @@ function crearTarjetaCombinadaHistorial(c) {
   if (c.resultado === "Cumplida") { clase = ""; icono = "✓"; claseIcono = "icono-cumplida"; }
   else if (c.resultado === "Fallada") { clase = ""; icono = "✕"; claseIcono = "icono-fallada"; }
 
-  let partidos = [];
-  try { partidos = JSON.parse(c.partidos_json); } catch (e) { partidos = []; }
+  const partidos = Array.isArray(c.partidos_json) ? c.partidos_json : [];
   const filasPartidos = partidos.map(p => `<b>${p.local} vs ${p.visitante}</b> — ${p.pick_recomendado}`).join(" · ");
-  const tipo = (c.es_gratis === true || c.es_gratis === "True") ? "Gratis" : "VIP";
+  const tipo = c.es_gratis ? "Gratis" : "VIP";
 
   return `
     <div class="combinada-card ${clase}">
@@ -855,7 +964,7 @@ function crearTarjetaCombinadaHistorial(c) {
 async function cargarHistorialCombinadas() {
   const contenedor = document.getElementById("contenedor-fechas");
   try {
-    const datos = await cargarCSV("historial_combinadas.csv");
+    const datos = window._historialCombinadasCache || [];
 
     if (!datos.length) {
       contenedor.innerHTML = `<div class="vacio">Todavía no hay combinadas registradas. Vuelve después de la primera fecha.</div>`;
@@ -894,7 +1003,11 @@ async function cargarHistorialCombinadas() {
   }
 }
 
-cargarTodo();
+(async function iniciar() {
+  await actualizarSesion();
+  await cargarTodo();
+  sb.auth.onAuthStateChange(() => { actualizarSesion(); });
+})();
 </script>
 
 </body>
