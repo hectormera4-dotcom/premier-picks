@@ -4,24 +4,28 @@
     "es_gratis": true,
     "partidos": [
       {
+        "fecha": "2026-08-21 19:00:00",
         "local": "Arsenal",
         "visitante": "Coventry",
         "pick_recomendado": "Local gana + Over 1.5 goles",
         "pick_probabilidad": 84.3
       },
       {
+        "fecha": "2026-08-22 11:30:00",
         "local": "Hull",
         "visitante": "Man United",
         "pick_recomendado": "Over 1.5 goles",
         "pick_probabilidad": 83.8
       },
       {
+        "fecha": "2026-08-22 16:30:00",
         "local": "Brentford",
         "visitante": "Tottenham",
         "pick_recomendado": "Under 12.5 corners",
         "pick_probabilidad": 83.4
       },
       {
+        "fecha": "2026-08-30 13:00:00",
         "local": "Leeds",
         "visitante": "Brentford",
         "pick_recomendado": "Over 5.5 tiros a puerta",
@@ -36,18 +40,21 @@
     "es_gratis": false,
     "partidos": [
       {
+        "fecha": "2026-08-28 19:00:00",
         "local": "Crystal Palace",
         "visitante": "Man City",
         "pick_recomendado": "Under 12.5 corners",
         "pick_probabilidad": 81.3
       },
       {
+        "fecha": "2026-08-22 14:00:00",
         "local": "Everton",
         "visitante": "Crystal Palace",
         "pick_recomendado": "Over 5.5 tiros a puerta",
         "pick_probabilidad": 81.1
       },
       {
+        "fecha": "2026-08-24 19:00:00",
         "local": "Fulham",
         "visitante": "Chelsea",
         "pick_recomendado": "Over 1.5 goles",
@@ -62,18 +69,21 @@
     "es_gratis": false,
     "partidos": [
       {
+        "fecha": "2026-08-30 13:00:00",
         "local": "Sunderland",
         "visitante": "Fulham",
         "pick_recomendado": "Over 6.5 corners",
         "pick_probabilidad": 80.7
       },
       {
+        "fecha": "2026-08-29 14:00:00",
         "local": "Bournemouth",
         "visitante": "Everton",
         "pick_recomendado": "Under 13.5 corners",
         "pick_probabilidad": 80.6
       },
       {
+        "fecha": "2026-08-22 14:00:00",
         "local": "Ipswich",
         "visitante": "Sunderland",
         "pick_recomendado": "Doble oportunidad X2 + Under 12.5 corners",
