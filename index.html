@@ -729,9 +729,10 @@ function renderBarraAuth() {
 }
 
 async function entrarConGoogle() {
+  const urlLimpia = window.location.origin + window.location.pathname;
   await sb.auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo: window.location.href }
+    options: { redirectTo: urlLimpia }
   });
 }
 
@@ -1068,6 +1069,15 @@ async function cargarHistorialCombinadas() {
   await actualizarSesion();
   await cargarTodo();
   sb.auth.onAuthStateChange((_evento, session) => { aplicarSesion(session); cargarTodo(); });
+
+  // Limpieza de seguridad: si quedo un "#" suelto en la URL (residuo de
+  // un login anterior), lo quitamos para que nunca se acumule con el
+  // proximo "#access_token=..." que agregue Supabase.
+  if (window.location.hash) {
+    setTimeout(() => {
+      history.replaceState(null, "", window.location.pathname);
+    }, 500);
+  }
 })();
 </script>
 
