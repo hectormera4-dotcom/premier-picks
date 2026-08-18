@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Picks PL — Pronósticos Premier League</title>
+<title>Picks FC — Pronósticos con IA</title>
+
+<!-- PWA: hace que la web se pueda "instalar" como app en el celular -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16221A">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Picks FC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -596,7 +605,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo">PICKS<span>PL</span></div>
+    <div class="logo">PICKS<span>FC</span></div>
     <div id="auth-barra" class="auth-barra"></div>
   </div>
 </header>
@@ -740,16 +749,45 @@ async function aplicarSesion(session) {
   renderBarraAuth();
 }
 
+let promptInstalacion = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  promptInstalacion = e;
+  renderBarraAuth(); // volvemos a pintar para que aparezca el boton
+});
+
+function botonInstalarApp() {
+  if (!promptInstalacion) return "";
+  return `<button class="auth-btn" onclick="instalarApp()">📲 Instalar app</button>`;
+}
+
+async function instalarApp() {
+  if (!promptInstalacion) return;
+  promptInstalacion.prompt();
+  await promptInstalacion.userChoice;
+  promptInstalacion = null;
+  renderBarraAuth();
+}
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch((err) => console.error("Error registrando service worker:", err));
+  });
+}
+
 function renderBarraAuth() {
   const cont = document.getElementById("auth-barra");
   if (sesionActual && perfilActual) {
     const etiqueta = perfilActual.es_admin ? "Administrador" : (perfilActual.es_vip ? "VIP" : "Gratis");
     cont.innerHTML = `
+      ${botonInstalarApp()}
       <span class="auth-estado">${sesionActual.user.email} · <b>${etiqueta}</b></span>
       <button class="auth-btn" onclick="cerrarSesion()">Cerrar sesión</button>
     `;
   } else {
     cont.innerHTML = `
+      ${botonInstalarApp()}
       <button class="auth-btn" onclick="mostrarFormAuth('login')">Iniciar sesión</button>
       <button class="auth-btn destacado" onclick="mostrarFormAuth('signup')">Registrarse</button>
     `;
