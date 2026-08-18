@@ -855,9 +855,83 @@ function renderMarcadorGlobal(porcentaje, totalResueltos) {
 function botonDesbloquear() {
   const yaEsVip = perfilActual && (perfilActual.es_vip || perfilActual.es_admin);
   if (yaEsVip) return "";
-  return sesionActual
-    ? `<button class="btn-vip" onclick="alert('Aqui conectamos el pago en el siguiente paso')">Hazte VIP</button>`
-    : `<button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>`;
+  if (!sesionActual) {
+    return `<button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>`;
+  }
+  return `
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-vip" onclick="iniciarPagoVip(this, 'dia')">Solo esta fecha — $5</button>
+      <button class="btn-vip" onclick="iniciarPagoVip(this, 'mes')">Mes completo — $15</button>
+    </div>
+  `;
+}
+
+async function iniciarPagoVip(boton, plan) {
+  const textoOriginal = boton.textContent;
+  boton.disabled = true;
+  boton.textContent = "Preparando pago...";
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { alert("Tu sesión expiró, inicia sesión de nuevo."); return; }
+
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/payphone-prepare`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ plan }),
+    });
+    const data = await resp.json();
+
+    if (!resp.ok || data.error) {
+      alert("No se pudo iniciar el pago: " + (data.error || "Error desconocido"));
+      boton.disabled = false;
+      boton.textContent = textoOriginal;
+      return;
+    }
+
+    // Redirigimos al formulario de pago de Payphone (tarjeta directa)
+    window.location.href = data.payWithCard;
+  } catch (err) {
+    alert("Error al conectar con el sistema de pagos: " + err.message);
+    boton.disabled = false;
+    boton.textContent = textoOriginal;
+  }
+}
+
+async function verificarRetornoDePago() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  const clientTransactionId = params.get("clientTransactionId");
+  if (!id || !clientTransactionId) return;
+
+  const cont = document.getElementById("grid");
+  cont.innerHTML = `<div class="combinada" style="grid-column:1/-1; text-align:center;">Verificando tu pago, un momento...</div>` + cont.innerHTML;
+
+  try {
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/payphone-confirm`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, clientTransactionId }),
+    });
+    const data = await resp.json();
+
+    if (data.aprobado) {
+      alert("¡Pago aprobado! Ya eres usuario VIP 🎉");
+    } else {
+      alert("El pago no se completó (" + (data.transactionStatus || "estado desconocido") + "). Intenta de nuevo.");
+    }
+  } catch (err) {
+    alert("No se pudo verificar el pago: " + err.message);
+  }
+
+  // Limpiamos los parametros de la URL y recargamos los datos (para que
+  // se vea el nuevo estado VIP si el pago fue aprobado)
+  history.replaceState(null, "", window.location.pathname);
+  await actualizarSesion();
+  await cargarTodo();
 }
 
 function crearCombinada(c) {
@@ -1088,6 +1162,7 @@ async function cargarHistorialCombinadas() {
 (async function iniciar() {
   await actualizarSesion();
   await cargarTodo();
+  await verificarRetornoDePago();
   sb.auth.onAuthStateChange((_evento, session) => { aplicarSesion(session); cargarTodo(); });
 
   // Limpieza de seguridad: si quedo un "#" suelto en la URL (residuo de
