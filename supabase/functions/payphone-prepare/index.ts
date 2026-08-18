@@ -83,7 +83,22 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify(bodyPayphone),
     });
 
-    const data = await resp.json();
+    const textoRespuesta = await resp.text();
+    let data: any;
+    try {
+      data = JSON.parse(textoRespuesta);
+    } catch (_e) {
+      // Payphone no devolvio JSON -- mostramos exactamente que nos mando,
+      // para poder diagnosticar en vez de fallar en silencio
+      return new Response(JSON.stringify({
+        error: "Payphone no devolvio una respuesta JSON valida",
+        status_http_de_payphone: resp.status,
+        respuesta_cruda: textoRespuesta.slice(0, 500),
+      }), {
+        status: 502,
+        headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+      });
+    }
 
     if (!resp.ok) {
       return new Response(JSON.stringify({ error: "Error de Payphone", detalle: data }), {
