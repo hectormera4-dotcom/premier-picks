@@ -1029,21 +1029,30 @@ def subir_historial_combinadas_supabase(historial_combinadas):
 
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
-def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=10, umbral_seguro=0.75,
+def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                    fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, corners_combinable=False,
                    fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False,
                    fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False):
-    ahora = datetime.utcnow()
-    limite = ahora + timedelta(days=dias_adelante)
-
     programados = [p for p in partidos if p["status"] in ("SCHEDULED", "TIMED")]
     picks = []
 
+    if not programados:
+        return pd.DataFrame(picks)
+
+    # Usamos el numero de jornada REAL que trae football-data.org (campo
+    # "matchday") en vez de adivinar por fechas. Esto agrupa correctamente
+    # incluso partidos reprogramados entre semana que pertenecen a la misma
+    # jornada, sin importar que tan separados esten en el calendario.
+    jornadas = [p.get("matchday") for p in programados if p.get("matchday") is not None]
+    if jornadas:
+        proxima_jornada = min(jornadas)
+        programados = [p for p in programados if p.get("matchday") == proxima_jornada]
+    # Si por alguna razon la API no trae "matchday" en algun partido, ese
+    # partido simplemente no se incluye en este lote (se recogera solo
+    # cuando si tenga el dato, en vez de arriesgarnos a mezclar jornadas).
+
     for p in programados:
         fecha_partido = pd.to_datetime(p["utcDate"]).tz_localize(None)
-        if fecha_partido > limite:
-            continue
-
         local = MAPEO_NOMBRES.get(p["homeTeam"]["name"], p["homeTeam"]["name"])
         visitante = MAPEO_NOMBRES.get(p["awayTeam"]["name"], p["awayTeam"]["name"])
 
@@ -1196,7 +1205,7 @@ if __name__ == "__main__":
         umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
 
         print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
-        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, dias_adelante=15, umbral_seguro=umbral_dinamico,
+        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico,
                                fuerzas_corners=fuerzas_corners, prom_l_corners=prom_l_corners, prom_v_corners=prom_v_corners,
                                corners_combinable=corners_combinable,
                                fuerzas_tarjetas=fuerzas_tarjetas, factores_arbitro=factores_arbitro,

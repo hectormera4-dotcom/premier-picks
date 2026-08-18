@@ -116,6 +116,21 @@
     font-size: 14px;
   }
   .auth-error { font-size: 12px; color: var(--rojo); min-height: 14px; }
+  .auth-btn-google {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 10px 12px;
+    border-radius: 6px; border: 1px solid var(--linea);
+    background: #fff; color: #3c4043;
+    font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600;
+    cursor: pointer;
+  }
+  .auth-separador {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; color: var(--tinta-suave); text-transform: uppercase;
+  }
+  .auth-separador::before, .auth-separador::after { content: ""; flex: 1; height: 1px; background: var(--linea); }
+  .combinada-vip-preview { border-color: rgba(201,138,43,0.35); }
+
 
   /* ---------- Marcador global de confianza ---------- */
   .marcador-global {
@@ -646,6 +661,7 @@ function formatearFecha(fechaStr) {
 }
 
 function transformarPick(fila) {
+  const esGratis = !!fila.es_gratis;
   const seguro = !!fila.pick_es_seguro;
   const mercadosObj = fila.mercados_json || {};
   const mercados = Object.entries(ETIQUETAS_MERCADOS)
@@ -655,7 +671,7 @@ function transformarPick(fila) {
   return {
     fecha: formatearFecha(fila.fecha),
     local: fila.local, visitante: fila.visitante,
-    seguro,
+    esGratis, seguro,
     pick: seguro ? fila.pick_recomendado : null,
     prob: seguro ? Math.round(fila.pick_probabilidad) : null,
     cuota: seguro ? fila.pick_cuota_aprox : null,
@@ -696,12 +712,21 @@ function renderBarraAuth() {
   }
 }
 
+async function entrarConGoogle() {
+  await sb.auth.signInWithOAuth({ provider: "google" });
+}
+
 function mostrarFormAuth(modo) {
   const esLogin = modo === "login";
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarFormAuth(event)">
       <div class="auth-modal" onclick="event.stopPropagation()">
         <div class="auth-modal-titulo">${esLogin ? "Iniciar sesión" : "Crear cuenta"}</div>
+        <button class="auth-btn-google" onclick="entrarConGoogle()">
+          <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h11.9c-.5 2.7-2 5-4.4 6.6v5.4h7.1c4.2-3.8 6.5-9.5 6.5-16.5z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.4c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.6C8.1 41 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.4c-.4-1.3-.7-2.7-.7-4.4s.3-3.1.7-4.4v-5.6H4.5C3 17 2 20.4 2 24s1 7 4.5 9.9l7.3-5.5z"/><path fill="#EA4335" d="M24 10.7c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.4 2 8.1 7 4.5 14.1l7.3 5.6c1.7-5.2 6.5-9 12.2-9z"/></svg>
+          Continuar con Google
+        </button>
+        <div class="auth-separador"><span>o</span></div>
         <input type="email" id="auth-email" placeholder="Correo electrónico" class="auth-input">
         <input type="password" id="auth-password" placeholder="Contraseña" class="auth-input">
         <button class="auth-btn destacado" style="width:100%; margin-top:8px;"
@@ -747,9 +772,9 @@ async function cerrarSesion() {
 async function cargarTodo() {
   try {
     const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }] = await Promise.all([
-      sb.from("picks").select("*").order("pick_probabilidad", { ascending: false }),
-      sb.from("combinadas").select("*"),
-      sb.from("historial_combinadas").select("*"),
+      sb.from("picks_publicos").select("*"),
+      sb.from("combinadas_publicas").select("*"),
+      sb.from("historial_combinadas").select("*").not("resultado", "is", null),
     ]);
 
     const picks = (picksRaw || []).map(transformarPick);
@@ -791,25 +816,40 @@ function renderMarcadorGlobal(porcentaje, totalResueltos) {
   }
 }
 
+function botonDesbloquear() {
+  const yaEsVip = perfilActual && (perfilActual.es_vip || perfilActual.es_admin);
+  if (yaEsVip) return "";
+  return sesionActual
+    ? `<button class="btn-vip" onclick="alert('Aqui conectamos el pago en el siguiente paso')">Hazte VIP</button>`
+    : `<button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>`;
+}
+
 function crearCombinada(c) {
   const filas = c.partidos.map(p => `
     <div class="combinada-fila">
-      <span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>
-      <span><b>${p.local} vs ${p.visitante}</b> — ${p.pick_recomendado}</span>
+      ${c.es_gratis ? `<span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>` : ""}
+      <span><b>${p.local} vs ${p.visitante}</b>${c.es_gratis ? ` — ${p.pick_recomendado}` : ""}</span>
     </div>
   `).join("");
 
-  return `
-    <div class="combinada ${c.es_gratis ? 'gratis' : ''}">
-      <div class="combinada-header">
-        <span class="combinada-titulo">${c.nombre}</span>
-        <span class="badge-mini ${c.es_gratis ? 'gratis' : 'vip'}">${c.es_gratis ? 'Gratis' : 'VIP'}</span>
-      </div>
-      <div class="combinada-partidos">${filas}</div>
+  const pie = c.es_gratis ? `
       <div class="combinada-footer">
         <span class="combinada-cuota-label">cuota combinada</span>
         <span class="combinada-cuota">${c.cuota_combinada}</span>
+      </div>` : `
+      <div class="combinada-footer">
+        <span class="lock-texto" style="max-width:none; text-align:left;">Pícks y cuota visibles solo para VIP</span>
+        ${botonDesbloquear()}
+      </div>`;
+
+  return `
+    <div class="combinada ${c.es_gratis ? 'gratis' : 'combinada-vip-preview'}">
+      <div class="combinada-header">
+        <span class="combinada-titulo">${c.nombre}</span>
+        <span class="badge-mini ${c.es_gratis ? 'gratis' : 'vip'}">${c.es_gratis ? 'Gratis' : '🔒 VIP'}</span>
       </div>
+      <div class="combinada-partidos">${filas}</div>
+      ${pie}
     </div>
   `;
 }
@@ -830,12 +870,31 @@ function crearGauge(prob, nivel) {
 }
 
 function crearTarjeta(p, i) {
+  // Caso 1: contenido VIP -- el usuario NO recibio el pick real (esta null),
+  // solo sabemos que existe. Mostramos el partido con candado, sin inventar nada.
+  if (!p.esGratis) {
+    return `
+      <div class="card">
+        <div class="card-top">
+          <div class="card-fecha">${p.fecha}</div>
+          <div class="card-equipos">
+            <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
+          </div>
+        </div>
+        <div class="card-body" style="justify-content:space-between;">
+          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave);">🔒 Pick disponible solo para VIP</div>
+          ${botonDesbloquear()}
+        </div>
+      </div>
+    `;
+  }
+
   const detalleFilas = p.mercados.map(m => `
     <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
   `).join("");
 
-  // Caso honesto: el partido no tiene ningun mercado que llegue al umbral.
-  // No inventamos una recomendacion, mostramos el partido como "parejo".
+  // Caso 2: es gratis, pero el partido no tiene ningun mercado que llegue
+  // al umbral. No inventamos una recomendacion, lo mostramos como "parejo".
   if (!p.seguro) {
     return `
       <div class="card sin-pick">
@@ -856,6 +915,7 @@ function crearTarjeta(p, i) {
     `;
   }
 
+  // Caso 3: gratis y con pick recomendado -- tarjeta completa normal.
   const badgeClase = p.nivel === "seguro" ? "badge-seguro" : "badge-moderado";
   const badgeTexto = p.nivel === "seguro" ? "Muy seguro" : "Moderado";
   const comboBadge = p.combo ? `<span class="badge badge-combo">Combo x2</span>` : "";
@@ -885,23 +945,6 @@ function crearTarjeta(p, i) {
   `;
 }
 
-function crearTeaserVip() {
-  const yaEsVip = perfilActual && (perfilActual.es_vip || perfilActual.es_admin);
-  if (yaEsVip) return "";
-
-  const accion = sesionActual
-    ? `<button class="btn-vip" onclick="alert('Aqui conectamos Stripe en el siguiente paso')">Hazte VIP</button>`
-    : `<button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>`;
-
-  return `
-    <div class="combinada" style="align-items:center; text-align:center; gap:10px;">
-      <div class="lock-icono" style="margin:0 auto;"></div>
-      <div class="lock-texto">Hay más picks y combinadas disponibles solo para usuarios VIP</div>
-      ${accion}
-    </div>
-  `;
-}
-
 function render(picks, combinadas) {
   const combinadasHtml = combinadas.map(crearCombinada).join("");
   const hayCombinadas = combinadas.length > 0;
@@ -914,8 +957,7 @@ function render(picks, combinadas) {
       </div>`;
   }
 
-  document.getElementById("grid").innerHTML =
-    combinadasHtml + avisoVip + picks.map(crearTarjeta).join("") + crearTeaserVip();
+  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picks.map(crearTarjeta).join("");
 }
 
 function toggleDetalle(i) {
