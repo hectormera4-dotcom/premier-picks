@@ -713,7 +713,10 @@ function renderBarraAuth() {
 }
 
 async function entrarConGoogle() {
-  await sb.auth.signInWithOAuth({ provider: "google" });
+  await sb.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: window.location.href }
+  });
 }
 
 function mostrarFormAuth(modo) {
