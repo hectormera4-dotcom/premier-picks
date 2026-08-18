@@ -25,55 +25,26 @@
         "pick_probabilidad": 83.4
       },
       {
-        "fecha": "2026-08-30 13:00:00",
-        "local": "Leeds",
-        "visitante": "Brentford",
+        "fecha": "2026-08-22 14:00:00",
+        "local": "Everton",
+        "visitante": "Crystal Palace",
         "pick_recomendado": "Over 5.5 tiros a puerta",
-        "pick_probabilidad": 82.7
+        "pick_probabilidad": 81.1
       }
     ],
-    "probabilidad_combinada": 48.7,
-    "cuota_combinada": 2.05
+    "probabilidad_combinada": 47.8,
+    "cuota_combinada": 2.09
   },
   {
     "nombre": "Combinada #2",
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-08-28 19:00:00",
-        "local": "Crystal Palace",
-        "visitante": "Man City",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 81.3
-      },
-      {
-        "fecha": "2026-08-22 14:00:00",
-        "local": "Everton",
-        "visitante": "Crystal Palace",
-        "pick_recomendado": "Over 5.5 tiros a puerta",
-        "pick_probabilidad": 81.1
-      },
-      {
         "fecha": "2026-08-24 19:00:00",
         "local": "Fulham",
         "visitante": "Chelsea",
         "pick_recomendado": "Over 1.5 goles",
         "pick_probabilidad": 81.0
-      }
-    ],
-    "probabilidad_combinada": 53.4,
-    "cuota_combinada": 1.87
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-08-30 13:00:00",
-        "local": "Sunderland",
-        "visitante": "Fulham",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 80.7
       },
       {
         "fecha": "2026-08-22 14:00:00",
@@ -83,14 +54,43 @@
         "pick_probabilidad": 80.6
       },
       {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Bournemouth",
-        "visitante": "Everton",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 80.6
+        "fecha": "2026-08-23 13:00:00",
+        "local": "Man City",
+        "visitante": "Bournemouth",
+        "pick_recomendado": "Over 1.5 goles + Más corners: Man City",
+        "pick_probabilidad": 80.5
       }
     ],
-    "probabilidad_combinada": 52.4,
-    "cuota_combinada": 1.91
+    "probabilidad_combinada": 52.6,
+    "cuota_combinada": 1.9
+  },
+  {
+    "nombre": "Combinada #3",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-08-23 13:00:00",
+        "local": "Brighton",
+        "visitante": "Aston Villa",
+        "pick_recomendado": "Under 11.5 tiros a puerta",
+        "pick_probabilidad": 80.3
+      },
+      {
+        "fecha": "2026-08-23 15:30:00",
+        "local": "Newcastle",
+        "visitante": "Liverpool",
+        "pick_recomendado": "Ambos anotan - Si",
+        "pick_probabilidad": 80.2
+      },
+      {
+        "fecha": "2026-08-22 14:00:00",
+        "local": "Nott'm Forest",
+        "visitante": "Leeds",
+        "pick_recomendado": "Over 5.5 tiros a puerta",
+        "pick_probabilidad": 80.1
+      }
+    ],
+    "probabilidad_combinada": 51.6,
+    "cuota_combinada": 1.94
   }
 ]
