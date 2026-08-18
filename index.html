@@ -685,10 +685,26 @@ function transformarPick(fila) {
 
 async function actualizarSesion() {
   const { data: { session } } = await sb.auth.getSession();
+  await aplicarSesion(session);
+}
+
+async function aplicarSesion(session) {
   sesionActual = session;
 
   if (session) {
-    const { data: perfil } = await sb.from("perfiles").select("*").eq("id", session.user.id).single();
+    // Usamos maybeSingle (no single): si el perfil todavia no existe
+    // (el trigger de creacion puede tardar una fraccion de segundo la
+    // primera vez que alguien se registra), esto devuelve null en vez
+    // de lanzar un error 406.
+    let { data: perfil } = await sb.from("perfiles").select("*").eq("id", session.user.id).maybeSingle();
+
+    // Si es la primera vez y el trigger todavia no termino, reintentamos
+    // una vez mas tras una pausa corta antes de rendirnos.
+    if (!perfil) {
+      await new Promise(r => setTimeout(r, 800));
+      const reintento = await sb.from("perfiles").select("*").eq("id", session.user.id).maybeSingle();
+      perfil = reintento.data;
+    }
     perfilActual = perfil;
   } else {
     perfilActual = null;
@@ -1051,7 +1067,7 @@ async function cargarHistorialCombinadas() {
 (async function iniciar() {
   await actualizarSesion();
   await cargarTodo();
-  sb.auth.onAuthStateChange(() => { actualizarSesion(); });
+  sb.auth.onAuthStateChange((_evento, session) => { aplicarSesion(session); cargarTodo(); });
 })();
 </script>
 
