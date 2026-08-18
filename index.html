@@ -781,10 +781,20 @@ async function hacerLogin() {
 async function hacerSignup() {
   const email = document.getElementById("auth-email").value;
   const password = document.getElementById("auth-password").value;
-  const { error } = await sb.auth.signUp({ email, password });
+  const { data, error } = await sb.auth.signUp({ email, password });
   if (error) { document.getElementById("auth-error").textContent = error.message; return; }
+
   document.getElementById("auth-error").style.color = "var(--verde-claro)";
-  document.getElementById("auth-error").textContent = "Cuenta creada. Ya puedes iniciar sesión.";
+  if (data.session) {
+    // La confirmacion por correo esta desactivada -- ya quedo con sesion iniciada
+    cerrarFormAuth();
+    await actualizarSesion();
+    await cargarTodo();
+  } else {
+    // Caso normal: falta confirmar el correo antes de poder iniciar sesion
+    document.getElementById("auth-error").textContent =
+      "Cuenta creada. Revisa tu correo y confirma tu cuenta antes de iniciar sesión.";
+  }
 }
 
 async function cerrarSesion() {
