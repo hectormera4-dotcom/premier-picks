@@ -116,6 +116,27 @@
     font-size: 14px;
   }
   .auth-error { font-size: 12px; color: var(--rojo); min-height: 14px; }
+
+  .banner-vip {
+    background: linear-gradient(135deg, #2A4433 0%, #1F3327 100%);
+    border: 1px solid rgba(201,138,43,0.4);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 22px 0 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .banner-vip-titulo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--ambar);
+    margin-bottom: 3px;
+  }
+  .banner-vip-texto { font-size: 12.5px; color: rgba(239,235,226,0.8); }
   .auth-btn-google {
     display: flex; align-items: center; justify-content: center; gap: 8px;
     width: 100%; padding: 10px 12px;
@@ -596,6 +617,7 @@
 </div>
 
 <div id="vista-picks">
+<div id="banner-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
 <div class="tabs">
   <button class="tab activo">Gratis</button>
   <button class="tab">VIP</button>
@@ -852,16 +874,32 @@ function renderMarcadorGlobal(porcentaje, totalResueltos) {
   }
 }
 
-function botonDesbloquear() {
+function crearBannerVip() {
   const yaEsVip = perfilActual && (perfilActual.es_vip || perfilActual.es_admin);
   if (yaEsVip) return "";
+
   if (!sesionActual) {
-    return `<button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>`;
+    return `
+      <div class="banner-vip">
+        <div class="banner-vip-texto">
+          <div class="banner-vip-titulo">🔒 Hazte miembro VIP</div>
+          <div>Para tener acceso a todos los picks y combinadas con un solo pago.</div>
+        </div>
+        <button class="btn-vip" onclick="mostrarFormAuth('signup')">Crea tu cuenta</button>
+      </div>
+    `;
   }
+
   return `
-    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="btn-vip" onclick="iniciarPagoVip(this, 'dia')">Solo esta fecha — $5</button>
-      <button class="btn-vip" onclick="iniciarPagoVip(this, 'mes')">Mes completo — $15</button>
+    <div class="banner-vip">
+      <div class="banner-vip-texto">
+        <div class="banner-vip-titulo">🔒 Hazte miembro VIP</div>
+        <div>Para tener acceso a todos los picks y combinadas con un solo pago.</div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-vip" onclick="iniciarPagoVip(this, 'dia')">Solo esta fecha — $5</button>
+        <button class="btn-vip" onclick="iniciarPagoVip(this, 'mes')">Mes completo — $15</button>
+      </div>
     </div>
   `;
 }
@@ -879,6 +917,7 @@ async function iniciarPagoVip(boton, plan) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
         "Authorization": `Bearer ${session.access_token}`,
       },
       body: JSON.stringify({ plan }),
@@ -913,7 +952,7 @@ async function verificarRetornoDePago() {
   try {
     const resp = await fetch(`${SUPABASE_URL}/functions/v1/payphone-confirm`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY },
       body: JSON.stringify({ id, clientTransactionId }),
     });
     const data = await resp.json();
@@ -951,9 +990,8 @@ function crearCombinada(c) {
         <span class="combinada-cuota-label">cuota combinada</span>
         <span class="combinada-cuota">${c.cuota_combinada}</span>
       </div>` : `
-      <div class="combinada-footer">
-        <span class="lock-texto" style="max-width:none; text-align:left;">Pícks y cuota visibles solo para VIP</span>
-        ${botonDesbloquear()}
+      <div class="combinada-footer" style="justify-content:center;">
+        <span class="lock-texto" style="max-width:none; text-align:center;">🔒 Picks y cuota visibles solo para VIP</span>
       </div>`;
 
   return `
@@ -985,7 +1023,8 @@ function crearGauge(prob, nivel) {
 
 function crearTarjeta(p, i) {
   // Caso 1: contenido VIP -- el usuario NO recibio el pick real (esta null),
-  // solo sabemos que existe. Mostramos el partido con candado, sin inventar nada.
+  // solo sabemos que existe. Mostramos el partido con candado, sin botones
+  // (el llamado a la accion vive una sola vez, arriba en el banner VIP).
   if (!p.tieneDatos) {
     return `
       <div class="card">
@@ -995,9 +1034,8 @@ function crearTarjeta(p, i) {
             <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
           </div>
         </div>
-        <div class="card-body" style="justify-content:space-between;">
-          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave);">🔒 Pick disponible solo para VIP</div>
-          ${botonDesbloquear()}
+        <div class="card-body" style="justify-content:center;">
+          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">🔒 Solo para VIP</div>
         </div>
       </div>
     `;
@@ -1060,6 +1098,8 @@ function crearTarjeta(p, i) {
 }
 
 function render(picks, combinadas) {
+  document.getElementById("banner-vip-contenedor").innerHTML = crearBannerVip();
+
   const combinadasHtml = combinadas.map(crearCombinada).join("");
   const hayCombinadas = combinadas.length > 0;
 
