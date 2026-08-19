@@ -98,6 +98,27 @@
   }
   .auth-btn.destacado { background: var(--verde); border-color: var(--verde); color: #fff; }
 
+  .btn-instalar-app {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #C98A2B, #E0A73F);
+    color: #17201A;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 rgba(201,138,43,0.6);
+    animation: pulso-instalar 2.2s ease-in-out infinite;
+  }
+  @keyframes pulso-instalar {
+    0%   { box-shadow: 0 0 0 0 rgba(201,138,43,0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(201,138,43,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,138,43,0); }
+  }
+
   .auth-modal-fondo {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.6);
@@ -760,7 +781,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
 
 function botonInstalarApp() {
   if (!promptInstalacion) return "";
-  return `<button class="auth-btn" onclick="instalarApp()">📲 Instalar app</button>`;
+  return `<button class="btn-instalar-app" onclick="instalarApp()">📲 Instalar App</button>`;
 }
 
 async function instalarApp() {
