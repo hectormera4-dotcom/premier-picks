@@ -1,7 +1,7 @@
 [
   {
     "nombre": "Combinada #1",
-    "es_gratis": true,
+    "es_gratis": false,
     "partidos": [
       {
         "fecha": "2026-08-21 19:00:00",
@@ -45,7 +45,7 @@
   },
   {
     "nombre": "Combinada #3",
-    "es_gratis": false,
+    "es_gratis": true,
     "partidos": [
       {
         "fecha": "2026-08-23 13:00:00",
