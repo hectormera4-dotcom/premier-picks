@@ -615,6 +615,56 @@ def verificar_picks_resueltos(historial, historico_partidos):
         print(f"Se verificaron {resueltos_ahora} picks que ya se jugaron.")
     return historial
 
+def verificar_calibracion_continua(historial, umbral_alerta=8.0, minimo_muestras=30):
+    """
+    Revisa, usando los picks individuales YA RESUELTOS (historial_picks),
+    si la calibracion sigue siendo honesta: compara la probabilidad que
+    el modelo declaro contra el acierto real observado hasta ahora en esta
+    temporada. Si la brecha supera 'umbral_alerta' puntos porcentuales,
+    imprime una advertencia clara y la guarda en Supabase para que quede
+    registrada -- asi no dependes de acordarte de revisarlo tu mismo.
+    """
+    resueltos = historial.dropna(subset=["acierto"])
+    resueltos = resueltos[resueltos["pick_probabilidad"] >= 70]  # rango relevante
+
+    n = len(resueltos)
+    if n < minimo_muestras:
+        print(f"\n[Calibracion] Todavia hay pocos picks resueltos esta temporada ({n}/{minimo_muestras}) "
+              f"para revisar la calibracion de forma confiable. Se revisara automaticamente "
+              f"en cuanto haya suficientes.")
+        return
+
+    prob_declarada = resueltos["pick_probabilidad"].mean()
+    acierto_real = resueltos["acierto"].astype(float).mean() * 100
+    diferencia = acierto_real - prob_declarada
+    necesita_recalibrar = abs(diferencia) > umbral_alerta
+
+    if necesita_recalibrar:
+        mensaje = (f"ALERTA: la calibracion parece haberse desviado. Con {n} picks resueltos, "
+                   f"el modelo declara en promedio {prob_declarada:.1f}% pero el acierto real es "
+                   f"{acierto_real:.1f}% (diferencia de {diferencia:+.1f} puntos). "
+                   f"Se recomienda repetir el backtest de calibracion pronto.")
+        print(f"\n{'='*70}\n[Calibracion] {mensaje}\n{'='*70}")
+    else:
+        mensaje = (f"La calibracion sigue siendo confiable. Con {n} picks resueltos, "
+                   f"declarado {prob_declarada:.1f}% vs real {acierto_real:.1f}% "
+                   f"(diferencia de {diferencia:+.1f} puntos, dentro de lo esperado).")
+        print(f"\n[Calibracion] {mensaje}")
+
+    if supabase_configurado():
+        registro = {
+            "n_muestras": int(n),
+            "prob_declarada_promedio": round(float(prob_declarada), 2),
+            "acierto_real_promedio": round(float(acierto_real), 2),
+            "diferencia": round(float(diferencia), 2),
+            "necesita_recalibrar": bool(necesita_recalibrar),
+            "mensaje": mensaje,
+        }
+        resp = requests.post(f"{SUPABASE_URL}/rest/v1/alertas_calibracion", headers=supabase_headers(), json=registro)
+        if resp.status_code not in (200, 201):
+            print(f"Aviso: no se pudo guardar la alerta de calibracion en Supabase ({resp.status_code})")
+
+
 def resumen_track_record(historial):
     resueltos = historial[historial["acierto"].notna()]
     if len(resueltos) == 0:
@@ -663,7 +713,7 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         elegidos_df = pd.DataFrame(elegidos)
         combinadas.append({
             "nombre": f"Combinada #{n+1}",
-            "es_gratis": (n == 0),  # la primera combinada generada es la gratuita
+            "es_gratis": False,  # se decide despues, cuando ya tenemos todas generadas
             "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
             "probabilidad_combinada": round(prob_acumulada*100, 1),
             "cuota_combinada": round(1/prob_acumulada, 2),
@@ -671,6 +721,14 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
 
         # Quitamos esos partidos del pool para que la siguiente combinada use otros
         disponibles = disponibles.drop(indices_usados)
+
+    # Todas las combinadas ya cumplen el mismo estandar de seguridad (el
+    # mismo umbral_seguro), asi que no hay razon para regalar la menos
+    # atractiva -- marcamos como gratis la de MEJOR cuota, para enganchar
+    # mejor a los usuarios nuevos sin sacrificar nada de seguridad real.
+    if combinadas:
+        indice_mejor_cuota = max(range(len(combinadas)), key=lambda i: combinadas[i]["cuota_combinada"])
+        combinadas[indice_mejor_cuota]["es_gratis"] = True
 
     print(f"\n=== {len(combinadas)} COMBINADAS GENERADAS ===")
     for c in combinadas:
@@ -1265,6 +1323,7 @@ if __name__ == "__main__":
             historial_a_guardar.to_csv(ARCHIVO_HISTORIAL_PICKS, index=False)
 
             resumen_track_record(historial)
+            verificar_calibracion_continua(historial)
 
             combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=2)
             with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
