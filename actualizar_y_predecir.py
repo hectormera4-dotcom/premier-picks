@@ -488,7 +488,12 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
         cumple_umbral = False
 
     nombres_pick, prob = mejor
-    cuota = 1 / prob if prob > 0 else None
+    # Restamos un pequeño margen (0.10) a la cuota que mostramos: la cuota
+    # "justa" que calculamos es teorica, y las casas de apuestas reales
+    # siempre pagan un poco menos por su propio margen de ganancia. Esto
+    # hace que el numero que mostramos sea una estimacion mas realista de
+    # lo que el usuario va a encontrar de verdad al ir a apostar.
+    cuota = max(1 / prob - 0.10, 1.01) if prob > 0 else None
     return nombres_pick, prob, cuota, cumple_umbral
 
 ARCHIVO_HISTORIAL_PICKS = "historial_picks.csv"
@@ -716,7 +721,7 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
             "es_gratis": False,  # se decide despues, cuando ya tenemos todas generadas
             "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
             "probabilidad_combinada": round(prob_acumulada*100, 1),
-            "cuota_combinada": round(1/prob_acumulada, 2),
+            "cuota_combinada": round(max(1/prob_acumulada - 0.10, 1.01), 2),
         })
 
         # Quitamos esos partidos del pool para que la siguiente combinada use otros
@@ -746,48 +751,6 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         print(f"{c['nombre']} [{etiqueta}]: {nombres} -> cuota {c['cuota_combinada']}{aviso}")
 
     return combinadas
-    """
-    Arma una combinada agregando partidos SEGUROS uno por uno, empezando
-    por los mas seguros (mayor probabilidad individual), hasta alcanzar
-    la cuota objetivo. Asi se usan el menor numero de partidos posible
-    (y los mas seguros disponibles) para llegar al nivel de riesgo deseado,
-    en vez de maximizar la cuota sin control.
-    """
-    seguros = picks_df[picks_df["pick_es_seguro"] == True].copy()
-    if len(seguros) < 2:
-        print("No hay suficientes picks seguros hoy para armar una combinada.")
-        return None
-
-    # Empezamos por los mas seguros (mayor probabilidad individual) y vamos
-    # agregando de a uno hasta alcanzar la cuota objetivo
-    seguros = seguros.sort_values("pick_probabilidad", ascending=False).reset_index(drop=True)
-
-    prob_acumulada = 1.0
-    elegidos = []
-    for _, partido in seguros.iterrows():
-        prob_acumulada *= partido["pick_probabilidad"] / 100
-        elegidos.append(partido)
-        cuota_actual = 1 / prob_acumulada
-        if cuota_actual >= cuota_objetivo or len(elegidos) >= max_partidos:
-            break
-
-    elegidos_df = pd.DataFrame(elegidos)
-    cuota_final = 1 / prob_acumulada
-
-    print(f"\n=== COMBINADA DEL DIA ({len(elegidos_df)} partidos, objetivo {cuota_objetivo}) ===")
-    for _, p in elegidos_df.iterrows():
-        print(f"  {p['local']} vs {p['visitante']}: {p['pick_recomendado']} ({p['pick_probabilidad']}%)")
-    print(f"Probabilidad combinada: {prob_acumulada*100:.1f}%")
-    print(f"Cuota combinada aproximada: {cuota_final:.2f}")
-
-    if cuota_final < cuota_objetivo:
-        print(f"Aviso: no hay suficientes picks seguros hoy para alcanzar la cuota objetivo ({cuota_objetivo}).")
-
-    return {
-        "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
-        "probabilidad_combinada": round(prob_acumulada*100, 1),
-        "cuota_combinada": round(cuota_final, 2),
-    }
 
 def calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80, ventana=10):
     """
