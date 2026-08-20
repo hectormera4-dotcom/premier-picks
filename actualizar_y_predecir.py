@@ -933,13 +933,24 @@ def calcular_fuerzas_tiros(df):
         }
     return fuerzas, prom_local, prom_visit
 
-def calcular_mercados_tiros(local, visitante, fuerzas, prom_local, prom_visit, lineas=(3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5)):
+def calcular_mercados_tiros(local, visitante, fuerzas, prom_local, prom_visit, lineas=None):
     if not fuerzas or local not in fuerzas or visitante not in fuerzas:
         return {}
     fl, fv = fuerzas[local], fuerzas[visitante]
     lam = prom_local * fl["ataque_local"] * fv["defensa_visitante"]
     mu = prom_visit * fv["ataque_visitante"] * fl["defensa_local"]
     total = lam + mu
+
+    # Las casas de apuestas reales no ofrecen un rango fijo amplio -- ponen
+    # su linea principal cerca del promedio esperado de ESE partido y solo
+    # agregan 1-2 alternativas cercanas (ej. si el promedio es ~8, ofrecen
+    # 7.5/8.5/9.5, nunca algo como "Under 11.5"). Generamos las lineas de la
+    # misma forma, centradas en el total esperado, para que el pick
+    # recomendado siempre corresponda a algo que existe de verdad.
+    if lineas is None:
+        centro = round(total - 0.5) + 0.5  # la linea .5 mas cercana al promedio
+        lineas = [centro - 1.5, centro - 0.5, centro + 0.5, centro + 1.5]
+        lineas = [l for l in lineas if l >= 1.5]  # nunca lineas absurdamente bajas
 
     mercados = {}
     for linea in lineas:
