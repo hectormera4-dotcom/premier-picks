@@ -423,6 +423,22 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
         print(f"Se verificaron {resueltas_ahora} combinadas que ya se completaron.")
     return historial_combinadas
 
+def calibrar_probabilidad(prob):
+    """
+    Corrige la probabilidad "cruda" que calcula el modelo para que refleje
+    el acierto real observado historicamente (Platt Scaling), en vez del
+    numero optimista que sale directo de Poisson/Dixon-Coles.
+
+    Entrenado con un backtest de 4 temporadas (12,943 observaciones de
+    mercados individuales, umbral relevante >=60%). Sin esto, el modelo
+    tiende a sobreestimar su propia confianza por 4-9 puntos porcentuales,
+    especialmente en combinadas (donde el error se multiplica).
+    """
+    PENDIENTE = 4.8797
+    INTERCEPTO = -2.6940
+    z = INTERCEPTO + PENDIENTE * prob
+    return 1 / (1 + np.exp(-z))
+
 def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None):
     """
     Evalua mercados de goles/resultado (individuales + combos de 2 validos).
@@ -456,6 +472,11 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
             prob_goles = calcular_combo(matriz, [nombre_goles])
             for nombre_extra, prob_extra in mercados_extra_combinables.items():
                 candidatos.append(([nombre_goles, nombre_extra], prob_goles * prob_extra))
+
+    # Calibramos TODOS los candidatos antes de decidir -- asi el umbral de
+    # seguridad se aplica sobre el acierto real esperado, no sobre el
+    # numero optimista que sale directo del modelo estadistico
+    candidatos = [(nombres, calibrar_probabilidad(prob)) for nombres, prob in candidatos]
 
     seguros = [c for c in candidatos if c[1] >= umbral_minimo]
 
@@ -1046,7 +1067,14 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
     jornadas = [p.get("matchday") for p in programados if p.get("matchday") is not None]
     if jornadas:
         proxima_jornada = min(jornadas)
+        sin_jornada = len([p for p in programados if p.get("matchday") is None])
+        print(f"DIAGNOSTICO: jornadas detectadas en los partidos programados: {sorted(set(jornadas))}")
+        print(f"DIAGNOSTICO: se eligio la jornada {proxima_jornada} como la proxima a mostrar")
+        if sin_jornada:
+            print(f"DIAGNOSTICO: aviso -- {sin_jornada} partidos programados NO traen numero de jornada y quedaron excluidos")
         programados = [p for p in programados if p.get("matchday") == proxima_jornada]
+    else:
+        print("DIAGNOSTICO: NINGUN partido programado trae el campo 'matchday' -- revisar la respuesta de la API")
     # Si por alguna razon la API no trae "matchday" en algun partido, ese
     # partido simplemente no se incluye en este lote (se recogera solo
     # cuando si tenga el dato, en vez de arriesgarnos a mezclar jornadas).
@@ -1059,7 +1087,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         matriz, lam, mu = matriz_marcadores(local, visitante, fuerzas, prom_l, prom_v, rho)
         if matriz is None:
             continue
-        mercados = calcular_mercados(matriz)
+        mercados_sin_calibrar = calcular_mercados(matriz)
 
         mercados_corners = {}
         if fuerzas_corners:
@@ -1083,6 +1111,15 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         if fuerzas_tiros:
             mercados_tiros = calcular_mercados_tiros(local, visitante, fuerzas_tiros, prom_l_tiros, prom_v_tiros)
 
+        # Version calibrada de TODOS los mercados, solo para mostrar en el
+        # detalle desplegable "ver todos los mercados" -- los valores SIN
+        # calibrar (arriba) son los que entran a elegir_mejor_pick, que ya
+        # calibra internamente antes de decidir (evita calibrar dos veces)
+        mercados = {k: calibrar_probabilidad(v) for k, v in mercados_sin_calibrar.items()}
+        mercados_corners_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_corners.items()}
+        mercados_tarjetas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tarjetas.items()}
+        mercados_tiros_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros.items()}
+
         mercados_extra_todos = {**mercados_corners, **mercados_tarjetas, **mercados_tiros}
         mercados_extra_combinables = {}
         if corners_combinable:
@@ -1105,9 +1142,9 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             "pick_cuota_aprox": round(pick_cuota, 2) if pick_cuota else None,
             "pick_es_seguro": cumple_umbral,
             **{k: round(v*100, 1) for k, v in mercados.items()},
-            **{k: round(v*100, 1) for k, v in mercados_corners.items()},
-            **{k: round(v*100, 1) for k, v in mercados_tarjetas.items()},
-            **{k: round(v*100, 1) for k, v in mercados_tiros.items()},
+            **{k: round(v*100, 1) for k, v in mercados_corners_mostrar.items()},
+            **{k: round(v*100, 1) for k, v in mercados_tarjetas_mostrar.items()},
+            **{k: round(v*100, 1) for k, v in mercados_tiros_mostrar.items()},
         })
 
     return pd.DataFrame(picks)
@@ -1202,7 +1239,7 @@ if __name__ == "__main__":
         historial = cargar_historial_picks()
         historial = verificar_picks_resueltos(historial, historico)
 
-        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
+        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80)
 
         print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
         picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico,
@@ -1229,7 +1266,7 @@ if __name__ == "__main__":
 
             resumen_track_record(historial)
 
-            combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3)
+            combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=2)
             with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
                 json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
             print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")

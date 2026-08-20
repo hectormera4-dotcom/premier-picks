@@ -2,8 +2,14 @@
 // Se llama cuando el usuario hace clic en "Hazte VIP". Prepara el cobro
 // con Payphone de forma segura (el token nunca toca el navegador) y
 // devuelve el link de pago para redirigir al usuario.
+//
+// NOTA: usamos Axios en vez de fetch() para hablar con la API de Payphone,
+// por recomendacion directa de su equipo de soporte -- reportaron
+// inconsistencias conocidas de fetch() en entornos como Supabase Edge
+// Functions al consumir su API.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import axios from "npm:axios@1.7.7";
 
 const PAYPHONE_TOKEN = Deno.env.get("PAYPHONE_TOKEN")!;
 const PAYPHONE_STOREID = Deno.env.get("PAYPHONE_STOREID")!;
@@ -61,8 +67,12 @@ Deno.serve(async (req: Request) => {
     const elegido = PLANES[plan];
 
     // El clientTransactionId incluye el id del usuario y el plan elegido,
-    // para saber a quien y por cuanto tiempo activarle el VIP al confirmar
-    const clientTransactionId = `${user.id}__${plan}__${Date.now()}`;
+    // para saber a quien y por cuanto tiempo activarle el VIP al confirmar.
+    // Payphone exige maximo 50 caracteres, asi que usamos un formato corto:
+    // {uuid}_{d o m}_{timestamp en base36}
+    const planCorto = plan === "dia" ? "d" : "m";
+    const timestampCorto = Date.now().toString(36);
+    const clientTransactionId = `${user.id}_${planCorto}_${timestampCorto}`;
 
     const bodyPayphone = {
       amount: elegido.amount,
@@ -74,43 +84,45 @@ Deno.serve(async (req: Request) => {
       responseUrl: SITE_URL,
     };
 
-    const resp = await fetch("https://pay.payphonetodoesposible.com/api/button/Prepare", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${PAYPHONE_TOKEN}`,
-      },
-      body: JSON.stringify(bodyPayphone),
-    });
-
-    const textoRespuesta = await resp.text();
-    let data: any;
     try {
-      data = JSON.parse(textoRespuesta);
-    } catch (_e) {
-      // Payphone no devolvio JSON -- mostramos exactamente que nos mando,
-      // para poder diagnosticar en vez de fallar en silencio
+      const respuestaAxios = await axios.post(
+        "https://pay.payphonetodoesposible.com/api/button/Prepare",
+        bodyPayphone,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${PAYPHONE_TOKEN}`,
+          },
+          timeout: 15000,
+        }
+      );
+
+      const data = respuestaAxios.data;
       return new Response(JSON.stringify({
-        error: "Payphone no devolvio una respuesta JSON valida",
-        status_http_de_payphone: resp.status,
-        respuesta_cruda: textoRespuesta.slice(0, 500),
+        payWithCard: data.payWithCard,
+        payWithPayPhone: data.payWithPayPhone,
+      }), { headers: { ...CORS_HEADERS, "Content-Type": "application/json" } });
+
+    } catch (errAxios: any) {
+      // Si Payphone respondio pero con error (4xx/5xx), Axios lo guarda en err.response
+      if (errAxios.response) {
+        return new Response(JSON.stringify({
+          error: "Error de Payphone",
+          status_http_de_payphone: errAxios.response.status,
+          detalle: errAxios.response.data,
+        }), {
+          status: 400,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+        });
+      }
+      // Error de red/timeout, sin respuesta de Payphone
+      return new Response(JSON.stringify({
+        error: "No se pudo conectar con Payphone: " + errAxios.message,
       }), {
         status: 502,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
-
-    if (!resp.ok) {
-      return new Response(JSON.stringify({ error: "Error de Payphone", detalle: data }), {
-        status: 400,
-        headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-      });
-    }
-
-    return new Response(JSON.stringify({
-      payWithCard: data.payWithCard,
-      payWithPayPhone: data.payWithPayPhone,
-    }), { headers: { ...CORS_HEADERS, "Content-Type": "application/json" } });
 
   } catch (err) {
     return new Response(JSON.stringify({ error: String(err) }), {

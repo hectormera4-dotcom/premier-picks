@@ -2,8 +2,12 @@
 // Payphone redirige aqui al usuario despues del pago (via la pagina web,
 // que llama a esta funcion con los parametros que recibio). Confirma con
 // Payphone que el pago sea real y aprobado, y si lo es, activa el VIP.
+//
+// NOTA: usamos Axios en vez de fetch() para hablar con la API de Payphone,
+// por recomendacion directa de su equipo de soporte.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import axios from "npm:axios@1.7.7";
 
 const PAYPHONE_TOKEN = Deno.env.get("PAYPHONE_TOKEN")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -29,33 +33,35 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const resp = await fetch("https://pay.payphonetodoesposible.com/api/button/V2/Confirm", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${PAYPHONE_TOKEN}`,
-      },
-      body: JSON.stringify({ id: Number(id), clientTxId: clientTransactionId }),
-    });
-
-    const textoRespuesta = await resp.text();
     let data: any;
     try {
-      data = JSON.parse(textoRespuesta);
-    } catch (_e) {
+      const respuestaAxios = await axios.post(
+        "https://pay.payphonetodoesposible.com/api/button/V2/Confirm",
+        { id: Number(id), clientTxId: clientTransactionId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${PAYPHONE_TOKEN}`,
+          },
+          timeout: 15000,
+        }
+      );
+      data = respuestaAxios.data;
+    } catch (errAxios: any) {
+      if (errAxios.response) {
+        return new Response(JSON.stringify({
+          error: "Error confirmando con Payphone",
+          status_http_de_payphone: errAxios.response.status,
+          detalle: errAxios.response.data,
+        }), {
+          status: 400,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+        });
+      }
       return new Response(JSON.stringify({
-        error: "Payphone no devolvio una respuesta JSON valida",
-        status_http_de_payphone: resp.status,
-        respuesta_cruda: textoRespuesta.slice(0, 500),
+        error: "No se pudo conectar con Payphone: " + errAxios.message,
       }), {
         status: 502,
-        headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-      });
-    }
-
-    if (!resp.ok) {
-      return new Response(JSON.stringify({ error: "Error confirmando con Payphone", detalle: data }), {
-        status: 400,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
@@ -63,10 +69,11 @@ Deno.serve(async (req: Request) => {
     const aprobado = data.statusCode === 3 && data.transactionStatus === "Approved";
 
     if (aprobado) {
-      // El clientTransactionId tiene la forma "{userId}__{plan}__{timestamp}"
-      const partes = String(clientTransactionId).split("__");
+      // El clientTransactionId tiene la forma "{userId}_{d o m}_{timestamp}"
+      const partes = String(clientTransactionId).split("_");
       const userId = partes[0];
-      const plan = partes[1] || "mes";
+      const planCorto = partes[1] || "m";
+      const plan = planCorto === "d" ? "dia" : "mes";
 
       const DIAS_POR_PLAN: Record<string, number> = { dia: 5, mes: 30 };
       const dias = DIAS_POR_PLAN[plan] || 30;
