@@ -730,6 +730,14 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         indice_mejor_cuota = max(range(len(combinadas)), key=lambda i: combinadas[i]["cuota_combinada"])
         combinadas[indice_mejor_cuota]["es_gratis"] = True
 
+        # Reordenamos para que la gratis siempre aparezca primero, y
+        # renombramos "Combinada #1, #2, #3..." segun ese nuevo orden --
+        # asi la gratis SIEMPRE se llama "Combinada #1" para el usuario,
+        # sin importar cual fue la mejor cuota ese dia.
+        combinadas.insert(0, combinadas.pop(indice_mejor_cuota))
+        for i, c in enumerate(combinadas):
+            c["nombre"] = f"Combinada #{i+1}"
+
     print(f"\n=== {len(combinadas)} COMBINADAS GENERADAS ===")
     for c in combinadas:
         nombres = ", ".join(f"{p['local']} vs {p['visitante']}" for p in c["partidos"])
@@ -1297,7 +1305,7 @@ if __name__ == "__main__":
         historial = cargar_historial_picks()
         historial = verificar_picks_resueltos(historial, historico)
 
-        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.75, umbral_alto=0.80)
+        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
 
         print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
         picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico,
