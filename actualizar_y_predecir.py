@@ -1333,7 +1333,7 @@ if __name__ == "__main__":
             resumen_track_record(historial)
             verificar_calibracion_continua(historial)
 
-            combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=2)
+            combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=3)
             with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
                 json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
             print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")
