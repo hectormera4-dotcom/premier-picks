@@ -26,7 +26,7 @@
       }
     ],
     "probabilidad_combinada": 51.7,
-    "cuota_combinada": 1.93
+    "cuota_combinada": 1.83
   },
   {
     "nombre": "Combinada #2",
@@ -55,7 +55,7 @@
       }
     ],
     "probabilidad_combinada": 54.1,
-    "cuota_combinada": 1.85
+    "cuota_combinada": 1.75
   },
   {
     "nombre": "Combinada #3",
@@ -84,6 +84,6 @@
       }
     ],
     "probabilidad_combinada": 52.5,
-    "cuota_combinada": 1.91
+    "cuota_combinada": 1.81
   }
 ]
