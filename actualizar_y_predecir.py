@@ -21,46 +21,98 @@ API_TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "TU_TOKEN_AQUI")
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
-ARCHIVO_HISTORICO = "premier_league_combinado.csv"
-ARCHIVO_PICKS = "picks_del_dia.csv"
-ARCHIVO_COMBINADAS = "combinadas_del_dia.json"
 MAX_GOLES = 6
 
-# Traductor de nombres: football-data.org (izquierda) -> football-data.co.uk (derecha)
-MAPEO_NOMBRES = {
-    "AFC Bournemouth": "Bournemouth",
-    "Arsenal FC": "Arsenal",
-    "Aston Villa FC": "Aston Villa",
-    "Brentford FC": "Brentford",
-    "Brighton & Hove Albion FC": "Brighton",
-    "Chelsea FC": "Chelsea",
-    "Coventry City FC": "Coventry",       # equipo nuevo, sin historial
-    "Crystal Palace FC": "Crystal Palace",
-    "Everton FC": "Everton",
-    "Fulham FC": "Fulham",
-    "Hull City AFC": "Hull",              # equipo nuevo, sin historial
-    "Ipswich Town FC": "Ipswich",
-    "Leeds United FC": "Leeds",
-    "Liverpool FC": "Liverpool",
-    "Manchester City FC": "Man City",
-    "Manchester United FC": "Man United",
-    "Newcastle United FC": "Newcastle",
-    "Nottingham Forest FC": "Nott'm Forest",
-    "Sunderland AFC": "Sunderland",
-    "Tottenham Hotspur FC": "Tottenham",
+# ---------- Configuracion de cada liga soportada ----------
+# Para agregar una liga nueva, solo hay que agregar una entrada aqui --
+# el resto del pipeline ya esta preparado para trabajar con cualquiera.
+LIGAS = {
+    "premier_league": {
+        "nombre_mostrar": "Premier League",
+        "codigo_api": "PL",              # codigo de football-data.org
+        "codigo_footballdata": "E0",      # codigo de football-data.co.uk
+        "archivo_historico": "premier_league_combinado.csv",
+        "equipos_sin_historial": ["Coventry", "Hull"],
+        "mapeo_nombres": {
+            "AFC Bournemouth": "Bournemouth",
+            "Arsenal FC": "Arsenal",
+            "Aston Villa FC": "Aston Villa",
+            "Brentford FC": "Brentford",
+            "Brighton & Hove Albion FC": "Brighton",
+            "Chelsea FC": "Chelsea",
+            "Coventry City FC": "Coventry",
+            "Crystal Palace FC": "Crystal Palace",
+            "Everton FC": "Everton",
+            "Fulham FC": "Fulham",
+            "Hull City AFC": "Hull",
+            "Ipswich Town FC": "Ipswich",
+            "Leeds United FC": "Leeds",
+            "Liverpool FC": "Liverpool",
+            "Manchester City FC": "Man City",
+            "Manchester United FC": "Man United",
+            "Newcastle United FC": "Newcastle",
+            "Nottingham Forest FC": "Nott'm Forest",
+            "Sunderland AFC": "Sunderland",
+            "Tottenham Hotspur FC": "Tottenham",
+        },
+    },
+    "la_liga": {
+        "nombre_mostrar": "LaLiga",
+        "codigo_api": "PD",               # Primera Division
+        "codigo_footballdata": "SP1",
+        "archivo_historico": "la_liga_combinado.csv",
+        # Equipos recien ascendidos a Primera 2025/26, sin historial reciente
+        "equipos_sin_historial": ["Oviedo", "Levante", "Elche"],
+        "mapeo_nombres": {
+            "Real Madrid CF": "Real Madrid",
+            "FC Barcelona": "Barcelona",
+            "Club Atlético de Madrid": "Ath Madrid",
+            "Athletic Club": "Ath Bilbao",
+            "Villarreal CF": "Villarreal",
+            "Real Betis Balompié": "Betis",
+            "Real Sociedad de Fútbol": "Sociedad",
+            "RC Celta de Vigo": "Celta",
+            "Rayo Vallecano de Madrid": "Vallecano",
+            "Getafe CF": "Getafe",
+            "CA Osasuna": "Osasuna",
+            "Sevilla FC": "Sevilla",
+            "Valencia CF": "Valencia",
+            "Girona FC": "Girona",
+            "RCD Mallorca": "Mallorca",
+            "Real Oviedo": "Oviedo",
+            "RCD Espanyol de Barcelona": "Espanyol",
+            "Levante UD": "Levante",
+            "Elche CF": "Elche",
+            "Deportivo Alavés": "Alaves",
+        },
+    },
 }
 
-EQUIPOS_SIN_HISTORIAL = ["Coventry", "Hull"]
+LIGAS_ACTIVAS = ["premier_league", "la_liga"]  # cuales corren en cada ejecucion
+
+# Estas variables se reasignan al inicio de cada liga (ver correr_pipeline_liga
+# al final del archivo) -- el resto de las funciones las usan sin saber que
+# cambian entre una liga y otra. Los valores de aqui son solo el default
+# inicial (Premier League), para que el archivo siga siendo valido si algo
+# se importa antes de que corra el bucle principal.
+LIGA_ACTUAL = "premier_league"
+ARCHIVO_HISTORICO = LIGAS["premier_league"]["archivo_historico"]
+MAPEO_NOMBRES = LIGAS["premier_league"]["mapeo_nombres"]
+EQUIPOS_SIN_HISTORIAL = LIGAS["premier_league"]["equipos_sin_historial"]
+ARCHIVO_PICKS = "picks_del_dia.csv"
+ARCHIVO_COMBINADAS = "combinadas_del_dia.json"
+
+
 
 # ---------- Paso 1: traer datos de football-data.org ----------
 
-def obtener_partidos_temporada():
+def obtener_partidos_temporada(codigo_api="PL"):
     # No mandamos el parametro 'season': la API usa la temporada actual por
     # defecto, y el plan gratuito de todas formas solo da acceso a esa.
     # Mandar season=YYYY explicito puede causar error 400 si el sistema
     # todavia no tiene esa temporada completamente registrada.
     resp = requests.get(
-        f"{BASE_URL}/competitions/PL/matches",
+        f"{BASE_URL}/competitions/{codigo_api}/matches",
         headers=HEADERS
     )
     resp.raise_for_status()
@@ -113,7 +165,7 @@ def actualizar_historico(partidos):
 
 TEMPORADA_CODIGO_FDCOUK = "2627"  # temporada 2026/27 en el formato de football-data.co.uk
 
-def actualizar_estadisticas_extra(historico):
+def actualizar_estadisticas_extra(historico, codigo_footballdata="E0"):
     """
     football-data.org (usado arriba) NO incluye corners/tarjetas en el plan
     gratuito. Para mantener esos datos frescos durante la temporada, volvemos
@@ -121,7 +173,7 @@ def actualizar_estadisticas_extra(historico):
     (se actualiza dos veces por semana) y completamos corners/tarjetas/arbitro
     para los partidos que ya tenemos, cuando esten disponibles.
     """
-    url = f"https://www.football-data.co.uk/mmz4281/{TEMPORADA_CODIGO_FDCOUK}/E0.csv"
+    url = f"https://www.football-data.co.uk/mmz4281/{TEMPORADA_CODIGO_FDCOUK}/{codigo_footballdata}.csv"
     try:
         resp = requests.get(url, timeout=15)
         resp.raise_for_status()
@@ -990,14 +1042,15 @@ def supabase_headers(upsert=False):
 def supabase_configurado():
     return bool(SUPABASE_URL and SUPABASE_SERVICE_KEY)
 
-def limpiar_tabla_supabase(tabla):
-    """Borra todas las filas de una tabla (usamos esto para picks/combinadas,
-    que se regeneran completas cada vez que corre el pipeline)."""
-    resp = requests.delete(f"{SUPABASE_URL}/rest/v1/{tabla}?id=gt.0", headers=supabase_headers())
+def limpiar_tabla_supabase(tabla, liga):
+    """Borra las filas de una liga especifica en una tabla (usamos esto para
+    picks/combinadas, que se regeneran completas cada vez que corre el
+    pipeline PARA ESA LIGA -- nunca tocamos las filas de otras ligas)."""
+    resp = requests.delete(f"{SUPABASE_URL}/rest/v1/{tabla}?liga=eq.{liga}", headers=supabase_headers())
     if resp.status_code not in (200, 204):
         print(f"Aviso: no se pudo limpiar la tabla '{tabla}' en Supabase ({resp.status_code}): {resp.text[:200]}")
 
-def subir_picks_supabase(picks_df, n_gratis=3):
+def subir_picks_supabase(picks_df, liga, n_gratis=3):
     """Sube los picks individuales a Supabase, marcando los N mas seguros
     del dia como gratis (el resto queda VIP automaticamente)."""
     if not supabase_configurado():
@@ -1028,9 +1081,10 @@ def subir_picks_supabase(picks_df, n_gratis=3):
             "pick_es_seguro": bool(fila["pick_es_seguro"]),
             "es_gratis": bool(fila["es_gratis"]),
             "mercados_json": mercados,
+            "liga": liga,
         })
 
-    limpiar_tabla_supabase("picks")
+    limpiar_tabla_supabase("picks", liga)
     resp = requests.post(f"{SUPABASE_URL}/rest/v1/picks", headers=supabase_headers(), json=registros)
     if resp.status_code in (200, 201):
         gratis_n = sum(1 for r in registros if r["es_gratis"])
@@ -1038,7 +1092,7 @@ def subir_picks_supabase(picks_df, n_gratis=3):
     else:
         print(f"Aviso: fallo al subir picks a Supabase ({resp.status_code}): {resp.text[:300]}")
 
-def subir_combinadas_supabase(combinadas):
+def subir_combinadas_supabase(combinadas, liga):
     if not supabase_configurado():
         return
     if not combinadas:
@@ -1050,16 +1104,17 @@ def subir_combinadas_supabase(combinadas):
         "partidos_json": json.loads(json.dumps(c["partidos"], default=str)),
         "probabilidad_combinada": float(c["probabilidad_combinada"]),
         "cuota_combinada": float(c["cuota_combinada"]),
+        "liga": liga,
     } for c in combinadas]
 
-    limpiar_tabla_supabase("combinadas")
+    limpiar_tabla_supabase("combinadas", liga)
     resp = requests.post(f"{SUPABASE_URL}/rest/v1/combinadas", headers=supabase_headers(), json=registros)
     if resp.status_code in (200, 201):
         print(f"Subidas {len(registros)} combinadas a Supabase.")
     else:
         print(f"Aviso: fallo al subir combinadas a Supabase ({resp.status_code}): {resp.text[:300]}")
 
-def subir_historial_combinadas_supabase(historial_combinadas):
+def subir_historial_combinadas_supabase(historial_combinadas, liga):
     """A diferencia de picks/combinadas, el historial NUNCA se borra --
     se actualiza (upsert) para ir agregando fechas nuevas y marcando
     resultados sin perder lo que ya existia."""
@@ -1078,6 +1133,7 @@ def subir_historial_combinadas_supabase(historial_combinadas):
             "partidos_json": json.loads(fila["partidos_json"]),
             "cuota_combinada": float(fila["cuota_combinada"]),
             "resultado": fila["resultado"] if pd.notna(fila["resultado"]) else None,
+            "liga": liga,
         })
 
     resp = requests.post(
@@ -1221,111 +1277,144 @@ def verificar_correlacion_goles_metrica(df, columna_local, columna_visitante, li
     print(f"[{nombre_metrica}] ¿Se puede combinar con goles? {'SI' if independientes else 'NO'}")
     return independientes
 
-if __name__ == "__main__":
+def correr_pipeline_liga(liga_key):
+    """Corre el pipeline completo (datos, modelo, picks, combinadas, Supabase)
+    para UNA liga especifica. Reasigna las variables globales dependientes
+    de la liga (archivos, mapeo de nombres) antes de correr la logica ya
+    existente, que no necesita saber que hay mas de una liga."""
+    global ARCHIVO_HISTORICO, MAPEO_NOMBRES, EQUIPOS_SIN_HISTORIAL
+    global ARCHIVO_PICKS, ARCHIVO_COMBINADAS
+    global ARCHIVO_HISTORIAL_PICKS, ARCHIVO_HISTORIAL_COMBINADAS, ARCHIVO_CONTADOR_FECHAS
+
+    config = LIGAS[liga_key]
+    print(f"\n{'#'*70}\n# LIGA: {config['nombre_mostrar']}\n{'#'*70}")
+
+    ARCHIVO_HISTORICO = config["archivo_historico"]
+    MAPEO_NOMBRES = config["mapeo_nombres"]
+    EQUIPOS_SIN_HISTORIAL = config["equipos_sin_historial"]
+    ARCHIVO_PICKS = f"picks_del_dia_{liga_key}.csv"
+    ARCHIVO_COMBINADAS = f"combinadas_del_dia_{liga_key}.json"
+    ARCHIVO_HISTORIAL_PICKS = f"historial_picks_{liga_key}.csv"
+    ARCHIVO_HISTORIAL_COMBINADAS = f"historial_combinadas_{liga_key}.csv"
+    ARCHIVO_CONTADOR_FECHAS = f"contador_fechas_{liga_key}.json"
+
     print("Descargando datos de football-data.org...")
-    partidos = obtener_partidos_temporada()
+    partidos = obtener_partidos_temporada(config["codigo_api"])
 
     print("Actualizando historico con partidos ya jugados...")
     historico = actualizar_historico(partidos)
 
-    if historico is not None and len(historico) > 0:
-        historico["Date"] = pd.to_datetime(historico["Date"])
+    if historico is None or len(historico) == 0:
+        print("No hay historico disponible todavia para esta liga.")
+        return
 
-        print("Actualizando corners/tarjetas desde football-data.co.uk...")
-        historico = actualizar_estadisticas_extra(historico)
+    historico["Date"] = pd.to_datetime(historico["Date"])
 
-        print("Calculando fuerzas de equipos...")
-        fuerzas, prom_l, prom_v = calcular_fuerzas(historico)
+    print("Actualizando corners/tarjetas desde football-data.co.uk...")
+    historico = actualizar_estadisticas_extra(historico, config["codigo_footballdata"])
 
-        print("Calculando fuerzas de corners (si hay datos disponibles)...")
-        fuerzas_corners, prom_l_corners, prom_v_corners = calcular_fuerzas_corners(historico)
-        corners_combinable = False
-        if fuerzas_corners:
-            print(f"  Corners disponibles para {len(fuerzas_corners)} equipos.")
-            print("  Verificando si es seguro combinar goles+corners con datos reales...")
-            corners_combinable = bool(verificar_correlacion_goles_metrica(
-                historico, "HC", "AC", nombre_metrica="corners"))
-        else:
-            print("  Sin datos de corners todavia (se activara solo cuando esten disponibles).")
+    print("Calculando fuerzas de equipos...")
+    fuerzas, prom_l, prom_v = calcular_fuerzas(historico)
 
-        print("Calculando fuerzas de tarjetas (si hay datos disponibles)...")
-        fuerzas_tarjetas, factores_arbitro, prom_l_tarjetas, prom_v_tarjetas = calcular_fuerzas_tarjetas(historico)
-        tarjetas_combinable = False
-        if fuerzas_tarjetas:
-            print(f"  Tarjetas disponibles para {len(fuerzas_tarjetas)} equipos, "
-                  f"{len(factores_arbitro)} arbitros con historial suficiente.")
-            print("  Verificando si es seguro combinar goles+tarjetas con datos reales...")
-            tarjetas_combinable = bool(verificar_correlacion_goles_metrica(
-                historico, "HY", "AY", linea_metrica=3.5, nombre_metrica="tarjetas"))
-        else:
-            print("  Sin datos de tarjetas todavia (se activara solo cuando esten disponibles).")
+    print("Calculando fuerzas de corners (si hay datos disponibles)...")
+    fuerzas_corners, prom_l_corners, prom_v_corners = calcular_fuerzas_corners(historico)
+    corners_combinable = False
+    if fuerzas_corners:
+        print(f"  Corners disponibles para {len(fuerzas_corners)} equipos.")
+        print("  Verificando si es seguro combinar goles+corners con datos reales...")
+        corners_combinable = bool(verificar_correlacion_goles_metrica(
+            historico, "HC", "AC", nombre_metrica="corners"))
+    else:
+        print("  Sin datos de corners todavia (se activara solo cuando esten disponibles).")
 
-        print("Calculando fuerzas de tiros a puerta (si hay datos disponibles)...")
-        fuerzas_tiros, prom_l_tiros, prom_v_tiros = calcular_fuerzas_tiros(historico)
-        tiros_combinable = False
-        if fuerzas_tiros:
-            print(f"  Tiros a puerta disponibles para {len(fuerzas_tiros)} equipos.")
-            print("  Verificando si es seguro combinar goles+tiros a puerta con datos reales...")
-            tiros_combinable = bool(verificar_correlacion_goles_metrica(
-                historico, "HST", "AST", linea_metrica=8.5, nombre_metrica="tiros a puerta"))
-        else:
-            print("  Sin datos de tiros a puerta todavia (se activara solo cuando esten disponibles).")
+    print("Calculando fuerzas de tarjetas (si hay datos disponibles)...")
+    fuerzas_tarjetas, factores_arbitro, prom_l_tarjetas, prom_v_tarjetas = calcular_fuerzas_tarjetas(historico)
+    tarjetas_combinable = False
+    if fuerzas_tarjetas:
+        print(f"  Tarjetas disponibles para {len(fuerzas_tarjetas)} equipos, "
+              f"{len(factores_arbitro)} arbitros con historial suficiente.")
+        print("  Verificando si es seguro combinar goles+tarjetas con datos reales...")
+        tarjetas_combinable = bool(verificar_correlacion_goles_metrica(
+            historico, "HY", "AY", linea_metrica=3.5, nombre_metrica="tarjetas"))
+    else:
+        print("  Sin datos de tarjetas todavia (se activara solo cuando esten disponibles).")
 
-        print("Ajustando Dixon-Coles...")
-        rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
-        print(f"Rho: {rho:.3f}")
+    print("Calculando fuerzas de tiros a puerta (si hay datos disponibles)...")
+    fuerzas_tiros, prom_l_tiros, prom_v_tiros = calcular_fuerzas_tiros(historico)
+    tiros_combinable = False
+    if fuerzas_tiros:
+        print(f"  Tiros a puerta disponibles para {len(fuerzas_tiros)} equipos.")
+        print("  Verificando si es seguro combinar goles+tiros a puerta con datos reales...")
+        tiros_combinable = bool(verificar_correlacion_goles_metrica(
+            historico, "HST", "AST", linea_metrica=8.5, nombre_metrica="tiros a puerta"))
+    else:
+        print("  Sin datos de tiros a puerta todavia (se activara solo cuando esten disponibles).")
 
-        print("Actualizando el registro de historial (track record)...")
-        historial = cargar_historial_picks()
-        historial = verificar_picks_resueltos(historial, historico)
+    print("Ajustando Dixon-Coles...")
+    rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
+    print(f"Rho: {rho:.3f}")
 
-        umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
+    print("Actualizando el registro de historial (track record)...")
+    historial = cargar_historial_picks()
+    historial = verificar_picks_resueltos(historial, historico)
 
-        print(f"\nGenerando picks de los proximos 10 dias (umbral: {umbral_dinamico*100:.0f}%)...")
-        picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico,
-                               fuerzas_corners=fuerzas_corners, prom_l_corners=prom_l_corners, prom_v_corners=prom_v_corners,
-                               corners_combinable=corners_combinable,
-                               fuerzas_tarjetas=fuerzas_tarjetas, factores_arbitro=factores_arbitro,
-                               prom_l_tarjetas=prom_l_tarjetas, prom_v_tarjetas=prom_v_tarjetas,
-                               tarjetas_combinable=tarjetas_combinable,
-                               fuerzas_tiros=fuerzas_tiros, prom_l_tiros=prom_l_tiros, prom_v_tiros=prom_v_tiros,
-                               tiros_combinable=tiros_combinable)
+    umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
 
-        if len(picks) > 0:
-            picks.to_csv(ARCHIVO_PICKS, index=False)
-            print(f"\n{len(picks)} picks guardados en '{ARCHIVO_PICKS}'\n")
-            print("=== PICKS RECOMENDADOS (mercado mas seguro por partido) ===")
-            print(picks[["fecha", "local", "visitante", "pick_recomendado", "es_combo",
-                          "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro"]].to_string(index=False))
+    print(f"\nGenerando picks de los proximos dias (umbral: {umbral_dinamico*100:.0f}%)...")
+    picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico,
+                           fuerzas_corners=fuerzas_corners, prom_l_corners=prom_l_corners, prom_v_corners=prom_v_corners,
+                           corners_combinable=corners_combinable,
+                           fuerzas_tarjetas=fuerzas_tarjetas, factores_arbitro=factores_arbitro,
+                           prom_l_tarjetas=prom_l_tarjetas, prom_v_tarjetas=prom_v_tarjetas,
+                           tarjetas_combinable=tarjetas_combinable,
+                           fuerzas_tiros=fuerzas_tiros, prom_l_tiros=prom_l_tiros, prom_v_tiros=prom_v_tiros,
+                           tiros_combinable=tiros_combinable)
 
-            historial = registrar_picks_nuevos(picks, historial)
+    if len(picks) == 0:
+        print("No hay partidos programados en los proximos dias para esta liga.")
+        return
 
-            historial_a_guardar = historial.copy()
-            historial_a_guardar["fecha_partido"] = pd.to_datetime(historial_a_guardar["fecha_partido"]).dt.strftime("%Y-%m-%d %H:%M:%S")
-            historial_a_guardar.to_csv(ARCHIVO_HISTORIAL_PICKS, index=False)
+    picks.to_csv(ARCHIVO_PICKS, index=False)
+    print(f"\n{len(picks)} picks guardados en '{ARCHIVO_PICKS}'\n")
+    print("=== PICKS RECOMENDADOS (mercado mas seguro por partido) ===")
+    print(picks[["fecha", "local", "visitante", "pick_recomendado", "es_combo",
+                  "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro"]].to_string(index=False))
 
-            resumen_track_record(historial)
-            verificar_calibracion_continua(historial)
+    historial = registrar_picks_nuevos(picks, historial)
 
-            combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=3)
-            with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
-                json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
-            print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")
+    historial_a_guardar = historial.copy()
+    historial_a_guardar["fecha_partido"] = pd.to_datetime(historial_a_guardar["fecha_partido"]).dt.strftime("%Y-%m-%d %H:%M:%S")
+    historial_a_guardar.to_csv(ARCHIVO_HISTORIAL_PICKS, index=False)
 
-            print("\nActualizando historial de combinadas por fecha...")
-            historial_combinadas = cargar_historial_combinadas()
-            historial_combinadas = registrar_combinadas_historial(combinadas, picks, historial_combinadas)
-            historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, historico)
-            historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS, index=False)
+    resumen_track_record(historial)
+    verificar_calibracion_continua(historial)
 
-            resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
-            if len(resueltas) > 0:
-                cumplidas = (resueltas["resultado"] == "Cumplida").sum()
-                print(f"Historial de combinadas: {cumplidas}/{len(resueltas)} cumplidas ({cumplidas/len(resueltas)*100:.1f}%)")
+    combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=3)
+    with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
+        json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
+    print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")
 
-            print("\nSincronizando con Supabase...")
-            subir_picks_supabase(picks, n_gratis=3)
-            subir_combinadas_supabase(combinadas)
-            subir_historial_combinadas_supabase(historial_combinadas)
-        else:
-            print("No hay partidos programados en los proximos dias.")
+    print("\nActualizando historial de combinadas por fecha...")
+    historial_combinadas = cargar_historial_combinadas()
+    historial_combinadas = registrar_combinadas_historial(combinadas, picks, historial_combinadas)
+    historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, historico)
+    historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS, index=False)
+
+    resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
+    if len(resueltas) > 0:
+        cumplidas = (resueltas["resultado"] == "Cumplida").sum()
+        print(f"Historial de combinadas: {cumplidas}/{len(resueltas)} cumplidas ({cumplidas/len(resueltas)*100:.1f}%)")
+
+    print("\nSincronizando con Supabase...")
+    subir_picks_supabase(picks, liga=liga_key, n_gratis=3)
+    subir_combinadas_supabase(combinadas, liga=liga_key)
+    subir_historial_combinadas_supabase(historial_combinadas, liga=liga_key)
+
+
+if __name__ == "__main__":
+    for liga_key in LIGAS_ACTIVAS:
+        try:
+            correr_pipeline_liga(liga_key)
+        except Exception as e:
+            print(f"\nERROR corriendo la liga '{liga_key}': {e}")
+            print("Continuando con la siguiente liga...")
