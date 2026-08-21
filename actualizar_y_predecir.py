@@ -430,6 +430,7 @@ def registrar_combinadas_historial(combinadas, picks_df, historial_combinadas):
             "partidos_json": json.dumps(c["partidos"], ensure_ascii=False, default=str),
             "cuota_combinada": c["cuota_combinada"],
             "resultado": None,
+            "liga": c.get("liga", "premier_league"),
         })
 
     if nuevas:
@@ -771,7 +772,7 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         combinadas.append({
             "nombre": f"Combinada #{n+1}",
             "es_gratis": False,  # se decide despues, cuando ya tenemos todas generadas
-            "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad"]].to_dict("records"),
+            "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad", "liga"]].to_dict("records"),
             "probabilidad_combinada": round(prob_acumulada*100, 1),
             "cuota_combinada": round(max(1/prob_acumulada - 0.10, 1.01), 2),
         })
@@ -1114,10 +1115,10 @@ def subir_combinadas_supabase(combinadas, liga):
     else:
         print(f"Aviso: fallo al subir combinadas a Supabase ({resp.status_code}): {resp.text[:300]}")
 
-def subir_historial_combinadas_supabase(historial_combinadas, liga):
-    """A diferencia de picks/combinadas, el historial NUNCA se borra --
-    se actualiza (upsert) para ir agregando fechas nuevas y marcando
-    resultados sin perder lo que ya existia."""
+def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
+    """Igual que subir_historial_combinadas_supabase, pero usa la columna
+    'liga' que ya viene incluida en cada fila (puede haber una mezcla de
+    ligas distintas, incluyendo 'mixta'), en vez de un solo valor para todas."""
     if not supabase_configurado():
         return
     if len(historial_combinadas) == 0:
@@ -1133,7 +1134,7 @@ def subir_historial_combinadas_supabase(historial_combinadas, liga):
             "partidos_json": json.loads(fila["partidos_json"]),
             "cuota_combinada": float(fila["cuota_combinada"]),
             "resultado": fila["resultado"] if pd.notna(fila["resultado"]) else None,
-            "liga": liga,
+            "liga": fila.get("liga", "premier_league"),
         })
 
     resp = requests.post(
@@ -1375,7 +1376,7 @@ def correr_pipeline_liga(liga_key):
 
     if len(picks) == 0:
         print("No hay partidos programados en los proximos dias para esta liga.")
-        return
+        return None, None
 
     picks.to_csv(ARCHIVO_PICKS, index=False)
     print(f"\n{len(picks)} picks guardados en '{ARCHIVO_PICKS}'\n")
@@ -1392,15 +1393,44 @@ def correr_pipeline_liga(liga_key):
     resumen_track_record(historial)
     verificar_calibracion_continua(historial)
 
-    combinadas = calcular_combinadas_multiples(picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=3)
-    with open(ARCHIVO_COMBINADAS, "w", encoding="utf-8") as f:
+    print("\nSincronizando picks con Supabase...")
+    subir_picks_supabase(picks, liga=liga_key, n_gratis=3)
+
+    # Las combinadas YA NO se generan aqui -- se arman despues, juntando el
+    # pool de picks seguros de TODAS las ligas activas (ver mas abajo), asi
+    # una combinada puede mezclar partidos de distintas ligas para tener
+    # mas opciones seguras entre las cuales elegir.
+    picks["liga"] = liga_key
+    historico["liga"] = liga_key
+    return picks, historico
+
+
+def correr_combinadas_multiliga(pool_picks, pool_historico):
+    """Arma las combinadas del dia usando el pool combinado de picks
+    seguros de TODAS las ligas activas, en vez de una por liga -- asi hay
+    mas partidos candidatos y las combinadas pueden mezclar ligas."""
+    if pool_picks is None or len(pool_picks) == 0:
+        print("\nNo hay picks de ninguna liga para armar combinadas hoy.")
+        return
+
+    print(f"\n{'#'*70}\n# COMBINADAS MULTI-LIGA (pool de {len(pool_picks)} picks seguros)\n{'#'*70}")
+
+    combinadas = calcular_combinadas_multiples(pool_picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=3)
+
+    # A cada combinada le calculamos su "liga": si todos sus partidos son
+    # de la misma liga, usamos esa; si mezcla varias, la marcamos "mixta"
+    for c in combinadas:
+        ligas_en_combinada = set(p.get("liga") for p in c["partidos"])
+        c["liga"] = ligas_en_combinada.pop() if len(ligas_en_combinada) == 1 else "mixta"
+
+    with open("combinadas_del_dia.json", "w", encoding="utf-8") as f:
         json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
-    print(f"Combinadas guardadas en '{ARCHIVO_COMBINADAS}'")
+    print("Combinadas guardadas en 'combinadas_del_dia.json'")
 
     print("\nActualizando historial de combinadas por fecha...")
     historial_combinadas = cargar_historial_combinadas()
-    historial_combinadas = registrar_combinadas_historial(combinadas, picks, historial_combinadas)
-    historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, historico)
+    historial_combinadas = registrar_combinadas_historial(combinadas, pool_picks, historial_combinadas)
+    historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, pool_historico)
     historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS, index=False)
 
     resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
@@ -1408,16 +1438,49 @@ def correr_pipeline_liga(liga_key):
         cumplidas = (resueltas["resultado"] == "Cumplida").sum()
         print(f"Historial de combinadas: {cumplidas}/{len(resueltas)} cumplidas ({cumplidas/len(resueltas)*100:.1f}%)")
 
-    print("\nSincronizando con Supabase...")
-    subir_picks_supabase(picks, liga=liga_key, n_gratis=3)
-    subir_combinadas_supabase(combinadas, liga=liga_key)
-    subir_historial_combinadas_supabase(historial_combinadas, liga=liga_key)
+    print("\nSincronizando combinadas con Supabase...")
+    if supabase_configurado():
+        # Las combinadas se regeneran TODAS juntas cada corrida (ya no es
+        # por liga), asi que limpiamos la tabla completa antes de subir el
+        # nuevo lote, en vez de filtrar por una sola liga.
+        resp = requests.delete(f"{SUPABASE_URL}/rest/v1/combinadas?id=gt.0", headers=supabase_headers())
+        if resp.status_code not in (200, 204):
+            print(f"Aviso: no se pudo limpiar la tabla de combinadas ({resp.status_code})")
+
+        registros = [{
+            "nombre": c["nombre"],
+            "es_gratis": bool(c["es_gratis"]),
+            "partidos_json": json.loads(json.dumps(c["partidos"], default=str)),
+            "probabilidad_combinada": float(c["probabilidad_combinada"]),
+            "cuota_combinada": float(c["cuota_combinada"]),
+            "liga": c["liga"],
+        } for c in combinadas]
+        resp = requests.post(f"{SUPABASE_URL}/rest/v1/combinadas", headers=supabase_headers(), json=registros)
+        if resp.status_code in (200, 201):
+            print(f"Subidas {len(registros)} combinadas a Supabase.")
+        else:
+            print(f"Aviso: fallo al subir combinadas a Supabase ({resp.status_code}): {resp.text[:300]}")
+
+        # El historial de combinadas ya trae la columna "liga" (o "mixta")
+        # asignada directamente al registrarse, asi que subimos tal cual
+        subir_historial_combinadas_liga_ya_incluida(historial_combinadas)
+    else:
+        print("Supabase no configurado -- se omite la subida de combinadas.")
 
 
 if __name__ == "__main__":
+    pools_picks = []
+    pools_historico = []
     for liga_key in LIGAS_ACTIVAS:
         try:
-            correr_pipeline_liga(liga_key)
+            picks_liga, historico_liga = correr_pipeline_liga(liga_key)
+            if picks_liga is not None:
+                pools_picks.append(picks_liga)
+                pools_historico.append(historico_liga)
         except Exception as e:
             print(f"\nERROR corriendo la liga '{liga_key}': {e}")
             print("Continuando con la siguiente liga...")
+
+    pool_picks = pd.concat(pools_picks, ignore_index=True) if pools_picks else None
+    pool_historico = pd.concat(pools_historico, ignore_index=True) if pools_historico else None
+    correr_combinadas_multiliga(pool_picks, pool_historico)
