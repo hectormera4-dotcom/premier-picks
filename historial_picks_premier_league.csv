@@ -1,5 +1,5 @@
 fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_cuota_aprox,fecha_generado,resultado_real,acierto
-2026-08-21 19:00:00,Arsenal,Coventry,Local gana + Over 1.5 goles,True,80.6,1.14,2026-08-21,,
+2026-08-21 19:00:00,Arsenal,Coventry,Local gana + Over 1.5 goles,True,80.6,1.14,2026-08-21,3-0,True
 2026-08-22 11:30:00,Hull,Man United,Over 1.5 goles,False,80.2,1.15,2026-08-21,,
 2026-08-22 14:00:00,Ipswich,Sunderland,Under 11.5 corners,False,82.4,1.11,2026-08-21,,
 2026-08-22 14:00:00,Nott'm Forest,Leeds,Under 12.5 corners,False,82.0,1.12,2026-08-21,,
