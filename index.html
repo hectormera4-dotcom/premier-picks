@@ -224,30 +224,108 @@
 
   /* ---------- Tabs ---------- */
   /* ---------- Navegacion principal (Picks / Historial) ---------- */
-  .nav-principal {
-    max-width: 960px;
-    margin: 22px auto 0;
-    padding: 0 20px;
-    display: flex;
-    gap: 4px;
-    border-bottom: 1px solid var(--linea-oscura);
+  /* ---------- Boton de menu (hamburguesa) ---------- */
+  .btn-menu {
+    background: transparent; border: none; color: var(--papel);
+    cursor: pointer; padding: 6px; display: flex; align-items: center;
   }
-  .nav-tab {
-    font-family: 'Oswald', sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.03em;
-    padding: 10px 18px;
-    border: none;
-    background: transparent;
-    color: rgba(239,235,226,0.5);
+
+  /* ---------- Menu lateral ---------- */
+  .fondo-menu-lateral {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+    z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .fondo-menu-lateral.visible { opacity: 1; pointer-events: auto; }
+
+  .menu-lateral {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 300px; max-width: 85vw;
+    background: var(--fondo-alt);
+    border-right: 1px solid var(--linea-oscura);
+    z-index: 91;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .menu-lateral.abierto { transform: translateX(0); }
+
+  .menu-lateral-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 16px; border-bottom: 1px solid var(--linea-oscura);
+  }
+  .btn-cerrar-menu {
+    background: transparent; border: none; color: rgba(239,235,226,0.6);
+    font-size: 18px; cursor: pointer; padding: 4px 8px;
+  }
+
+  .menu-lateral-nav { padding: 14px 12px; flex: 1; }
+  .menu-item {
+    display: block; width: 100%; text-align: left;
+    background: transparent; border: none; color: var(--papel);
+    font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 500;
+    padding: 12px 12px; border-radius: 6px; cursor: pointer;
+    margin-bottom: 2px;
+  }
+  .menu-item.activo { background: rgba(78,152,104,0.18); color: var(--verde-claro); }
+  .menu-item:hover { background: rgba(255,255,255,0.05); }
+
+  .submenu-ligas { padding: 4px 4px 10px 8px; }
+  .grid-ligas {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;
+  }
+  .liga-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--linea-oscura);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
     cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
+    position: relative;
   }
-  .nav-tab.activo {
-    color: var(--papel);
-    border-bottom: 2px solid var(--verde-claro);
+  .liga-box.liga-activa-seleccionada { border-color: var(--verde-claro); background: rgba(78,152,104,0.12); }
+  .liga-box.liga-proximamente { cursor: default; opacity: 0.55; }
+  .liga-escudo {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 700;
+    margin: 0 auto 6px;
   }
+  .liga-nombre { font-size: 11px; color: rgba(239,235,226,0.85); line-height: 1.2; }
+  .liga-badge-proximamente {
+    font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--ambar); margin-top: 4px;
+  }
+
+  .menu-seccion-titulo {
+    font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: rgba(239,235,226,0.45);
+    margin: 18px 12px 8px;
+  }
+  .menu-novedades-placeholder {
+    font-size: 12px; color: rgba(239,235,226,0.55);
+    padding: 10px 12px; line-height: 1.5;
+    background: rgba(255,255,255,0.03); border-radius: 6px; margin: 0 8px;
+  }
+
+  .menu-lateral-footer {
+    padding: 16px; border-top: 1px solid var(--linea-oscura);
+  }
+  .menu-usuario-email { font-size: 12.5px; color: rgba(239,235,226,0.8); word-break: break-all; }
+  .menu-usuario-etiqueta { font-size: 11px; color: var(--verde-claro); margin: 2px 0 10px; }
+  .btn-cerrar-sesion {
+    width: 100%;
+    background: rgba(163,75,62,0.15);
+    border: 1px solid var(--rojo);
+    color: var(--rojo);
+    font-family: 'Oswald', sans-serif;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    padding: 9px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
 
   /* ---------- Historial de combinadas por fecha ---------- */
   .fecha-grupo {
@@ -627,10 +705,46 @@
 
 <header>
   <div class="header-inner">
+    <button class="btn-menu" onclick="abrirMenuLateral()" aria-label="Menú">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
     <div class="logo">PICKS<span>FC</span></div>
-    <div id="auth-barra" class="auth-barra"></div>
+    <div id="auth-barra-header"></div>
   </div>
 </header>
+
+<!-- Menu lateral -->
+<div id="fondo-menu-lateral" class="fondo-menu-lateral" onclick="cerrarMenuLateral()"></div>
+<aside id="menu-lateral" class="menu-lateral">
+  <div class="menu-lateral-header">
+    <div class="logo">PICKS<span>FC</span></div>
+    <button class="btn-cerrar-menu" onclick="cerrarMenuLateral()">✕</button>
+  </div>
+
+  <nav class="menu-lateral-nav">
+    <button class="menu-item activo" id="menu-picks" onclick="cambiarVista('picks'); cerrarMenuLateral();">
+      📋 Picks del día
+    </button>
+    <button class="menu-item" id="menu-historial" onclick="cambiarVista('historial'); cerrarMenuLateral();">
+      📊 Historial
+    </button>
+    <button class="menu-item" onclick="toggleSubmenuLigas()">
+      🏆 Ligas <span id="flecha-ligas">▾</span>
+    </button>
+    <div id="submenu-ligas" class="submenu-ligas" style="display:none;">
+      <div class="grid-ligas" id="grid-ligas"><!-- se llena con JS --></div>
+    </div>
+
+    <div class="menu-seccion-titulo">Novedades</div>
+    <div class="menu-novedades-placeholder">
+      Próximamente: lesiones, fichajes y noticias de tus ligas favoritas, directo aquí.
+    </div>
+  </nav>
+
+  <div class="menu-lateral-footer" id="menu-lateral-footer">
+    <!-- se llena con JS: estado de sesion o botones de login/registro -->
+  </div>
+</aside>
 
 <div class="marcador-global">
   <div class="marcador-box">
@@ -640,11 +754,6 @@
     </div>
     <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
   </div>
-</div>
-
-<div class="nav-principal">
-  <button class="nav-tab activo" id="nav-picks" onclick="cambiarVista('picks')">Picks del día</button>
-  <button class="nav-tab" id="nav-historial" onclick="cambiarVista('historial')">Historial</button>
 </div>
 
 <div id="vista-picks">
@@ -799,19 +908,22 @@ if ("serviceWorker" in navigator) {
 }
 
 function renderBarraAuth() {
-  const cont = document.getElementById("auth-barra");
+  // Header: version compacta, solo el boton de instalar app
+  document.getElementById("auth-barra-header").innerHTML = botonInstalarApp();
+
+  // Pie del menu lateral: estado completo de sesion
+  const pie = document.getElementById("menu-lateral-footer");
   if (sesionActual && perfilActual) {
     const etiqueta = perfilActual.es_admin ? "Administrador" : (perfilActual.es_vip ? "VIP" : "Gratis");
-    cont.innerHTML = `
-      ${botonInstalarApp()}
-      <span class="auth-estado">${sesionActual.user.email} · <b>${etiqueta}</b></span>
-      <button class="auth-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    pie.innerHTML = `
+      <div class="menu-usuario-email">${sesionActual.user.email}</div>
+      <div class="menu-usuario-etiqueta">${etiqueta}</div>
+      <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
     `;
   } else {
-    cont.innerHTML = `
-      ${botonInstalarApp()}
-      <button class="auth-btn" onclick="mostrarFormAuth('login')">Iniciar sesión</button>
-      <button class="auth-btn destacado" onclick="mostrarFormAuth('signup')">Registrarse</button>
+    pie.innerHTML = `
+      <button class="auth-btn" style="width:100%; margin-bottom:8px;" onclick="mostrarFormAuth('login')">Iniciar sesión</button>
+      <button class="auth-btn destacado" style="width:100%;" onclick="mostrarFormAuth('signup')">Registrarse</button>
     `;
   }
 }
@@ -889,9 +1001,19 @@ async function cerrarSesion() {
 
 async function cargarTodo() {
   try {
+    let consultaPicks = sb.from("picks_publicos").select("*");
+    let consultaCombinadas = sb.from("combinadas_publicas").select("*");
+
+    if (ligaSeleccionada !== "todas") {
+      consultaPicks = consultaPicks.eq("liga", ligaSeleccionada);
+      // Una combinada "mixta" puede incluir partidos de la liga seleccionada
+      // aunque tambien tenga de otra, asi que la dejamos visible tambien
+      consultaCombinadas = consultaCombinadas.or(`liga.eq.${ligaSeleccionada},liga.eq.mixta`);
+    }
+
     const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }] = await Promise.all([
-      sb.from("picks_publicos").select("*"),
-      sb.from("combinadas_publicas").select("*"),
+      consultaPicks,
+      consultaCombinadas,
       sb.from("historial_combinadas").select("*").not("resultado", "is", null),
     ]);
 
@@ -1182,9 +1304,61 @@ function toggleDetalle(i) {
 
 let historialYaCargado = false;
 
+// ---------- Menu lateral ----------
+
+const LIGAS_DISPONIBLES = [
+  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#3D195B", activa: true },
+  { clave: "la_liga", nombre: "LaLiga", abrev: "LL", color: "#EE8707", activa: true },
+  { clave: "serie_a", nombre: "Serie A", abrev: "SA", color: "#024494", activa: false },
+  { clave: "ligue_1", nombre: "Ligue 1", abrev: "L1", color: "#091C3E", activa: false },
+  { clave: "bundesliga", nombre: "Bundesliga", abrev: "BL", color: "#D3010C", activa: false },
+];
+
+let ligaSeleccionada = "todas";
+
+function renderGridLigas() {
+  document.getElementById("grid-ligas").innerHTML = LIGAS_DISPONIBLES.map(liga => `
+    <button class="liga-box ${!liga.activa ? 'liga-proximamente' : ''} ${ligaSeleccionada === liga.clave ? 'liga-activa-seleccionada' : ''}"
+            onclick="${liga.activa ? `seleccionarLiga('${liga.clave}')` : ''}">
+      <div class="liga-escudo" style="background:${liga.color}">${liga.abrev}</div>
+      <div class="liga-nombre">${liga.nombre}</div>
+      ${!liga.activa ? '<div class="liga-badge-proximamente">Próximamente</div>' : ''}
+    </button>
+  `).join("") + `
+    <button class="liga-box ${ligaSeleccionada === 'todas' ? 'liga-activa-seleccionada' : ''}" onclick="seleccionarLiga('todas')">
+      <div class="liga-escudo" style="background:#4E9868">TODAS</div>
+      <div class="liga-nombre">Todas las ligas</div>
+    </button>
+  `;
+}
+
+function seleccionarLiga(liga) {
+  ligaSeleccionada = liga;
+  renderGridLigas();
+  cargarTodo();
+  cerrarMenuLateral();
+}
+
+function abrirMenuLateral() {
+  document.getElementById("menu-lateral").classList.add("abierto");
+  document.getElementById("fondo-menu-lateral").classList.add("visible");
+}
+
+function cerrarMenuLateral() {
+  document.getElementById("menu-lateral").classList.remove("abierto");
+  document.getElementById("fondo-menu-lateral").classList.remove("visible");
+}
+
+function toggleSubmenuLigas() {
+  const submenu = document.getElementById("submenu-ligas");
+  const abierto = submenu.style.display !== "none";
+  submenu.style.display = abierto ? "none" : "block";
+  document.getElementById("flecha-ligas").textContent = abierto ? "▾" : "▴";
+}
+
 function cambiarVista(vista) {
-  document.getElementById("nav-picks").classList.toggle("activo", vista === "picks");
-  document.getElementById("nav-historial").classList.toggle("activo", vista === "historial");
+  document.getElementById("menu-picks").classList.toggle("activo", vista === "picks");
+  document.getElementById("menu-historial").classList.toggle("activo", vista === "historial");
   document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
   document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
 
@@ -1260,6 +1434,7 @@ async function cargarHistorialCombinadas() {
 }
 
 (async function iniciar() {
+  renderGridLigas();
   await actualizarSesion();
   await cargarTodo();
   await verificarRetornoDePago();
