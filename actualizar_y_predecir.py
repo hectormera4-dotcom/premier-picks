@@ -1182,6 +1182,9 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
 
         matriz, lam, mu = matriz_marcadores(local, visitante, fuerzas, prom_l, prom_v, rho)
         if matriz is None:
+            print(f"DIAGNOSTICO: se salto '{local}' vs '{visitante}' -- alguno de los dos "
+                  f"nombres no se encontro en las fuerzas calculadas (revisar MAPEO_NOMBRES). "
+                  f"Nombres originales de la API: '{p['homeTeam']['name']}' / '{p['awayTeam']['name']}'")
             continue
         mercados_sin_calibrar = calcular_mercados(matriz)
 
