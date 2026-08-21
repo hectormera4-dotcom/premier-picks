@@ -43,4 +43,8 @@ jobs:
           git add historial_combinadas_*.csv 2>/dev/null || true
           git add contador_fechas_*.json 2>/dev/null || true
           git diff --staged --quiet || git commit -m "Actualizacion automatica de picks"
+          # Nos sincronizamos con lo ultimo del repositorio antes de subir,
+          # por si alguien (o otra corrida del workflow) subio algo mientras
+          # tanto -- esto evita el error "rejected (fetch first)".
+          git pull --rebase --autostash origin main
           git push
