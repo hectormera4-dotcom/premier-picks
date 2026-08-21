@@ -331,15 +331,24 @@
   .celda-equipo { display: flex; align-items: center; gap: 8px; }
   .celda-equipo img { width: 18px; height: 18px; object-fit: contain; }
 
-  .lista-novedades { display: flex; flex-direction: column; gap: 8px; }
-  .novedad-item {
-    display: flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px 12px;
+  .lista-partidos { display: flex; flex-direction: column; gap: 6px; }
+  .partido-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px 14px;
+    gap: 10px; flex-wrap: wrap;
   }
-  .novedad-escudo { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
-  .novedad-jugador { font-size: 13px; font-weight: 600; }
-  .novedad-equipo { font-weight: 400; color: rgba(239,235,226,0.55); }
-  .novedad-motivo { font-size: 11.5px; color: var(--ambar); margin-top: 2px; }
+  .partido-fecha { font-size: 11px; color: rgba(239,235,226,0.5); white-space: nowrap; }
+  .partido-equipos {
+    display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;
+    flex: 1; justify-content: flex-end;
+  }
+  .partido-equipos span { display: flex; align-items: center; gap: 5px; }
+  .partido-escudo { width: 16px; height: 16px; object-fit: contain; }
+  .partido-marcador {
+    font-family: 'Oswald', sans-serif; color: var(--verde-claro);
+    background: rgba(78,152,104,0.15); padding: 2px 8px; border-radius: 4px;
+  }
+  .partido-vs-mini { color: rgba(239,235,226,0.4); font-weight: 400; font-size: 11px; }
 
   .menu-seccion-titulo {
     font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em;
@@ -862,8 +871,13 @@
     </section>
 
     <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">Novedades</h3>
-      <div id="liga-novedades"><div class="cargando-liga">Cargando novedades...</div></div>
+      <h3 class="seccion-liga-titulo">Resultados recientes</h3>
+      <div id="liga-resultados"><div class="cargando-liga">Cargando resultados...</div></div>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Próximos partidos</h3>
+      <div id="liga-proximos"><div class="cargando-liga">Cargando próximos partidos...</div></div>
     </section>
   </main>
 </div>
@@ -1434,36 +1448,52 @@ async function mostrarVistaLiga(liga) {
 
   document.getElementById("liga-tabla-posiciones").innerHTML = `<div class="cargando-liga">Cargando tabla de posiciones...</div>`;
   document.getElementById("liga-tabla-goleadores").innerHTML = `<div class="cargando-liga">Cargando goleadores...</div>`;
-  document.getElementById("liga-novedades").innerHTML = `<div class="cargando-liga">Cargando novedades...</div>`;
+  document.getElementById("liga-resultados").innerHTML = `<div class="cargando-liga">Cargando resultados...</div>`;
+  document.getElementById("liga-proximos").innerHTML = `<div class="cargando-liga">Cargando próximos partidos...</div>`;
 
-  const [{ data: posiciones }, { data: goleadores }, { data: lesiones }] = await Promise.all([
+  const [{ data: posiciones }, { data: goleadores }, { data: calendario }] = await Promise.all([
     sb.from("tabla_posiciones").select("*").eq("liga", liga).order("posicion", { ascending: true }),
     sb.from("goleadores").select("*").eq("liga", liga).order("posicion", { ascending: true }),
-    sb.from("lesiones").select("*").eq("liga", liga),
+    sb.from("calendario_liga").select("*").eq("liga", liga).order("fecha", { ascending: true }),
   ]);
 
   document.getElementById("liga-tabla-posiciones").innerHTML = renderTablaPosiciones(posiciones || []);
   document.getElementById("liga-tabla-goleadores").innerHTML = renderTablaGoleadores(goleadores || []);
-  document.getElementById("liga-novedades").innerHTML = renderNovedades(lesiones || []);
+
+  const calendarioLista = calendario || [];
+  const resultados = calendarioLista.filter(p => p.estado === "finalizado").sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+  const proximos = calendarioLista.filter(p => p.estado === "programado").sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+
+  document.getElementById("liga-resultados").innerHTML = renderResultados(resultados);
+  document.getElementById("liga-proximos").innerHTML = renderProximos(proximos);
 }
 
-function renderNovedades(filas) {
-  if (filas.length === 0) {
-    return `<div class="cargando-liga">No hay novedades de lesiones o suspensiones por ahora.</div>`;
-  }
-  const traduccionTipo = { "Injury": "Lesión", "Missing Fixture": "Lesión", "Suspended": "Suspendido" };
-  return `
-    <div class="lista-novedades">
-      ${filas.map(f => `
-        <div class="novedad-item">
-          ${f.escudo_equipo ? `<img src="${f.escudo_equipo}" class="novedad-escudo" alt="">` : ""}
-          <div>
-            <div class="novedad-jugador">${f.jugador} <span class="novedad-equipo">— ${f.equipo || ""}</span></div>
-            <div class="novedad-motivo">${traduccionTipo[f.tipo] || f.tipo || "Baja"}${f.motivo ? `: ${f.motivo}` : ""}</div>
-          </div>
-        </div>
-      `).join("")}
-    </div>`;
+function renderResultados(filas) {
+  if (filas.length === 0) return `<div class="cargando-liga">Todavía no hay resultados recientes disponibles.</div>`;
+  return `<div class="lista-partidos">${filas.map(p => `
+    <div class="partido-item">
+      <span class="partido-fecha">${formatearFecha(p.fecha)}</span>
+      <div class="partido-equipos">
+        <span>${p.escudo_local ? `<img src="${p.escudo_local}" class="partido-escudo" alt="">` : ""}${p.local}</span>
+        <span class="partido-marcador">${p.goles_local} - ${p.goles_visitante}</span>
+        <span>${p.visitante}${p.escudo_visitante ? `<img src="${p.escudo_visitante}" class="partido-escudo" alt="">` : ""}</span>
+      </div>
+    </div>
+  `).join("")}</div>`;
+}
+
+function renderProximos(filas) {
+  if (filas.length === 0) return `<div class="cargando-liga">Todavía no hay próximos partidos programados.</div>`;
+  return `<div class="lista-partidos">${filas.map(p => `
+    <div class="partido-item">
+      <span class="partido-fecha">${formatearFecha(p.fecha)}</span>
+      <div class="partido-equipos">
+        <span>${p.escudo_local ? `<img src="${p.escudo_local}" class="partido-escudo" alt="">` : ""}${p.local}</span>
+        <span class="partido-vs-mini">vs</span>
+        <span>${p.visitante}${p.escudo_visitante ? `<img src="${p.escudo_visitante}" class="partido-escudo" alt="">` : ""}</span>
+      </div>
+    </div>
+  `).join("")}</div>`;
 }
 
 function renderTablaPosiciones(filas) {

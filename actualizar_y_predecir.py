@@ -18,7 +18,6 @@ from datetime import datetime, timedelta
 import os
 
 API_TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "TU_TOKEN_AQUI")
-API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")  # para lesiones (Novedades)
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
@@ -31,7 +30,6 @@ LIGAS = {
     "premier_league": {
         "nombre_mostrar": "Premier League",
         "codigo_api": "PL",              # codigo de football-data.org
-        "codigo_api_football": 39,        # id de liga en API-Football (para lesiones)
         "codigo_footballdata": "E0",      # codigo de football-data.co.uk
         "archivo_historico": "premier_league_combinado.csv",
         "equipos_sin_historial": ["Coventry", "Hull"],
@@ -61,7 +59,6 @@ LIGAS = {
     "la_liga": {
         "nombre_mostrar": "LaLiga",
         "codigo_api": "PD",               # Primera Division
-        "codigo_api_football": 140,        # id de liga en API-Football (para lesiones)
         "codigo_footballdata": "SP1",
         "archivo_historico": "la_liga_combinado.csv",
         # Equipos recien ascendidos a Primera 2025/26, sin historial reciente
@@ -1054,60 +1051,46 @@ def limpiar_tabla_supabase(tabla, liga):
     if resp.status_code not in (200, 204):
         print(f"Aviso: no se pudo limpiar la tabla '{tabla}' en Supabase ({resp.status_code}): {resp.text[:200]}")
 
-def actualizar_lesiones(liga_key, codigo_api_football):
-    """Descarga las lesiones/suspensiones actuales de una liga desde
-    API-Football y las sube a Supabase. Los nombres exactos de los campos
-    anidados en la respuesta no estan 100% confirmados en la documentacion
-    publica, asi que leemos todo de forma defensiva (con .get()) e
-    imprimimos la primera respuesta cruda para poder ajustar si hace falta."""
-    if not API_FOOTBALL_KEY:
-        print("Aviso: API_FOOTBALL_KEY no configurada -- se omite la actualizacion de lesiones.")
-        return
+def actualizar_calendario_liga(liga_key, partidos):
+    """Sube a Supabase los resultados recientes y los proximos partidos de
+    una liga, usando los datos que YA descargamos de football-data.org
+    para generar los picks -- no cuesta ninguna llamada extra. Se muestran
+    en la seccion 'Resultados recientes / Proximos partidos' de cada liga."""
     if not supabase_configurado():
         return
+    if not partidos:
+        return
 
-    try:
-        resp = requests.get(
-            "https://v3.football.api-sports.io/injuries",
-            headers={"x-apisports-key": API_FOOTBALL_KEY},
-            params={"league": codigo_api_football, "season": TEMPORADA_ACTUAL},
-            timeout=20,
-        )
-        resp.raise_for_status()
-        datos = resp.json()
+    finalizados = [p for p in partidos if p.get("status") == "FINISHED"]
+    programados = [p for p in partidos if p.get("status") in ("SCHEDULED", "TIMED")]
 
-        if datos.get("errors"):
-            print(f"Aviso: API-Football devolvio errores: {datos['errors']}")
-            return
+    finalizados = sorted(finalizados, key=lambda p: p["utcDate"], reverse=True)[:8]
+    programados = sorted(programados, key=lambda p: p["utcDate"])[:8]
 
-        items = datos.get("response", [])
-        print(f"DIAGNOSTICO lesiones ({liga_key}): {len(items)} resultados. "
-              f"Primer item crudo (para verificar campos): {items[0] if items else 'ninguno'}")
+    def _armar_registro(p, estado):
+        marcador = p.get("score", {}).get("fullTime", {})
+        return {
+            "liga": liga_key,
+            "fecha": p["utcDate"],
+            "local": p["homeTeam"]["name"],
+            "escudo_local": p["homeTeam"].get("crest"),
+            "visitante": p["awayTeam"]["name"],
+            "escudo_visitante": p["awayTeam"].get("crest"),
+            "estado": estado,
+            "goles_local": marcador.get("home"),
+            "goles_visitante": marcador.get("away"),
+        }
 
-        registros = []
-        for item in items[:30]:  # nos quedamos con un maximo razonable
-            jugador = item.get("player", {})
-            equipo = item.get("team", {})
-            registros.append({
-                "liga": liga_key,
-                "jugador": jugador.get("name", "Desconocido"),
-                "equipo": equipo.get("name"),
-                "escudo_equipo": equipo.get("logo"),
-                "tipo": item.get("type") or jugador.get("type"),
-                "motivo": item.get("reason") or jugador.get("reason"),
-                "fecha_partido": (item.get("fixture") or {}).get("date"),
-            })
+    registros = [_armar_registro(p, "finalizado") for p in finalizados]
+    registros += [_armar_registro(p, "programado") for p in programados]
 
-        requests.delete(f"{SUPABASE_URL}/rest/v1/lesiones?liga=eq.{liga_key}", headers=supabase_headers())
-        if registros:
-            resp2 = requests.post(f"{SUPABASE_URL}/rest/v1/lesiones", headers=supabase_headers(), json=registros)
-            if resp2.status_code in (200, 201):
-                print(f"Lesiones actualizadas ({len(registros)} registros).")
-            else:
-                print(f"Aviso: fallo al subir lesiones ({resp2.status_code}): {resp2.text[:200]}")
-
-    except Exception as e:
-        print(f"Aviso: no se pudo actualizar lesiones: {e}")
+    requests.delete(f"{SUPABASE_URL}/rest/v1/calendario_liga?liga=eq.{liga_key}", headers=supabase_headers())
+    if registros:
+        resp = requests.post(f"{SUPABASE_URL}/rest/v1/calendario_liga", headers=supabase_headers(), json=registros)
+        if resp.status_code in (200, 201):
+            print(f"Calendario actualizado ({len(finalizados)} resultados recientes, {len(programados)} proximos).")
+        else:
+            print(f"Aviso: fallo al subir calendario ({resp.status_code}): {resp.text[:200]}")
 
 
 def actualizar_posiciones_y_goleadores(liga_key, codigo_api):
@@ -1437,8 +1420,8 @@ def correr_pipeline_liga(liga_key):
     print("Actualizando tabla de posiciones y goleadores...")
     actualizar_posiciones_y_goleadores(liga_key, config["codigo_api"])
 
-    print("Actualizando lesiones (Novedades)...")
-    actualizar_lesiones(liga_key, config["codigo_api_football"])
+    print("Actualizando resultados recientes y proximos partidos...")
+    actualizar_calendario_liga(liga_key, partidos)
 
     print("Actualizando historico con partidos ya jugados...")
     historico = actualizar_historico(partidos)
