@@ -709,7 +709,7 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <div class="logo">PICKS<span>FC</span></div>
-    <div id="auth-barra-header"></div>
+    <div id="auth-barra-header" class="auth-barra"></div>
   </div>
 </header>
 
@@ -908,24 +908,27 @@ if ("serviceWorker" in navigator) {
 }
 
 function renderBarraAuth() {
-  // Header: version compacta, solo el boton de instalar app
-  document.getElementById("auth-barra-header").innerHTML = botonInstalarApp();
-
-  // Pie del menu lateral: estado completo de sesion
-  const pie = document.getElementById("menu-lateral-footer");
+  // Header: estado completo de sesion (igual que antes), + boton de instalar app
+  const header = document.getElementById("auth-barra-header");
   if (sesionActual && perfilActual) {
     const etiqueta = perfilActual.es_admin ? "Administrador" : (perfilActual.es_vip ? "VIP" : "Gratis");
-    pie.innerHTML = `
-      <div class="menu-usuario-email">${sesionActual.user.email}</div>
-      <div class="menu-usuario-etiqueta">${etiqueta}</div>
-      <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
+    header.innerHTML = `
+      ${botonInstalarApp()}
+      <span class="auth-estado">${sesionActual.user.email} · <b>${etiqueta}</b></span>
     `;
   } else {
-    pie.innerHTML = `
-      <button class="auth-btn" style="width:100%; margin-bottom:8px;" onclick="mostrarFormAuth('login')">Iniciar sesión</button>
-      <button class="auth-btn destacado" style="width:100%;" onclick="mostrarFormAuth('signup')">Registrarse</button>
+    header.innerHTML = `
+      ${botonInstalarApp()}
+      <button class="auth-btn" onclick="mostrarFormAuth('login')">Iniciar sesión</button>
+      <button class="auth-btn destacado" onclick="mostrarFormAuth('signup')">Registrarse</button>
     `;
   }
+
+  // Pie del menu lateral: SOLO el boton de cerrar sesion (nada si no hay sesion)
+  const pie = document.getElementById("menu-lateral-footer");
+  pie.innerHTML = sesionActual
+    ? `<button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>`
+    : "";
 }
 
 async function entrarConGoogle() {
