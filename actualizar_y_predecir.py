@@ -1133,7 +1133,7 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
     df.loc[top_indices, "es_gratis"] = True
 
     columnas_base = {"fecha", "local", "visitante", "pick_recomendado", "es_combo",
-                      "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis"}
+                      "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis", "liga"}
 
     registros = []
     for _, fila in df.iterrows():
@@ -1149,7 +1149,10 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
             "pick_es_seguro": bool(fila["pick_es_seguro"]),
             "es_gratis": bool(fila["es_gratis"]),
             "mercados_json": mercados,
-            "liga": liga,
+            # Usamos la liga REAL de cada pick (ya viene en el propio dataframe),
+            # no el parametro generico -- asi cada uno queda etiquetado con
+            # su liga de origen (premier_league, la_liga, etc.)
+            "liga": fila["liga"] if ("liga" in fila.index and pd.notna(fila["liga"])) else liga,
         })
 
     limpiar_tabla_supabase("picks", liga)
@@ -1463,8 +1466,9 @@ def correr_pipeline_liga(liga_key):
     resumen_track_record(historial)
     verificar_calibracion_continua(historial)
 
-    print("\nSincronizando picks con Supabase...")
-    subir_picks_supabase(picks, liga=liga_key, n_gratis=3)
+    # Los picks YA NO se suben aqui -- se suben despues de juntar el pool de
+    # TODAS las ligas y quedarnos solo con los 10 mas confiables en total
+    # (ver correr_combinadas_multiliga, que ahora tambien maneja esto).
 
     # Las combinadas YA NO se generan aqui -- se arman despues, juntando el
     # pool de picks seguros de TODAS las ligas activas (ver mas abajo), asi
@@ -1473,6 +1477,28 @@ def correr_pipeline_liga(liga_key):
     picks["liga"] = liga_key
     historico["liga"] = liga_key
     return picks, historico
+
+
+def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
+    """Junta el pool de picks seguros de TODAS las ligas activas y se queda
+    SOLO con los 'top_n' mas confiables en total -- esto es lo unico que se
+    muestra en la pestana 'Picks del dia', sin importar de que liga vengan
+    ni cuantos partidos haya ese dia en cada una."""
+    if pool_picks is None or len(pool_picks) == 0:
+        print("\nNo hay picks de ninguna liga para mostrar hoy.")
+        return None
+
+    picks_curados = pool_picks.sort_values("pick_probabilidad", ascending=False).head(top_n).reset_index(drop=True)
+    print(f"\nCurando picks del dia: {len(picks_curados)} de {len(pool_picks)} candidatos totales "
+          f"(los {top_n} mas confiables, de todas las ligas activas).")
+
+    print("Sincronizando picks del dia con Supabase...")
+    if supabase_configurado():
+        # Limpiamos TODA la tabla (ya no es por liga, es un solo top curado)
+        requests.delete(f"{SUPABASE_URL}/rest/v1/picks?id=gt.0", headers=supabase_headers())
+    subir_picks_supabase(picks_curados, liga="multiliga", n_gratis=n_gratis)
+
+    return picks_curados
 
 
 def correr_combinadas_multiliga(pool_picks, pool_historico):
@@ -1485,7 +1511,7 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
 
     print(f"\n{'#'*70}\n# COMBINADAS MULTI-LIGA (pool de {len(pool_picks)} picks seguros)\n{'#'*70}")
 
-    combinadas = calcular_combinadas_multiples(pool_picks, cuota_objetivo=1.70, max_combinadas=3, max_partidos_por_combinada=3)
+    combinadas = calcular_combinadas_multiples(pool_picks, cuota_objetivo=1.70, max_combinadas=4, max_partidos_por_combinada=3)
 
     # A cada combinada le calculamos su "liga": si todos sus partidos son
     # de la misma liga, usamos esa; si mezcla varias, la marcamos "mixta"
@@ -1553,4 +1579,6 @@ if __name__ == "__main__":
 
     pool_picks = pd.concat(pools_picks, ignore_index=True) if pools_picks else None
     pool_historico = pd.concat(pools_historico, ignore_index=True) if pools_historico else None
-    correr_combinadas_multiliga(pool_picks, pool_historico)
+
+    picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=15, n_gratis=3)
+    correr_combinadas_multiliga(picks_del_dia, pool_historico)

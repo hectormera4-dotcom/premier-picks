@@ -297,6 +297,40 @@
     color: var(--ambar); margin-top: 4px;
   }
 
+  /* ---------- Vista de liga (posiciones, goleadores, novedades) ---------- */
+  .liga-header-vista {
+    max-width: 960px; margin: 26px auto 10px; padding: 0 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .liga-escudo-grande { width: 46px; height: 46px; font-size: 13px; flex-shrink: 0; }
+  .liga-header-vista h2 {
+    font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 600; margin: 0;
+  }
+  .seccion-liga { margin: 28px 0; }
+  .seccion-liga-titulo {
+    font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 0.03em;
+    color: var(--verde-claro); margin: 0 0 12px;
+  }
+  .cargando-liga {
+    color: rgba(239,235,226,0.5); font-size: 13px;
+    padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;
+  }
+  .tabla-liga {
+    width: 100%; border-collapse: collapse;
+    background: rgba(255,255,255,0.03); border-radius: 8px; overflow: hidden;
+    font-size: 13px;
+  }
+  .tabla-liga th {
+    text-align: left; padding: 10px 10px; font-family: 'Oswald', sans-serif;
+    font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase;
+    color: rgba(239,235,226,0.5); border-bottom: 1px solid var(--linea-oscura);
+  }
+  .tabla-liga td {
+    padding: 9px 10px; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .celda-equipo { display: flex; align-items: center; gap: 8px; }
+  .celda-equipo img { width: 18px; height: 18px; object-fit: contain; }
+
   .menu-seccion-titulo {
     font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em;
     text-transform: uppercase; color: rgba(239,235,226,0.45);
@@ -440,6 +474,24 @@
     text-transform: uppercase;
     color: var(--tinta-suave);
     margin-bottom: 8px;
+  }
+  .card-liga-badge {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--verde-claro);
+    background: rgba(78,152,104,0.15);
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-left: 6px;
+  }
+  .combinada-liga-badge {
+    color: rgba(239,235,226,0.6);
+    background: rgba(255,255,255,0.06);
+    margin-left: 4px;
   }
   .card-equipos {
     display: flex;
@@ -779,6 +831,30 @@
   </main>
 </div>
 
+<div id="vista-liga" style="display:none;">
+  <div class="liga-header-vista">
+    <div class="liga-escudo liga-escudo-grande" id="liga-escudo-titulo"></div>
+    <h2 id="liga-titulo">Liga</h2>
+  </div>
+
+  <main style="max-width:960px; margin:0 auto; padding:0 20px 40px;">
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Tabla de posiciones</h3>
+      <div id="liga-tabla-posiciones"></div>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Goleadores</h3>
+      <div id="liga-tabla-goleadores"></div>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Novedades</h3>
+      <div class="cargando-liga">Próximamente: lesiones, fichajes y noticias relevantes de esta liga.</div>
+    </section>
+  </main>
+</div>
+
 <footer>
   Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
 </footer>
@@ -845,8 +921,15 @@ function transformarPick(fila) {
     cuota: tieneDatos ? fila.pick_cuota_aprox : null,
     nivel: tieneDatos && seguro ? "seguro" : null,
     combo: !!fila.es_combo,
+    liga: fila.liga,
+    ligaMostrar: nombreLiga(fila.liga),
     mercados,
   };
+}
+
+function nombreLiga(clave) {
+  const encontrada = LIGAS_DISPONIBLES.find(l => l.clave === clave);
+  return encontrada ? encontrada.nombre : (clave === "mixta" ? "Varias ligas" : "");
 }
 
 // ---------- Autenticacion ----------
@@ -1004,19 +1087,9 @@ async function cerrarSesion() {
 
 async function cargarTodo() {
   try {
-    let consultaPicks = sb.from("picks_publicos").select("*");
-    let consultaCombinadas = sb.from("combinadas_publicas").select("*");
-
-    if (ligaSeleccionada !== "todas") {
-      consultaPicks = consultaPicks.eq("liga", ligaSeleccionada);
-      // Una combinada "mixta" puede incluir partidos de la liga seleccionada
-      // aunque tambien tenga de otra, asi que la dejamos visible tambien
-      consultaCombinadas = consultaCombinadas.or(`liga.eq.${ligaSeleccionada},liga.eq.mixta`);
-    }
-
     const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }] = await Promise.all([
-      consultaPicks,
-      consultaCombinadas,
+      sb.from("picks_publicos").select("*"),
+      sb.from("combinadas_publicas").select("*"),
       sb.from("historial_combinadas").select("*").not("resultado", "is", null),
     ]);
 
@@ -1166,7 +1239,9 @@ function crearCombinada(c) {
   const filas = c.partidos.map(p => `
     <div class="combinada-fila">
       ${desbloqueada ? `<span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>` : ""}
-      <span><b>${p.local} vs ${p.visitante}</b>${desbloqueada ? ` — ${p.pick_recomendado}` : ""}</span>
+      <span><b>${p.local} vs ${p.visitante}</b>${desbloqueada ? ` — ${p.pick_recomendado}` : ""}
+        <span class="card-liga-badge combinada-liga-badge">${nombreLiga(p.liga)}</span>
+      </span>
     </div>
   `).join("");
 
@@ -1214,7 +1289,7 @@ function crearTarjeta(p, i) {
     return `
       <div class="card">
         <div class="card-top">
-          <div class="card-fecha">${p.fecha}</div>
+          <div class="card-fecha">${p.fecha} <span class="card-liga-badge">${p.ligaMostrar}</span></div>
           <div class="card-equipos">
             <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
           </div>
@@ -1236,7 +1311,7 @@ function crearTarjeta(p, i) {
     return `
       <div class="card sin-pick">
         <div class="card-top">
-          <div class="card-fecha">${p.fecha}</div>
+          <div class="card-fecha">${p.fecha} <span class="card-liga-badge">${p.ligaMostrar}</span></div>
           <div class="card-equipos">
             <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
           </div>
@@ -1260,7 +1335,7 @@ function crearTarjeta(p, i) {
   return `
     <div class="card">
       <div class="card-top">
-        <div class="card-fecha">${p.fecha}</div>
+        <div class="card-fecha">${p.fecha} <span class="card-liga-badge">${p.ligaMostrar}</span></div>
         <div class="card-equipos">
           <span>${p.local}</span><span class="vs">vs</span><span>${p.visitante}</span>
         </div>
@@ -1327,19 +1402,68 @@ function renderGridLigas() {
       <div class="liga-nombre">${liga.nombre}</div>
       ${!liga.activa ? '<div class="liga-badge-proximamente">Próximamente</div>' : ''}
     </button>
-  `).join("") + `
-    <button class="liga-box ${ligaSeleccionada === 'todas' ? 'liga-activa-seleccionada' : ''}" onclick="seleccionarLiga('todas')">
-      <div class="liga-escudo" style="background:#4E9868">TODAS</div>
-      <div class="liga-nombre">Todas las ligas</div>
-    </button>
-  `;
+  `).join("");
 }
 
-function seleccionarLiga(liga) {
+async function seleccionarLiga(liga) {
   ligaSeleccionada = liga;
-  renderGridLigas();
-  cargarTodo();
   cerrarMenuLateral();
+  await mostrarVistaLiga(liga);
+}
+
+async function mostrarVistaLiga(liga) {
+  cambiarVista("liga");
+
+  const infoLiga = LIGAS_DISPONIBLES.find(l => l.clave === liga);
+  document.getElementById("liga-titulo").textContent = infoLiga ? infoLiga.nombre : liga;
+  document.getElementById("liga-escudo-titulo").style.background = infoLiga ? infoLiga.color : "#4E9868";
+  document.getElementById("liga-escudo-titulo").textContent = infoLiga ? infoLiga.abrev : "";
+
+  document.getElementById("liga-tabla-posiciones").innerHTML = `<div class="cargando-liga">Cargando tabla de posiciones...</div>`;
+  document.getElementById("liga-tabla-goleadores").innerHTML = `<div class="cargando-liga">Cargando goleadores...</div>`;
+
+  const [{ data: posiciones }, { data: goleadores }] = await Promise.all([
+    sb.from("tabla_posiciones").select("*").eq("liga", liga).order("posicion", { ascending: true }),
+    sb.from("goleadores").select("*").eq("liga", liga).order("posicion", { ascending: true }),
+  ]);
+
+  document.getElementById("liga-tabla-posiciones").innerHTML = renderTablaPosiciones(posiciones || []);
+  document.getElementById("liga-tabla-goleadores").innerHTML = renderTablaGoleadores(goleadores || []);
+}
+
+function renderTablaPosiciones(filas) {
+  if (filas.length === 0) return `<div class="cargando-liga">Todavía no hay datos de posiciones disponibles.</div>`;
+  return `
+    <table class="tabla-liga">
+      <thead><tr><th>#</th><th>Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>DG</th><th>Pts</th></tr></thead>
+      <tbody>
+        ${filas.map(f => `
+          <tr>
+            <td>${f.posicion}</td>
+            <td class="celda-equipo">${f.escudo_url ? `<img src="${f.escudo_url}" alt="">` : ""}${f.equipo}</td>
+            <td>${f.jugados}</td><td>${f.ganados}</td><td>${f.empatados}</td><td>${f.perdidos}</td>
+            <td>${f.diferencia > 0 ? "+" : ""}${f.diferencia}</td>
+            <td><b>${f.puntos}</b></td>
+          </tr>`).join("")}
+      </tbody>
+    </table>`;
+}
+
+function renderTablaGoleadores(filas) {
+  if (filas.length === 0) return `<div class="cargando-liga">Todavía no hay datos de goleadores disponibles.</div>`;
+  return `
+    <table class="tabla-liga">
+      <thead><tr><th>#</th><th>Jugador</th><th>Equipo</th><th>Goles</th></tr></thead>
+      <tbody>
+        ${filas.map(f => `
+          <tr>
+            <td>${f.posicion}</td>
+            <td>${f.jugador}</td>
+            <td class="celda-equipo">${f.escudo_url ? `<img src="${f.escudo_url}" alt="">` : ""}${f.equipo}</td>
+            <td><b>${f.goles}</b></td>
+          </tr>`).join("")}
+      </tbody>
+    </table>`;
 }
 
 function abrirMenuLateral() {
@@ -1364,6 +1488,7 @@ function cambiarVista(vista) {
   document.getElementById("menu-historial").classList.toggle("activo", vista === "historial");
   document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
   document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
+  document.getElementById("vista-liga").style.display = vista === "liga" ? "block" : "none";
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
