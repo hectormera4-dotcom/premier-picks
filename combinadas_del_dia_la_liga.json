@@ -8,24 +8,24 @@
         "local": "Celta",
         "visitante": "Osasuna",
         "pick_recomendado": "Under 11.5 corners",
-        "pick_probabilidad": 82.7
+        "pick_probabilidad": 82.6
       },
       {
         "fecha": "2026-08-26 19:00:00",
         "local": "Real Madrid",
         "visitante": "Sociedad",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 81.6
+        "pick_probabilidad": 81.7
       },
       {
         "fecha": "2026-08-27 19:00:00",
         "local": "Barcelona",
         "visitante": "Ath Bilbao",
         "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 80.6
+        "pick_probabilidad": 80.5
       }
     ],
-    "probabilidad_combinada": 54.4,
+    "probabilidad_combinada": 54.3,
     "cuota_combinada": 1.74
   }
 ]
