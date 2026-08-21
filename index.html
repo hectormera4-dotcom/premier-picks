@@ -331,6 +331,16 @@
   .celda-equipo { display: flex; align-items: center; gap: 8px; }
   .celda-equipo img { width: 18px; height: 18px; object-fit: contain; }
 
+  .lista-novedades { display: flex; flex-direction: column; gap: 8px; }
+  .novedad-item {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px 12px;
+  }
+  .novedad-escudo { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
+  .novedad-jugador { font-size: 13px; font-weight: 600; }
+  .novedad-equipo { font-weight: 400; color: rgba(239,235,226,0.55); }
+  .novedad-motivo { font-size: 11.5px; color: var(--ambar); margin-top: 2px; }
+
   .menu-seccion-titulo {
     font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.06em;
     text-transform: uppercase; color: rgba(239,235,226,0.45);
@@ -853,7 +863,7 @@
 
     <section class="seccion-liga">
       <h3 class="seccion-liga-titulo">Novedades</h3>
-      <div class="cargando-liga">Próximamente: lesiones, fichajes y noticias relevantes de esta liga.</div>
+      <div id="liga-novedades"><div class="cargando-liga">Cargando novedades...</div></div>
     </section>
   </main>
 </div>
@@ -1424,14 +1434,36 @@ async function mostrarVistaLiga(liga) {
 
   document.getElementById("liga-tabla-posiciones").innerHTML = `<div class="cargando-liga">Cargando tabla de posiciones...</div>`;
   document.getElementById("liga-tabla-goleadores").innerHTML = `<div class="cargando-liga">Cargando goleadores...</div>`;
+  document.getElementById("liga-novedades").innerHTML = `<div class="cargando-liga">Cargando novedades...</div>`;
 
-  const [{ data: posiciones }, { data: goleadores }] = await Promise.all([
+  const [{ data: posiciones }, { data: goleadores }, { data: lesiones }] = await Promise.all([
     sb.from("tabla_posiciones").select("*").eq("liga", liga).order("posicion", { ascending: true }),
     sb.from("goleadores").select("*").eq("liga", liga).order("posicion", { ascending: true }),
+    sb.from("lesiones").select("*").eq("liga", liga),
   ]);
 
   document.getElementById("liga-tabla-posiciones").innerHTML = renderTablaPosiciones(posiciones || []);
   document.getElementById("liga-tabla-goleadores").innerHTML = renderTablaGoleadores(goleadores || []);
+  document.getElementById("liga-novedades").innerHTML = renderNovedades(lesiones || []);
+}
+
+function renderNovedades(filas) {
+  if (filas.length === 0) {
+    return `<div class="cargando-liga">No hay novedades de lesiones o suspensiones por ahora.</div>`;
+  }
+  const traduccionTipo = { "Injury": "Lesión", "Missing Fixture": "Lesión", "Suspended": "Suspendido" };
+  return `
+    <div class="lista-novedades">
+      ${filas.map(f => `
+        <div class="novedad-item">
+          ${f.escudo_equipo ? `<img src="${f.escudo_equipo}" class="novedad-escudo" alt="">` : ""}
+          <div>
+            <div class="novedad-jugador">${f.jugador} <span class="novedad-equipo">— ${f.equipo || ""}</span></div>
+            <div class="novedad-motivo">${traduccionTipo[f.tipo] || f.tipo || "Baja"}${f.motivo ? `: ${f.motivo}` : ""}</div>
+          </div>
+        </div>
+      `).join("")}
+    </div>`;
 }
 
 function renderTablaPosiciones(filas) {

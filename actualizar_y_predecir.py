@@ -18,6 +18,7 @@ from datetime import datetime, timedelta
 import os
 
 API_TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "TU_TOKEN_AQUI")
+API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")  # para lesiones (Novedades)
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
@@ -30,6 +31,7 @@ LIGAS = {
     "premier_league": {
         "nombre_mostrar": "Premier League",
         "codigo_api": "PL",              # codigo de football-data.org
+        "codigo_api_football": 39,        # id de liga en API-Football (para lesiones)
         "codigo_footballdata": "E0",      # codigo de football-data.co.uk
         "archivo_historico": "premier_league_combinado.csv",
         "equipos_sin_historial": ["Coventry", "Hull"],
@@ -59,6 +61,7 @@ LIGAS = {
     "la_liga": {
         "nombre_mostrar": "LaLiga",
         "codigo_api": "PD",               # Primera Division
+        "codigo_api_football": 140,        # id de liga en API-Football (para lesiones)
         "codigo_footballdata": "SP1",
         "archivo_historico": "la_liga_combinado.csv",
         # Equipos recien ascendidos a Primera 2025/26, sin historial reciente
@@ -1051,6 +1054,62 @@ def limpiar_tabla_supabase(tabla, liga):
     if resp.status_code not in (200, 204):
         print(f"Aviso: no se pudo limpiar la tabla '{tabla}' en Supabase ({resp.status_code}): {resp.text[:200]}")
 
+def actualizar_lesiones(liga_key, codigo_api_football):
+    """Descarga las lesiones/suspensiones actuales de una liga desde
+    API-Football y las sube a Supabase. Los nombres exactos de los campos
+    anidados en la respuesta no estan 100% confirmados en la documentacion
+    publica, asi que leemos todo de forma defensiva (con .get()) e
+    imprimimos la primera respuesta cruda para poder ajustar si hace falta."""
+    if not API_FOOTBALL_KEY:
+        print("Aviso: API_FOOTBALL_KEY no configurada -- se omite la actualizacion de lesiones.")
+        return
+    if not supabase_configurado():
+        return
+
+    try:
+        resp = requests.get(
+            "https://v3.football.api-sports.io/injuries",
+            headers={"x-apisports-key": API_FOOTBALL_KEY},
+            params={"league": codigo_api_football, "season": TEMPORADA_ACTUAL},
+            timeout=20,
+        )
+        resp.raise_for_status()
+        datos = resp.json()
+
+        if datos.get("errors"):
+            print(f"Aviso: API-Football devolvio errores: {datos['errors']}")
+            return
+
+        items = datos.get("response", [])
+        print(f"DIAGNOSTICO lesiones ({liga_key}): {len(items)} resultados. "
+              f"Primer item crudo (para verificar campos): {items[0] if items else 'ninguno'}")
+
+        registros = []
+        for item in items[:30]:  # nos quedamos con un maximo razonable
+            jugador = item.get("player", {})
+            equipo = item.get("team", {})
+            registros.append({
+                "liga": liga_key,
+                "jugador": jugador.get("name", "Desconocido"),
+                "equipo": equipo.get("name"),
+                "escudo_equipo": equipo.get("logo"),
+                "tipo": item.get("type") or jugador.get("type"),
+                "motivo": item.get("reason") or jugador.get("reason"),
+                "fecha_partido": (item.get("fixture") or {}).get("date"),
+            })
+
+        requests.delete(f"{SUPABASE_URL}/rest/v1/lesiones?liga=eq.{liga_key}", headers=supabase_headers())
+        if registros:
+            resp2 = requests.post(f"{SUPABASE_URL}/rest/v1/lesiones", headers=supabase_headers(), json=registros)
+            if resp2.status_code in (200, 201):
+                print(f"Lesiones actualizadas ({len(registros)} registros).")
+            else:
+                print(f"Aviso: fallo al subir lesiones ({resp2.status_code}): {resp2.text[:200]}")
+
+    except Exception as e:
+        print(f"Aviso: no se pudo actualizar lesiones: {e}")
+
+
 def actualizar_posiciones_y_goleadores(liga_key, codigo_api):
     """Descarga la tabla de posiciones y los goleadores actuales de una
     liga desde football-data.org, y los sube a Supabase (reemplazando lo
@@ -1377,6 +1436,9 @@ def correr_pipeline_liga(liga_key):
 
     print("Actualizando tabla de posiciones y goleadores...")
     actualizar_posiciones_y_goleadores(liga_key, config["codigo_api"])
+
+    print("Actualizando lesiones (Novedades)...")
+    actualizar_lesiones(liga_key, config["codigo_api_football"])
 
     print("Actualizando historico con partidos ya jugados...")
     historico = actualizar_historico(partidos)
