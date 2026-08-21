@@ -1132,9 +1132,9 @@ def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
             "fecha_generado": str(fila["fecha_generado"]),
             "es_gratis": bool(fila["es_gratis"]),
             "partidos_json": json.loads(fila["partidos_json"]),
-            "cuota_combinada": float(fila["cuota_combinada"]),
+            "cuota_combinada": float(fila["cuota_combinada"]) if pd.notna(fila["cuota_combinada"]) else None,
             "resultado": fila["resultado"] if pd.notna(fila["resultado"]) else None,
-            "liga": fila.get("liga", "premier_league"),
+            "liga": fila["liga"] if ("liga" in fila.index and pd.notna(fila["liga"])) else "premier_league",
         })
 
     resp = requests.post(
