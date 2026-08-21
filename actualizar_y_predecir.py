@@ -1051,6 +1051,73 @@ def limpiar_tabla_supabase(tabla, liga):
     if resp.status_code not in (200, 204):
         print(f"Aviso: no se pudo limpiar la tabla '{tabla}' en Supabase ({resp.status_code}): {resp.text[:200]}")
 
+def actualizar_posiciones_y_goleadores(liga_key, codigo_api):
+    """Descarga la tabla de posiciones y los goleadores actuales de una
+    liga desde football-data.org, y los sube a Supabase (reemplazando lo
+    anterior por completo, ya que estos datos no tienen 'historial' --
+    solo nos importa el estado actual)."""
+    if not supabase_configurado():
+        return
+
+    try:
+        resp_posiciones = requests.get(f"{BASE_URL}/competitions/{codigo_api}/standings", headers=HEADERS)
+        resp_posiciones.raise_for_status()
+        tabla = resp_posiciones.json()["standings"][0]["table"]  # tabla general (TOTAL)
+
+        registros_posiciones = []
+        for fila in tabla:
+            registros_posiciones.append({
+                "liga": liga_key,
+                "posicion": fila["position"],
+                "equipo": fila["team"]["name"],
+                "escudo_url": fila["team"].get("crest"),
+                "jugados": fila["playedGames"],
+                "ganados": fila["won"],
+                "empatados": fila["draw"],
+                "perdidos": fila["lost"],
+                "goles_favor": fila["goalsFor"],
+                "goles_contra": fila["goalsAgainst"],
+                "diferencia": fila["goalDifference"],
+                "puntos": fila["points"],
+            })
+
+        requests.delete(f"{SUPABASE_URL}/rest/v1/tabla_posiciones?liga=eq.{liga_key}", headers=supabase_headers())
+        resp = requests.post(f"{SUPABASE_URL}/rest/v1/tabla_posiciones", headers=supabase_headers(), json=registros_posiciones)
+        if resp.status_code in (200, 201):
+            print(f"Tabla de posiciones actualizada ({len(registros_posiciones)} equipos).")
+        else:
+            print(f"Aviso: fallo al subir tabla de posiciones ({resp.status_code}): {resp.text[:200]}")
+
+    except Exception as e:
+        print(f"Aviso: no se pudo actualizar la tabla de posiciones: {e}")
+
+    try:
+        resp_goleadores = requests.get(f"{BASE_URL}/competitions/{codigo_api}/scorers?limit=15", headers=HEADERS)
+        resp_goleadores.raise_for_status()
+        goleadores = resp_goleadores.json()["scorers"]
+
+        registros_goleadores = []
+        for i, g in enumerate(goleadores):
+            registros_goleadores.append({
+                "liga": liga_key,
+                "posicion": i + 1,
+                "jugador": g["player"]["name"],
+                "equipo": g["team"]["name"],
+                "escudo_url": g["team"].get("crest"),
+                "goles": g["goals"],
+            })
+
+        requests.delete(f"{SUPABASE_URL}/rest/v1/goleadores?liga=eq.{liga_key}", headers=supabase_headers())
+        resp = requests.post(f"{SUPABASE_URL}/rest/v1/goleadores", headers=supabase_headers(), json=registros_goleadores)
+        if resp.status_code in (200, 201):
+            print(f"Goleadores actualizados ({len(registros_goleadores)} jugadores).")
+        else:
+            print(f"Aviso: fallo al subir goleadores ({resp.status_code}): {resp.text[:200]}")
+
+    except Exception as e:
+        print(f"Aviso: no se pudo actualizar goleadores: {e}")
+
+
 def subir_picks_supabase(picks_df, liga, n_gratis=3):
     """Sube los picks individuales a Supabase, marcando los N mas seguros
     del dia como gratis (el resto queda VIP automaticamente)."""
@@ -1304,6 +1371,9 @@ def correr_pipeline_liga(liga_key):
 
     print("Descargando datos de football-data.org...")
     partidos = obtener_partidos_temporada(config["codigo_api"])
+
+    print("Actualizando tabla de posiciones y goleadores...")
+    actualizar_posiciones_y_goleadores(liga_key, config["codigo_api"])
 
     print("Actualizando historico con partidos ya jugados...")
     historico = actualizar_historico(partidos)
