@@ -73,9 +73,9 @@ Deno.serve(async (req: Request) => {
       const partes = String(clientTransactionId).split("_");
       const userId = partes[0];
       const planCorto = partes[1] || "m";
-      const plan = planCorto === "d" ? "dia" : "mes";
+      const plan = planCorto === "s" ? "semana" : "mes";
 
-      const DIAS_POR_PLAN: Record<string, number> = { dia: 5, mes: 30 };
+      const DIAS_POR_PLAN: Record<string, number> = { semana: 7, mes: 30 };
       const dias = DIAS_POR_PLAN[plan] || 30;
       const vipHasta = new Date(Date.now() + dias * 24 * 60 * 60 * 1000).toISOString();
 

@@ -55,13 +55,13 @@ Deno.serve(async (req: Request) => {
     let plan = "mes";
     try {
       const body = await req.json();
-      if (body && body.plan === "dia") plan = "dia";
+      if (body && body.plan === "semana") plan = "semana";
     } catch (_e) {
       // Si no mandan body, usamos "mes" por defecto
     }
 
     const PLANES: Record<string, { amount: number; reference: string }> = {
-      dia: { amount: 500, reference: "Acceso VIP a la fecha actual - Picks FC" },
+      semana: { amount: 500, reference: "Acceso VIP por 1 semana - Picks FC" },
       mes: { amount: 1500, reference: "Suscripcion VIP mensual - Picks FC" },
     };
     const elegido = PLANES[plan];
@@ -69,8 +69,8 @@ Deno.serve(async (req: Request) => {
     // El clientTransactionId incluye el id del usuario y el plan elegido,
     // para saber a quien y por cuanto tiempo activarle el VIP al confirmar.
     // Payphone exige maximo 50 caracteres, asi que usamos un formato corto:
-    // {uuid}_{d o m}_{timestamp en base36}
-    const planCorto = plan === "dia" ? "d" : "m";
+    // {uuid}_{s o m}_{timestamp en base36}
+    const planCorto = plan === "semana" ? "s" : "m";
     const timestampCorto = Date.now().toString(36);
     const clientTransactionId = `${user.id}_${planCorto}_${timestampCorto}`;
 
