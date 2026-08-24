@@ -367,7 +367,7 @@ def calcular_combo(matriz, lista_condiciones):
         if all(CONDICIONES[c](i, j) for c in lista_condiciones)
     )
 
-ARCHIVO_HISTORIAL_COMBINADAS = "historial_combinadas.csv"
+ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA = "historial_combinadas.csv"
 ARCHIVO_CONTADOR_FECHAS = "contador_fechas.json"
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
@@ -396,8 +396,8 @@ def obtener_numero_fecha(fecha_partido):
     return mapa[semana]
 
 def cargar_historial_combinadas():
-    if os.path.exists(ARCHIVO_HISTORIAL_COMBINADAS):
-        h = pd.read_csv(ARCHIVO_HISTORIAL_COMBINADAS)
+    if os.path.exists(ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA):
+        h = pd.read_csv(ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA)
         h["resultado"] = h["resultado"].astype(object)
         return h
     return pd.DataFrame(columns=["id_combinada", "numero_fecha", "fecha_generado", "es_gratis",
@@ -463,7 +463,25 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
                 (historico_partidos["HomeTeam"] == p["local"]) &
                 (historico_partidos["AwayTeam"] == p["visitante"])
             ]
-            if match.empty or pd.isna(match.iloc[0].get("FTHG")):
+            if match.empty:
+                # Diagnostico: ¿el equipo aparece en el historico con OTRA
+                # fecha? Esto nos dice si el problema es de fecha o de
+                # nombre de equipo.
+                mismo_equipo = historico_partidos[
+                    (historico_partidos["HomeTeam"] == p["local"]) &
+                    (historico_partidos["AwayTeam"] == p["visitante"])
+                ]
+                if len(mismo_equipo) > 0:
+                    print(f"DIAGNOSTICO combinada: '{p['local']}' vs '{p['visitante']}' SI aparece en el "
+                          f"historico, pero con otra fecha. Buscabamos: {fecha_partido} (tipo {type(fecha_partido)}). "
+                          f"Fechas encontradas en historico para ese partido: {mismo_equipo['Date'].tolist()} "
+                          f"(tipo de la columna: {historico_partidos['Date'].dtype})")
+                else:
+                    print(f"DIAGNOSTICO combinada: '{p['local']}' vs '{p['visitante']}' NO aparece en el "
+                          f"historico en absoluto (ni con otra fecha) -- posible problema de nombre de equipo.")
+                completa = False
+                break
+            if pd.isna(match.iloc[0].get("FTHG")):
                 completa = False
                 break
             resultado_leg = verificar_pick_individual(p["pick_recomendado"], match.iloc[0])
@@ -1405,8 +1423,8 @@ def correr_pipeline_liga(liga_key):
     de la liga (archivos, mapeo de nombres) antes de correr la logica ya
     existente, que no necesita saber que hay mas de una liga."""
     global ARCHIVO_HISTORICO, MAPEO_NOMBRES, EQUIPOS_SIN_HISTORIAL
-    global ARCHIVO_PICKS, ARCHIVO_COMBINADAS
-    global ARCHIVO_HISTORIAL_PICKS, ARCHIVO_HISTORIAL_COMBINADAS, ARCHIVO_CONTADOR_FECHAS
+    global ARCHIVO_PICKS
+    global ARCHIVO_HISTORIAL_PICKS, ARCHIVO_CONTADOR_FECHAS
 
     config = LIGAS[liga_key]
     print(f"\n{'#'*70}\n# LIGA: {config['nombre_mostrar']}\n{'#'*70}")
@@ -1415,9 +1433,7 @@ def correr_pipeline_liga(liga_key):
     MAPEO_NOMBRES = config["mapeo_nombres"]
     EQUIPOS_SIN_HISTORIAL = config["equipos_sin_historial"]
     ARCHIVO_PICKS = f"picks_del_dia_{liga_key}.csv"
-    ARCHIVO_COMBINADAS = f"combinadas_del_dia_{liga_key}.json"
     ARCHIVO_HISTORIAL_PICKS = f"historial_picks_{liga_key}.csv"
-    ARCHIVO_HISTORIAL_COMBINADAS = f"historial_combinadas_{liga_key}.csv"
     ARCHIVO_CONTADOR_FECHAS = f"contador_fechas_{liga_key}.json"
 
     print("Descargando datos de football-data.org...")
@@ -1578,7 +1594,7 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
     historial_combinadas = cargar_historial_combinadas()
     historial_combinadas = registrar_combinadas_historial(combinadas, pool_picks, historial_combinadas)
     historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, pool_historico)
-    historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS, index=False)
+    historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA, index=False)
 
     resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
     if len(resueltas) > 0:
