@@ -463,22 +463,7 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
                 (historico_partidos["HomeTeam"] == p["local"]) &
                 (historico_partidos["AwayTeam"] == p["visitante"])
             ]
-            if match.empty:
-                # Diagnostico: ¿el equipo aparece en el historico con OTRA
-                # fecha? Esto nos dice si el problema es de fecha o de
-                # nombre de equipo.
-                mismo_equipo = historico_partidos[
-                    (historico_partidos["HomeTeam"] == p["local"]) &
-                    (historico_partidos["AwayTeam"] == p["visitante"])
-                ]
-                if len(mismo_equipo) > 0:
-                    print(f"DIAGNOSTICO combinada: '{p['local']}' vs '{p['visitante']}' SI aparece en el "
-                          f"historico, pero con otra fecha. Buscabamos: {fecha_partido} (tipo {type(fecha_partido)}). "
-                          f"Fechas encontradas en historico para ese partido: {mismo_equipo['Date'].tolist()} "
-                          f"(tipo de la columna: {historico_partidos['Date'].dtype})")
-                else:
-                    print(f"DIAGNOSTICO combinada: '{p['local']}' vs '{p['visitante']}' NO aparece en el "
-                          f"historico en absoluto (ni con otra fecha) -- posible problema de nombre de equipo.")
+                        if match.empty:
                 completa = False
                 break
             if pd.isna(match.iloc[0].get("FTHG")):
