@@ -463,7 +463,7 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
                 (historico_partidos["HomeTeam"] == p["local"]) &
                 (historico_partidos["AwayTeam"] == p["visitante"])
             ]
-                        if match.empty:
+            if match.empty:
                 completa = False
                 break
             if pd.isna(match.iloc[0].get("FTHG")):
