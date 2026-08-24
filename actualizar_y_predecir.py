@@ -452,6 +452,12 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
 
         for p in partidos:
             fecha_partido = pd.Timestamp(p["fecha"])
+            if fecha_partido.tzinfo is not None:
+                # La fecha guardada en la combinada puede traer zona horaria
+                # (UTC) pegada, mientras que el historico nunca la tiene --
+                # sin esto, la comparacion de mas abajo nunca coincide,
+                # aunque sea exactamente el mismo partido a la misma hora.
+                fecha_partido = fecha_partido.tz_localize(None)
             match = historico_partidos[
                 (historico_partidos["Date"] == fecha_partido) &
                 (historico_partidos["HomeTeam"] == p["local"]) &
