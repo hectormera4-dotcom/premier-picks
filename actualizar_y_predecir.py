@@ -1278,24 +1278,15 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
     if not programados:
         return pd.DataFrame(picks)
 
-    # Usamos el numero de jornada REAL que trae football-data.org (campo
-    # "matchday") en vez de adivinar por fechas. Esto agrupa correctamente
-    # incluso partidos reprogramados entre semana que pertenecen a la misma
-    # jornada, sin importar que tan separados esten en el calendario.
-    jornadas = [p.get("matchday") for p in programados if p.get("matchday") is not None]
-    if jornadas:
-        proxima_jornada = min(jornadas)
-        sin_jornada = len([p for p in programados if p.get("matchday") is None])
-        print(f"DIAGNOSTICO: jornadas detectadas en los partidos programados: {sorted(set(jornadas))}")
-        print(f"DIAGNOSTICO: se eligio la jornada {proxima_jornada} como la proxima a mostrar")
-        if sin_jornada:
-            print(f"DIAGNOSTICO: aviso -- {sin_jornada} partidos programados NO traen numero de jornada y quedaron excluidos")
-        programados = [p for p in programados if p.get("matchday") == proxima_jornada]
-    else:
-        print("DIAGNOSTICO: NINGUN partido programado trae el campo 'matchday' -- revisar la respuesta de la API")
-    # Si por alguna razon la API no trae "matchday" en algun partido, ese
-    # partido simplemente no se incluye en este lote (se recogera solo
-    # cuando si tenga el dato, en vez de arriesgarnos a mezclar jornadas).
+    # Nos quedamos SOLO con los partidos de HOY (fecha del calendario), no
+    # con toda la jornada -- una jornada puede estar repartida entre
+    # viernes y lunes, y no queremos mostrar el lunes un partido que se
+    # jugo el viernes, ni mostrar hoy un partido que es hasta el domingo.
+    # Si hoy no hay partidos, simplemente no se generan picks ese dia --
+    # es correcto, no hay que "adelantar" partidos de otro dia.
+    hoy = datetime.utcnow().date()
+    programados = [p for p in programados if pd.Timestamp(p["utcDate"]).date() == hoy]
+    print(f"DIAGNOSTICO: {len(programados)} partidos programados para hoy ({hoy}).")
 
     for p in programados:
         fecha_partido = pd.to_datetime(p["utcDate"]).tz_localize(None)
