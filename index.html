@@ -1387,8 +1387,20 @@ function crearTarjeta(p, i) {
 function render(picks, combinadas) {
   document.getElementById("banner-vip-contenedor").innerHTML = crearBannerVip();
 
-  const combinadasHtml = combinadas.map(crearCombinada).join("");
+  const hayPicks = picks.length > 0;
   const hayCombinadas = combinadas.length > 0;
+
+  if (!hayPicks && !hayCombinadas) {
+    // No hay ningun partido programado hoy en ninguna liga activa -- esto
+    // es normal (no todos los dias hay partidos), no un error.
+    document.getElementById("grid").innerHTML = `
+      <div class="combinada" style="grid-column:1/-1; opacity:0.7; align-items:center; justify-content:center; text-align:center; padding:40px 20px;">
+        <span class="sin-pick-texto">⚽ Hoy no hay partidos programados en tus ligas activas.<br>Vuelve más tarde o revisa el calendario de cada liga en el menú.</span>
+      </div>`;
+    return;
+  }
+
+  const combinadasHtml = combinadas.map(crearCombinada).join("");
 
   let avisoVip = "";
   if (!hayCombinadas) {

@@ -86,9 +86,39 @@ LIGAS = {
             "Deportivo Alavés": "Alaves",
         },
     },
+    "serie_a": {
+        "nombre_mostrar": "Serie A",
+        "codigo_api": "SA",
+        "codigo_footballdata": "I1",
+        "archivo_historico": "serie_a_combinado.csv",
+        # Equipos recien ascendidos a Serie A 2026/27, sin historial reciente
+        "equipos_sin_historial": ["Venezia", "Frosinone", "Monza"],
+        "mapeo_nombres": {
+            "Atalanta BC": "Atalanta",
+            "Como 1907": "Como",
+            "FC Internazionale Milano": "Inter",
+            "AC Milan": "Milan",
+            "Bologna FC 1909": "Bologna",
+            "Parma Calcio 1913": "Parma",
+            "US Sassuolo Calcio": "Sassuolo",
+            "AS Roma": "Roma",
+            "SS Lazio": "Lazio",
+            "Juventus FC": "Juventus",
+            "Torino FC": "Torino",
+            "ACF Fiorentina": "Fiorentina",
+            "US Lecce": "Lecce",
+            "SSC Napoli": "Napoli",
+            "Udinese Calcio": "Udinese",
+            "Genoa CFC": "Genoa",
+            "Cagliari Calcio": "Cagliari",
+            "Venezia FC": "Venezia",
+            "Frosinone Calcio": "Frosinone",
+            "AC Monza": "Monza",
+        },
+    },
 }
 
-LIGAS_ACTIVAS = ["premier_league", "la_liga"]  # cuales corren en cada ejecucion
+LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a"]  # cuales corren en cada ejecucion
 
 # Estas variables se reasignan al inicio de cada liga (ver correr_pipeline_liga
 # al final del archivo) -- el resto de las funciones las usan sin saber que
@@ -1529,6 +1559,9 @@ def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
     ni cuantos partidos haya ese dia en cada una."""
     if pool_picks is None or len(pool_picks) == 0:
         print("\nNo hay picks de ninguna liga para mostrar hoy.")
+        if supabase_configurado():
+            requests.delete(f"{SUPABASE_URL}/rest/v1/picks?id=gt.0", headers=supabase_headers())
+            print("Tabla de picks limpiada en Supabase (no queda ningun pick viejo mostrandose).")
         return None
 
     picks_curados = pool_picks.sort_values("pick_probabilidad", ascending=False).head(top_n).reset_index(drop=True)
@@ -1550,6 +1583,9 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
     mas partidos candidatos y las combinadas pueden mezclar ligas."""
     if pool_picks is None or len(pool_picks) == 0:
         print("\nNo hay picks de ninguna liga para armar combinadas hoy.")
+        if supabase_configurado():
+            requests.delete(f"{SUPABASE_URL}/rest/v1/combinadas?id=gt.0", headers=supabase_headers())
+            print("Tabla de combinadas limpiada en Supabase (no queda ninguna combinada vieja mostrandose).")
         return
 
     print(f"\n{'#'*70}\n# COMBINADAS MULTI-LIGA (pool de {len(pool_picks)} picks seguros)\n{'#'*70}")
