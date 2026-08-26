@@ -490,11 +490,16 @@ def registrar_combinadas_historial(combinadas, picks_df, historial_combinadas):
         if (historial_combinadas["id_combinada"] == id_combinada).any():
             continue  # ya estaba registrada
 
-        # Buscamos la fecha del primer partido de la combinada para asignar el numero de fecha
-        primer_partido = c["partidos"][0]
-        fila_pick = picks_df[(picks_df["local"] == primer_partido["local"]) &
-                               (picks_df["visitante"] == primer_partido["visitante"])]
-        fecha_ref = fila_pick.iloc[0]["fecha"] if not fila_pick.empty else datetime.utcnow()
+        # Usamos la fecha MAS TEMPRANA entre TODOS los partidos de la
+        # combinada para asignar el numero de fecha -- c["partidos"][0] no
+        # sirve para esto porque esa lista viene ordenada por probabilidad
+        # del pick (de mayor a menor), no cronologicamente. Si el partido
+        # con mejor probabilidad resultaba ser, por casualidad, el ultimo
+        # en jugarse, la combinada entera se etiquetaba con la semana
+        # equivocada aunque el resto de sus partidos fueran de la ronda
+        # anterior.
+        fechas_partidos = [pd.Timestamp(p["fecha"]) for p in c["partidos"]]
+        fecha_ref = min(fechas_partidos) if fechas_partidos else datetime.utcnow()
         numero_fecha = obtener_numero_fecha(pd.Timestamp(fecha_ref))
 
         nuevas.append({
@@ -1488,7 +1493,14 @@ def _fijar_globales_liga(liga_key):
     valor de la ultima liga procesada en la fase anterior (ver error #2 de
     variables reasignadas dentro de un bucle, ya documentado)."""
     global ARCHIVO_HISTORICO, MAPEO_NOMBRES, EQUIPOS_SIN_HISTORIAL
-    global ARCHIVO_PICKS, ARCHIVO_HISTORIAL_PICKS, ARCHIVO_CONTADOR_FECHAS
+    global ARCHIVO_PICKS, ARCHIVO_HISTORIAL_PICKS
+    # NOTA: ARCHIVO_CONTADOR_FECHAS NO se reasigna aqui -- solo lo usa la
+    # numeracion de "Fecha" de las combinadas multiliga (obtener_numero_fecha),
+    # que corre DESPUES del bucle de las 3 ligas, no por liga. Si se
+    # reasignara aqui, quedaria "pegado" al archivo de la ULTIMA liga
+    # procesada (ej. contador_fechas_serie_a.json) en vez de usar siempre
+    # el mismo archivo compartido -- eso hacia que el mismo partido pudiera
+    # numerarse distinto segun que liga corriera de ultimo ese dia.
 
     config = LIGAS[liga_key]
     ARCHIVO_HISTORICO = config["archivo_historico"]
@@ -1496,7 +1508,6 @@ def _fijar_globales_liga(liga_key):
     EQUIPOS_SIN_HISTORIAL = config["equipos_sin_historial"]
     ARCHIVO_PICKS = f"picks_del_dia_{liga_key}.csv"
     ARCHIVO_HISTORIAL_PICKS = f"historial_picks_{liga_key}.csv"
-    ARCHIVO_CONTADOR_FECHAS = f"contador_fechas_{liga_key}.json"
     return config
 
 def calcular_umbral_dinamico_multiliga(historiales_por_liga, umbral_base=0.80, umbral_alto=0.85, ventana=10):
