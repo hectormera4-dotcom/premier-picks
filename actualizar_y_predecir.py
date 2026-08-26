@@ -1423,24 +1423,70 @@ def verificar_correlacion_goles_metrica(df, columna_local, columna_visitante, li
     print(f"[{nombre_metrica}] ¿Se puede combinar con goles? {'SI' if independientes else 'NO'}")
     return independientes
 
-def correr_pipeline_liga(liga_key):
-    """Corre el pipeline completo (datos, modelo, picks, combinadas, Supabase)
-    para UNA liga especifica. Reasigna las variables globales dependientes
-    de la liga (archivos, mapeo de nombres) antes de correr la logica ya
-    existente, que no necesita saber que hay mas de una liga."""
+def _fijar_globales_liga(liga_key):
+    """Reasigna las variables globales dependientes de la liga (archivos,
+    mapeo de nombres). Se llama al INICIO de cada fase (preparar_liga Y
+    generar_picks_liga) porque ambas fases corren en bucles separados sobre
+    LIGAS_ACTIVAS -- si solo se fijaran una vez, quedarian 'pegadas' al
+    valor de la ultima liga procesada en la fase anterior (ver error #2 de
+    variables reasignadas dentro de un bucle, ya documentado)."""
     global ARCHIVO_HISTORICO, MAPEO_NOMBRES, EQUIPOS_SIN_HISTORIAL
-    global ARCHIVO_PICKS
-    global ARCHIVO_HISTORIAL_PICKS, ARCHIVO_CONTADOR_FECHAS
+    global ARCHIVO_PICKS, ARCHIVO_HISTORIAL_PICKS, ARCHIVO_CONTADOR_FECHAS
 
     config = LIGAS[liga_key]
-    print(f"\n{'#'*70}\n# LIGA: {config['nombre_mostrar']}\n{'#'*70}")
-
     ARCHIVO_HISTORICO = config["archivo_historico"]
     MAPEO_NOMBRES = config["mapeo_nombres"]
     EQUIPOS_SIN_HISTORIAL = config["equipos_sin_historial"]
     ARCHIVO_PICKS = f"picks_del_dia_{liga_key}.csv"
     ARCHIVO_HISTORIAL_PICKS = f"historial_picks_{liga_key}.csv"
     ARCHIVO_CONTADOR_FECHAS = f"contador_fechas_{liga_key}.json"
+    return config
+
+def calcular_umbral_dinamico_multiliga(historiales_por_liga, umbral_base=0.80, umbral_alto=0.85, ventana=10):
+    """
+    Igual que calcular_umbral_dinamico, pero mira los ultimos picks resueltos
+    de TODAS las ligas activas juntos (no cada liga por separado). Asi, si
+    una liga viene en mala racha, el umbral sube para las 3 ligas a la vez --
+    tiene sentido porque las combinadas ya mezclan partidos de varias ligas,
+    asi que la confiabilidad de una afecta a lo que se le ofrece al usuario
+    en conjunto, no solo a esa liga individual.
+    """
+    todos = [h for h in historiales_por_liga.values() if h is not None and len(h) > 0]
+    if not todos:
+        print(f"Sin historial todavia en ninguna liga. Usando umbral base {umbral_base*100:.0f}%.")
+        return umbral_base
+
+    combinado = pd.concat(todos, ignore_index=True)
+    resueltos = combinado[combinado["acierto"].notna()].sort_values("fecha_partido")
+
+    if len(resueltos) < ventana:
+        print(f"Historial insuficiente entre todas las ligas para evaluar racha reciente "
+              f"(se necesitan {ventana} picks resueltos, hay {len(resueltos)}). Usando umbral base {umbral_base*100:.0f}%.")
+        return umbral_base
+
+    ultimos = resueltos.tail(ventana)
+    tasa_acierto = ultimos["acierto"].astype(bool).mean()
+
+    if tasa_acierto < 0.5:
+        print(f"Aviso: tasa de acierto de los ultimos {ventana} picks (entre TODAS las ligas activas) "
+              f"fue {tasa_acierto*100:.1f}% (por debajo del 50%). Subiendo umbral de seguridad a "
+              f"{umbral_alto*100:.0f}% para las 3 ligas.")
+        return umbral_alto
+
+    print(f"Tasa de acierto de los ultimos {ventana} picks (entre TODAS las ligas activas): "
+          f"{tasa_acierto*100:.1f}%. Umbral compartido se mantiene en {umbral_base*100:.0f}%.")
+    return umbral_base
+
+def preparar_liga(liga_key):
+    """FASE 1 del pipeline para UNA liga: descarga datos, actualiza el
+    historico, calcula fuerzas/modelos y resuelve los picks pendientes de
+    dias anteriores. NO genera picks nuevos todavia -- eso se hace en
+    generar_picks_liga, despues de que las 3 ligas ya pasaron por aqui y se
+    pudo calcular el umbral de seguridad COMPARTIDO entre todas.
+    Devuelve un diccionario con todo lo que generar_picks_liga necesita, o
+    None si esta liga no tiene nada que procesar hoy."""
+    config = _fijar_globales_liga(liga_key)
+    print(f"\n{'#'*70}\n# LIGA: {config['nombre_mostrar']} (preparando datos y modelo)\n{'#'*70}")
 
     print("Descargando datos de football-data.org...")
     partidos = obtener_partidos_temporada(config["codigo_api"])
@@ -1456,7 +1502,7 @@ def correr_pipeline_liga(liga_key):
 
     if historico is None or len(historico) == 0:
         print("No hay historico disponible todavia para esta liga.")
-        return
+        return None
 
     historico["Date"] = pd.to_datetime(historico["Date"])
 
@@ -1508,20 +1554,47 @@ def correr_pipeline_liga(liga_key):
     historial = cargar_historial_picks()
     historial = verificar_picks_resueltos(historial, historico)
 
-    umbral_dinamico = calcular_umbral_dinamico(historial, umbral_base=0.80, umbral_alto=0.85)
+    return {
+        "config": config, "partidos": partidos, "historico": historico,
+        "fuerzas": fuerzas, "prom_l": prom_l, "prom_v": prom_v, "rho": rho,
+        "fuerzas_corners": fuerzas_corners, "prom_l_corners": prom_l_corners, "prom_v_corners": prom_v_corners,
+        "corners_combinable": corners_combinable,
+        "fuerzas_tarjetas": fuerzas_tarjetas, "factores_arbitro": factores_arbitro,
+        "prom_l_tarjetas": prom_l_tarjetas, "prom_v_tarjetas": prom_v_tarjetas,
+        "tarjetas_combinable": tarjetas_combinable,
+        "fuerzas_tiros": fuerzas_tiros, "prom_l_tiros": prom_l_tiros, "prom_v_tiros": prom_v_tiros,
+        "tiros_combinable": tiros_combinable,
+        "historial": historial,
+    }
 
-    print(f"\nGenerando picks de los proximos dias (umbral: {umbral_dinamico*100:.0f}%)...")
-    picks = generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=umbral_dinamico,
-                           fuerzas_corners=fuerzas_corners, prom_l_corners=prom_l_corners, prom_v_corners=prom_v_corners,
-                           corners_combinable=corners_combinable,
-                           fuerzas_tarjetas=fuerzas_tarjetas, factores_arbitro=factores_arbitro,
-                           prom_l_tarjetas=prom_l_tarjetas, prom_v_tarjetas=prom_v_tarjetas,
-                           tarjetas_combinable=tarjetas_combinable,
-                           fuerzas_tiros=fuerzas_tiros, prom_l_tiros=prom_l_tiros, prom_v_tiros=prom_v_tiros,
-                           tiros_combinable=tiros_combinable)
+def generar_picks_liga(liga_key, ctx, umbral_dinamico):
+    """FASE 2 del pipeline para UNA liga: genera los picks de hoy usando el
+    modelo ya preparado en preparar_liga (ctx) y el umbral de seguridad ya
+    decidido (compartido entre las 3 ligas activas)."""
+    config = _fijar_globales_liga(liga_key)
+    print(f"\n{'#'*70}\n# LIGA: {config['nombre_mostrar']} (generando picks, umbral: {umbral_dinamico*100:.0f}%)\n{'#'*70}")
+
+    picks = generar_picks(
+        ctx["partidos"], ctx["fuerzas"], ctx["prom_l"], ctx["prom_v"], ctx["rho"], umbral_seguro=umbral_dinamico,
+        fuerzas_corners=ctx["fuerzas_corners"], prom_l_corners=ctx["prom_l_corners"], prom_v_corners=ctx["prom_v_corners"],
+        corners_combinable=ctx["corners_combinable"],
+        fuerzas_tarjetas=ctx["fuerzas_tarjetas"], factores_arbitro=ctx["factores_arbitro"],
+        prom_l_tarjetas=ctx["prom_l_tarjetas"], prom_v_tarjetas=ctx["prom_v_tarjetas"],
+        tarjetas_combinable=ctx["tarjetas_combinable"],
+        fuerzas_tiros=ctx["fuerzas_tiros"], prom_l_tiros=ctx["prom_l_tiros"], prom_v_tiros=ctx["prom_v_tiros"],
+        tiros_combinable=ctx["tiros_combinable"])
+
+    historico = ctx["historico"]
+    historial = ctx["historial"]
 
     if len(picks) == 0:
         print("No hay partidos programados en los proximos dias para esta liga.")
+        # Igual guardamos el historial actualizado (picks de dias anteriores
+        # que se acaban de resolver en preparar_liga), aunque hoy no haya
+        # partidos nuevos que generar.
+        historial_a_guardar = historial.copy()
+        historial_a_guardar["fecha_partido"] = pd.to_datetime(historial_a_guardar["fecha_partido"]).dt.strftime("%Y-%m-%d %H:%M:%S")
+        historial_a_guardar.to_csv(ARCHIVO_HISTORIAL_PICKS, index=False)
         return None, None
 
     picks.to_csv(ARCHIVO_PICKS, index=False)
@@ -1540,8 +1613,8 @@ def correr_pipeline_liga(liga_key):
     verificar_calibracion_continua(historial)
 
     # Los picks YA NO se suben aqui -- se suben despues de juntar el pool de
-    # TODAS las ligas y quedarnos solo con los 10 mas confiables en total
-    # (ver correr_combinadas_multiliga, que ahora tambien maneja esto).
+    # TODAS las ligas y quedarnos solo con los mas confiables en total
+    # (ver curar_y_subir_picks_del_dia).
 
     # Las combinadas YA NO se generan aqui -- se arman despues, juntando el
     # pool de picks seguros de TODAS las ligas activas (ver mas abajo), asi
@@ -1553,10 +1626,13 @@ def correr_pipeline_liga(liga_key):
 
 
 def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
-    """Junta el pool de picks seguros de TODAS las ligas activas y se queda
-    SOLO con los 'top_n' mas confiables en total -- esto es lo unico que se
-    muestra en la pestana 'Picks del dia', sin importar de que liga vengan
-    ni cuantos partidos haya ese dia en cada una."""
+    """Junta el pool de picks de TODAS las ligas activas, descarta los que
+    NO superaron el umbral de seguridad (pick_es_seguro == False -- no son
+    confiables, sin importar que tan alta sea su probabilidad comparada con
+    otros picks del dia) y se queda con los 'top_n' mas confiables entre los
+    que SI son seguros. Si un dia hay menos de 'top_n' picks seguros en total
+    (entre las 3 ligas), se muestran los que haya -- nunca se rellena con
+    picks que no cumplieron el umbral solo para completar el numero."""
     if pool_picks is None or len(pool_picks) == 0:
         print("\nNo hay picks de ninguna liga para mostrar hoy.")
         if supabase_configurado():
@@ -1564,9 +1640,19 @@ def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
             print("Tabla de picks limpiada en Supabase (no queda ningun pick viejo mostrandose).")
         return None
 
-    picks_curados = pool_picks.sort_values("pick_probabilidad", ascending=False).head(top_n).reset_index(drop=True)
-    print(f"\nCurando picks del dia: {len(picks_curados)} de {len(pool_picks)} candidatos totales "
-          f"(los {top_n} mas confiables, de todas las ligas activas).")
+    seguros = pool_picks[pool_picks["pick_es_seguro"] == True].copy()
+
+    if len(seguros) == 0:
+        print(f"\nNinguno de los {len(pool_picks)} picks candidatos de hoy supero el umbral de "
+              f"seguridad -- no se muestra ningun pick (mejor no recomendar nada a que se recomiende algo poco confiable).")
+        if supabase_configurado():
+            requests.delete(f"{SUPABASE_URL}/rest/v1/picks?id=gt.0", headers=supabase_headers())
+            print("Tabla de picks limpiada en Supabase (no queda ningun pick viejo mostrandose).")
+        return None
+
+    picks_curados = seguros.sort_values("pick_probabilidad", ascending=False).head(top_n).reset_index(drop=True)
+    print(f"\nCurando picks del dia: {len(picks_curados)} de {len(seguros)} picks seguros disponibles "
+          f"(de {len(pool_picks)} candidatos totales, de todas las ligas activas).")
 
     print("Sincronizando picks del dia con Supabase...")
     if supabase_configurado():
@@ -1644,16 +1730,37 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
 
 
 if __name__ == "__main__":
-    pools_picks = []
-    pools_historico = []
+    # FASE 1: preparar datos y modelo de cada liga activa (sin generar picks
+    # todavia). Esto resuelve los picks pendientes de dias anteriores en el
+    # historial de cada liga, que es lo que necesitamos para poder calcular
+    # despues un umbral de seguridad UNICO, compartido entre las 3 ligas.
+    contextos = {}
     for liga_key in LIGAS_ACTIVAS:
         try:
-            picks_liga, historico_liga = correr_pipeline_liga(liga_key)
+            ctx = preparar_liga(liga_key)
+            if ctx is not None:
+                contextos[liga_key] = ctx
+        except Exception as e:
+            print(f"\nERROR preparando la liga '{liga_key}': {e}")
+            print("Continuando con la siguiente liga...")
+
+    # El umbral de seguridad se calcula UNA sola vez, mirando los ultimos
+    # picks resueltos de TODAS las ligas activas juntos -- si una liga viene
+    # en mala racha, sube el umbral para las 3 (ver calcular_umbral_dinamico_multiliga).
+    historiales_por_liga = {k: ctx["historial"] for k, ctx in contextos.items()}
+    umbral_dinamico = calcular_umbral_dinamico_multiliga(historiales_por_liga, umbral_base=0.80, umbral_alto=0.85)
+
+    # FASE 2: generar los picks de hoy de cada liga con ese umbral compartido.
+    pools_picks = []
+    pools_historico = []
+    for liga_key, ctx in contextos.items():
+        try:
+            picks_liga, historico_liga = generar_picks_liga(liga_key, ctx, umbral_dinamico)
             if picks_liga is not None:
                 pools_picks.append(picks_liga)
                 pools_historico.append(historico_liga)
         except Exception as e:
-            print(f"\nERROR corriendo la liga '{liga_key}': {e}")
+            print(f"\nERROR generando picks de la liga '{liga_key}': {e}")
             print("Continuando con la siguiente liga...")
 
     pool_picks = pd.concat(pools_picks, ignore_index=True) if pools_picks else None
