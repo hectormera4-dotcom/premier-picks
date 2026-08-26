@@ -1723,12 +1723,30 @@ def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
 def correr_combinadas_multiliga(pool_picks, pool_historico):
     """Arma las combinadas del dia usando el pool combinado de picks
     seguros de TODAS las ligas activas, en vez de una por liga -- asi hay
-    mas partidos candidatos y las combinadas pueden mezclar ligas."""
+    mas partidos candidatos y las combinadas pueden mezclar ligas.
+
+    'pool_historico' debe ser el historico COMPLETO de todas las ligas
+    preparadas hoy (venga o no venga acompañado de picks nuevos) -- las
+    combinadas viejas pendientes de dias anteriores necesitan verificarse
+    SIEMPRE, incluso en un dia sin ningun partido nuevo, porque los
+    partidos de esas combinadas pueden haber terminado mientras tanto."""
+    print("\nActualizando historial de combinadas (verificando pendientes de dias anteriores)...")
+    historial_combinadas = cargar_historial_combinadas()
+    if pool_historico is not None and len(pool_historico) > 0:
+        historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, pool_historico)
+    else:
+        print("Sin historico disponible todavia para verificar combinadas pendientes.")
+
     if pool_picks is None or len(pool_picks) == 0:
-        print("\nNo hay picks de ninguna liga para armar combinadas hoy.")
+        print("\nNo hay picks de ninguna liga para armar combinadas nuevas hoy.")
+        # Igual guardamos el historial (las pendientes que se acaban de
+        # resolver arriba, si las hubo) y lo sincronizamos con Supabase,
+        # aunque hoy no se genere ninguna combinada nueva.
+        historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA, index=False)
         if supabase_configurado():
             requests.delete(f"{SUPABASE_URL}/rest/v1/combinadas?id=gt.0", headers=supabase_headers())
             print("Tabla de combinadas limpiada en Supabase (no queda ninguna combinada vieja mostrandose).")
+            subir_historial_combinadas_liga_ya_incluida(historial_combinadas)
         return
 
     print(f"\n{'#'*70}\n# COMBINADAS MULTI-LIGA (pool de {len(pool_picks)} picks seguros)\n{'#'*70}")
@@ -1745,10 +1763,7 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
         json.dump(combinadas, f, ensure_ascii=False, indent=2, default=str)
     print("Combinadas guardadas en 'combinadas_del_dia.json'")
 
-    print("\nActualizando historial de combinadas por fecha...")
-    historial_combinadas = cargar_historial_combinadas()
     historial_combinadas = registrar_combinadas_historial(combinadas, pool_picks, historial_combinadas)
-    historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, pool_historico)
     historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA, index=False)
 
     resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
@@ -1809,19 +1824,29 @@ if __name__ == "__main__":
 
     # FASE 2: generar los picks de hoy de cada liga con ese umbral compartido.
     pools_picks = []
-    pools_historico = []
     for liga_key, ctx in contextos.items():
         try:
-            picks_liga, historico_liga = generar_picks_liga(liga_key, ctx, umbral_dinamico)
+            picks_liga, _ = generar_picks_liga(liga_key, ctx, umbral_dinamico)
             if picks_liga is not None:
                 pools_picks.append(picks_liga)
-                pools_historico.append(historico_liga)
         except Exception as e:
             print(f"\nERROR generando picks de la liga '{liga_key}': {e}")
             print("Continuando con la siguiente liga...")
 
     pool_picks = pd.concat(pools_picks, ignore_index=True) if pools_picks else None
-    pool_historico = pd.concat(pools_historico, ignore_index=True) if pools_historico else None
+
+    # El historico que se usa para VERIFICAR combinadas viejas pendientes es
+    # el de la FASE 1 (todas las ligas preparadas hoy, tengan o no partidos
+    # nuevos), no el de la fase 2 (que solo trae historico de las ligas que
+    # generaron picks hoy). Sin esto, un dia sin partidos en ninguna liga
+    # nunca revisaba si las combinadas de dias anteriores ya se habian
+    # resuelto, aunque los partidos ya hubieran terminado hace rato.
+    historicos_completos = []
+    for liga_key, ctx in contextos.items():
+        h = ctx["historico"].copy()
+        h["liga"] = liga_key
+        historicos_completos.append(h)
+    pool_historico_completo = pd.concat(historicos_completos, ignore_index=True) if historicos_completos else None
 
     picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=15, n_gratis=3)
-    correr_combinadas_multiliga(picks_del_dia, pool_historico)
+    correr_combinadas_multiliga(picks_del_dia, pool_historico_completo)
