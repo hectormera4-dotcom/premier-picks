@@ -147,9 +147,41 @@ LIGAS = {
             "ES Troyes AC": "Troyes",
         },
     },
+    "bundesliga": {
+        "nombre_mostrar": "Bundesliga",
+        "codigo_api": "BL1",
+        "codigo_footballdata": "D1",
+        "archivo_historico": "bundesliga_combinado.csv",
+        # Equipos recien ascendidos a Bundesliga 2026/27. Schalke 04 ya
+        # tiene historial reciente (jugo en primera en 2022/23, dentro de
+        # nuestras 4 temporadas); Elversberg (debut historico en Bundesliga)
+        # y Paderborn (su ultimo paso por primera fue hace 6 anios, fuera
+        # de nuestra ventana de 4 temporadas) no tienen historial reciente.
+        "equipos_sin_historial": ["Elversberg", "Paderborn"],
+        "mapeo_nombres": {
+            "FC Augsburg": "Augsburg",
+            "1. FC Union Berlin": "Union Berlin",
+            "SV Werder Bremen": "Werder Bremen",
+            "Borussia Dortmund": "Dortmund",
+            "SV 07 Elversberg": "Elversberg",
+            "Eintracht Frankfurt": "Ein Frankfurt",
+            "Sport-Club Freiburg": "Freiburg",
+            "Hamburger SV": "Hamburg",
+            "TSG 1899 Hoffenheim": "Hoffenheim",
+            "1. FC Köln": "FC Koln",
+            "RB Leipzig": "RB Leipzig",
+            "Bayer 04 Leverkusen": "Leverkusen",
+            "1. FSV Mainz 05": "Mainz",
+            "Borussia Mönchengladbach": "M'gladbach",
+            "FC Bayern München": "Bayern Munich",
+            "SC Paderborn 07": "Paderborn",
+            "FC Schalke 04": "Schalke 04",
+            "VfB Stuttgart": "Stuttgart",
+        },
+    },
 }
 
-LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1"]  # cuales corren en cada ejecucion
+LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1", "bundesliga"]  # cuales corren en cada ejecucion
 
 # Estas variables se reasignan al inicio de cada liga (ver correr_pipeline_liga
 # al final del archivo) -- el resto de las funciones las usan sin saber que
