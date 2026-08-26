@@ -150,13 +150,45 @@ def obtener_partidos_temporada(codigo_api="PL"):
 
 # ---------- Paso 2: actualizar historico con partidos ya jugados ----------
 
+def _combinar_duplicados_historico(df):
+    """
+    Colapsa filas duplicadas del mismo partido (mismo Date+HomeTeam+AwayTeam)
+    en una sola, quedandose con el primer valor NO vacio de cada columna
+    entre todas las copias -- asi no se pierde ningun dato (ej. corners) que
+    alguna de las copias si tenia y otra no. Devuelve (df_limpio, cuantos_se_quitaron).
+    """
+    antes = len(df)
+    if antes == 0:
+        return df, 0
+    llaves = ["Date", "HomeTeam", "AwayTeam"]
+    otras_columnas = [c for c in df.columns if c not in llaves]
+    df_ordenado = df.sort_values(llaves).reset_index(drop=True)
+    # Por cada grupo (mismo partido), rellenamos hacia adelante/atras dentro
+    # del grupo para que cada columna se quede con el primer valor real que
+    # exista entre todas las copias duplicadas (ej. corners que una copia
+    # tenia y otra no), y luego nos quedamos con una sola fila por grupo.
+    df_ordenado[otras_columnas] = df_ordenado.groupby(llaves, sort=False)[otras_columnas].transform(
+        lambda s: s.bfill().ffill())
+    llenado = df_ordenado.drop_duplicates(subset=llaves, keep="first").reset_index(drop=True)
+    quitados = antes - len(llenado)
+    return llenado, quitados
+
 def actualizar_historico(partidos):
     if not os.path.exists(ARCHIVO_HISTORICO):
         print(f"No se encontro {ARCHIVO_HISTORICO}. Ejecuta primero el paso de datos historicos.")
         return
 
     historico = pd.read_csv(ARCHIVO_HISTORICO)
-    historico["Date"] = pd.to_datetime(historico["Date"], dayfirst=True)
+    # dayfirst=True + el formato dd/mm/aaaa con el que siempre se guarda ya
+    # implican que esto queda sin hora (medianoche) -- .normalize() lo deja
+    # explicito, para que SIEMPRE se compare a este mismo nivel de precision
+    # (dia, sin hora) sin importar de donde venga la fecha.
+    historico["Date"] = pd.to_datetime(historico["Date"], dayfirst=True).dt.normalize()
+
+    historico, duplicados_quitados = _combinar_duplicados_historico(historico)
+    if duplicados_quitados:
+        print(f"Aviso: se encontraron y combinaron {duplicados_quitados} filas duplicadas del mismo "
+              f"partido en el historico (quedan como una sola fila, sin perder los datos que tenian).")
 
     finalizados = [p for p in partidos if p["status"] == "FINISHED"]
     nuevos = []
@@ -164,7 +196,13 @@ def actualizar_historico(partidos):
     for p in finalizados:
         local = MAPEO_NOMBRES.get(p["homeTeam"]["name"], p["homeTeam"]["name"])
         visitante = MAPEO_NOMBRES.get(p["awayTeam"]["name"], p["awayTeam"]["name"])
-        fecha = pd.to_datetime(p["utcDate"]).tz_localize(None)
+        # Normalizamos a medianoche (sin hora) -- el historico SIEMPRE se
+        # guarda y compara a nivel de dia, nunca con la hora exacta del
+        # pitazo inicial. Sin esto, el mismo partido nunca vuelve a
+        # coincidir consigo mismo entre una corrida y la siguiente (la hora
+        # se pierde al guardar el CSV en formato dd/mm/aaaa), y se agrega
+        # como "nuevo" una y otra vez.
+        fecha = pd.to_datetime(p["utcDate"]).tz_localize(None).normalize()
 
         ya_existe = ((historico["Date"] == fecha) &
                      (historico["HomeTeam"] == local) &
@@ -179,17 +217,21 @@ def actualizar_historico(partidos):
         nuevos.append({"Date": fecha, "HomeTeam": local, "AwayTeam": visitante,
                         "FTHG": gh, "FTAG": ga, "FTR": ftr})
 
+    hubo_cambios = bool(nuevos) or duplicados_quitados > 0
+
     if nuevos:
         df_nuevos = pd.DataFrame(nuevos)
         historico = pd.concat([historico, df_nuevos], ignore_index=True)
+        print(f"Se agregaron {len(nuevos)} partidos nuevos al historico.")
+    else:
+        print("No hay partidos nuevos que agregar (nadie ha jugado desde la ultima actualizacion).")
+
+    if hubo_cambios:
         # Guardamos la fecha SIEMPRE en el mismo formato (dd/mm/aaaa) para
         # que la proxima lectura del archivo no tenga formatos mezclados
         historico_a_guardar = historico.copy()
         historico_a_guardar["Date"] = pd.to_datetime(historico_a_guardar["Date"]).dt.strftime("%d/%m/%Y")
         historico_a_guardar.to_csv(ARCHIVO_HISTORICO, index=False)
-        print(f"Se agregaron {len(nuevos)} partidos nuevos al historico.")
-    else:
-        print("No hay partidos nuevos que agregar (nadie ha jugado desde la ultima actualizacion).")
 
     return historico
 
@@ -213,7 +255,10 @@ def actualizar_estadisticas_extra(historico, codigo_footballdata="E0"):
         return historico
 
     import io
-    columnas_extra = ["HC", "AC", "HY", "AY", "Referee"]
+    # HST/AST (tiros a puerta) estaban ausentes de esta lista -- por eso el
+    # mercado de tiros a puerta nunca se actualizaba con partidos de la
+    # temporada actual, solo usaba datos de temporadas viejas.
+    columnas_extra = ["HC", "AC", "HY", "AY", "HST", "AST", "Referee"]
     try:
         actual = pd.read_csv(io.StringIO(resp.text))
     except Exception as e:
@@ -225,7 +270,7 @@ def actualizar_estadisticas_extra(historico, codigo_footballdata="E0"):
         print("Aviso: el archivo de la temporada actual todavia no trae corners/tarjetas.")
         return historico
 
-    actual["Date"] = pd.to_datetime(actual["Date"], dayfirst=True)
+    actual["Date"] = pd.to_datetime(actual["Date"], dayfirst=True).dt.normalize()
 
     # Nos aseguramos de que las columnas extra existan en el historico
     for col in columnas_disponibles:
@@ -488,6 +533,12 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
                 # sin esto, la comparacion de mas abajo nunca coincide,
                 # aunque sea exactamente el mismo partido a la misma hora.
                 fecha_partido = fecha_partido.tz_localize(None)
+            # El historico SIEMPRE guarda la fecha sin hora (medianoche),
+            # pero la fecha guardada en la combinada trae la hora exacta del
+            # pitazo inicial -- sin normalizar, nunca coinciden y la
+            # combinada se queda "Pendiente" para siempre, aunque el
+            # partido ya se haya jugado y resuelto hace dias.
+            fecha_partido = fecha_partido.normalize()
             match = historico_partidos[
                 (historico_partidos["Date"] == fecha_partido) &
                 (historico_partidos["HomeTeam"] == p["local"]) &
@@ -683,8 +734,14 @@ def verificar_picks_resueltos(historial, historico_partidos):
     resueltos_ahora = 0
 
     for idx, pick in pendientes.iterrows():
+        # El historico guarda la fecha sin hora (medianoche); "fecha_partido"
+        # en el historial de picks guarda la hora exacta del pitazo inicial
+        # (la necesitamos para mostrarla en la app). Sin normalizar aqui, la
+        # comparacion nunca coincide y el pick se queda "Pendiente" para
+        # siempre, aunque el partido ya se haya jugado hace dias.
+        fecha_normalizada = pd.Timestamp(pick["fecha_partido"]).normalize()
         match = historico_partidos[
-            (historico_partidos["Date"] == pick["fecha_partido"]) &
+            (historico_partidos["Date"] == fecha_normalizada) &
             (historico_partidos["HomeTeam"] == pick["local"]) &
             (historico_partidos["AwayTeam"] == pick["visitante"])
         ]
