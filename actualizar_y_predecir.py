@@ -167,15 +167,32 @@ ARCHIVO_COMBINADAS = "combinadas_del_dia.json"
 
 # ---------- Paso 1: traer datos de football-data.org ----------
 
+def _get_football_data_org(url, intentos=3):
+    """
+    GET a football-data.org con reintentos automaticos si nos topamos con el
+    limite de peticiones por minuto del plan gratuito (HTTP 429) -- con 4
+    ligas activas, cada una hace 3 llamadas seguidas (partidos, posiciones,
+    goleadores), y es facil pasarse del limite en la ultima liga del dia.
+    Respeta el header 'Retry-After' si la API lo manda; si no, espera un
+    tiempo fijo razonable antes de reintentar.
+    """
+    import time
+    for intento in range(intentos):
+        resp = requests.get(url, headers=HEADERS)
+        if resp.status_code != 429:
+            return resp
+        espera = int(resp.headers.get("Retry-After", 20))
+        print(f"Aviso: limite de peticiones de football-data.org alcanzado, "
+              f"esperando {espera}s antes de reintentar (intento {intento+1}/{intentos})...")
+        time.sleep(espera)
+    return resp  # se agotaron los intentos -- devolvemos la ultima respuesta (429) tal cual
+
 def obtener_partidos_temporada(codigo_api="PL"):
     # No mandamos el parametro 'season': la API usa la temporada actual por
     # defecto, y el plan gratuito de todas formas solo da acceso a esa.
     # Mandar season=YYYY explicito puede causar error 400 si el sistema
     # todavia no tiene esa temporada completamente registrada.
-    resp = requests.get(
-        f"{BASE_URL}/competitions/{codigo_api}/matches",
-        headers=HEADERS
-    )
+    resp = _get_football_data_org(f"{BASE_URL}/competitions/{codigo_api}/matches")
     resp.raise_for_status()
     return resp.json().get("matches", [])
 
@@ -1234,7 +1251,7 @@ def actualizar_posiciones_y_goleadores(liga_key, codigo_api):
         return
 
     try:
-        resp_posiciones = requests.get(f"{BASE_URL}/competitions/{codigo_api}/standings", headers=HEADERS)
+        resp_posiciones = _get_football_data_org(f"{BASE_URL}/competitions/{codigo_api}/standings")
         resp_posiciones.raise_for_status()
         tabla = resp_posiciones.json()["standings"][0]["table"]  # tabla general (TOTAL)
 
@@ -1266,7 +1283,7 @@ def actualizar_posiciones_y_goleadores(liga_key, codigo_api):
         print(f"Aviso: no se pudo actualizar la tabla de posiciones: {e}")
 
     try:
-        resp_goleadores = requests.get(f"{BASE_URL}/competitions/{codigo_api}/scorers?limit=15", headers=HEADERS)
+        resp_goleadores = _get_football_data_org(f"{BASE_URL}/competitions/{codigo_api}/scorers?limit=15")
         resp_goleadores.raise_for_status()
         goleadores = resp_goleadores.json()["scorers"]
 
