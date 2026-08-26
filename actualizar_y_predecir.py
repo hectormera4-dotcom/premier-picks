@@ -116,9 +116,40 @@ LIGAS = {
             "AC Monza": "Monza",
         },
     },
+    "ligue_1": {
+        "nombre_mostrar": "Ligue 1",
+        "codigo_api": "FL1",
+        "codigo_footballdata": "F1",
+        "archivo_historico": "ligue_1_combinado.csv",
+        # Equipos recien ascendidos a Ligue 1 2026/27. Troyes ya tiene
+        # historial reciente (estuvo en Ligue 1 en 2022/23, dentro de
+        # nuestras 4 temporadas de historico); Le Mans no juega en primera
+        # desde hace 16 anios, sin historial reciente en absoluto.
+        "equipos_sin_historial": ["Le Mans"],
+        "mapeo_nombres": {
+            "Angers SCO": "Angers",
+            "AJ Auxerre": "Auxerre",
+            "Stade Brestois 29": "Brest",
+            "Le Havre AC": "Le Havre",
+            "Le Mans FC": "Le Mans",
+            "RC Lens": "Lens",
+            "Lille OSC": "Lille",
+            "FC Lorient": "Lorient",
+            "Olympique Lyonnais": "Lyon",
+            "Olympique de Marseille": "Marseille",
+            "AS Monaco FC": "Monaco",
+            "OGC Nice": "Nice",
+            "Paris FC": "Paris FC",
+            "Paris Saint-Germain FC": "Paris SG",
+            "Stade Rennais FC 1901": "Rennes",
+            "RC Strasbourg Alsace": "Strasbourg",
+            "Toulouse FC": "Toulouse",
+            "ES Troyes AC": "Troyes",
+        },
+    },
 }
 
-LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a"]  # cuales corren en cada ejecucion
+LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1"]  # cuales corren en cada ejecucion
 
 # Estas variables se reasignan al inicio de cada liga (ver correr_pipeline_liga
 # al final del archivo) -- el resto de las funciones las usan sin saber que
