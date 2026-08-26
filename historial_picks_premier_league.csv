@@ -1,14 +1,14 @@
 fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_cuota_aprox,fecha_generado,resultado_real,acierto
 2026-08-21 19:00:00,Arsenal,Coventry,Local gana + Over 1.5 goles,True,80.6,1.14,2026-08-21,3-0,True
 2026-08-22 11:30:00,Hull,Man United,Over 1.5 goles,False,80.2,1.15,2026-08-21,2-0,True
-2026-08-22 14:00:00,Ipswich,Sunderland,Under 11.5 corners,False,82.4,1.11,2026-08-21,,
-2026-08-22 14:00:00,Nott'm Forest,Leeds,Under 12.5 corners,False,82.0,1.12,2026-08-21,,
-2026-08-22 14:00:00,Everton,Crystal Palace,Over 6.5 corners,False,80.3,1.15,2026-08-21,,
-2026-08-22 16:30:00,Brentford,Tottenham,Over 6.5 corners,False,80.1,1.15,2026-08-21,,
-2026-08-23 13:00:00,Man City,Bournemouth,Doble oportunidad 1X + Over 5.5 corners,True,81.6,1.13,2026-08-21,,
-2026-08-23 13:00:00,Brighton,Aston Villa,Under 12.5 corners,False,80.3,1.15,2026-08-21,,
-2026-08-23 15:30:00,Newcastle,Liverpool,Over 1.5 goles + Over 6.5 corners,True,80.8,1.14,2026-08-21,,
-2026-08-24 19:00:00,Fulham,Chelsea,Over 6.5 corners,False,84.8,1.08,2026-08-21,,
+2026-08-22 14:00:00,Ipswich,Sunderland,Under 11.5 corners,False,82.4,1.11,2026-08-21,2-1,True
+2026-08-22 14:00:00,Nott'm Forest,Leeds,Under 12.5 corners,False,82.0,1.12,2026-08-21,0-1,True
+2026-08-22 14:00:00,Everton,Crystal Palace,Over 6.5 corners,False,80.3,1.15,2026-08-21,2-0,False
+2026-08-22 16:30:00,Brentford,Tottenham,Over 6.5 corners,False,80.1,1.15,2026-08-21,3-0,True
+2026-08-23 13:00:00,Man City,Bournemouth,Doble oportunidad 1X + Over 5.5 corners,True,81.6,1.13,2026-08-21,2-1,True
+2026-08-23 13:00:00,Brighton,Aston Villa,Under 12.5 corners,False,80.3,1.15,2026-08-21,4-0,True
+2026-08-23 15:30:00,Newcastle,Liverpool,Over 1.5 goles + Over 6.5 corners,True,80.8,1.14,2026-08-21,2-2,True
+2026-08-24 19:00:00,Fulham,Chelsea,Over 6.5 corners,False,84.8,1.08,2026-08-21,2-3,True
 2026-08-28 19:00:00,Crystal Palace,Man City,Doble oportunidad X2,False,81.1,1.13,2026-08-25,,
 2026-08-29 11:30:00,Liverpool,Nott'm Forest,Más corners: Liverpool,False,80.4,1.14,2026-08-25,,
 2026-08-29 14:00:00,Bournemouth,Everton,Over 7.5 corners,False,81.2,1.13,2026-08-25,,
