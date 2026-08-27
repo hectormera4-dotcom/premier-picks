@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Picks FC — Pronósticos con IA</title>
 
+<!-- PostHog: analytics de uso real (funnels, session replay). Cargamos
+     el script real directamente (en vez del snippet minificado que
+     normalmente recomienda PostHog) y llamamos a init() en cuanto
+     termina de cargar -- mismo resultado, sin el riesgo de transcribir
+     mal un bloque de codigo minificado a mano. person_profiles:
+     "identified_only" evita gastar cuota en visitantes anonimos que
+     nunca inician sesion. -->
+<script src="https://us-assets.i.posthog.com/static/array.js"
+        onload="posthog.init('phc_mRJNHufDfZEc8bxS3ZhjafXS2dGaxrLp4eiayWuoRvGD', {api_host: 'https://us.i.posthog.com', person_profiles: 'identified_only'})"></script>
+
 <!-- PWA: hace que la web se pueda "instalar" como app en el celular -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#16221A">
@@ -984,6 +994,10 @@ async function aplicarSesion(session) {
       perfil = reintento.data;
     }
     perfilActual = perfil;
+    // Vinculamos los eventos de PostHog a este usuario real (en vez de
+    // quedar como visitante anonimo) -- asi los funnels de conversion a
+    // VIP se pueden ver por usuario, no solo como numeros sueltos.
+    if (window.posthog) posthog.identify(session.user.id, { email: session.user.email });
   } else {
     perfilActual = null;
   }
@@ -1118,6 +1132,7 @@ async function hacerSignup() {
 
 async function cerrarSesion() {
   await sb.auth.signOut();
+  if (window.posthog) posthog.reset(); // sin esto, la siguiente sesion anonima quedaria pegada a este usuario
   await actualizarSesion();
   await cargarTodo();
 }
@@ -1205,6 +1220,7 @@ async function iniciarPagoVip(boton, plan) {
   const textoOriginal = boton.textContent;
   boton.disabled = true;
   boton.textContent = "Preparando pago...";
+  if (window.posthog) posthog.capture("vip_boton_clickeado", { plan });
 
   try {
     const { data: { session } } = await sb.auth.getSession();
@@ -1222,15 +1238,18 @@ async function iniciarPagoVip(boton, plan) {
     const data = await resp.json();
 
     if (!resp.ok || data.error) {
+      if (window.posthog) posthog.capture("vip_pago_error_preparar", { plan, error: data.error || "desconocido" });
       alert("No se pudo iniciar el pago: " + (data.error || "Error desconocido"));
       boton.disabled = false;
       boton.textContent = textoOriginal;
       return;
     }
 
+    if (window.posthog) posthog.capture("vip_pago_preparado", { plan });
     // Redirigimos al formulario de pago de Payphone (tarjeta directa)
     window.location.href = data.payWithCard;
   } catch (err) {
+    if (window.posthog) posthog.capture("vip_pago_error_preparar", { plan, error: err.message });
     alert("Error al conectar con el sistema de pagos: " + err.message);
     boton.disabled = false;
     boton.textContent = textoOriginal;
@@ -1255,11 +1274,14 @@ async function verificarRetornoDePago() {
     const data = await resp.json();
 
     if (data.aprobado) {
+      if (window.posthog) posthog.capture("vip_pago_aprobado", { amount: data.amount });
       alert("¡Pago aprobado! Ya eres usuario VIP 🎉");
     } else {
+      if (window.posthog) posthog.capture("vip_pago_rechazado", { transactionStatus: data.transactionStatus });
       alert("El pago no se completó (" + (data.transactionStatus || "estado desconocido") + "). Intenta de nuevo.");
     }
   } catch (err) {
+    if (window.posthog) posthog.capture("vip_pago_error_verificar", { error: err.message });
     alert("No se pudo verificar el pago: " + err.message);
   }
 
