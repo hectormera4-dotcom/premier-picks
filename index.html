@@ -1017,11 +1017,23 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+function vipVigente(perfil) {
+  // Misma logica que la funcion SQL es_usuario_vip_o_admin(): admin, o
+  // vip_hasta todavia no vencio. NO usamos el booleano perfil.es_vip solo
+  // -- ese campo se pone en true al pagar y JAMAS se vuelve a poner en
+  // false cuando la suscripcion vence, asi que por si solo queda "pegado"
+  // en VIP para siempre despues del primer pago. vip_hasta es la unica
+  // fuente de verdad real sobre si la suscripcion sigue activa.
+  if (!perfil) return false;
+  if (perfil.es_admin) return true;
+  return !!(perfil.vip_hasta && new Date(perfil.vip_hasta) > new Date());
+}
+
 function renderBarraAuth() {
   // Header: estado completo de sesion (igual que antes), + boton de instalar app
   const header = document.getElementById("auth-barra-header");
   if (sesionActual && perfilActual) {
-    const etiqueta = perfilActual.es_admin ? "Administrador" : (perfilActual.es_vip ? "VIP" : "Gratis");
+    const etiqueta = perfilActual.es_admin ? "Administrador" : (vipVigente(perfilActual) ? "VIP" : "Gratis");
     header.innerHTML = `
       ${botonInstalarApp()}
       <span class="auth-estado">${sesionActual.user.email} · <b>${etiqueta}</b></span>
@@ -1160,7 +1172,7 @@ function renderMarcadorGlobal(porcentaje, totalResueltos) {
 }
 
 function crearBannerVip() {
-  const yaEsVip = perfilActual && (perfilActual.es_vip || perfilActual.es_admin);
+  const yaEsVip = vipVigente(perfilActual);
   if (yaEsVip) return "";
 
   if (!sesionActual) {
