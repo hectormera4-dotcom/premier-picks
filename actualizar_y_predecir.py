@@ -179,6 +179,23 @@ LIGAS = {
             "VfB Stuttgart": "Stuttgart",
         },
     },
+    "champions_league": {
+        "nombre_mostrar": "Champions League",
+        "codigo_api": "CL",
+        # football-data.co.uk NO cubre competencias europeas -- no hay
+        # fuente gratuita de corners/tarjetas/tiros a puerta para esto,
+        # nunca la va a haber. codigo_footballdata=None hace que el
+        # pipeline se salte ese paso por completo (ver preparar_liga).
+        "codigo_footballdata": None,
+        "archivo_historico": "champions_league_combinado.csv",
+        # El pool de 36 equipos cambia cada temporada (no es una liga fija
+        # de ~20 como las domesticas) -- mantener un MAPEO_NOMBRES y un
+        # EQUIPOS_SIN_HISTORIAL escritos a mano no escala. En su lugar:
+        "equipos_sin_historial": [],
+        "mapeo_nombres": {},
+        "nombres_dinamicos": True,      # usa normalizar_nombre_equipo() en vez de mapeo_nombres
+        "fallback_automatico": True,    # CUALQUIER equipo sin historial usa la fuerza conservadora
+    },
 }
 
 LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1", "bundesliga"]  # cuales corren en cada ejecucion
@@ -194,6 +211,50 @@ MAPEO_NOMBRES = LIGAS["premier_league"]["mapeo_nombres"]
 EQUIPOS_SIN_HISTORIAL = LIGAS["premier_league"]["equipos_sin_historial"]
 ARCHIVO_PICKS = "picks_del_dia.csv"
 ARCHIVO_COMBINADAS = "combinadas_del_dia.json"
+
+# ---------- Nombres de equipo dinamicos (solo para competencias como
+# Champions League, donde el pool de 36 equipos cambia cada temporada y
+# no tiene sentido mantener un MAPEO_NOMBRES fijo como en las ligas
+# domesticas) ----------
+NOMBRES_DINAMICOS = False       # se activa por liga en _fijar_globales_liga
+FALLBACK_AUTOMATICO = False     # idem -- aplica el fallback conservador a
+                                 # CUALQUIER equipo sin historial, no solo a
+                                 # una lista pre-declarada (EQUIPOS_SIN_HISTORIAL)
+
+SUFIJOS_EQUIPO_A_QUITAR = [
+    r"\bFC\b", r"\bCF\b", r"\bSC\b", r"\bAC\b", r"\bAS\b", r"\bSK\b",
+    r"\bKV\b", r"\bBC\b", r"\b1899\b", r"\b1909\b", r"\b07\b", r"\b04\b",
+    r"\bClube de Regatas\b", r"\bClube\b", r"\bClub\b",
+]
+
+# Alias manuales para competencias con nombres_dinamicos=True -- verificados
+# a mano contra los equipos que aparecieron en el historico de cada
+# competencia (ver construir_historico_champions_league.py). La MISMA tabla
+# se usa al construir el historico y al traducir los nombres que manda la
+# API en vivo, para que ambos lados coincidan siempre.
+ALIAS_EQUIPOS_EUROPA = {
+    "Atlético de Madrid": "Atlético Madrid",
+    "FK Crvena Zvezda": "Crvena Zvezda",
+    "GNK Dinamo Zagreb": "Dinamo Zagreb",
+    "FK Shakhtar Donetsk": "Shakhtar Donetsk",
+    "Internazionale Milano": "Inter",
+    "SS Lazio": "Lazio Roma",
+    "PAE Olympiakos SFP": "Olympiakos Piraeus",
+    "Olympique de Marseille": "Olympique Marseille",
+    "Red Bull Salzburg": "RB Salzburg",
+    "Sport Lisboa e Benfica": "SL Benfica",
+    "Sporting de Portugal": "Sporting CP",
+}
+
+def normalizar_nombre_equipo(nombre):
+    """Quita sufijos corporativos comunes (FC, CF, AC, 1899, etc.) y aplica
+    la tabla de alias manual, para llegar a un nombre 'nucleo' consistente
+    sin importar la variante exacta que use la API ese dia."""
+    n = nombre
+    for patron in SUFIJOS_EQUIPO_A_QUITAR:
+        n = re.sub(patron, "", n)
+    n = re.sub(r"\s+", " ", n).strip()
+    return ALIAS_EQUIPOS_EUROPA.get(n, n)
 
 
 
@@ -274,8 +335,8 @@ def actualizar_historico(partidos):
     nuevos = []
 
     for p in finalizados:
-        local = MAPEO_NOMBRES.get(p["homeTeam"]["name"], p["homeTeam"]["name"])
-        visitante = MAPEO_NOMBRES.get(p["awayTeam"]["name"], p["awayTeam"]["name"])
+        local = _traducir_nombre_equipo(p["homeTeam"]["name"])
+        visitante = _traducir_nombre_equipo(p["awayTeam"]["name"])
         # Normalizamos a medianoche (sin hora) -- el historico SIEMPRE se
         # guarda y compara a nivel de dia, nunca con la hora exacta del
         # pitazo inicial. Sin esto, el mismo partido nunca vuelve a
@@ -380,6 +441,34 @@ def actualizar_estadisticas_extra(historico, codigo_footballdata="E0"):
 
 # ---------- Paso 3: modelo (fuerzas + Dixon-Coles) ----------
 
+class _FuerzasConFallbackAutomatico(dict):
+    """Dict de fuerzas para competencias con FALLBACK_AUTOMATICO=True (ver
+    LIGAS["champions_league"]): CUALQUIER equipo desconocido se trata como
+    si tuviera la fuerza conservadora por defecto, en vez de necesitar
+    estar pre-declarado en EQUIPOS_SIN_HISTORIAL. Sobreescribimos
+    __contains__ para que 'equipo in fuerzas' siempre de True (asi
+    matriz_marcadores/goles_esperados nunca saltan el partido por no
+    reconocer al equipo), y __getitem__ para devolver el valor por
+    defecto (avisando una sola vez por equipo)."""
+    def __init__(self, default_ataque, default_defensa):
+        super().__init__()
+        self._default = {
+            "ataque_local": default_ataque, "defensa_local": default_defensa,
+            "ataque_visitante": default_ataque, "defensa_visitante": default_defensa,
+        }
+        self._avisados = set()
+
+    def __contains__(self, equipo):
+        return True
+
+    def __getitem__(self, equipo):
+        if dict.__contains__(self, equipo):
+            return dict.__getitem__(self, equipo)
+        if equipo not in self._avisados:
+            print(f"Aviso: {equipo} no tiene historial, usando fuerza conservadora por defecto.")
+            self._avisados.add(equipo)
+        return self._default
+
 def calcular_fuerzas(df):
     fecha_max = df["Date"].max()
     dias_desde = (fecha_max - df["Date"]).dt.days
@@ -415,13 +504,23 @@ def calcular_fuerzas(df):
     else:
         default_ataque, default_defensa = 0.85, 1.15
 
-    for equipo in EQUIPOS_SIN_HISTORIAL:
-        if equipo not in fuerzas:
-            fuerzas[equipo] = {
-                "ataque_local": default_ataque, "defensa_local": default_defensa,
-                "ataque_visitante": default_ataque, "defensa_visitante": default_defensa,
-            }
-            print(f"Aviso: {equipo} no tiene historial, usando fuerza conservadora por defecto.")
+    if FALLBACK_AUTOMATICO:
+        # Competencias como Champions League cambian su pool de equipos
+        # cada temporada -- no tiene sentido mantener una lista fija de
+        # "equipos sin historial". En vez de eso, CUALQUIER equipo que no
+        # aparezca en el historico recibe la fuerza conservadora por
+        # defecto automaticamente, la primera vez que se le necesita.
+        fuerzas_con_fallback = _FuerzasConFallbackAutomatico(default_ataque, default_defensa)
+        fuerzas_con_fallback.update(fuerzas)
+        fuerzas = fuerzas_con_fallback
+    else:
+        for equipo in EQUIPOS_SIN_HISTORIAL:
+            if equipo not in fuerzas:
+                fuerzas[equipo] = {
+                    "ataque_local": default_ataque, "defensa_local": default_defensa,
+                    "ataque_visitante": default_ataque, "defensa_visitante": default_defensa,
+                }
+                print(f"Aviso: {equipo} no tiene historial, usando fuerza conservadora por defecto.")
 
     return fuerzas, prom_local, prom_visit
 
@@ -1462,8 +1561,8 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
 
     for p in programados:
         fecha_partido = pd.to_datetime(p["utcDate"]).tz_localize(None)
-        local = MAPEO_NOMBRES.get(p["homeTeam"]["name"], p["homeTeam"]["name"])
-        visitante = MAPEO_NOMBRES.get(p["awayTeam"]["name"], p["awayTeam"]["name"])
+        local = _traducir_nombre_equipo(p["homeTeam"]["name"])
+        visitante = _traducir_nombre_equipo(p["awayTeam"]["name"])
 
         matriz, lam, mu = matriz_marcadores(local, visitante, fuerzas, prom_l, prom_v, rho)
         if matriz is None:
@@ -1574,6 +1673,7 @@ def _fijar_globales_liga(liga_key):
     variables reasignadas dentro de un bucle, ya documentado)."""
     global ARCHIVO_HISTORICO, MAPEO_NOMBRES, EQUIPOS_SIN_HISTORIAL
     global ARCHIVO_PICKS, ARCHIVO_HISTORIAL_PICKS
+    global NOMBRES_DINAMICOS, FALLBACK_AUTOMATICO
     # NOTA: ARCHIVO_CONTADOR_FECHAS NO se reasigna aqui -- solo lo usa la
     # numeracion de "Fecha" de las combinadas multiliga (obtener_numero_fecha),
     # que corre DESPUES del bucle de las 3 ligas, no por liga. Si se
@@ -1588,7 +1688,18 @@ def _fijar_globales_liga(liga_key):
     EQUIPOS_SIN_HISTORIAL = config["equipos_sin_historial"]
     ARCHIVO_PICKS = f"picks_del_dia_{liga_key}.csv"
     ARCHIVO_HISTORIAL_PICKS = f"historial_picks_{liga_key}.csv"
+    NOMBRES_DINAMICOS = config.get("nombres_dinamicos", False)
+    FALLBACK_AUTOMATICO = config.get("fallback_automatico", False)
     return config
+
+def _traducir_nombre_equipo(nombre_api):
+    """Traduce el nombre de equipo que manda football-data.org al nombre
+    corto que usa nuestro historico -- via MAPEO_NOMBRES fijo (ligas
+    domesticas) o via normalizacion dinamica (competencias con pool de
+    equipos variable, ver NOMBRES_DINAMICOS)."""
+    if NOMBRES_DINAMICOS:
+        return normalizar_nombre_equipo(nombre_api)
+    return MAPEO_NOMBRES.get(nombre_api, nombre_api)
 
 def calcular_umbral_dinamico_multiliga(historiales_por_liga, umbral_base=0.80, umbral_alto=0.85, ventana=10):
     """
@@ -1654,8 +1765,17 @@ def preparar_liga(liga_key):
 
     historico["Date"] = pd.to_datetime(historico["Date"])
 
-    print("Actualizando corners/tarjetas desde football-data.co.uk...")
-    historico = actualizar_estadisticas_extra(historico, config["codigo_footballdata"])
+    if config["codigo_footballdata"]:
+        print("Actualizando corners/tarjetas desde football-data.co.uk...")
+        historico = actualizar_estadisticas_extra(historico, config["codigo_footballdata"])
+    else:
+        # Competencias europeas (Champions League, etc.): football-data.co.uk
+        # no las cubre -- no hay fuente de corners/tarjetas/tiros a puerta,
+        # ni la va a haber. Nos saltamos este paso directo; las funciones
+        # calcular_fuerzas_corners/tarjetas/tiros ya manejan bien que esas
+        # columnas no existan (devuelven {} y esos mercados quedan
+        # desactivados, sin romper nada del resto del pipeline).
+        print("Esta competencia no tiene fuente de corners/tarjetas/tiros a puerta -- se omite ese paso.")
 
     print("Calculando fuerzas de equipos...")
     fuerzas, prom_l, prom_v = calcular_fuerzas(historico)

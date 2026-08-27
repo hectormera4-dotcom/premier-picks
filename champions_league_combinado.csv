@@ -1,0 +1,998 @@
+Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR
+18/09/2019,Brugge,Galatasaray,0,0,D
+18/09/2019,Paris Saint-Germain,Real Madrid,3,0,H
+01/10/2019,Real Madrid,Brugge,2,2,D
+01/10/2019,Galatasaray,Paris Saint-Germain,0,1,A
+22/10/2019,Brugge,Paris Saint-Germain,0,5,A
+22/10/2019,Galatasaray,Real Madrid,0,1,A
+06/11/2019,Paris Saint-Germain,Brugge,1,0,H
+06/11/2019,Real Madrid,Galatasaray,6,0,H
+26/11/2019,Galatasaray,Brugge,1,1,D
+26/11/2019,Real Madrid,Paris Saint-Germain,2,2,D
+11/12/2019,Paris Saint-Germain,Galatasaray,5,0,H
+11/12/2019,Brugge,Real Madrid,1,3,A
+18/09/2019,Olympiakos Piraeus,Tottenham Hotspur,2,2,D
+18/09/2019,Bayern München,Crvena Zvezda,3,0,H
+01/10/2019,Tottenham Hotspur,Bayern München,2,7,A
+01/10/2019,Crvena Zvezda,Olympiakos Piraeus,3,1,H
+22/10/2019,Tottenham Hotspur,Crvena Zvezda,5,0,H
+22/10/2019,Olympiakos Piraeus,Bayern München,2,3,A
+06/11/2019,Bayern München,Olympiakos Piraeus,2,0,H
+06/11/2019,Crvena Zvezda,Tottenham Hotspur,0,4,A
+26/11/2019,Tottenham Hotspur,Olympiakos Piraeus,4,2,H
+26/11/2019,Crvena Zvezda,Bayern München,0,6,A
+11/12/2019,Bayern München,Tottenham Hotspur,3,1,H
+11/12/2019,Olympiakos Piraeus,Crvena Zvezda,1,0,H
+18/09/2019,Shakhtar Donetsk,Manchester City,0,3,A
+18/09/2019,Dinamo Zagreb,Atalanta,4,0,H
+01/10/2019,Atalanta,Shakhtar Donetsk,1,2,A
+01/10/2019,Manchester City,Dinamo Zagreb,2,0,H
+22/10/2019,Shakhtar Donetsk,Dinamo Zagreb,2,2,D
+22/10/2019,Manchester City,Atalanta,5,1,H
+06/11/2019,Dinamo Zagreb,Shakhtar Donetsk,3,3,D
+06/11/2019,Atalanta,Manchester City,1,1,D
+26/11/2019,Manchester City,Shakhtar Donetsk,1,1,D
+26/11/2019,Atalanta,Dinamo Zagreb,2,0,H
+11/12/2019,Shakhtar Donetsk,Atalanta,0,3,A
+11/12/2019,Dinamo Zagreb,Manchester City,1,4,A
+18/09/2019,Atlético Madrid,Juventus,2,2,D
+18/09/2019,Bayer Leverkusen,Lokomotiv Moskva,1,2,A
+01/10/2019,Juventus,Bayer Leverkusen,3,0,H
+01/10/2019,Lokomotiv Moskva,Atlético Madrid,0,2,A
+22/10/2019,Atlético Madrid,Bayer Leverkusen,1,0,H
+22/10/2019,Juventus,Lokomotiv Moskva,2,1,H
+06/11/2019,Lokomotiv Moskva,Juventus,1,2,A
+06/11/2019,Bayer Leverkusen,Atlético Madrid,2,1,H
+26/11/2019,Lokomotiv Moskva,Bayer Leverkusen,0,2,A
+26/11/2019,Juventus,Atlético Madrid,1,0,H
+11/12/2019,Atlético Madrid,Lokomotiv Moskva,2,0,H
+11/12/2019,Bayer Leverkusen,Juventus,0,2,A
+17/09/2019,SSC Napoli,Liverpool,2,0,H
+17/09/2019,RB Salzburg,KRC Genk,6,2,H
+02/10/2019,KRC Genk,SSC Napoli,0,0,D
+02/10/2019,Liverpool,RB Salzburg,4,3,H
+23/10/2019,RB Salzburg,SSC Napoli,2,3,A
+23/10/2019,KRC Genk,Liverpool,1,4,A
+05/11/2019,Liverpool,KRC Genk,2,1,H
+05/11/2019,SSC Napoli,RB Salzburg,1,1,D
+27/11/2019,Liverpool,SSC Napoli,1,1,D
+27/11/2019,KRC Genk,RB Salzburg,1,4,A
+10/12/2019,SSC Napoli,KRC Genk,4,0,H
+10/12/2019,RB Salzburg,Liverpool,0,2,A
+17/09/2019,Inter,Slavia Praha,1,1,D
+17/09/2019,Borussia Dortmund,Barcelona,0,0,D
+02/10/2019,Slavia Praha,Borussia Dortmund,0,2,A
+02/10/2019,Barcelona,Inter,2,1,H
+23/10/2019,Inter,Borussia Dortmund,2,0,H
+23/10/2019,Slavia Praha,Barcelona,1,2,A
+05/11/2019,Barcelona,Slavia Praha,0,0,D
+05/11/2019,Borussia Dortmund,Inter,3,2,H
+27/11/2019,Barcelona,Borussia Dortmund,3,1,H
+27/11/2019,Slavia Praha,Inter,1,3,A
+10/12/2019,Borussia Dortmund,Slavia Praha,2,1,H
+10/12/2019,Inter,Barcelona,1,2,A
+17/09/2019,Olympique Lyonnais,Zenit St. Petersburg,1,1,D
+17/09/2019,SL Benfica,RB Leipzig,1,2,A
+02/10/2019,Zenit St. Petersburg,SL Benfica,3,1,H
+02/10/2019,RB Leipzig,Olympique Lyonnais,0,2,A
+23/10/2019,RB Leipzig,Zenit St. Petersburg,2,1,H
+23/10/2019,SL Benfica,Olympique Lyonnais,2,1,H
+05/11/2019,Zenit St. Petersburg,RB Leipzig,0,2,A
+05/11/2019,Olympique Lyonnais,SL Benfica,3,1,H
+27/11/2019,Zenit St. Petersburg,Olympique Lyonnais,2,0,H
+27/11/2019,RB Leipzig,SL Benfica,2,2,D
+10/12/2019,SL Benfica,Zenit St. Petersburg,3,0,H
+10/12/2019,Olympique Lyonnais,RB Leipzig,2,2,D
+17/09/2019,Chelsea,Valencia,0,1,A
+17/09/2019,AFC Ajax,Lille OSC,3,0,H
+02/10/2019,Valencia,AFC Ajax,0,3,A
+02/10/2019,Lille OSC,Chelsea,1,2,A
+23/10/2019,AFC Ajax,Chelsea,0,1,A
+23/10/2019,Lille OSC,Valencia,1,1,D
+05/11/2019,Chelsea,AFC Ajax,4,4,D
+05/11/2019,Valencia,Lille OSC,4,1,H
+27/11/2019,Valencia,Chelsea,2,2,D
+27/11/2019,Lille OSC,AFC Ajax,0,2,A
+10/12/2019,Chelsea,Lille OSC,2,1,H
+10/12/2019,AFC Ajax,Valencia,0,1,A
+18/02/2020,Borussia Dortmund,Paris Saint-Germain,2,1,H
+18/02/2020,Atlético Madrid,Liverpool,1,0,H
+19/02/2020,Atalanta,Valencia,4,1,H
+19/02/2020,Tottenham Hotspur,RB Leipzig,0,1,A
+25/02/2020,Chelsea,Bayern München,0,3,A
+25/02/2020,SSC Napoli,Barcelona,1,1,D
+26/02/2020,Real Madrid,Manchester City,1,2,A
+26/02/2020,Olympique Lyonnais,Juventus,1,0,H
+10/03/2020,Valencia,Atalanta,3,4,A
+10/03/2020,RB Leipzig,Tottenham Hotspur,3,0,H
+11/03/2020,Paris Saint-Germain,Borussia Dortmund,2,0,H
+11/03/2020,Liverpool,Atlético Madrid,2,3,A
+07/08/2020,Manchester City,Real Madrid,2,1,H
+07/08/2020,Juventus,Olympique Lyonnais,2,1,H
+08/08/2020,Bayern München,Chelsea,4,1,H
+08/08/2020,Barcelona,SSC Napoli,3,1,H
+12/08/2020,Atalanta,Paris Saint-Germain,1,2,A
+13/08/2020,RB Leipzig,Atlético Madrid,2,1,H
+14/08/2020,Barcelona,Bayern München,2,8,A
+15/08/2020,Manchester City,Olympique Lyonnais,1,3,A
+18/08/2020,RB Leipzig,Paris Saint-Germain,0,3,A
+19/08/2020,Olympique Lyonnais,Bayern München,0,3,A
+23/08/2020,Paris Saint-Germain,Bayern München,0,1,A
+21/10/2020,RB Salzburg,Lokomotiv Moskva,2,2,D
+21/10/2020,Bayern München,Atlético Madrid,4,0,H
+27/10/2020,Lokomotiv Moskva,Bayern München,1,2,A
+27/10/2020,Atlético Madrid,RB Salzburg,3,2,H
+03/11/2020,Lokomotiv Moskva,Atlético Madrid,1,1,D
+03/11/2020,RB Salzburg,Bayern München,2,6,A
+25/11/2020,Atlético Madrid,Lokomotiv Moskva,0,0,D
+25/11/2020,Bayern München,RB Salzburg,3,1,H
+01/12/2020,Lokomotiv Moskva,RB Salzburg,1,3,A
+01/12/2020,Atlético Madrid,Bayern München,1,1,D
+09/12/2020,Bayern München,Lokomotiv Moskva,2,0,H
+09/12/2020,RB Salzburg,Atlético Madrid,0,2,A
+21/10/2020,Real Madrid,Shakhtar Donetsk,2,3,A
+21/10/2020,Inter,Bor. Mönchengladbach,2,2,D
+27/10/2020,Shakhtar Donetsk,Inter,0,0,D
+27/10/2020,Bor. Mönchengladbach,Real Madrid,2,2,D
+03/11/2020,Shakhtar Donetsk,Bor. Mönchengladbach,0,6,A
+03/11/2020,Real Madrid,Inter,3,2,H
+25/11/2020,Bor. Mönchengladbach,Shakhtar Donetsk,4,0,H
+25/11/2020,Inter,Real Madrid,0,2,A
+01/12/2020,Shakhtar Donetsk,Real Madrid,2,0,H
+01/12/2020,Bor. Mönchengladbach,Inter,2,3,A
+09/12/2020,Inter,Shakhtar Donetsk,0,0,D
+09/12/2020,Real Madrid,Bor. Mönchengladbach,2,0,H
+21/10/2020,Manchester City,Porto,3,1,H
+21/10/2020,Olympiakos Piraeus,Olympique Marseille,1,0,H
+27/10/2020,Porto,Olympiakos Piraeus,2,0,H
+27/10/2020,Olympique Marseille,Manchester City,0,3,A
+03/11/2020,Porto,Olympique Marseille,3,0,H
+03/11/2020,Manchester City,Olympiakos Piraeus,3,0,H
+25/11/2020,Olympiakos Piraeus,Manchester City,0,1,A
+25/11/2020,Olympique Marseille,Porto,0,2,A
+01/12/2020,Porto,Manchester City,0,0,D
+01/12/2020,Olympique Marseille,Olympiakos Piraeus,2,1,H
+09/12/2020,Manchester City,Olympique Marseille,3,0,H
+09/12/2020,Olympiakos Piraeus,Porto,0,2,A
+21/10/2020,AFC Ajax,Liverpool,0,1,A
+21/10/2020,Midtjylland,Atalanta,0,4,A
+27/10/2020,Atalanta,AFC Ajax,2,2,D
+27/10/2020,Liverpool,Midtjylland,2,0,H
+03/11/2020,Atalanta,Liverpool,0,5,A
+03/11/2020,Midtjylland,AFC Ajax,1,2,A
+25/11/2020,AFC Ajax,Midtjylland,3,1,H
+25/11/2020,Liverpool,Atalanta,0,2,A
+01/12/2020,Atalanta,Midtjylland,1,1,D
+01/12/2020,Liverpool,AFC Ajax,1,0,H
+09/12/2020,AFC Ajax,Atalanta,0,1,A
+09/12/2020,Midtjylland,Liverpool,1,1,D
+20/10/2020,Chelsea,Sevilla,0,0,D
+20/10/2020,Stade Rennais,FK Krasnodar,1,1,D
+28/10/2020,FK Krasnodar,Chelsea,0,4,A
+28/10/2020,Sevilla,Stade Rennais,1,0,H
+04/11/2020,Chelsea,Stade Rennais,3,0,H
+04/11/2020,Sevilla,FK Krasnodar,3,2,H
+24/11/2020,Stade Rennais,Chelsea,1,2,A
+24/11/2020,FK Krasnodar,Sevilla,1,2,A
+02/12/2020,FK Krasnodar,Stade Rennais,1,0,H
+02/12/2020,Sevilla,Chelsea,0,4,A
+08/12/2020,Chelsea,FK Krasnodar,1,1,D
+08/12/2020,Stade Rennais,Sevilla,1,3,A
+20/10/2020,Zenit St. Petersburg,Brugge,1,2,A
+20/10/2020,Lazio Roma,Borussia Dortmund,3,1,H
+28/10/2020,Borussia Dortmund,Zenit St. Petersburg,2,0,H
+28/10/2020,Brugge,Lazio Roma,1,1,D
+04/11/2020,Zenit St. Petersburg,Lazio Roma,1,1,D
+04/11/2020,Brugge,Borussia Dortmund,0,3,A
+24/11/2020,Borussia Dortmund,Brugge,3,0,H
+24/11/2020,Lazio Roma,Zenit St. Petersburg,3,1,H
+02/12/2020,Borussia Dortmund,Lazio Roma,1,1,D
+02/12/2020,Brugge,Zenit St. Petersburg,3,0,H
+08/12/2020,Zenit St. Petersburg,Borussia Dortmund,1,2,A
+08/12/2020,Lazio Roma,Brugge,2,2,D
+20/10/2020,Dinamo Kiev,Juventus,0,2,A
+20/10/2020,Barcelona,Ferencvárosi TC,5,1,H
+28/10/2020,Ferencvárosi TC,Dinamo Kiev,2,2,D
+28/10/2020,Juventus,Barcelona,0,2,A
+04/11/2020,Barcelona,Dinamo Kiev,2,1,H
+04/11/2020,Ferencvárosi TC,Juventus,1,4,A
+24/11/2020,Dinamo Kiev,Barcelona,0,4,A
+24/11/2020,Juventus,Ferencvárosi TC,2,1,H
+02/12/2020,Juventus,Dinamo Kiev,3,0,H
+02/12/2020,Ferencvárosi TC,Barcelona,0,3,A
+08/12/2020,Dinamo Kiev,Ferencvárosi TC,1,0,H
+08/12/2020,Barcelona,Juventus,0,3,A
+20/10/2020,RB Leipzig,İstanbul Başakşehir,2,0,H
+20/10/2020,Paris Saint-Germain,Manchester United,1,2,A
+28/10/2020,İstanbul Başakşehir,Paris Saint-Germain,0,2,A
+28/10/2020,Manchester United,RB Leipzig,5,0,H
+04/11/2020,İstanbul Başakşehir,Manchester United,2,1,H
+04/11/2020,RB Leipzig,Paris Saint-Germain,2,1,H
+24/11/2020,Manchester United,İstanbul Başakşehir,4,1,H
+24/11/2020,Paris Saint-Germain,RB Leipzig,1,0,H
+02/12/2020,İstanbul Başakşehir,RB Leipzig,3,4,A
+02/12/2020,Manchester United,Paris Saint-Germain,1,3,A
+08/12/2020,RB Leipzig,Manchester United,3,2,H
+09/12/2020,Paris Saint-Germain,İstanbul Başakşehir,5,1,H
+16/02/2021,RB Leipzig,Liverpool,0,2,A
+16/02/2021,Barcelona,Paris Saint-Germain,1,4,A
+17/02/2021,Porto,Juventus,2,1,H
+17/02/2021,Sevilla,Borussia Dortmund,2,3,A
+23/02/2021,Lazio Roma,Bayern München,1,4,A
+23/02/2021,Atlético Madrid,Chelsea,0,1,A
+24/02/2021,Bor. Mönchengladbach,Manchester City,0,2,A
+24/02/2021,Atalanta,Real Madrid,0,1,A
+09/03/2021,Juventus,Porto,3,2,H
+09/03/2021,Borussia Dortmund,Sevilla,2,2,D
+10/03/2021,Liverpool,RB Leipzig,2,0,H
+10/03/2021,Paris Saint-Germain,Barcelona,1,1,D
+16/03/2021,Manchester City,Bor. Mönchengladbach,2,0,H
+16/03/2021,Real Madrid,Atalanta,3,1,H
+17/03/2021,Bayern München,Lazio Roma,2,1,H
+17/03/2021,Chelsea,Atlético Madrid,2,0,H
+06/04/2021,Manchester City,Borussia Dortmund,2,1,H
+06/04/2021,Real Madrid,Liverpool,3,1,H
+07/04/2021,Porto,Chelsea,0,2,A
+07/04/2021,Bayern München,Paris Saint-Germain,2,3,A
+13/04/2021,Chelsea,Porto,0,1,A
+13/04/2021,Paris Saint-Germain,Bayern München,0,1,A
+14/04/2021,Borussia Dortmund,Manchester City,1,2,A
+14/04/2021,Liverpool,Real Madrid,0,0,D
+27/04/2021,Real Madrid,Chelsea,1,1,D
+28/04/2021,Paris Saint-Germain,Manchester City,1,2,A
+04/05/2021,Manchester City,Paris Saint-Germain,2,0,H
+05/05/2021,Chelsea,Real Madrid,2,0,H
+29/05/2021,Manchester City,Chelsea,0,1,A
+15/09/2021,Manchester City,RB Leipzig,6,3,H
+15/09/2021,Brugge,Paris Saint-Germain,1,1,D
+28/09/2021,Paris Saint-Germain,Manchester City,2,0,H
+28/09/2021,RB Leipzig,Brugge,1,2,A
+19/10/2021,Brugge,Manchester City,1,5,A
+19/10/2021,Paris Saint-Germain,RB Leipzig,3,2,H
+03/11/2021,RB Leipzig,Paris Saint-Germain,2,2,D
+03/11/2021,Manchester City,Brugge,4,1,H
+24/11/2021,Manchester City,Paris Saint-Germain,2,1,H
+24/11/2021,Brugge,RB Leipzig,0,5,A
+07/12/2021,RB Leipzig,Manchester City,2,1,H
+07/12/2021,Paris Saint-Germain,Brugge,4,1,H
+15/09/2021,Atlético Madrid,Porto,0,0,D
+15/09/2021,Liverpool,Milan,3,2,H
+28/09/2021,Porto,Liverpool,1,5,A
+28/09/2021,Milan,Atlético Madrid,1,2,A
+19/10/2021,Atlético Madrid,Liverpool,2,3,A
+19/10/2021,Porto,Milan,1,0,H
+03/11/2021,Milan,Porto,1,1,D
+03/11/2021,Liverpool,Atlético Madrid,2,0,H
+24/11/2021,Liverpool,Porto,2,0,H
+24/11/2021,Atlético Madrid,Milan,0,1,A
+07/12/2021,Porto,Atlético Madrid,1,3,A
+07/12/2021,Milan,Liverpool,1,2,A
+15/09/2021,Beşiktaş,Borussia Dortmund,1,2,A
+15/09/2021,Sporting CP,AFC Ajax,1,5,A
+28/09/2021,AFC Ajax,Beşiktaş,2,0,H
+28/09/2021,Borussia Dortmund,Sporting CP,1,0,H
+19/10/2021,Beşiktaş,Sporting CP,1,4,A
+19/10/2021,AFC Ajax,Borussia Dortmund,4,0,H
+03/11/2021,Borussia Dortmund,AFC Ajax,1,3,A
+03/11/2021,Sporting CP,Beşiktaş,4,0,H
+24/11/2021,Beşiktaş,AFC Ajax,1,2,A
+24/11/2021,Sporting CP,Borussia Dortmund,3,1,H
+07/12/2021,AFC Ajax,Sporting CP,4,2,H
+07/12/2021,Borussia Dortmund,Beşiktaş,5,0,H
+15/09/2021,Sheriff,Shakhtar Donetsk,2,0,H
+15/09/2021,Inter,Real Madrid,0,1,A
+28/09/2021,Shakhtar Donetsk,Inter,0,0,D
+28/09/2021,Real Madrid,Sheriff,1,2,A
+19/10/2021,Shakhtar Donetsk,Real Madrid,0,5,A
+19/10/2021,Inter,Sheriff,3,1,H
+03/11/2021,Real Madrid,Shakhtar Donetsk,2,1,H
+03/11/2021,Sheriff,Inter,1,3,A
+24/11/2021,Inter,Shakhtar Donetsk,2,0,H
+24/11/2021,Sheriff,Real Madrid,0,3,A
+07/12/2021,Real Madrid,Inter,2,0,H
+07/12/2021,Shakhtar Donetsk,Sheriff,1,1,D
+14/09/2021,Barcelona,Bayern München,0,3,A
+14/09/2021,Dinamo Kiev,SL Benfica,0,0,D
+29/09/2021,SL Benfica,Barcelona,3,0,H
+29/09/2021,Bayern München,Dinamo Kiev,5,0,H
+20/10/2021,Barcelona,Dinamo Kiev,1,0,H
+20/10/2021,SL Benfica,Bayern München,0,4,A
+02/11/2021,Bayern München,SL Benfica,5,2,H
+02/11/2021,Dinamo Kiev,Barcelona,0,1,A
+23/11/2021,Dinamo Kiev,Bayern München,1,2,A
+23/11/2021,Barcelona,SL Benfica,0,0,D
+08/12/2021,Bayern München,Barcelona,3,0,H
+08/12/2021,SL Benfica,Dinamo Kiev,2,0,H
+14/09/2021,BSC Young Boys,Manchester United,2,1,H
+14/09/2021,Villarreal,Atalanta,2,2,D
+29/09/2021,Atalanta,BSC Young Boys,1,0,H
+29/09/2021,Manchester United,Villarreal,2,1,H
+20/10/2021,Manchester United,Atalanta,3,2,H
+20/10/2021,BSC Young Boys,Villarreal,1,4,A
+02/11/2021,Atalanta,Manchester United,2,2,D
+02/11/2021,Villarreal,BSC Young Boys,2,0,H
+23/11/2021,Villarreal,Manchester United,0,2,A
+23/11/2021,BSC Young Boys,Atalanta,3,3,D
+08/12/2021,Manchester United,BSC Young Boys,1,1,D
+09/12/2021,Atalanta,Villarreal,2,3,A
+14/09/2021,Sevilla,RB Salzburg,1,1,D
+14/09/2021,Lille OSC,VfL Wolfsburg,0,0,D
+29/09/2021,RB Salzburg,Lille OSC,2,1,H
+29/09/2021,VfL Wolfsburg,Sevilla,1,1,D
+20/10/2021,RB Salzburg,VfL Wolfsburg,3,1,H
+20/10/2021,Lille OSC,Sevilla,0,0,D
+02/11/2021,VfL Wolfsburg,RB Salzburg,2,1,H
+02/11/2021,Sevilla,Lille OSC,1,2,A
+23/11/2021,Lille OSC,RB Salzburg,1,0,H
+23/11/2021,Sevilla,VfL Wolfsburg,2,0,H
+08/12/2021,RB Salzburg,Sevilla,1,0,H
+08/12/2021,VfL Wolfsburg,Lille OSC,1,3,A
+14/09/2021,Chelsea,Zenit St. Petersburg,1,0,H
+14/09/2021,Malmö FF,Juventus,0,3,A
+29/09/2021,Zenit St. Petersburg,Malmö FF,4,0,H
+29/09/2021,Juventus,Chelsea,1,0,H
+20/10/2021,Zenit St. Petersburg,Juventus,0,1,A
+20/10/2021,Chelsea,Malmö FF,4,0,H
+02/11/2021,Malmö FF,Chelsea,0,1,A
+02/11/2021,Juventus,Zenit St. Petersburg,4,2,H
+23/11/2021,Chelsea,Juventus,4,0,H
+23/11/2021,Malmö FF,Zenit St. Petersburg,1,1,D
+08/12/2021,Zenit St. Petersburg,Chelsea,3,3,D
+08/12/2021,Juventus,Malmö FF,1,0,H
+15/02/2022,Sporting CP,Manchester City,0,5,A
+15/02/2022,Paris Saint-Germain,Real Madrid,1,0,H
+16/02/2022,RB Salzburg,Bayern München,1,1,D
+16/02/2022,Inter,Liverpool,0,2,A
+22/02/2022,Chelsea,Lille OSC,2,0,H
+22/02/2022,Villarreal,Juventus,1,1,D
+23/02/2022,SL Benfica,AFC Ajax,2,2,D
+23/02/2022,Atlético Madrid,Manchester United,1,1,D
+08/03/2022,Bayern München,RB Salzburg,7,1,H
+08/03/2022,Liverpool,Inter,0,1,A
+09/03/2022,Manchester City,Sporting CP,0,0,D
+09/03/2022,Real Madrid,Paris Saint-Germain,3,1,H
+15/03/2022,AFC Ajax,SL Benfica,0,1,A
+15/03/2022,Manchester United,Atlético Madrid,0,1,A
+16/03/2022,Lille OSC,Chelsea,1,2,A
+16/03/2022,Juventus,Villarreal,0,3,A
+05/04/2022,Manchester City,Atlético Madrid,1,0,H
+05/04/2022,SL Benfica,Liverpool,1,3,A
+06/04/2022,Chelsea,Real Madrid,1,3,A
+06/04/2022,Villarreal,Bayern München,1,0,H
+12/04/2022,Real Madrid,Chelsea,2,3,A
+12/04/2022,Bayern München,Villarreal,1,1,D
+13/04/2022,Atlético Madrid,Manchester City,0,0,D
+13/04/2022,Liverpool,SL Benfica,3,3,D
+26/04/2022,Manchester City,Real Madrid,4,3,H
+27/04/2022,Liverpool,Villarreal,2,0,H
+03/05/2022,Villarreal,Liverpool,2,3,A
+04/05/2022,Real Madrid,Manchester City,3,1,H
+28/05/2022,Liverpool,Real Madrid,0,1,A
+07/09/2022,AFC Ajax,Rangers,4,0,H
+07/09/2022,SSC Napoli,Liverpool,4,1,H
+13/09/2022,Liverpool,AFC Ajax,2,1,H
+14/09/2022,Rangers,SSC Napoli,0,3,A
+04/10/2022,AFC Ajax,SSC Napoli,1,6,A
+04/10/2022,Liverpool,Rangers,2,0,H
+12/10/2022,SSC Napoli,AFC Ajax,4,2,H
+12/10/2022,Rangers,Liverpool,1,7,A
+26/10/2022,AFC Ajax,Liverpool,0,3,A
+26/10/2022,SSC Napoli,Rangers,3,0,H
+01/11/2022,Rangers,AFC Ajax,1,3,A
+01/11/2022,Liverpool,SSC Napoli,2,0,H
+07/09/2022,Atlético Madrid,Porto,2,1,H
+07/09/2022,Brugge,Bayer Leverkusen,1,0,H
+13/09/2022,Bayer Leverkusen,Atlético Madrid,2,0,H
+13/09/2022,Porto,Brugge,0,4,A
+04/10/2022,Brugge,Atlético Madrid,2,0,H
+04/10/2022,Porto,Bayer Leverkusen,2,0,H
+12/10/2022,Atlético Madrid,Brugge,0,0,D
+12/10/2022,Bayer Leverkusen,Porto,0,3,A
+26/10/2022,Brugge,Porto,0,4,A
+26/10/2022,Atlético Madrid,Bayer Leverkusen,2,2,D
+01/11/2022,Porto,Atlético Madrid,2,1,H
+01/11/2022,Bayer Leverkusen,Brugge,0,0,D
+07/09/2022,Inter,Bayern München,0,2,A
+07/09/2022,Barcelona,Viktoria Plzeň,5,1,H
+13/09/2022,Viktoria Plzeň,Inter,0,2,A
+13/09/2022,Bayern München,Barcelona,2,0,H
+04/10/2022,Bayern München,Viktoria Plzeň,5,0,H
+04/10/2022,Inter,Barcelona,1,0,H
+12/10/2022,Viktoria Plzeň,Bayern München,2,4,A
+12/10/2022,Barcelona,Inter,3,3,D
+26/10/2022,Inter,Viktoria Plzeň,4,0,H
+26/10/2022,Barcelona,Bayern München,0,3,A
+01/11/2022,Bayern München,Inter,2,0,H
+01/11/2022,Viktoria Plzeň,Barcelona,2,4,A
+07/09/2022,Eintracht Frankfurt,Sporting CP,0,3,A
+07/09/2022,Tottenham Hotspur,Olympique Marseille,2,0,H
+13/09/2022,Sporting CP,Tottenham Hotspur,2,0,H
+13/09/2022,Olympique Marseille,Eintracht Frankfurt,0,1,A
+04/10/2022,Olympique Marseille,Sporting CP,4,1,H
+04/10/2022,Eintracht Frankfurt,Tottenham Hotspur,0,0,D
+12/10/2022,Tottenham Hotspur,Eintracht Frankfurt,3,2,H
+12/10/2022,Sporting CP,Olympique Marseille,0,2,A
+26/10/2022,Eintracht Frankfurt,Olympique Marseille,2,1,H
+26/10/2022,Tottenham Hotspur,Sporting CP,1,1,D
+01/11/2022,Sporting CP,Eintracht Frankfurt,1,2,A
+01/11/2022,Olympique Marseille,Tottenham Hotspur,1,2,A
+06/09/2022,Dinamo Zagreb,Chelsea,1,0,H
+06/09/2022,RB Salzburg,Milan,1,1,D
+14/09/2022,Milan,Dinamo Zagreb,3,1,H
+14/09/2022,Chelsea,RB Salzburg,1,1,D
+05/10/2022,RB Salzburg,Dinamo Zagreb,1,0,H
+05/10/2022,Chelsea,Milan,3,0,H
+11/10/2022,Milan,Chelsea,0,2,A
+11/10/2022,Dinamo Zagreb,RB Salzburg,1,1,D
+25/10/2022,RB Salzburg,Chelsea,1,2,A
+25/10/2022,Dinamo Zagreb,Milan,0,4,A
+02/11/2022,Milan,RB Salzburg,4,0,H
+02/11/2022,Chelsea,Dinamo Zagreb,2,1,H
+06/09/2022,Celtic,Real Madrid,0,3,A
+06/09/2022,RB Leipzig,Shakhtar Donetsk,1,4,A
+14/09/2022,Shakhtar Donetsk,Celtic,1,1,D
+14/09/2022,Real Madrid,RB Leipzig,2,0,H
+05/10/2022,RB Leipzig,Celtic,3,1,H
+05/10/2022,Real Madrid,Shakhtar Donetsk,2,1,H
+11/10/2022,Celtic,RB Leipzig,0,2,A
+11/10/2022,Shakhtar Donetsk,Real Madrid,1,1,D
+25/10/2022,Celtic,Shakhtar Donetsk,1,1,D
+25/10/2022,RB Leipzig,Real Madrid,3,2,H
+02/11/2022,Real Madrid,Celtic,5,1,H
+02/11/2022,Shakhtar Donetsk,RB Leipzig,0,4,A
+06/09/2022,Borussia Dortmund,København,3,0,H
+06/09/2022,Sevilla,Manchester City,0,4,A
+14/09/2022,Manchester City,Borussia Dortmund,2,1,H
+14/09/2022,København,Sevilla,0,0,D
+05/10/2022,Sevilla,Borussia Dortmund,1,4,A
+05/10/2022,Manchester City,København,5,0,H
+11/10/2022,København,Manchester City,0,0,D
+11/10/2022,Borussia Dortmund,Sevilla,1,1,D
+25/10/2022,Sevilla,København,3,0,H
+25/10/2022,Borussia Dortmund,Manchester City,0,0,D
+02/11/2022,København,Borussia Dortmund,1,1,D
+02/11/2022,Manchester City,Sevilla,3,1,H
+06/09/2022,Paris Saint-Germain,Juventus,2,1,H
+06/09/2022,SL Benfica,Maccabi Haifa,2,0,H
+14/09/2022,Juventus,SL Benfica,1,2,A
+14/09/2022,Maccabi Haifa,Paris Saint-Germain,1,3,A
+05/10/2022,Juventus,Maccabi Haifa,3,1,H
+05/10/2022,SL Benfica,Paris Saint-Germain,1,1,D
+11/10/2022,Maccabi Haifa,Juventus,2,0,H
+11/10/2022,Paris Saint-Germain,SL Benfica,1,1,D
+25/10/2022,SL Benfica,Juventus,4,3,H
+25/10/2022,Paris Saint-Germain,Maccabi Haifa,7,2,H
+02/11/2022,Juventus,Paris Saint-Germain,1,2,A
+02/11/2022,Maccabi Haifa,SL Benfica,1,6,A
+14/02/2023,Milan,Tottenham Hotspur,1,0,H
+14/02/2023,Paris Saint-Germain,Bayern München,0,1,A
+15/02/2023,Brugge,SL Benfica,0,2,A
+15/02/2023,Borussia Dortmund,Chelsea,1,0,H
+21/02/2023,Liverpool,Real Madrid,2,5,A
+21/02/2023,Eintracht Frankfurt,SSC Napoli,0,2,A
+22/02/2023,RB Leipzig,Manchester City,1,1,D
+22/02/2023,Inter,Porto,1,0,H
+07/03/2023,SL Benfica,Brugge,5,1,H
+07/03/2023,Chelsea,Borussia Dortmund,2,0,H
+08/03/2023,Bayern München,Paris Saint-Germain,2,0,H
+08/03/2023,Tottenham Hotspur,Milan,0,0,D
+14/03/2023,Manchester City,RB Leipzig,7,0,H
+14/03/2023,Porto,Inter,0,0,D
+15/03/2023,Real Madrid,Liverpool,1,0,H
+15/03/2023,SSC Napoli,Eintracht Frankfurt,3,0,H
+11/04/2023,SL Benfica,Inter,0,2,A
+11/04/2023,Manchester City,Bayern München,3,0,H
+12/04/2023,Real Madrid,Chelsea,2,0,H
+12/04/2023,Milan,SSC Napoli,1,0,H
+18/04/2023,Chelsea,Real Madrid,0,2,A
+18/04/2023,SSC Napoli,Milan,1,1,D
+19/04/2023,Inter,SL Benfica,3,3,D
+19/04/2023,Bayern München,Manchester City,1,1,D
+09/05/2023,Real Madrid,Manchester City,1,1,D
+10/05/2023,Milan,Inter,0,2,A
+16/05/2023,Inter,Milan,1,0,H
+17/05/2023,Manchester City,Real Madrid,4,0,H
+10/06/2023,Manchester City,Inter,1,0,H
+19/09/2023,Milan,Newcastle United,0,0,D
+19/09/2023,BSC Young Boys,RB Leipzig,1,3,A
+19/09/2023,Lazio Roma,Atlético Madrid,1,1,D
+19/09/2023,Feyenoord Rotterdam,Celtic,2,0,H
+19/09/2023,Paris Saint-Germain,Borussia Dortmund,2,0,H
+19/09/2023,Manchester City,Crvena Zvezda,3,1,H
+19/09/2023,Barcelona,Royal Antwerp,5,0,H
+19/09/2023,Shakhtar Donetsk,Porto,1,3,A
+20/09/2023,Real Madrid,1. Union Berlin,1,0,H
+20/09/2023,Galatasaray,København,2,2,D
+20/09/2023,Sevilla,Racing de Lens,1,1,D
+20/09/2023,Sporting de Braga,SSC Napoli,1,2,A
+20/09/2023,Real Sociedad de Fútbol,Inter,1,1,D
+20/09/2023,SL Benfica,RB Salzburg,0,2,A
+20/09/2023,Bayern München,Manchester United,4,3,H
+20/09/2023,Arsenal,PSV,4,0,H
+03/10/2023,1. Union Berlin,Sporting de Braga,2,3,A
+03/10/2023,RB Salzburg,Real Sociedad de Fútbol,0,2,A
+03/10/2023,SSC Napoli,Real Madrid,2,3,A
+03/10/2023,Inter,SL Benfica,1,0,H
+03/10/2023,København,Bayern München,1,2,A
+03/10/2023,Manchester United,Galatasaray,2,3,A
+03/10/2023,Racing de Lens,Arsenal,2,1,H
+03/10/2023,PSV,Sevilla,2,2,D
+04/10/2023,Atlético Madrid,Feyenoord Rotterdam,3,2,H
+04/10/2023,Royal Antwerp,Shakhtar Donetsk,2,3,A
+04/10/2023,Celtic,Lazio Roma,1,2,A
+04/10/2023,Borussia Dortmund,Milan,0,0,D
+04/10/2023,Newcastle United,Paris Saint-Germain,4,1,H
+04/10/2023,Crvena Zvezda,BSC Young Boys,2,2,D
+04/10/2023,RB Leipzig,Manchester City,1,3,A
+04/10/2023,Porto,Barcelona,0,1,A
+24/10/2023,Inter,RB Salzburg,2,1,H
+24/10/2023,Galatasaray,Bayern München,1,3,A
+24/10/2023,1. Union Berlin,SSC Napoli,0,1,A
+24/10/2023,Sporting de Braga,Real Madrid,1,2,A
+24/10/2023,SL Benfica,Real Sociedad de Fútbol,0,1,A
+24/10/2023,Manchester United,København,1,0,H
+24/10/2023,Sevilla,Arsenal,1,2,A
+24/10/2023,Racing de Lens,PSV,1,1,D
+25/10/2023,Feyenoord Rotterdam,Lazio Roma,3,1,H
+25/10/2023,Barcelona,Shakhtar Donetsk,2,1,H
+25/10/2023,Celtic,Atlético Madrid,2,2,D
+25/10/2023,Paris Saint-Germain,Milan,3,0,H
+25/10/2023,Newcastle United,Borussia Dortmund,0,1,A
+25/10/2023,BSC Young Boys,Manchester City,1,3,A
+25/10/2023,RB Leipzig,Crvena Zvezda,3,1,H
+25/10/2023,Royal Antwerp,Porto,1,4,A
+07/11/2023,Borussia Dortmund,Newcastle United,2,0,H
+07/11/2023,Shakhtar Donetsk,Barcelona,1,0,H
+07/11/2023,Atlético Madrid,Celtic,6,0,H
+07/11/2023,Lazio Roma,Feyenoord Rotterdam,1,0,H
+07/11/2023,Milan,Paris Saint-Germain,2,1,H
+07/11/2023,Manchester City,BSC Young Boys,3,0,H
+07/11/2023,Crvena Zvezda,RB Leipzig,1,2,A
+07/11/2023,Porto,Royal Antwerp,2,0,H
+08/11/2023,SSC Napoli,1. Union Berlin,1,1,D
+08/11/2023,Real Sociedad de Fútbol,SL Benfica,3,1,H
+08/11/2023,Real Madrid,Sporting de Braga,3,0,H
+08/11/2023,RB Salzburg,Inter,0,1,A
+08/11/2023,Bayern München,Galatasaray,2,1,H
+08/11/2023,København,Manchester United,4,3,H
+08/11/2023,Arsenal,Sevilla,2,0,H
+08/11/2023,PSV,Racing de Lens,1,0,H
+28/11/2023,Lazio Roma,Celtic,2,0,H
+28/11/2023,Shakhtar Donetsk,Royal Antwerp,1,0,H
+28/11/2023,Feyenoord Rotterdam,Atlético Madrid,1,3,A
+28/11/2023,Milan,Borussia Dortmund,1,3,A
+28/11/2023,Paris Saint-Germain,Newcastle United,1,1,D
+28/11/2023,BSC Young Boys,Crvena Zvezda,2,0,H
+28/11/2023,Manchester City,RB Leipzig,3,2,H
+28/11/2023,Barcelona,Porto,2,1,H
+29/11/2023,Galatasaray,Manchester United,3,3,D
+29/11/2023,Sevilla,PSV,2,3,A
+29/11/2023,Sporting de Braga,1. Union Berlin,1,1,D
+29/11/2023,Real Madrid,SSC Napoli,4,2,H
+29/11/2023,SL Benfica,Inter,3,3,D
+29/11/2023,Real Sociedad de Fútbol,RB Salzburg,0,0,D
+29/11/2023,Bayern München,København,0,0,D
+29/11/2023,Arsenal,Racing de Lens,6,0,H
+12/12/2023,PSV,Arsenal,1,1,D
+12/12/2023,Racing de Lens,Sevilla,2,1,H
+12/12/2023,1. Union Berlin,Real Madrid,2,3,A
+12/12/2023,SSC Napoli,Sporting de Braga,2,0,H
+12/12/2023,Inter,Real Sociedad de Fútbol,0,0,D
+12/12/2023,RB Salzburg,SL Benfica,1,3,A
+12/12/2023,Manchester United,Bayern München,0,1,A
+12/12/2023,København,Galatasaray,1,0,H
+13/12/2023,RB Leipzig,BSC Young Boys,2,1,H
+13/12/2023,Crvena Zvezda,Manchester City,2,3,A
+13/12/2023,Atlético Madrid,Lazio Roma,2,0,H
+13/12/2023,Celtic,Feyenoord Rotterdam,2,1,H
+13/12/2023,Newcastle United,Milan,1,2,A
+13/12/2023,Borussia Dortmund,Paris Saint-Germain,1,1,D
+13/12/2023,Royal Antwerp,Barcelona,3,2,H
+13/12/2023,Porto,Shakhtar Donetsk,5,3,H
+13/02/2024,København,Manchester City,1,3,A
+13/02/2024,RB Leipzig,Real Madrid,0,1,A
+14/02/2024,Paris Saint-Germain,Real Sociedad de Fútbol,2,0,H
+14/02/2024,Lazio Roma,Bayern München,1,0,H
+20/02/2024,Inter,Atlético Madrid,1,0,H
+20/02/2024,PSV,Borussia Dortmund,1,1,D
+21/02/2024,Porto,Arsenal,1,0,H
+21/02/2024,SSC Napoli,Barcelona,1,1,D
+05/03/2024,Real Sociedad de Fútbol,Paris Saint-Germain,1,2,A
+05/03/2024,Bayern München,Lazio Roma,3,0,H
+06/03/2024,Manchester City,København,3,1,H
+06/03/2024,Real Madrid,RB Leipzig,1,1,D
+12/03/2024,Arsenal,Porto,4,2,H
+12/03/2024,Barcelona,SSC Napoli,3,1,H
+13/03/2024,Atlético Madrid,Inter,3,2,H
+13/03/2024,Borussia Dortmund,PSV,2,0,H
+09/04/2024,Arsenal,Bayern München,2,2,D
+09/04/2024,Real Madrid,Manchester City,3,3,D
+10/04/2024,Atlético Madrid,Borussia Dortmund,2,1,H
+10/04/2024,Paris Saint-Germain,Barcelona,2,3,A
+16/04/2024,Borussia Dortmund,Atlético Madrid,4,2,H
+16/04/2024,Barcelona,Paris Saint-Germain,1,4,A
+17/04/2024,Bayern München,Arsenal,1,0,H
+17/04/2024,Manchester City,Real Madrid,3,4,A
+30/04/2024,Bayern München,Real Madrid,2,2,D
+01/05/2024,Borussia Dortmund,Paris Saint-Germain,1,0,H
+07/05/2024,Paris Saint-Germain,Borussia Dortmund,0,1,A
+08/05/2024,Real Madrid,Bayern München,2,1,H
+01/06/2024,Borussia Dortmund,Real Madrid,0,2,A
+17/09/2024,BSC Young Boys,Aston Villa,0,3,A
+17/09/2024,Juventus,PSV,3,1,H
+17/09/2024,Sporting CP,Lille OSC,2,0,H
+17/09/2024,Bayern München,Dinamo Zagreb,9,2,H
+17/09/2024,Real Madrid,VfB Stuttgart,3,1,H
+17/09/2024,Milan,Liverpool,1,3,A
+18/09/2024,Bologna,Shakhtar Donetsk,0,0,D
+18/09/2024,Sparta Praha,RB Salzburg,3,0,H
+18/09/2024,Manchester City,Inter,0,0,D
+18/09/2024,Paris Saint-Germain,Girona,1,0,H
+18/09/2024,Brugge,Borussia Dortmund,0,3,A
+18/09/2024,Celtic,ŠK Slovan Bratislava,5,1,H
+19/09/2024,Feyenoord Rotterdam,Bayer Leverkusen,0,4,A
+19/09/2024,Crvena Zvezda,SL Benfica,1,2,A
+19/09/2024,Monaco,Barcelona,2,1,H
+19/09/2024,Stade Brestois 29,Sturm Graz,2,1,H
+19/09/2024,Atalanta,Arsenal,0,0,D
+19/09/2024,Atlético Madrid,RB Leipzig,2,1,H
+01/10/2024,VfB Stuttgart,Sparta Praha,1,1,D
+01/10/2024,RB Salzburg,Stade Brestois 29,0,4,A
+01/10/2024,ŠK Slovan Bratislava,Manchester City,0,4,A
+01/10/2024,Borussia Dortmund,Celtic,7,1,H
+01/10/2024,Barcelona,BSC Young Boys,5,0,H
+01/10/2024,Inter,Crvena Zvezda,4,0,H
+01/10/2024,Bayer Leverkusen,Milan,1,0,H
+01/10/2024,Arsenal,Paris Saint-Germain,2,0,H
+01/10/2024,PSV,Sporting CP,1,1,D
+02/10/2024,Girona,Feyenoord Rotterdam,2,3,A
+02/10/2024,Shakhtar Donetsk,Atalanta,0,3,A
+02/10/2024,Aston Villa,Bayern München,1,0,H
+02/10/2024,Sturm Graz,Brugge,0,1,A
+02/10/2024,Liverpool,Bologna,2,0,H
+02/10/2024,RB Leipzig,Juventus,2,3,A
+02/10/2024,SL Benfica,Atlético Madrid,4,0,H
+02/10/2024,Dinamo Zagreb,Monaco,2,2,D
+02/10/2024,Lille OSC,Real Madrid,1,0,H
+22/10/2024,Monaco,Crvena Zvezda,5,1,H
+22/10/2024,Milan,Brugge,3,1,H
+22/10/2024,Aston Villa,Bologna,2,0,H
+22/10/2024,Girona,ŠK Slovan Bratislava,2,0,H
+22/10/2024,Sturm Graz,Sporting CP,0,2,A
+22/10/2024,Paris Saint-Germain,PSV,1,1,D
+22/10/2024,Real Madrid,Borussia Dortmund,5,2,H
+22/10/2024,Arsenal,Shakhtar Donetsk,1,0,H
+22/10/2024,Juventus,VfB Stuttgart,0,1,A
+23/10/2024,Stade Brestois 29,Bayer Leverkusen,1,1,D
+23/10/2024,Atalanta,Celtic,0,0,D
+23/10/2024,BSC Young Boys,Inter,0,1,A
+23/10/2024,Barcelona,Bayern München,4,1,H
+23/10/2024,Manchester City,Sparta Praha,5,0,H
+23/10/2024,RB Leipzig,Liverpool,0,1,A
+23/10/2024,Atlético Madrid,Lille OSC,1,3,A
+23/10/2024,SL Benfica,Feyenoord Rotterdam,1,3,A
+23/10/2024,RB Salzburg,Dinamo Zagreb,0,2,A
+05/11/2024,ŠK Slovan Bratislava,Dinamo Zagreb,1,4,A
+05/11/2024,PSV,Girona,4,0,H
+05/11/2024,Sporting CP,Manchester City,4,1,H
+05/11/2024,Bologna,Monaco,0,1,A
+05/11/2024,Borussia Dortmund,Sturm Graz,1,0,H
+05/11/2024,Liverpool,Bayer Leverkusen,4,0,H
+05/11/2024,Real Madrid,Milan,1,3,A
+05/11/2024,Celtic,RB Leipzig,3,1,H
+05/11/2024,Lille OSC,Juventus,1,1,D
+06/11/2024,Brugge,Aston Villa,1,0,H
+06/11/2024,Shakhtar Donetsk,BSC Young Boys,2,1,H
+06/11/2024,Sparta Praha,Stade Brestois 29,1,2,A
+06/11/2024,VfB Stuttgart,Atalanta,0,2,A
+06/11/2024,Inter,Arsenal,1,0,H
+06/11/2024,Paris Saint-Germain,Atlético Madrid,1,2,A
+06/11/2024,Feyenoord Rotterdam,RB Salzburg,1,3,A
+06/11/2024,Crvena Zvezda,Barcelona,2,5,A
+06/11/2024,Bayern München,SL Benfica,1,0,H
+26/11/2024,ŠK Slovan Bratislava,Milan,2,3,A
+26/11/2024,Sparta Praha,Atlético Madrid,0,6,A
+26/11/2024,Sporting CP,Arsenal,1,5,A
+26/11/2024,BSC Young Boys,Atalanta,1,6,A
+26/11/2024,Bayern München,Paris Saint-Germain,1,0,H
+26/11/2024,Barcelona,Stade Brestois 29,3,0,H
+26/11/2024,Inter,RB Leipzig,1,0,H
+26/11/2024,Manchester City,Feyenoord Rotterdam,3,3,D
+26/11/2024,Bayer Leverkusen,RB Salzburg,5,0,H
+27/11/2024,Sturm Graz,Girona,1,0,H
+27/11/2024,Crvena Zvezda,VfB Stuttgart,5,1,H
+27/11/2024,Monaco,SL Benfica,2,3,A
+27/11/2024,Aston Villa,Juventus,0,0,D
+27/11/2024,Bologna,Lille OSC,1,2,A
+27/11/2024,Liverpool,Real Madrid,2,0,H
+27/11/2024,Celtic,Brugge,1,1,D
+27/11/2024,Dinamo Zagreb,Borussia Dortmund,0,3,A
+27/11/2024,PSV,Shakhtar Donetsk,3,2,H
+10/12/2024,Girona,Liverpool,0,1,A
+10/12/2024,Dinamo Zagreb,Celtic,0,0,D
+10/12/2024,Stade Brestois 29,PSV,1,0,H
+10/12/2024,RB Leipzig,Aston Villa,2,3,A
+10/12/2024,Atalanta,Real Madrid,2,3,A
+10/12/2024,Bayer Leverkusen,Inter,1,0,H
+10/12/2024,Brugge,Sporting CP,2,1,H
+10/12/2024,Shakhtar Donetsk,Bayern München,1,5,A
+10/12/2024,RB Salzburg,Paris Saint-Germain,0,3,A
+11/12/2024,Atlético Madrid,ŠK Slovan Bratislava,3,1,H
+11/12/2024,Lille OSC,Sturm Graz,3,2,H
+11/12/2024,VfB Stuttgart,BSC Young Boys,5,1,H
+11/12/2024,Borussia Dortmund,Barcelona,2,3,A
+11/12/2024,Milan,Crvena Zvezda,2,1,H
+11/12/2024,SL Benfica,Bologna,0,0,D
+11/12/2024,Arsenal,Monaco,3,0,H
+11/12/2024,Juventus,Manchester City,2,0,H
+11/12/2024,Feyenoord Rotterdam,Sparta Praha,4,2,H
+21/01/2025,Monaco,Aston Villa,1,0,H
+21/01/2025,Atalanta,Sturm Graz,5,0,H
+21/01/2025,Bologna,Borussia Dortmund,2,1,H
+21/01/2025,ŠK Slovan Bratislava,VfB Stuttgart,1,3,A
+21/01/2025,Liverpool,Lille OSC,2,1,H
+21/01/2025,Atlético Madrid,Bayer Leverkusen,2,1,H
+21/01/2025,SL Benfica,Barcelona,4,5,A
+21/01/2025,Brugge,Juventus,0,0,D
+21/01/2025,Crvena Zvezda,PSV,2,3,A
+22/01/2025,RB Leipzig,Sporting CP,2,1,H
+22/01/2025,Shakhtar Donetsk,Stade Brestois 29,2,0,H
+22/01/2025,Sparta Praha,Inter,0,1,A
+22/01/2025,Paris Saint-Germain,Manchester City,4,2,H
+22/01/2025,Real Madrid,RB Salzburg,5,1,H
+22/01/2025,Milan,Girona,1,0,H
+22/01/2025,Arsenal,Dinamo Zagreb,3,0,H
+22/01/2025,Celtic,BSC Young Boys,1,0,H
+22/01/2025,Feyenoord Rotterdam,Bayern München,3,0,H
+29/01/2025,Sporting CP,Bologna,1,1,D
+29/01/2025,BSC Young Boys,Crvena Zvezda,0,1,A
+29/01/2025,Aston Villa,Celtic,4,2,H
+29/01/2025,Girona,Arsenal,1,2,A
+29/01/2025,Stade Brestois 29,Real Madrid,0,3,A
+29/01/2025,Sturm Graz,RB Leipzig,1,0,H
+29/01/2025,VfB Stuttgart,Paris Saint-Germain,1,4,A
+29/01/2025,Bayern München,ŠK Slovan Bratislava,3,1,H
+29/01/2025,Borussia Dortmund,Shakhtar Donetsk,3,1,H
+29/01/2025,Barcelona,Atalanta,2,2,D
+29/01/2025,Inter,Monaco,3,0,H
+29/01/2025,Manchester City,Brugge,3,1,H
+29/01/2025,Bayer Leverkusen,Sparta Praha,2,0,H
+29/01/2025,Juventus,SL Benfica,0,2,A
+29/01/2025,Dinamo Zagreb,Milan,2,1,H
+29/01/2025,Lille OSC,Feyenoord Rotterdam,6,1,H
+29/01/2025,PSV,Liverpool,3,2,H
+29/01/2025,RB Salzburg,Atlético Madrid,1,4,A
+11/02/2025,Stade Brestois 29,Paris Saint-Germain,0,3,A
+11/02/2025,Manchester City,Real Madrid,2,3,A
+11/02/2025,Juventus,PSV,2,1,H
+11/02/2025,Sporting CP,Borussia Dortmund,0,3,A
+12/02/2025,Brugge,Atalanta,2,1,H
+12/02/2025,Monaco,SL Benfica,0,1,A
+12/02/2025,Celtic,Bayern München,1,2,A
+12/02/2025,Feyenoord Rotterdam,Milan,1,0,H
+18/02/2025,Milan,Feyenoord Rotterdam,1,1,D
+18/02/2025,SL Benfica,Monaco,3,3,D
+18/02/2025,Bayern München,Celtic,1,1,D
+18/02/2025,Atalanta,Brugge,1,3,A
+19/02/2025,Borussia Dortmund,Sporting CP,0,0,D
+19/02/2025,Paris Saint-Germain,Stade Brestois 29,7,0,H
+19/02/2025,Real Madrid,Manchester City,3,1,H
+19/02/2025,PSV,Juventus,3,1,H
+04/03/2025,Brugge,Aston Villa,1,3,A
+04/03/2025,Real Madrid,Atlético Madrid,2,1,H
+04/03/2025,PSV,Arsenal,1,7,A
+04/03/2025,Borussia Dortmund,Lille OSC,1,1,D
+05/03/2025,Feyenoord Rotterdam,Inter,0,2,A
+05/03/2025,Paris Saint-Germain,Liverpool,0,1,A
+05/03/2025,Bayern München,Bayer Leverkusen,3,0,H
+05/03/2025,SL Benfica,Barcelona,0,1,A
+11/03/2025,Barcelona,SL Benfica,3,1,H
+11/03/2025,Liverpool,Paris Saint-Germain,1,4,A
+11/03/2025,Inter,Feyenoord Rotterdam,2,1,H
+11/03/2025,Bayer Leverkusen,Bayern München,0,2,A
+12/03/2025,Lille OSC,Borussia Dortmund,1,2,A
+12/03/2025,Aston Villa,Brugge,3,0,H
+12/03/2025,Atlético Madrid,Real Madrid,2,4,A
+12/03/2025,Arsenal,PSV,2,2,D
+08/04/2025,Arsenal,Real Madrid,3,0,H
+08/04/2025,Bayern München,Inter,1,2,A
+09/04/2025,Paris Saint-Germain,Aston Villa,3,1,H
+09/04/2025,Barcelona,Borussia Dortmund,4,0,H
+15/04/2025,Aston Villa,Paris Saint-Germain,3,2,H
+15/04/2025,Borussia Dortmund,Barcelona,3,1,H
+16/04/2025,Real Madrid,Arsenal,1,2,A
+16/04/2025,Inter,Bayern München,2,2,D
+29/04/2025,Arsenal,Paris Saint-Germain,0,1,A
+30/04/2025,Barcelona,Inter,3,3,D
+06/05/2025,Inter,Barcelona,4,3,H
+07/05/2025,Paris Saint-Germain,Arsenal,2,1,H
+31/05/2025,Paris Saint-Germain,Inter,5,0,H
+16/09/2025,Athletic,Arsenal,0,2,A
+16/09/2025,PSV,Royale Union Saint-Gilloise,1,3,A
+16/09/2025,Juventus,Borussia Dortmund,4,4,D
+16/09/2025,SL Benfica,Qarabağ Ağdam FK,2,3,A
+16/09/2025,Tottenham Hotspur,Villarreal,1,0,H
+16/09/2025,Real Madrid,Olympique Marseille,2,1,H
+17/09/2025,Slavia Praha,FK Bodø/Glimt,2,2,D
+17/09/2025,Olympiakos Piraeus,Paphos,0,0,D
+17/09/2025,AFC Ajax,Inter,0,2,A
+17/09/2025,Liverpool,Atlético Madrid,3,2,H
+17/09/2025,Paris Saint-Germain,Atalanta,4,0,H
+17/09/2025,Bayern München,Chelsea,3,1,H
+18/09/2025,København,Bayer Leverkusen,2,2,D
+18/09/2025,Brugge,Monaco,4,1,H
+18/09/2025,Newcastle United,Barcelona,1,2,A
+18/09/2025,Manchester City,SSC Napoli,2,0,H
+18/09/2025,Eintracht Frankfurt,Galatasaray,5,1,H
+18/09/2025,Sporting CP,FK Kairat,4,1,H
+30/09/2025,Atalanta,Brugge,2,1,H
+30/09/2025,FK Kairat,Real Madrid,0,5,A
+30/09/2025,Galatasaray,Liverpool,1,0,H
+30/09/2025,Atlético Madrid,Eintracht Frankfurt,5,1,H
+30/09/2025,Olympique Marseille,AFC Ajax,4,0,H
+30/09/2025,FK Bodø/Glimt,Tottenham Hotspur,2,2,D
+30/09/2025,Paphos,Bayern München,1,5,A
+30/09/2025,Chelsea,SL Benfica,1,0,H
+30/09/2025,Inter,Slavia Praha,3,0,H
+01/10/2025,Qarabağ Ağdam FK,København,2,0,H
+01/10/2025,Royale Union Saint-Gilloise,Newcastle United,0,4,A
+01/10/2025,Borussia Dortmund,Athletic,4,1,H
+01/10/2025,Barcelona,Paris Saint-Germain,1,2,A
+01/10/2025,Monaco,Manchester City,2,2,D
+01/10/2025,Bayer Leverkusen,PSV,1,1,D
+01/10/2025,Arsenal,Olympiakos Piraeus,2,0,H
+01/10/2025,Villarreal,Juventus,2,2,D
+01/10/2025,SSC Napoli,Sporting CP,2,1,H
+21/10/2025,Barcelona,Olympiakos Piraeus,6,1,H
+21/10/2025,FK Kairat,Paphos,0,0,D
+21/10/2025,Royale Union Saint-Gilloise,Inter,0,4,A
+21/10/2025,København,Borussia Dortmund,2,4,A
+21/10/2025,Bayer Leverkusen,Paris Saint-Germain,2,7,A
+21/10/2025,Villarreal,Manchester City,0,2,A
+21/10/2025,Arsenal,Atlético Madrid,4,0,H
+21/10/2025,Newcastle United,SL Benfica,3,0,H
+21/10/2025,PSV,SSC Napoli,6,2,H
+22/10/2025,Galatasaray,FK Bodø/Glimt,3,1,H
+22/10/2025,Athletic,Qarabağ Ağdam FK,3,1,H
+22/10/2025,Eintracht Frankfurt,Liverpool,1,5,A
+22/10/2025,Atalanta,Slavia Praha,0,0,D
+22/10/2025,Sporting CP,Olympique Marseille,2,1,H
+22/10/2025,Monaco,Tottenham Hotspur,0,0,D
+22/10/2025,Bayern München,Brugge,4,0,H
+22/10/2025,Chelsea,AFC Ajax,5,1,H
+22/10/2025,Real Madrid,Juventus,1,0,H
+04/11/2025,Slavia Praha,Arsenal,0,3,A
+04/11/2025,SSC Napoli,Eintracht Frankfurt,0,0,D
+04/11/2025,Juventus,Sporting CP,1,1,D
+04/11/2025,Atlético Madrid,Royale Union Saint-Gilloise,3,1,H
+04/11/2025,Tottenham Hotspur,København,4,0,H
+04/11/2025,FK Bodø/Glimt,Monaco,0,1,A
+04/11/2025,Olympiakos Piraeus,PSV,1,1,D
+04/11/2025,Paris Saint-Germain,Bayern München,1,2,A
+04/11/2025,Liverpool,Real Madrid,1,0,H
+05/11/2025,Paphos,Villarreal,1,0,H
+05/11/2025,Qarabağ Ağdam FK,Chelsea,2,2,D
+05/11/2025,Inter,FK Kairat,2,1,H
+05/11/2025,Manchester City,Borussia Dortmund,4,1,H
+05/11/2025,Brugge,Barcelona,3,3,D
+05/11/2025,SL Benfica,Bayer Leverkusen,0,1,A
+05/11/2025,Olympique Marseille,Atalanta,0,1,A
+05/11/2025,AFC Ajax,Galatasaray,0,3,A
+05/11/2025,Newcastle United,Athletic,2,0,H
+25/11/2025,AFC Ajax,SL Benfica,0,2,A
+25/11/2025,Galatasaray,Royale Union Saint-Gilloise,0,1,A
+25/11/2025,Borussia Dortmund,Villarreal,4,0,H
+25/11/2025,Manchester City,Bayer Leverkusen,0,2,A
+25/11/2025,FK Bodø/Glimt,Juventus,2,3,A
+25/11/2025,Olympique Marseille,Newcastle United,2,1,H
+25/11/2025,Slavia Praha,Athletic,0,0,D
+25/11/2025,SSC Napoli,Qarabağ Ağdam FK,2,0,H
+25/11/2025,Chelsea,Barcelona,3,0,H
+26/11/2025,Paphos,Monaco,2,2,D
+26/11/2025,København,FK Kairat,3,2,H
+26/11/2025,Liverpool,PSV,1,4,A
+26/11/2025,Paris Saint-Germain,Tottenham Hotspur,5,3,H
+26/11/2025,Eintracht Frankfurt,Atalanta,0,3,A
+26/11/2025,Sporting CP,Brugge,3,0,H
+26/11/2025,Arsenal,Bayern München,3,1,H
+26/11/2025,Olympiakos Piraeus,Real Madrid,3,4,A
+26/11/2025,Atlético Madrid,Inter,2,1,H
+09/12/2025,FK Kairat,Olympiakos Piraeus,0,1,A
+09/12/2025,Bayern München,Sporting CP,3,1,H
+09/12/2025,Barcelona,Eintracht Frankfurt,2,1,H
+09/12/2025,PSV,Atlético Madrid,2,3,A
+09/12/2025,Royale Union Saint-Gilloise,Olympique Marseille,2,3,A
+09/12/2025,Tottenham Hotspur,Slavia Praha,3,0,H
+09/12/2025,Monaco,Galatasaray,1,0,H
+09/12/2025,Atalanta,Chelsea,2,1,H
+09/12/2025,Inter,Liverpool,0,1,A
+10/12/2025,Villarreal,København,2,3,A
+10/12/2025,Qarabağ Ağdam FK,AFC Ajax,2,4,A
+10/12/2025,Borussia Dortmund,FK Bodø/Glimt,2,2,D
+10/12/2025,Athletic,Paris Saint-Germain,0,0,D
+10/12/2025,Bayer Leverkusen,Newcastle United,2,2,D
+10/12/2025,Brugge,Arsenal,0,3,A
+10/12/2025,SL Benfica,SSC Napoli,2,0,H
+10/12/2025,Juventus,Paphos,2,0,H
+10/12/2025,Real Madrid,Manchester City,1,2,A
+20/01/2026,FK Kairat,Brugge,1,4,A
+20/01/2026,FK Bodø/Glimt,Manchester City,3,1,H
+20/01/2026,Tottenham Hotspur,Borussia Dortmund,2,0,H
+20/01/2026,Sporting CP,Paris Saint-Germain,2,1,H
+20/01/2026,Olympiakos Piraeus,Bayer Leverkusen,2,0,H
+20/01/2026,Villarreal,AFC Ajax,1,2,A
+20/01/2026,København,SSC Napoli,1,1,D
+20/01/2026,Real Madrid,Monaco,6,1,H
+20/01/2026,Inter,Arsenal,1,3,A
+21/01/2026,Qarabağ Ağdam FK,Eintracht Frankfurt,3,2,H
+21/01/2026,Galatasaray,Atlético Madrid,1,1,D
+21/01/2026,Olympique Marseille,Liverpool,0,3,A
+21/01/2026,Slavia Praha,Barcelona,2,4,A
+21/01/2026,Atalanta,Athletic,2,3,A
+21/01/2026,Juventus,SL Benfica,2,0,H
+21/01/2026,Newcastle United,PSV,3,0,H
+21/01/2026,Bayern München,Royale Union Saint-Gilloise,2,0,H
+21/01/2026,Chelsea,Paphos,1,0,H
+28/01/2026,Liverpool,Qarabağ Ağdam FK,6,0,H
+28/01/2026,Barcelona,København,4,1,H
+28/01/2026,Manchester City,Galatasaray,2,0,H
+28/01/2026,Bayer Leverkusen,Villarreal,3,0,H
+28/01/2026,Arsenal,FK Kairat,3,2,H
+28/01/2026,Royale Union Saint-Gilloise,Atalanta,1,0,H
+28/01/2026,Brugge,Olympique Marseille,3,0,H
+28/01/2026,Eintracht Frankfurt,Tottenham Hotspur,0,2,A
+28/01/2026,Monaco,Juventus,0,0,D
+28/01/2026,Atlético Madrid,FK Bodø/Glimt,1,2,A
+28/01/2026,Athletic,Sporting CP,2,3,A
+28/01/2026,AFC Ajax,Olympiakos Piraeus,1,2,A
+28/01/2026,Paris Saint-Germain,Newcastle United,1,1,D
+28/01/2026,Paphos,Slavia Praha,4,1,H
+28/01/2026,PSV,Bayern München,1,2,A
+28/01/2026,SSC Napoli,Chelsea,2,3,A
+28/01/2026,SL Benfica,Real Madrid,4,2,H
+28/01/2026,Borussia Dortmund,Inter,0,2,A
+17/02/2026,Galatasaray,Juventus,5,2,H
+17/02/2026,SL Benfica,Real Madrid,0,1,A
+17/02/2026,Monaco,Paris Saint-Germain,2,3,A
+17/02/2026,Borussia Dortmund,Atalanta,2,0,H
+18/02/2026,Qarabağ Ağdam FK,Newcastle United,1,6,A
+18/02/2026,Brugge,Atlético Madrid,3,3,D
+18/02/2026,Olympiakos Piraeus,Bayer Leverkusen,0,2,A
+18/02/2026,FK Bodø/Glimt,Inter,3,1,H
+24/02/2026,Atlético Madrid,Brugge,4,1,H
+24/02/2026,Newcastle United,Qarabağ Ağdam FK,3,2,H
+24/02/2026,Bayer Leverkusen,Olympiakos Piraeus,0,0,D
+24/02/2026,Inter,FK Bodø/Glimt,1,2,A
+25/02/2026,Atalanta,Borussia Dortmund,4,1,H
+25/02/2026,Real Madrid,SL Benfica,2,1,H
+25/02/2026,Paris Saint-Germain,Monaco,2,2,D
+25/02/2026,Juventus,Galatasaray,3,2,H
+10/03/2026,Galatasaray,Liverpool,1,0,H
+10/03/2026,Atalanta,Bayern München,1,6,A
+10/03/2026,Newcastle United,Barcelona,1,1,D
+10/03/2026,Atlético Madrid,Tottenham Hotspur,5,2,H
+11/03/2026,Bayer Leverkusen,Arsenal,1,1,D
+11/03/2026,Paris Saint-Germain,Chelsea,5,2,H
+11/03/2026,Real Madrid,Manchester City,3,0,H
+11/03/2026,FK Bodø/Glimt,Sporting CP,3,0,H
+17/03/2026,Sporting CP,FK Bodø/Glimt,5,0,H
+17/03/2026,Chelsea,Paris Saint-Germain,0,3,A
+17/03/2026,Manchester City,Real Madrid,1,2,A
+17/03/2026,Arsenal,Bayer Leverkusen,2,0,H
+18/03/2026,Barcelona,Newcastle United,7,2,H
+18/03/2026,Liverpool,Galatasaray,4,0,H
+18/03/2026,Bayern München,Atalanta,4,1,H
+18/03/2026,Tottenham Hotspur,Atlético Madrid,3,2,H
+07/04/2026,Real Madrid,Bayern München,1,2,A
+07/04/2026,Sporting CP,Arsenal,0,1,A
+08/04/2026,Paris Saint-Germain,Liverpool,2,0,H
+08/04/2026,Barcelona,Atlético Madrid,0,2,A
+14/04/2026,Liverpool,Paris Saint-Germain,0,2,A
+14/04/2026,Atlético Madrid,Barcelona,1,2,A
+15/04/2026,Bayern München,Real Madrid,4,3,H
+15/04/2026,Arsenal,Sporting CP,0,0,D
+28/04/2026,Paris Saint-Germain,Bayern München,5,4,H
+29/04/2026,Atlético Madrid,Arsenal,1,1,D
+05/05/2026,Arsenal,Atlético Madrid,1,0,H
+06/05/2026,Bayern München,Paris Saint-Germain,1,1,D
+30/05/2026,Paris Saint-Germain,Arsenal,4,3,H
