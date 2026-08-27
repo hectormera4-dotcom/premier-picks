@@ -15,6 +15,12 @@
 <script src="https://us-assets.i.posthog.com/static/array.js"
         onload="posthog.init('phc_mRJNHufDfZEc8bxS3ZhjafXS2dGaxrLp4eiayWuoRvGD', {api_host: 'https://us.i.posthog.com', person_profiles: 'identified_only'})"></script>
 
+<!-- Sentry: captura errores reales de JavaScript que le pasan a un
+     usuario en su propio navegador, con el detalle tecnico completo,
+     aunque nosotros nunca lo veamos pasar. Loader Script oficial (el DSN
+     va incluido en la URL del script, no hace falta pegarlo aparte). -->
+<script src="https://js.sentry-cdn.com/e07b35debd8597f0c4c7df92a6411f03.min.js" crossorigin="anonymous"></script>
+
 <!-- PWA: hace que la web se pueda "instalar" como app en el celular -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#16221A">
