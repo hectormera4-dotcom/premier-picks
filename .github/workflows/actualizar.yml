@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   actualizar-picks:
@@ -49,3 +50,53 @@ jobs:
           # tanto -- esto evita el error "rejected (fetch first)".
           git pull --rebase --autostash origin main
           git push
+
+      - name: Avisar si el pipeline fallo (crea o actualiza un Issue)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const label = "pipeline-fallido";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { data: abiertos } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: "open", labels: label,
+            });
+            if (abiertos.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: abiertos[0].number,
+                body: `El pipeline volvio a fallar. Log completo: ${runUrl}`,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: "⚠️ El pipeline diario de picks fallo",
+                body: `La corrida automatica de "Actualizar picks diariamente" fallo.\n\n` +
+                      `Log completo: ${runUrl}\n\n` +
+                      `Este Issue se cierra solo automaticamente en cuanto una corrida futura sea exitosa.`,
+                labels: [label],
+              });
+            }
+
+      - name: Cerrar el aviso de fallo si esta corrida SI funciono
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const label = "pipeline-fallido";
+            const { data: abiertos } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: "open", labels: label,
+            });
+            for (const issue of abiertos) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: issue.number,
+                body: "La siguiente corrida del pipeline fue exitosa -- cerrando este aviso automaticamente.",
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: issue.number, state: "closed",
+              });
+            }
