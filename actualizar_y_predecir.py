@@ -179,6 +179,45 @@ LIGAS = {
             "VfB Stuttgart": "Stuttgart",
         },
     },
+    "championship": {
+        "nombre_mostrar": "Championship",
+        "codigo_api": "ELC",
+        "codigo_footballdata": "E1",
+        "archivo_historico": "championship_combinado.csv",
+        # Bolton y Lincoln ascendieron de League One (sin historial en
+        # Championship). West Ham y Wolves descendieron de Premier League
+        # -- llevan 4+ temporadas fuera del Championship, sin historial
+        # reciente en esta categoria (aunque sean equipos fuertes, el
+        # fallback conservador los va a subestimar al principio de
+        # temporada, hasta que jueguen suficientes partidos reales aqui).
+        "equipos_sin_historial": ["Bolton", "Lincoln", "West Ham", "Wolves"],
+        "mapeo_nombres": {
+            "Birmingham City FC": "Birmingham",
+            "Blackburn Rovers FC": "Blackburn",
+            "Bolton Wanderers FC": "Bolton",
+            "Bristol City FC": "Bristol City",
+            "Burnley FC": "Burnley",
+            "Cardiff City FC": "Cardiff",
+            "Charlton Athletic FC": "Charlton",
+            "Derby County FC": "Derby",
+            "Lincoln City FC": "Lincoln",
+            "Middlesbrough FC": "Middlesbrough",
+            "Millwall FC": "Millwall",
+            "Norwich City FC": "Norwich",
+            "Portsmouth FC": "Portsmouth",
+            "Preston North End FC": "Preston",
+            "Queens Park Rangers FC": "QPR",
+            "Sheffield United FC": "Sheffield United",
+            "Southampton FC": "Southampton",
+            "Stoke City FC": "Stoke",
+            "Swansea City AFC": "Swansea",
+            "Watford FC": "Watford",
+            "West Bromwich Albion FC": "West Brom",
+            "West Ham United FC": "West Ham",
+            "Wolverhampton Wanderers FC": "Wolves",
+            "Wrexham AFC": "Wrexham",
+        },
+    },
     "champions_league": {
         "nombre_mostrar": "Champions League",
         "codigo_api": "CL",
@@ -198,7 +237,7 @@ LIGAS = {
     },
 }
 
-LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1", "bundesliga"]  # cuales corren en cada ejecucion
+LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1", "bundesliga", "championship"]  # cuales corren en cada ejecucion
 
 # Estas variables se reasignan al inicio de cada liga (ver correr_pipeline_liga
 # al final del archivo) -- el resto de las funciones las usan sin saber que
