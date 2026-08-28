@@ -2,46 +2,46 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 05/08/2022,Ein Frankfurt,Bayern Munich,1,6,A,5.0,6.0,2.0,0.0,2.0,10.0
 06/08/2022,Augsburg,Freiburg,0,4,A,5.0,8.0,0.0,0.0,2.0,7.0
 06/08/2022,Bochum,Mainz,1,2,A,3.0,5.0,2.0,3.0,3.0,6.0
+06/08/2022,Dortmund,Leverkusen,1,0,H,3.0,3.0,2.0,4.0,4.0,3.0
 06/08/2022,M'gladbach,Hoffenheim,3,1,H,4.0,2.0,1.0,4.0,8.0,1.0
 06/08/2022,Union Berlin,Hertha,3,1,H,5.0,4.0,2.0,3.0,8.0,3.0
 06/08/2022,Wolfsburg,Werder Bremen,2,2,D,2.0,5.0,2.0,2.0,3.0,5.0
-06/08/2022,Dortmund,Leverkusen,1,0,H,3.0,3.0,2.0,4.0,4.0,3.0
-07/08/2022,Stuttgart,RB Leipzig,1,1,D,1.0,9.0,2.0,1.0,2.0,9.0
 07/08/2022,FC Koln,Schalke 04,3,1,H,9.0,1.0,0.0,1.0,10.0,2.0
+07/08/2022,Stuttgart,RB Leipzig,1,1,D,1.0,9.0,2.0,1.0,2.0,9.0
 12/08/2022,Freiburg,Dortmund,1,3,A,9.0,2.0,1.0,3.0,7.0,7.0
 13/08/2022,Hertha,Ein Frankfurt,1,1,D,4.0,5.0,3.0,1.0,5.0,1.0
 13/08/2022,Hoffenheim,Bochum,3,2,H,8.0,2.0,1.0,1.0,13.0,5.0
 13/08/2022,Leverkusen,Augsburg,1,2,A,7.0,3.0,1.0,6.0,10.0,4.0
 13/08/2022,RB Leipzig,FC Koln,2,2,D,2.0,7.0,1.0,4.0,5.0,3.0
-13/08/2022,Werder Bremen,Stuttgart,2,2,D,2.0,5.0,4.0,2.0,3.0,7.0
 13/08/2022,Schalke 04,M'gladbach,2,2,D,2.0,7.0,4.0,2.0,5.0,9.0
-14/08/2022,Mainz,Union Berlin,0,0,D,4.0,4.0,1.0,0.0,5.0,2.0
+13/08/2022,Werder Bremen,Stuttgart,2,2,D,2.0,5.0,4.0,2.0,3.0,7.0
 14/08/2022,Bayern Munich,Wolfsburg,2,0,H,8.0,4.0,2.0,1.0,8.0,1.0
+14/08/2022,Mainz,Union Berlin,0,0,D,4.0,4.0,1.0,0.0,5.0,2.0
 19/08/2022,M'gladbach,Hertha,1,0,H,5.0,5.0,1.0,2.0,6.0,5.0
 20/08/2022,Augsburg,Mainz,1,2,A,3.0,3.0,2.0,2.0,2.0,7.0
 20/08/2022,Dortmund,Werder Bremen,2,3,A,3.0,5.0,4.0,1.0,3.0,7.0
 20/08/2022,Leverkusen,Hoffenheim,0,3,A,3.0,1.0,1.0,4.0,3.0,5.0
 20/08/2022,Stuttgart,Freiburg,0,1,A,3.0,1.0,4.0,2.0,5.0,3.0
-20/08/2022,Wolfsburg,Schalke 04,0,0,D,12.0,4.0,1.0,3.0,6.0,2.0
 20/08/2022,Union Berlin,RB Leipzig,2,1,H,1.0,13.0,2.0,1.0,4.0,2.0
-21/08/2022,Ein Frankfurt,FC Koln,1,1,D,5.0,9.0,0.0,1.0,3.0,2.0
+20/08/2022,Wolfsburg,Schalke 04,0,0,D,12.0,4.0,1.0,3.0,6.0,2.0
 21/08/2022,Bochum,Bayern Munich,0,7,A,5.0,5.0,1.0,0.0,7.0,12.0
+21/08/2022,Ein Frankfurt,FC Koln,1,1,D,5.0,9.0,0.0,1.0,3.0,2.0
 26/08/2022,Freiburg,Bochum,1,0,H,2.0,5.0,2.0,2.0,12.0,5.0
+27/08/2022,Bayern Munich,M'gladbach,1,1,D,14.0,1.0,4.0,2.0,20.0,3.0
 27/08/2022,Hertha,Dortmund,0,1,A,6.0,10.0,1.0,0.0,3.0,7.0
 27/08/2022,Hoffenheim,Augsburg,1,0,H,4.0,6.0,1.0,1.0,6.0,1.0
 27/08/2022,Mainz,Leverkusen,0,3,A,3.0,4.0,1.0,6.0,3.0,5.0
 27/08/2022,RB Leipzig,Wolfsburg,2,0,H,8.0,4.0,3.0,3.0,7.0,4.0
 27/08/2022,Schalke 04,Union Berlin,1,6,A,8.0,2.0,1.0,0.0,4.0,7.0
-27/08/2022,Bayern Munich,M'gladbach,1,1,D,14.0,1.0,4.0,2.0,20.0,3.0
 28/08/2022,FC Koln,Stuttgart,0,0,D,6.0,8.0,2.0,2.0,2.0,5.0
 28/08/2022,Werder Bremen,Ein Frankfurt,3,4,A,5.0,7.0,1.0,3.0,4.0,7.0
 02/09/2022,Dortmund,Hoffenheim,1,0,H,5.0,8.0,3.0,4.0,5.0,2.0
 03/09/2022,Bochum,Werder Bremen,0,2,A,7.0,3.0,2.0,2.0,6.0,6.0
+03/09/2022,Ein Frankfurt,RB Leipzig,4,0,H,4.0,3.0,1.0,1.0,9.0,0.0
 03/09/2022,Leverkusen,Freiburg,2,3,A,8.0,4.0,2.0,2.0,6.0,3.0
 03/09/2022,Stuttgart,Schalke 04,1,1,D,5.0,7.0,4.0,2.0,3.0,4.0
 03/09/2022,Union Berlin,Bayern Munich,1,1,D,5.0,7.0,1.0,2.0,3.0,6.0
 03/09/2022,Wolfsburg,FC Koln,2,4,A,5.0,4.0,2.0,1.0,3.0,5.0
-03/09/2022,Ein Frankfurt,RB Leipzig,4,0,H,4.0,3.0,1.0,1.0,9.0,0.0
 04/09/2022,Augsburg,Hertha,0,2,A,5.0,1.0,2.0,1.0,2.0,6.0
 04/09/2022,M'gladbach,Mainz,0,1,A,4.0,8.0,1.0,4.0,3.0,5.0
 09/09/2022,Werder Bremen,Augsburg,0,1,A,3.0,7.0,4.0,5.0,6.0,5.0
@@ -57,38 +57,38 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 17/09/2022,Augsburg,Bayern Munich,1,0,H,2.0,8.0,3.0,1.0,4.0,7.0
 17/09/2022,Dortmund,Schalke 04,1,0,H,11.0,2.0,3.0,2.0,7.0,0.0
 17/09/2022,Leverkusen,Werder Bremen,1,1,D,9.0,6.0,2.0,3.0,7.0,7.0
-17/09/2022,Stuttgart,Ein Frankfurt,1,3,A,7.0,4.0,2.0,0.0,2.0,8.0
 17/09/2022,M'gladbach,RB Leipzig,3,0,H,8.0,3.0,2.0,2.0,10.0,6.0
-18/09/2022,Union Berlin,Wolfsburg,2,0,H,4.0,1.0,0.0,0.0,4.0,0.0
+17/09/2022,Stuttgart,Ein Frankfurt,1,3,A,7.0,4.0,2.0,0.0,2.0,8.0
 18/09/2022,Bochum,FC Koln,1,1,D,4.0,8.0,0.0,1.0,0.0,3.0
 18/09/2022,Hoffenheim,Freiburg,0,0,D,5.0,3.0,1.0,2.0,3.0,4.0
+18/09/2022,Union Berlin,Wolfsburg,2,0,H,4.0,1.0,0.0,0.0,4.0,0.0
 30/09/2022,Bayern Munich,Leverkusen,4,0,H,6.0,2.0,0.0,0.0,10.0,5.0
 01/10/2022,Ein Frankfurt,Union Berlin,2,0,H,4.0,7.0,3.0,4.0,4.0,5.0
 01/10/2022,FC Koln,Dortmund,3,2,H,7.0,11.0,4.0,3.0,16.0,13.0
 01/10/2022,Freiburg,Mainz,2,1,H,5.0,5.0,2.0,4.0,6.0,7.0
 01/10/2022,RB Leipzig,Bochum,4,0,H,7.0,2.0,0.0,2.0,9.0,1.0
-01/10/2022,Wolfsburg,Stuttgart,3,2,H,8.0,5.0,3.0,5.0,7.0,7.0
 01/10/2022,Werder Bremen,M'gladbach,5,1,H,4.0,5.0,0.0,1.0,9.0,9.0
+01/10/2022,Wolfsburg,Stuttgart,3,2,H,8.0,5.0,3.0,5.0,7.0,7.0
 02/10/2022,Hertha,Hoffenheim,1,1,D,2.0,6.0,2.0,1.0,5.0,4.0
 02/10/2022,Schalke 04,Augsburg,2,3,A,8.0,4.0,2.0,6.0,5.0,5.0
 07/10/2022,Hoffenheim,Werder Bremen,1,2,A,3.0,3.0,3.0,3.0,6.0,3.0
 08/10/2022,Augsburg,Wolfsburg,1,1,D,11.0,5.0,5.0,3.0,5.0,7.0
 08/10/2022,Bochum,Ein Frankfurt,3,0,H,9.0,4.0,2.0,1.0,6.0,2.0
+08/10/2022,Dortmund,Bayern Munich,2,2,D,7.0,4.0,3.0,6.0,6.0,3.0
 08/10/2022,Leverkusen,Schalke 04,4,0,H,3.0,3.0,1.0,1.0,7.0,1.0
 08/10/2022,Mainz,RB Leipzig,1,1,D,4.0,2.0,1.0,1.0,3.0,3.0
-08/10/2022,Dortmund,Bayern Munich,2,2,D,7.0,4.0,3.0,6.0,6.0,3.0
-09/10/2022,M'gladbach,FC Koln,5,2,H,7.0,4.0,2.0,3.0,6.0,3.0
 09/10/2022,Hertha,Freiburg,2,2,D,4.0,2.0,2.0,1.0,3.0,4.0
+09/10/2022,M'gladbach,FC Koln,5,2,H,7.0,4.0,2.0,3.0,6.0,3.0
 09/10/2022,Stuttgart,Union Berlin,0,1,A,2.0,5.0,3.0,3.0,3.0,4.0
 14/10/2022,Schalke 04,Hoffenheim,0,3,A,4.0,5.0,2.0,2.0,2.0,7.0
 15/10/2022,Ein Frankfurt,Leverkusen,5,1,H,7.0,1.0,0.0,4.0,11.0,2.0
+15/10/2022,RB Leipzig,Hertha,3,2,H,8.0,4.0,2.0,3.0,5.0,5.0
 15/10/2022,Stuttgart,Bochum,4,1,H,3.0,3.0,0.0,3.0,7.0,4.0
 15/10/2022,Werder Bremen,Mainz,0,2,A,3.0,3.0,1.0,2.0,4.0,5.0
 15/10/2022,Wolfsburg,M'gladbach,2,2,D,7.0,6.0,3.0,3.0,4.0,5.0
-15/10/2022,RB Leipzig,Hertha,3,2,H,8.0,4.0,2.0,3.0,5.0,5.0
+16/10/2022,Bayern Munich,Freiburg,5,0,H,5.0,5.0,0.0,2.0,8.0,0.0
 16/10/2022,FC Koln,Augsburg,3,2,H,5.0,3.0,2.0,4.0,6.0,3.0
 16/10/2022,Union Berlin,Dortmund,2,0,H,5.0,8.0,1.0,2.0,5.0,6.0
-16/10/2022,Bayern Munich,Freiburg,5,0,H,5.0,5.0,0.0,2.0,8.0,0.0
 21/10/2022,Mainz,FC Koln,5,0,H,5.0,4.0,1.0,5.0,7.0,2.0
 22/10/2022,Augsburg,RB Leipzig,3,3,D,3.0,6.0,7.0,1.0,3.0,8.0
 22/10/2022,Dortmund,Stuttgart,5,0,H,9.0,2.0,1.0,0.0,10.0,1.0
@@ -100,13 +100,13 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 23/10/2022,Hertha,Schalke 04,2,1,H,5.0,6.0,5.0,1.0,4.0,2.0
 28/10/2022,Werder Bremen,Hertha,1,0,H,4.0,5.0,2.0,3.0,4.0,1.0
 29/10/2022,Bayern Munich,Mainz,6,2,H,8.0,5.0,1.0,1.0,12.0,5.0
+29/10/2022,Ein Frankfurt,Dortmund,1,2,A,4.0,3.0,5.0,5.0,8.0,2.0
 29/10/2022,RB Leipzig,Leverkusen,2,0,H,3.0,3.0,3.0,3.0,6.0,1.0
 29/10/2022,Stuttgart,Augsburg,2,1,H,10.0,3.0,1.0,2.0,8.0,6.0
 29/10/2022,Wolfsburg,Bochum,4,0,H,7.0,2.0,1.0,1.0,7.0,3.0
-29/10/2022,Ein Frankfurt,Dortmund,1,2,A,4.0,3.0,5.0,5.0,8.0,2.0
-30/10/2022,Union Berlin,M'gladbach,2,1,H,6.0,5.0,3.0,2.0,5.0,3.0
-30/10/2022,Schalke 04,Freiburg,0,2,A,4.0,8.0,3.0,2.0,3.0,9.0
 30/10/2022,FC Koln,Hoffenheim,1,1,D,5.0,4.0,1.0,2.0,3.0,4.0
+30/10/2022,Schalke 04,Freiburg,0,2,A,4.0,8.0,3.0,2.0,3.0,9.0
+30/10/2022,Union Berlin,M'gladbach,2,1,H,6.0,5.0,3.0,2.0,5.0,3.0
 04/11/2022,M'gladbach,Stuttgart,3,1,H,3.0,5.0,2.0,1.0,6.0,4.0
 05/11/2022,Augsburg,Ein Frankfurt,1,2,A,3.0,6.0,0.0,1.0,5.0,7.0
 05/11/2022,Dortmund,Bochum,3,0,H,2.0,5.0,1.0,1.0,3.0,1.0
@@ -114,14 +114,14 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 05/11/2022,Hoffenheim,RB Leipzig,1,3,A,6.0,3.0,4.0,2.0,3.0,8.0
 05/11/2022,Mainz,Wolfsburg,0,3,A,9.0,4.0,1.0,1.0,3.0,3.0
 05/11/2022,Werder Bremen,Schalke 04,2,1,H,3.0,3.0,3.0,2.0,5.0,3.0
-06/11/2022,Leverkusen,Union Berlin,5,0,H,1.0,5.0,1.0,4.0,8.0,1.0
 06/11/2022,Freiburg,FC Koln,2,0,H,5.0,3.0,0.0,1.0,5.0,2.0
-08/11/2022,Wolfsburg,Dortmund,2,0,H,6.0,9.0,4.0,2.0,8.0,6.0
+06/11/2022,Leverkusen,Union Berlin,5,0,H,1.0,5.0,1.0,4.0,8.0,1.0
 08/11/2022,Bayern Munich,Werder Bremen,6,1,H,8.0,4.0,0.0,0.0,10.0,1.0
 08/11/2022,Bochum,M'gladbach,2,1,H,6.0,3.0,1.0,3.0,4.0,2.0
 08/11/2022,Stuttgart,Hertha,2,1,H,8.0,5.0,3.0,2.0,7.0,4.0
-09/11/2022,FC Koln,Leverkusen,1,2,A,6.0,1.0,1.0,2.0,7.0,3.0
+08/11/2022,Wolfsburg,Dortmund,2,0,H,6.0,9.0,4.0,2.0,8.0,6.0
 09/11/2022,Ein Frankfurt,Hoffenheim,4,2,H,4.0,5.0,0.0,3.0,8.0,3.0
+09/11/2022,FC Koln,Leverkusen,1,2,A,6.0,1.0,1.0,2.0,7.0,3.0
 09/11/2022,RB Leipzig,Freiburg,3,1,H,6.0,2.0,1.0,4.0,8.0,2.0
 09/11/2022,Schalke 04,Mainz,1,0,H,1.0,6.0,3.0,1.0,4.0,1.0
 09/11/2022,Union Berlin,Augsburg,2,2,D,6.0,3.0,1.0,4.0,6.0,2.0
@@ -130,44 +130,44 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 12/11/2022,Hertha,FC Koln,2,0,H,10.0,5.0,3.0,1.0,8.0,2.0
 12/11/2022,Hoffenheim,Wolfsburg,1,2,A,7.0,1.0,0.0,3.0,8.0,3.0
 12/11/2022,Leverkusen,Stuttgart,2,0,H,4.0,2.0,2.0,3.0,3.0,1.0
-12/11/2022,Werder Bremen,RB Leipzig,1,2,A,0.0,4.0,1.0,2.0,5.0,3.0
 12/11/2022,Schalke 04,Bayern Munich,0,2,A,4.0,5.0,0.0,0.0,2.0,6.0
-13/11/2022,Mainz,Ein Frankfurt,1,1,D,5.0,2.0,2.0,2.0,6.0,3.0
+12/11/2022,Werder Bremen,RB Leipzig,1,2,A,0.0,4.0,1.0,2.0,5.0,3.0
 13/11/2022,Freiburg,Union Berlin,4,1,H,2.0,1.0,0.0,1.0,5.0,2.0
+13/11/2022,Mainz,Ein Frankfurt,1,1,D,5.0,2.0,2.0,2.0,6.0,3.0
 20/01/2023,RB Leipzig,Bayern Munich,1,1,D,3.0,2.0,2.0,3.0,3.0,2.0
 21/01/2023,Bochum,Hertha,3,1,H,1.0,6.0,1.0,1.0,3.0,2.0
 21/01/2023,Ein Frankfurt,Schalke 04,3,0,H,5.0,4.0,2.0,3.0,3.0,4.0
+21/01/2023,FC Koln,Werder Bremen,7,1,H,2.0,2.0,0.0,0.0,7.0,2.0
 21/01/2023,Stuttgart,Mainz,1,1,D,3.0,5.0,1.0,3.0,4.0,2.0
 21/01/2023,Union Berlin,Hoffenheim,3,1,H,9.0,4.0,2.0,1.0,5.0,5.0
 21/01/2023,Wolfsburg,Freiburg,6,0,H,0.0,5.0,1.0,2.0,11.0,1.0
-21/01/2023,FC Koln,Werder Bremen,7,1,H,2.0,2.0,0.0,0.0,7.0,2.0
 22/01/2023,Dortmund,Augsburg,4,3,H,7.0,3.0,1.0,4.0,10.0,4.0
 22/01/2023,M'gladbach,Leverkusen,2,3,A,2.0,3.0,3.0,2.0,8.0,5.0
-24/01/2023,Schalke 04,RB Leipzig,1,6,A,1.0,6.0,1.0,1.0,1.0,14.0
 24/01/2023,Bayern Munich,FC Koln,1,1,D,9.0,4.0,0.0,1.0,7.0,1.0
 24/01/2023,Hertha,Wolfsburg,0,5,A,6.0,4.0,2.0,0.0,2.0,7.0
 24/01/2023,Hoffenheim,Stuttgart,2,2,D,6.0,4.0,1.0,3.0,5.0,4.0
-25/01/2023,Mainz,Dortmund,1,2,A,2.0,3.0,2.0,0.0,4.0,6.0
+24/01/2023,Schalke 04,RB Leipzig,1,6,A,1.0,6.0,1.0,1.0,1.0,14.0
 25/01/2023,Augsburg,M'gladbach,1,0,H,3.0,2.0,1.0,2.0,4.0,2.0
 25/01/2023,Freiburg,Ein Frankfurt,1,1,D,4.0,3.0,3.0,3.0,5.0,2.0
 25/01/2023,Leverkusen,Bochum,2,0,H,3.0,4.0,2.0,4.0,4.0,2.0
+25/01/2023,Mainz,Dortmund,1,2,A,2.0,3.0,2.0,0.0,4.0,6.0
 25/01/2023,Werder Bremen,Union Berlin,1,2,A,5.0,7.0,0.0,0.0,3.0,5.0
 27/01/2023,RB Leipzig,Stuttgart,2,1,H,3.0,6.0,0.0,0.0,4.0,3.0
+28/01/2023,Bayern Munich,Ein Frankfurt,1,1,D,7.0,6.0,3.0,1.0,6.0,1.0
 28/01/2023,Freiburg,Augsburg,3,1,H,3.0,7.0,3.0,3.0,9.0,4.0
 28/01/2023,Hertha,Union Berlin,0,2,A,3.0,2.0,1.0,2.0,3.0,3.0
 28/01/2023,Hoffenheim,M'gladbach,1,4,A,4.0,3.0,2.0,1.0,5.0,5.0
 28/01/2023,Mainz,Bochum,5,2,H,3.0,2.0,0.0,1.0,7.0,4.0
 28/01/2023,Werder Bremen,Wolfsburg,2,1,H,2.0,6.0,3.0,3.0,5.0,3.0
-28/01/2023,Bayern Munich,Ein Frankfurt,1,1,D,7.0,6.0,3.0,1.0,6.0,1.0
-29/01/2023,Schalke 04,FC Koln,0,0,D,7.0,7.0,3.0,4.0,2.0,0.0
 29/01/2023,Leverkusen,Dortmund,0,2,A,8.0,4.0,2.0,4.0,7.0,2.0
+29/01/2023,Schalke 04,FC Koln,0,0,D,7.0,7.0,3.0,4.0,2.0,0.0
 03/02/2023,Augsburg,Leverkusen,1,0,H,2.0,1.0,3.0,2.0,5.0,4.0
 04/02/2023,Bochum,Hoffenheim,5,2,H,6.0,6.0,2.0,3.0,11.0,4.0
 04/02/2023,Dortmund,Freiburg,5,1,H,14.0,0.0,3.0,4.0,8.0,3.0
 04/02/2023,Ein Frankfurt,Hertha,3,0,H,7.0,1.0,1.0,2.0,4.0,3.0
 04/02/2023,FC Koln,RB Leipzig,0,0,D,5.0,1.0,3.0,4.0,0.0,2.0
-04/02/2023,Union Berlin,Mainz,2,1,H,5.0,5.0,1.0,1.0,5.0,2.0
 04/02/2023,M'gladbach,Schalke 04,0,0,D,9.0,5.0,2.0,3.0,4.0,5.0
+04/02/2023,Union Berlin,Mainz,2,1,H,5.0,5.0,1.0,1.0,5.0,2.0
 05/02/2023,Stuttgart,Werder Bremen,0,2,A,8.0,4.0,2.0,5.0,5.0,4.0
 05/02/2023,Wolfsburg,Bayern Munich,2,4,A,7.0,4.0,2.0,6.0,5.0,4.0
 10/02/2023,Schalke 04,Wolfsburg,0,0,D,9.0,3.0,1.0,4.0,5.0,2.0
@@ -175,35 +175,35 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 11/02/2023,Freiburg,Stuttgart,2,1,H,4.0,3.0,3.0,3.0,5.0,3.0
 11/02/2023,Hoffenheim,Leverkusen,1,3,A,5.0,8.0,3.0,1.0,6.0,5.0
 11/02/2023,Mainz,Augsburg,3,1,H,4.0,12.0,1.0,1.0,7.0,3.0
-11/02/2023,Werder Bremen,Dortmund,0,2,A,3.0,7.0,1.0,0.0,3.0,9.0
 11/02/2023,RB Leipzig,Union Berlin,1,2,A,3.0,4.0,4.0,4.0,1.0,5.0
-12/02/2023,Hertha,M'gladbach,4,1,H,4.0,6.0,1.0,1.0,7.0,3.0
+11/02/2023,Werder Bremen,Dortmund,0,2,A,3.0,7.0,1.0,0.0,3.0,9.0
 12/02/2023,FC Koln,Ein Frankfurt,3,0,H,3.0,9.0,3.0,2.0,4.0,1.0
+12/02/2023,Hertha,M'gladbach,4,1,H,4.0,6.0,1.0,1.0,7.0,3.0
 17/02/2023,Augsburg,Hoffenheim,1,0,H,6.0,1.0,3.0,3.0,3.0,2.0
 18/02/2023,Bochum,Freiburg,0,2,A,5.0,5.0,4.0,2.0,6.0,5.0
+18/02/2023,Ein Frankfurt,Werder Bremen,2,0,H,5.0,2.0,1.0,1.0,6.0,0.0
 18/02/2023,M'gladbach,Bayern Munich,3,2,H,4.0,0.0,0.0,1.0,7.0,4.0
 18/02/2023,Stuttgart,FC Koln,3,0,H,3.0,6.0,3.0,4.0,7.0,4.0
 18/02/2023,Wolfsburg,RB Leipzig,0,3,A,2.0,5.0,1.0,1.0,2.0,5.0
-18/02/2023,Ein Frankfurt,Werder Bremen,2,0,H,5.0,2.0,1.0,1.0,6.0,0.0
-19/02/2023,Union Berlin,Schalke 04,0,0,D,6.0,4.0,2.0,1.0,4.0,2.0
 19/02/2023,Dortmund,Hertha,4,1,H,3.0,4.0,1.0,2.0,5.0,8.0
 19/02/2023,Leverkusen,Mainz,2,3,A,4.0,5.0,5.0,5.0,7.0,7.0
+19/02/2023,Union Berlin,Schalke 04,0,0,D,6.0,4.0,2.0,1.0,4.0,2.0
 24/02/2023,Mainz,M'gladbach,4,0,H,3.0,3.0,2.0,3.0,8.0,2.0
 25/02/2023,FC Koln,Wolfsburg,0,2,A,10.0,2.0,1.0,2.0,5.0,4.0
 25/02/2023,Hertha,Augsburg,2,0,H,1.0,6.0,1.0,3.0,3.0,2.0
 25/02/2023,Hoffenheim,Dortmund,0,1,A,12.0,11.0,3.0,1.0,4.0,11.0
 25/02/2023,RB Leipzig,Ein Frankfurt,2,1,H,2.0,6.0,2.0,3.0,5.0,4.0
-25/02/2023,Werder Bremen,Bochum,3,0,H,2.0,0.0,3.0,2.0,6.0,2.0
 25/02/2023,Schalke 04,Stuttgart,2,1,H,6.0,9.0,2.0,2.0,6.0,5.0
-26/02/2023,Freiburg,Leverkusen,1,1,D,1.0,3.0,2.0,1.0,4.0,4.0
+25/02/2023,Werder Bremen,Bochum,3,0,H,2.0,0.0,3.0,2.0,6.0,2.0
 26/02/2023,Bayern Munich,Union Berlin,3,0,H,10.0,4.0,1.0,1.0,10.0,1.0
+26/02/2023,Freiburg,Leverkusen,1,1,D,1.0,3.0,2.0,1.0,4.0,4.0
 03/03/2023,Dortmund,RB Leipzig,2,1,H,4.0,6.0,2.0,5.0,3.0,6.0
 04/03/2023,Augsburg,Werder Bremen,2,1,H,3.0,7.0,2.0,2.0,5.0,8.0
 04/03/2023,Bochum,Schalke 04,0,2,A,4.0,4.0,2.0,1.0,4.0,5.0
-04/03/2023,Mainz,Hoffenheim,1,0,H,11.0,3.0,1.0,4.0,6.0,4.0
 04/03/2023,M'gladbach,Freiburg,0,0,D,6.0,5.0,5.0,2.0,4.0,3.0
-04/03/2023,Union Berlin,FC Koln,0,0,D,5.0,4.0,1.0,0.0,2.0,4.0
+04/03/2023,Mainz,Hoffenheim,1,0,H,11.0,3.0,1.0,4.0,6.0,4.0
 04/03/2023,Stuttgart,Bayern Munich,1,2,A,3.0,6.0,0.0,0.0,4.0,6.0
+04/03/2023,Union Berlin,FC Koln,0,0,D,5.0,4.0,1.0,0.0,2.0,4.0
 05/03/2023,Leverkusen,Hertha,4,1,H,9.0,2.0,1.0,2.0,9.0,2.0
 05/03/2023,Wolfsburg,Ein Frankfurt,2,2,D,4.0,5.0,3.0,3.0,8.0,2.0
 10/03/2023,FC Koln,Bochum,0,2,A,10.0,1.0,2.0,2.0,5.0,3.0
@@ -218,45 +218,45 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 17/03/2023,M'gladbach,Werder Bremen,2,2,D,6.0,5.0,1.0,1.0,9.0,3.0
 18/03/2023,Augsburg,Schalke 04,1,1,D,9.0,6.0,4.0,4.0,3.0,5.0
 18/03/2023,Bochum,RB Leipzig,1,0,H,2.0,7.0,2.0,3.0,2.0,8.0
+18/03/2023,Dortmund,FC Koln,6,1,H,1.0,6.0,1.0,0.0,8.0,5.0
 18/03/2023,Hoffenheim,Hertha,3,1,H,8.0,9.0,0.0,3.0,7.0,5.0
 18/03/2023,Stuttgart,Wolfsburg,0,1,A,3.0,8.0,1.0,0.0,2.0,3.0
-18/03/2023,Dortmund,FC Koln,6,1,H,1.0,6.0,1.0,0.0,8.0,5.0
-19/03/2023,Union Berlin,Ein Frankfurt,2,0,H,3.0,7.0,3.0,2.0,3.0,4.0
 19/03/2023,Leverkusen,Bayern Munich,2,1,H,5.0,3.0,2.0,3.0,6.0,6.0
 19/03/2023,Mainz,Freiburg,1,1,D,3.0,5.0,2.0,3.0,6.0,5.0
+19/03/2023,Union Berlin,Ein Frankfurt,2,0,H,3.0,7.0,3.0,2.0,3.0,4.0
 31/03/2023,Ein Frankfurt,Bochum,1,1,D,15.0,2.0,3.0,2.0,7.0,2.0
+01/04/2023,Bayern Munich,Dortmund,4,2,H,6.0,2.0,1.0,1.0,9.0,4.0
 01/04/2023,Freiburg,Hertha,1,1,D,2.0,2.0,1.0,1.0,8.0,3.0
 01/04/2023,RB Leipzig,Mainz,0,3,A,3.0,4.0,3.0,3.0,3.0,7.0
 01/04/2023,Schalke 04,Leverkusen,0,3,A,7.0,5.0,2.0,1.0,3.0,10.0
 01/04/2023,Union Berlin,Stuttgart,3,0,H,3.0,5.0,1.0,1.0,5.0,8.0
 01/04/2023,Wolfsburg,Augsburg,2,2,D,4.0,7.0,3.0,2.0,5.0,2.0
-01/04/2023,Bayern Munich,Dortmund,4,2,H,6.0,2.0,1.0,1.0,9.0,4.0
 02/04/2023,FC Koln,M'gladbach,0,0,D,11.0,1.0,3.0,3.0,5.0,2.0
 02/04/2023,Werder Bremen,Hoffenheim,1,2,A,1.0,6.0,3.0,4.0,5.0,2.0
 08/04/2023,Augsburg,FC Koln,1,3,A,6.0,1.0,3.0,4.0,1.0,5.0
 08/04/2023,Dortmund,Union Berlin,2,1,H,8.0,0.0,5.0,2.0,6.0,2.0
 08/04/2023,Freiburg,Bayern Munich,0,1,A,2.0,6.0,2.0,2.0,2.0,8.0
+08/04/2023,Hertha,RB Leipzig,0,1,A,4.0,4.0,4.0,3.0,1.0,6.0
 08/04/2023,Leverkusen,Ein Frankfurt,3,1,H,2.0,5.0,1.0,5.0,8.0,3.0
 08/04/2023,Mainz,Werder Bremen,2,2,D,1.0,2.0,1.0,5.0,10.0,4.0
-08/04/2023,Hertha,RB Leipzig,0,1,A,4.0,4.0,4.0,3.0,1.0,6.0
-09/04/2023,M'gladbach,Wolfsburg,2,0,H,5.0,8.0,0.0,1.0,6.0,2.0
 09/04/2023,Bochum,Stuttgart,2,3,A,7.0,4.0,3.0,3.0,5.0,7.0
 09/04/2023,Hoffenheim,Schalke 04,2,0,H,9.0,8.0,3.0,0.0,4.0,3.0
+09/04/2023,M'gladbach,Wolfsburg,2,0,H,5.0,8.0,0.0,1.0,6.0,2.0
 14/04/2023,Schalke 04,Hertha,5,2,H,7.0,8.0,2.0,3.0,7.0,5.0
 15/04/2023,Bayern Munich,Hoffenheim,1,1,D,13.0,4.0,2.0,1.0,7.0,3.0
+15/04/2023,Ein Frankfurt,M'gladbach,1,1,D,10.0,2.0,1.0,2.0,5.0,2.0
 15/04/2023,FC Koln,Mainz,1,1,D,3.0,3.0,3.0,2.0,4.0,1.0
 15/04/2023,RB Leipzig,Augsburg,3,2,H,3.0,5.0,2.0,3.0,6.0,3.0
 15/04/2023,Stuttgart,Dortmund,3,3,D,5.0,7.0,5.0,3.0,5.0,6.0
-15/04/2023,Ein Frankfurt,M'gladbach,1,1,D,10.0,2.0,1.0,2.0,5.0,2.0
-16/04/2023,Werder Bremen,Freiburg,1,2,A,5.0,2.0,2.0,3.0,5.0,3.0
 16/04/2023,Union Berlin,Bochum,1,1,D,5.0,7.0,2.0,1.0,2.0,8.0
+16/04/2023,Werder Bremen,Freiburg,1,2,A,5.0,2.0,2.0,3.0,5.0,3.0
 16/04/2023,Wolfsburg,Leverkusen,0,0,D,2.0,6.0,0.0,5.0,3.0,4.0
 21/04/2023,Augsburg,Stuttgart,1,1,D,1.0,3.0,5.0,3.0,1.0,3.0
 22/04/2023,Bochum,Wolfsburg,1,5,A,10.0,3.0,3.0,3.0,6.0,7.0
+22/04/2023,Dortmund,Ein Frankfurt,4,0,H,5.0,2.0,2.0,3.0,7.0,2.0
 22/04/2023,Hertha,Werder Bremen,2,4,A,8.0,4.0,2.0,2.0,5.0,4.0
 22/04/2023,Hoffenheim,FC Koln,1,3,A,2.0,5.0,1.0,2.0,4.0,7.0
 22/04/2023,Mainz,Bayern Munich,3,1,H,2.0,7.0,2.0,0.0,4.0,2.0
-22/04/2023,Dortmund,Ein Frankfurt,4,0,H,5.0,2.0,2.0,3.0,7.0,2.0
 23/04/2023,Freiburg,Schalke 04,4,0,H,6.0,5.0,1.0,2.0,12.0,4.0
 23/04/2023,Leverkusen,RB Leipzig,2,0,H,0.0,9.0,3.0,5.0,6.0,8.0
 23/04/2023,M'gladbach,Union Berlin,0,1,A,2.0,2.0,3.0,2.0,4.0,4.0
@@ -264,9 +264,9 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 29/04/2023,Ein Frankfurt,Augsburg,1,1,D,5.0,7.0,2.0,2.0,1.0,3.0
 29/04/2023,FC Koln,Freiburg,0,1,A,9.0,6.0,1.0,1.0,8.0,6.0
 29/04/2023,RB Leipzig,Hoffenheim,1,0,H,7.0,1.0,0.0,2.0,2.0,2.0
+29/04/2023,Schalke 04,Werder Bremen,2,1,H,11.0,3.0,4.0,3.0,10.0,1.0
 29/04/2023,Stuttgart,M'gladbach,2,1,H,5.0,8.0,2.0,2.0,5.0,4.0
 29/04/2023,Union Berlin,Leverkusen,0,0,D,6.0,4.0,1.0,1.0,1.0,2.0
-29/04/2023,Schalke 04,Werder Bremen,2,1,H,11.0,3.0,4.0,3.0,10.0,1.0
 30/04/2023,Bayern Munich,Hertha,2,0,H,18.0,1.0,2.0,0.0,9.0,1.0
 30/04/2023,Wolfsburg,Mainz,3,0,H,3.0,5.0,1.0,3.0,4.0,2.0
 05/05/2023,Leverkusen,FC Koln,1,2,A,9.0,2.0,1.0,6.0,4.0,5.0
@@ -281,21 +281,21 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 12/05/2023,FC Koln,Hertha,5,2,H,12.0,3.0,2.0,7.0,15.0,3.0
 13/05/2023,Bayern Munich,Schalke 04,6,0,H,4.0,3.0,0.0,3.0,14.0,0.0
 13/05/2023,Bochum,Augsburg,3,2,H,7.0,7.0,3.0,2.0,8.0,2.0
+13/05/2023,Dortmund,M'gladbach,5,2,H,10.0,4.0,0.0,2.0,13.0,8.0
 13/05/2023,Ein Frankfurt,Mainz,3,0,H,5.0,1.0,1.0,3.0,7.0,4.0
 13/05/2023,Union Berlin,Freiburg,4,2,H,1.0,7.0,3.0,1.0,4.0,8.0
 13/05/2023,Wolfsburg,Hoffenheim,2,1,H,3.0,7.0,2.0,2.0,3.0,2.0
-13/05/2023,Dortmund,M'gladbach,5,2,H,10.0,4.0,0.0,2.0,13.0,8.0
-14/05/2023,Stuttgart,Leverkusen,1,1,D,7.0,3.0,3.0,4.0,1.0,3.0
 14/05/2023,RB Leipzig,Werder Bremen,2,1,H,3.0,2.0,2.0,5.0,7.0,2.0
+14/05/2023,Stuttgart,Leverkusen,1,1,D,7.0,3.0,3.0,4.0,1.0,3.0
 19/05/2023,Freiburg,Wolfsburg,2,0,H,4.0,4.0,1.0,3.0,7.0,2.0
+20/05/2023,Bayern Munich,RB Leipzig,1,3,A,7.0,2.0,1.0,1.0,4.0,8.0
 20/05/2023,Hertha,Bochum,1,1,D,9.0,5.0,1.0,1.0,4.0,6.0
 20/05/2023,Hoffenheim,Union Berlin,4,2,H,1.0,5.0,4.0,5.0,5.0,4.0
 20/05/2023,Schalke 04,Ein Frankfurt,2,2,D,8.0,3.0,3.0,4.0,4.0,3.0
 20/05/2023,Werder Bremen,FC Koln,1,1,D,4.0,9.0,4.0,2.0,6.0,4.0
-20/05/2023,Bayern Munich,RB Leipzig,1,3,A,7.0,2.0,1.0,1.0,4.0,8.0
-21/05/2023,Mainz,Stuttgart,1,4,A,6.0,3.0,3.0,1.0,6.0,6.0
 21/05/2023,Augsburg,Dortmund,0,3,A,3.0,8.0,3.0,3.0,1.0,10.0
 21/05/2023,Leverkusen,M'gladbach,2,2,D,2.0,3.0,3.0,3.0,6.0,5.0
+21/05/2023,Mainz,Stuttgart,1,4,A,6.0,3.0,3.0,1.0,6.0,6.0
 27/05/2023,Bochum,Leverkusen,3,0,H,2.0,5.0,5.0,5.0,5.0,2.0
 27/05/2023,Dortmund,Mainz,2,2,D,6.0,3.0,1.0,1.0,12.0,4.0
 27/05/2023,Ein Frankfurt,Freiburg,2,1,H,3.0,6.0,4.0,2.0,8.0,7.0
@@ -307,13 +307,13 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 27/05/2023,Wolfsburg,Hertha,1,2,A,7.0,3.0,1.0,5.0,9.0,5.0
 18/08/2023,Werder Bremen,Bayern Munich,0,4,A,0.0,6.0,2.0,1.0,1.0,10.0
 19/08/2023,Augsburg,M'gladbach,4,4,D,8.0,7.0,1.0,2.0,8.0,6.0
+19/08/2023,Dortmund,FC Koln,1,0,H,6.0,3.0,1.0,0.0,2.0,4.0
 19/08/2023,Hoffenheim,Freiburg,1,2,A,4.0,2.0,0.0,1.0,5.0,8.0
 19/08/2023,Leverkusen,RB Leipzig,3,2,H,4.0,5.0,1.0,2.0,7.0,6.0
 19/08/2023,Stuttgart,Bochum,5,0,H,7.0,0.0,1.0,1.0,9.0,1.0
 19/08/2023,Wolfsburg,Heidenheim,2,0,H,1.0,7.0,3.0,0.0,8.0,1.0
-19/08/2023,Dortmund,FC Koln,1,0,H,6.0,3.0,1.0,0.0,2.0,4.0
-20/08/2023,Union Berlin,Mainz,4,1,H,3.0,1.0,1.0,5.0,7.0,3.0
 20/08/2023,Ein Frankfurt,Darmstadt,1,0,H,7.0,3.0,2.0,3.0,4.0,2.0
+20/08/2023,Union Berlin,Mainz,4,1,H,3.0,1.0,1.0,5.0,7.0,3.0
 25/08/2023,RB Leipzig,Stuttgart,5,1,H,4.0,4.0,1.0,1.0,11.0,3.0
 26/08/2023,Bochum,Dortmund,1,1,D,5.0,4.0,2.0,1.0,6.0,3.0
 26/08/2023,Darmstadt,Union Berlin,1,4,A,3.0,5.0,2.0,2.0,6.0,6.0
@@ -321,26 +321,26 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 26/08/2023,Freiburg,Werder Bremen,1,0,H,5.0,5.0,2.0,2.0,6.0,2.0
 26/08/2023,Heidenheim,Hoffenheim,2,3,A,10.0,6.0,1.0,5.0,9.0,6.0
 26/08/2023,M'gladbach,Leverkusen,0,3,A,5.0,8.0,2.0,3.0,2.0,10.0
-27/08/2023,Mainz,Ein Frankfurt,1,1,D,5.0,4.0,3.0,4.0,7.0,2.0
 27/08/2023,Bayern Munich,Augsburg,3,1,H,10.0,4.0,1.0,2.0,6.0,2.0
+27/08/2023,Mainz,Ein Frankfurt,1,1,D,5.0,4.0,3.0,4.0,7.0,2.0
 01/09/2023,Dortmund,Heidenheim,2,2,D,3.0,6.0,3.0,3.0,9.0,6.0
 02/09/2023,Augsburg,Bochum,2,2,D,3.0,5.0,2.0,2.0,3.0,9.0
 02/09/2023,Hoffenheim,Wolfsburg,3,1,H,3.0,3.0,2.0,2.0,5.0,7.0
 02/09/2023,Leverkusen,Darmstadt,5,1,H,4.0,2.0,3.0,2.0,13.0,1.0
+02/09/2023,M'gladbach,Bayern Munich,1,2,A,1.0,15.0,0.0,2.0,3.0,9.0
 02/09/2023,Stuttgart,Freiburg,5,0,H,2.0,4.0,1.0,1.0,6.0,5.0
 02/09/2023,Werder Bremen,Mainz,4,0,H,1.0,7.0,2.0,2.0,6.0,3.0
-02/09/2023,M'gladbach,Bayern Munich,1,2,A,1.0,15.0,0.0,2.0,3.0,9.0
 03/09/2023,Ein Frankfurt,FC Koln,1,1,D,8.0,1.0,1.0,3.0,4.0,2.0
 03/09/2023,Union Berlin,RB Leipzig,0,3,A,3.0,7.0,3.0,1.0,1.0,8.0
 15/09/2023,Bayern Munich,Leverkusen,2,2,D,7.0,4.0,0.0,3.0,9.0,5.0
+16/09/2023,Bochum,Ein Frankfurt,1,1,D,8.0,2.0,3.0,2.0,10.0,6.0
 16/09/2023,FC Koln,Hoffenheim,1,3,A,13.0,4.0,4.0,4.0,7.0,5.0
 16/09/2023,Freiburg,Dortmund,2,4,A,6.0,8.0,2.0,3.0,4.0,6.0
 16/09/2023,Mainz,Stuttgart,1,3,A,6.0,4.0,1.0,2.0,3.0,6.0
 16/09/2023,RB Leipzig,Augsburg,3,0,H,1.0,6.0,0.0,0.0,6.0,4.0
 16/09/2023,Wolfsburg,Union Berlin,2,1,H,3.0,7.0,1.0,0.0,3.0,5.0
-16/09/2023,Bochum,Ein Frankfurt,1,1,D,8.0,2.0,3.0,2.0,10.0,6.0
-17/09/2023,Heidenheim,Werder Bremen,4,2,H,10.0,1.0,1.0,1.0,4.0,4.0
 17/09/2023,Darmstadt,M'gladbach,3,3,D,6.0,6.0,1.0,1.0,8.0,10.0
+17/09/2023,Heidenheim,Werder Bremen,4,2,H,10.0,1.0,1.0,1.0,4.0,4.0
 22/09/2023,Stuttgart,Darmstadt,3,1,H,5.0,4.0,1.0,6.0,11.0,0.0
 23/09/2023,Augsburg,Mainz,2,1,H,3.0,4.0,2.0,3.0,3.0,3.0
 23/09/2023,Bayern Munich,Bochum,7,0,H,8.0,1.0,0.0,1.0,16.0,1.0
@@ -348,15 +348,15 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 23/09/2023,M'gladbach,RB Leipzig,0,1,A,11.0,6.0,1.0,1.0,1.0,4.0
 23/09/2023,Union Berlin,Hoffenheim,0,2,A,11.0,6.0,1.0,3.0,6.0,4.0
 23/09/2023,Werder Bremen,FC Koln,2,1,H,9.0,8.0,2.0,1.0,6.0,5.0
-24/09/2023,Leverkusen,Heidenheim,4,1,H,7.0,2.0,1.0,1.0,10.0,1.0
 24/09/2023,Ein Frankfurt,Freiburg,0,0,D,7.0,3.0,4.0,2.0,5.0,2.0
+24/09/2023,Leverkusen,Heidenheim,4,1,H,7.0,2.0,1.0,1.0,10.0,1.0
 29/09/2023,Hoffenheim,Dortmund,1,3,A,4.0,3.0,3.0,4.0,5.0,5.0
 30/09/2023,Bochum,M'gladbach,1,3,A,5.0,10.0,2.0,3.0,5.0,9.0
 30/09/2023,FC Koln,Stuttgart,0,2,A,8.0,4.0,2.0,1.0,5.0,4.0
 30/09/2023,Heidenheim,Union Berlin,1,0,H,5.0,7.0,1.0,2.0,4.0,8.0
 30/09/2023,Mainz,Leverkusen,0,3,A,3.0,1.0,4.0,1.0,3.0,3.0
-30/09/2023,Wolfsburg,Ein Frankfurt,2,0,H,7.0,4.0,1.0,6.0,7.0,3.0
 30/09/2023,RB Leipzig,Bayern Munich,2,2,D,5.0,1.0,2.0,5.0,2.0,5.0
+30/09/2023,Wolfsburg,Ein Frankfurt,2,0,H,7.0,4.0,1.0,6.0,7.0,3.0
 01/10/2023,Darmstadt,Werder Bremen,4,2,H,2.0,4.0,3.0,2.0,5.0,7.0
 01/10/2023,Freiburg,Augsburg,2,0,H,2.0,3.0,2.0,2.0,3.0,4.0
 06/10/2023,M'gladbach,Mainz,2,2,D,10.0,3.0,3.0,1.0,9.0,7.0
@@ -365,52 +365,52 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 07/10/2023,RB Leipzig,Bochum,0,0,D,9.0,1.0,2.0,4.0,5.0,2.0
 07/10/2023,Stuttgart,Wolfsburg,3,1,H,5.0,6.0,1.0,3.0,7.0,5.0
 07/10/2023,Werder Bremen,Hoffenheim,2,3,A,4.0,4.0,5.0,4.0,3.0,4.0
-08/10/2023,Leverkusen,FC Koln,3,0,H,11.0,4.0,3.0,0.0,10.0,3.0
 08/10/2023,Bayern Munich,Freiburg,3,0,H,7.0,1.0,1.0,0.0,5.0,0.0
 08/10/2023,Ein Frankfurt,Heidenheim,2,0,H,3.0,6.0,2.0,3.0,6.0,2.0
+08/10/2023,Leverkusen,FC Koln,3,0,H,11.0,4.0,3.0,0.0,10.0,3.0
 20/10/2023,Dortmund,Werder Bremen,1,0,H,10.0,4.0,1.0,5.0,5.0,1.0
 21/10/2023,Darmstadt,RB Leipzig,1,3,A,6.0,0.0,6.0,3.0,3.0,7.0
 21/10/2023,Freiburg,Bochum,2,1,H,5.0,2.0,3.0,4.0,5.0,5.0
 21/10/2023,Hoffenheim,Ein Frankfurt,1,3,A,6.0,3.0,3.0,0.0,5.0,5.0
+21/10/2023,Mainz,Bayern Munich,1,3,A,2.0,7.0,3.0,2.0,3.0,5.0
 21/10/2023,Union Berlin,Stuttgart,0,3,A,4.0,2.0,2.0,1.0,2.0,5.0
 21/10/2023,Wolfsburg,Leverkusen,1,2,A,4.0,3.0,3.0,5.0,7.0,6.0
-21/10/2023,Mainz,Bayern Munich,1,3,A,2.0,7.0,3.0,2.0,3.0,5.0
 22/10/2023,FC Koln,M'gladbach,3,1,H,8.0,3.0,0.0,2.0,8.0,2.0
 22/10/2023,Heidenheim,Augsburg,2,5,A,6.0,5.0,3.0,2.0,5.0,6.0
 27/10/2023,Bochum,Mainz,2,2,D,5.0,4.0,3.0,3.0,4.0,4.0
 28/10/2023,Augsburg,Wolfsburg,3,2,H,5.0,5.0,6.0,4.0,5.0,6.0
 28/10/2023,Bayern Munich,Darmstadt,8,0,H,7.0,1.0,1.0,2.0,16.0,4.0
 28/10/2023,M'gladbach,Heidenheim,2,1,H,6.0,4.0,0.0,3.0,6.0,3.0
+28/10/2023,RB Leipzig,FC Koln,6,0,H,11.0,1.0,2.0,4.0,13.0,1.0
 28/10/2023,Stuttgart,Hoffenheim,2,3,A,6.0,0.0,2.0,1.0,10.0,5.0
 28/10/2023,Werder Bremen,Union Berlin,2,0,H,3.0,3.0,1.0,4.0,3.0,2.0
-28/10/2023,RB Leipzig,FC Koln,6,0,H,11.0,1.0,2.0,4.0,13.0,1.0
 29/10/2023,Ein Frankfurt,Dortmund,3,3,D,0.0,4.0,3.0,2.0,7.0,4.0
 29/10/2023,Leverkusen,Freiburg,2,1,H,11.0,4.0,0.0,2.0,4.0,4.0
 03/11/2023,Darmstadt,Bochum,1,2,A,11.0,2.0,2.0,5.0,4.0,4.0
+04/11/2023,Dortmund,Bayern Munich,0,4,A,3.0,2.0,3.0,2.0,1.0,8.0
 04/11/2023,FC Koln,Augsburg,1,1,D,10.0,2.0,1.0,4.0,12.0,3.0
 04/11/2023,Freiburg,M'gladbach,3,3,D,8.0,2.0,2.0,2.0,8.0,5.0
 04/11/2023,Hoffenheim,Leverkusen,2,3,A,4.0,3.0,3.0,2.0,7.0,4.0
 04/11/2023,Mainz,RB Leipzig,2,0,H,2.0,7.0,3.0,1.0,3.0,2.0
 04/11/2023,Union Berlin,Ein Frankfurt,0,3,A,9.0,1.0,0.0,1.0,3.0,3.0
-04/11/2023,Dortmund,Bayern Munich,0,4,A,3.0,2.0,3.0,2.0,1.0,8.0
-05/11/2023,Wolfsburg,Werder Bremen,2,2,D,5.0,2.0,4.0,1.0,5.0,4.0
 05/11/2023,Heidenheim,Stuttgart,2,0,H,9.0,6.0,2.0,2.0,2.0,2.0
+05/11/2023,Wolfsburg,Werder Bremen,2,2,D,5.0,2.0,4.0,1.0,5.0,4.0
 10/11/2023,M'gladbach,Wolfsburg,4,0,H,8.0,5.0,1.0,3.0,8.0,4.0
 11/11/2023,Augsburg,Hoffenheim,1,1,D,3.0,5.0,1.0,2.0,6.0,6.0
 11/11/2023,Bayern Munich,Heidenheim,4,2,H,7.0,2.0,1.0,0.0,8.0,2.0
+11/11/2023,Bochum,FC Koln,1,1,D,3.0,3.0,4.0,1.0,9.0,6.0
 11/11/2023,Darmstadt,Mainz,0,0,D,0.0,5.0,3.0,3.0,3.0,0.0
 11/11/2023,Stuttgart,Dortmund,2,1,H,6.0,1.0,2.0,3.0,10.0,1.0
-11/11/2023,Bochum,FC Koln,1,1,D,3.0,3.0,4.0,1.0,9.0,6.0
 12/11/2023,Leverkusen,Union Berlin,4,0,H,10.0,1.0,0.0,1.0,10.0,2.0
-12/11/2023,Werder Bremen,Ein Frankfurt,2,2,D,3.0,7.0,1.0,3.0,5.0,3.0
 12/11/2023,RB Leipzig,Freiburg,3,1,H,7.0,3.0,2.0,0.0,6.0,3.0
+12/11/2023,Werder Bremen,Ein Frankfurt,2,2,D,3.0,7.0,1.0,3.0,5.0,3.0
 24/11/2023,FC Koln,Bayern Munich,0,1,A,3.0,12.0,0.0,1.0,2.0,5.0
 25/11/2023,Dortmund,M'gladbach,4,2,H,5.0,4.0,1.0,2.0,13.0,3.0
+25/11/2023,Ein Frankfurt,Stuttgart,1,2,A,4.0,2.0,0.0,1.0,1.0,5.0
 25/11/2023,Freiburg,Darmstadt,1,1,D,11.0,2.0,2.0,0.0,3.0,1.0
 25/11/2023,Union Berlin,Augsburg,1,1,D,3.0,4.0,2.0,2.0,6.0,2.0
 25/11/2023,Werder Bremen,Leverkusen,0,3,A,1.0,6.0,3.0,1.0,1.0,4.0
 25/11/2023,Wolfsburg,RB Leipzig,2,1,H,1.0,12.0,4.0,2.0,4.0,10.0
-25/11/2023,Ein Frankfurt,Stuttgart,1,2,A,4.0,2.0,0.0,1.0,1.0,5.0
 26/11/2023,Heidenheim,Bochum,0,0,D,6.0,5.0,4.0,3.0,3.0,2.0
 26/11/2023,Hoffenheim,Mainz,1,1,D,4.0,5.0,4.0,4.0,6.0,6.0
 01/12/2023,Darmstadt,FC Koln,0,1,A,1.0,6.0,1.0,3.0,1.0,6.0
@@ -418,43 +418,43 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 02/12/2023,M'gladbach,Hoffenheim,2,1,H,6.0,3.0,2.0,2.0,3.0,5.0
 02/12/2023,RB Leipzig,Heidenheim,2,1,H,5.0,3.0,2.0,2.0,8.0,1.0
 02/12/2023,Stuttgart,Werder Bremen,2,0,H,6.0,7.0,1.0,0.0,6.0,3.0
-03/12/2023,Mainz,Freiburg,0,1,A,14.0,3.0,1.0,1.0,6.0,5.0
-03/12/2023,Leverkusen,Dortmund,1,1,D,16.0,1.0,3.0,2.0,6.0,2.0
 03/12/2023,Augsburg,Ein Frankfurt,2,1,H,2.0,4.0,1.0,1.0,4.0,6.0
+03/12/2023,Leverkusen,Dortmund,1,1,D,16.0,1.0,3.0,2.0,6.0,2.0
+03/12/2023,Mainz,Freiburg,0,1,A,14.0,3.0,1.0,1.0,6.0,5.0
 08/12/2023,Hoffenheim,Bochum,3,1,H,4.0,5.0,3.0,2.0,7.0,5.0
+09/12/2023,Dortmund,RB Leipzig,2,3,A,6.0,6.0,1.0,3.0,6.0,8.0
 09/12/2023,Ein Frankfurt,Bayern Munich,5,1,H,1.0,9.0,1.0,2.0,6.0,6.0
 09/12/2023,Heidenheim,Darmstadt,3,2,H,8.0,3.0,2.0,2.0,7.0,7.0
 09/12/2023,Union Berlin,M'gladbach,3,1,H,6.0,7.0,1.0,3.0,6.0,4.0
 09/12/2023,Werder Bremen,Augsburg,2,0,H,5.0,2.0,1.0,2.0,5.0,1.0
 09/12/2023,Wolfsburg,Freiburg,0,1,A,5.0,3.0,1.0,4.0,3.0,1.0
-09/12/2023,Dortmund,RB Leipzig,2,3,A,6.0,6.0,1.0,3.0,6.0,8.0
-10/12/2023,Stuttgart,Leverkusen,1,1,D,8.0,8.0,1.0,1.0,12.0,6.0
 10/12/2023,FC Koln,Mainz,0,0,D,1.0,7.0,2.0,4.0,3.0,5.0
+10/12/2023,Stuttgart,Leverkusen,1,1,D,8.0,8.0,1.0,1.0,12.0,6.0
 15/12/2023,M'gladbach,Werder Bremen,2,2,D,4.0,3.0,4.0,2.0,4.0,5.0
 16/12/2023,Augsburg,Dortmund,1,1,D,4.0,7.0,2.0,1.0,4.0,6.0
 16/12/2023,Bochum,Union Berlin,3,0,H,6.0,4.0,2.0,2.0,7.0,2.0
 16/12/2023,Darmstadt,Wolfsburg,0,1,A,7.0,7.0,2.0,0.0,4.0,3.0
 16/12/2023,Mainz,Heidenheim,0,1,A,8.0,1.0,3.0,3.0,4.0,2.0
 16/12/2023,RB Leipzig,Hoffenheim,3,1,H,9.0,2.0,3.0,2.0,11.0,4.0
+17/12/2023,Bayern Munich,Stuttgart,3,0,H,6.0,2.0,0.0,3.0,8.0,2.0
 17/12/2023,Freiburg,FC Koln,2,0,H,5.0,2.0,1.0,4.0,7.0,1.0
 17/12/2023,Leverkusen,Ein Frankfurt,3,0,H,5.0,5.0,1.0,1.0,6.0,2.0
-17/12/2023,Bayern Munich,Stuttgart,3,0,H,6.0,2.0,0.0,3.0,8.0,2.0
-19/12/2023,Werder Bremen,RB Leipzig,1,1,D,1.0,4.0,4.0,2.0,3.0,9.0
 19/12/2023,Dortmund,Mainz,1,1,D,6.0,1.0,0.0,4.0,8.0,6.0
 19/12/2023,Hoffenheim,Darmstadt,3,3,D,8.0,3.0,2.0,4.0,4.0,3.0
-20/12/2023,Union Berlin,FC Koln,2,0,H,4.0,5.0,0.0,0.0,8.0,7.0
+19/12/2023,Werder Bremen,RB Leipzig,1,1,D,1.0,4.0,4.0,2.0,3.0,9.0
 20/12/2023,Ein Frankfurt,M'gladbach,2,1,H,8.0,2.0,1.0,6.0,7.0,2.0
 20/12/2023,Heidenheim,Freiburg,3,2,H,7.0,4.0,3.0,4.0,3.0,4.0
 20/12/2023,Leverkusen,Bochum,4,0,H,4.0,3.0,0.0,2.0,8.0,1.0
 20/12/2023,Stuttgart,Augsburg,3,0,H,4.0,4.0,0.0,4.0,7.0,5.0
+20/12/2023,Union Berlin,FC Koln,2,0,H,4.0,5.0,0.0,0.0,8.0,7.0
 20/12/2023,Wolfsburg,Bayern Munich,1,2,A,0.0,6.0,4.0,2.0,4.0,7.0
 12/01/2024,Bayern Munich,Hoffenheim,3,0,H,11.0,2.0,1.0,3.0,12.0,4.0
 13/01/2024,Augsburg,Leverkusen,0,1,A,0.0,12.0,3.0,1.0,0.0,6.0
+13/01/2024,Darmstadt,Dortmund,0,3,A,3.0,4.0,1.0,3.0,2.0,8.0
 13/01/2024,FC Koln,Heidenheim,1,1,D,9.0,6.0,2.0,1.0,6.0,2.0
 13/01/2024,Freiburg,Union Berlin,0,0,D,4.0,3.0,0.0,2.0,4.0,4.0
 13/01/2024,Mainz,Wolfsburg,1,1,D,7.0,3.0,3.0,4.0,4.0,4.0
 13/01/2024,RB Leipzig,Ein Frankfurt,0,1,A,15.0,4.0,0.0,2.0,7.0,1.0
-13/01/2024,Darmstadt,Dortmund,0,3,A,3.0,4.0,1.0,3.0,2.0,8.0
 14/01/2024,Bochum,Werder Bremen,1,1,D,3.0,4.0,6.0,5.0,4.0,4.0
 14/01/2024,M'gladbach,Stuttgart,3,1,H,0.0,3.0,3.0,3.0,4.0,2.0
 20/01/2024,Bochum,Stuttgart,1,0,H,1.0,7.0,5.0,3.0,1.0,4.0
@@ -469,49 +469,49 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 26/01/2024,Ein Frankfurt,Mainz,1,0,H,2.0,1.0,2.0,1.0,4.0,0.0
 27/01/2024,Augsburg,Bayern Munich,2,3,A,4.0,5.0,2.0,6.0,7.0,4.0
 27/01/2024,Hoffenheim,Heidenheim,1,1,D,9.0,5.0,4.0,0.0,8.0,3.0
+27/01/2024,Leverkusen,M'gladbach,0,0,D,8.0,2.0,3.0,1.0,8.0,3.0
 27/01/2024,Stuttgart,RB Leipzig,5,2,H,9.0,3.0,1.0,4.0,11.0,2.0
 27/01/2024,Werder Bremen,Freiburg,3,1,H,5.0,5.0,2.0,1.0,4.0,4.0
 27/01/2024,Wolfsburg,FC Koln,1,1,D,6.0,3.0,5.0,3.0,5.0,2.0
-27/01/2024,Leverkusen,M'gladbach,0,0,D,8.0,2.0,3.0,1.0,8.0,3.0
-28/01/2024,Union Berlin,Darmstadt,1,0,H,4.0,3.0,3.0,2.0,6.0,1.0
 28/01/2024,Dortmund,Bochum,3,1,H,8.0,4.0,1.0,3.0,6.0,4.0
+28/01/2024,Union Berlin,Darmstadt,1,0,H,4.0,3.0,3.0,2.0,6.0,1.0
 02/02/2024,Heidenheim,Dortmund,0,0,D,4.0,6.0,0.0,2.0,0.0,5.0
 03/02/2024,Bayern Munich,M'gladbach,3,1,H,6.0,5.0,0.0,1.0,6.0,4.0
 03/02/2024,Bochum,Augsburg,1,1,D,3.0,5.0,3.0,1.0,4.0,6.0
 03/02/2024,Darmstadt,Leverkusen,0,2,A,4.0,3.0,2.0,2.0,6.0,7.0
+03/02/2024,FC Koln,Ein Frankfurt,2,0,H,7.0,7.0,1.0,4.0,4.0,4.0
 03/02/2024,Freiburg,Stuttgart,1,3,A,1.0,6.0,4.0,2.0,4.0,9.0
 03/02/2024,Mainz,Werder Bremen,0,1,A,11.0,1.0,4.0,3.0,5.0,1.0
-03/02/2024,FC Koln,Ein Frankfurt,2,0,H,7.0,7.0,1.0,4.0,4.0,4.0
-04/02/2024,Wolfsburg,Hoffenheim,2,2,D,7.0,2.0,2.0,3.0,8.0,7.0
 04/02/2024,RB Leipzig,Union Berlin,2,0,H,5.0,4.0,1.0,2.0,6.0,2.0
+04/02/2024,Wolfsburg,Hoffenheim,2,2,D,7.0,2.0,2.0,3.0,8.0,7.0
 07/02/2024,Mainz,Union Berlin,1,1,D,8.0,3.0,2.0,4.0,7.0,4.0
 09/02/2024,Dortmund,Freiburg,3,0,H,5.0,3.0,2.0,0.0,8.0,3.0
 10/02/2024,Augsburg,RB Leipzig,2,2,D,1.0,3.0,5.0,1.0,4.0,6.0
 10/02/2024,Ein Frankfurt,Bochum,1,1,D,8.0,3.0,2.0,2.0,2.0,5.0
+10/02/2024,Leverkusen,Bayern Munich,3,0,H,4.0,6.0,3.0,2.0,8.0,1.0
 10/02/2024,M'gladbach,Darmstadt,0,0,D,7.0,2.0,0.0,5.0,8.0,1.0
 10/02/2024,Union Berlin,Wolfsburg,1,0,H,6.0,10.0,1.0,2.0,2.0,5.0
 10/02/2024,Werder Bremen,Heidenheim,1,2,A,5.0,10.0,1.0,2.0,3.0,3.0
-10/02/2024,Leverkusen,Bayern Munich,3,0,H,4.0,6.0,3.0,2.0,8.0,1.0
-11/02/2024,Stuttgart,Mainz,3,1,H,4.0,5.0,1.0,1.0,7.0,6.0
 11/02/2024,Hoffenheim,FC Koln,1,1,D,10.0,3.0,3.0,4.0,4.0,1.0
+11/02/2024,Stuttgart,Mainz,3,1,H,4.0,5.0,1.0,1.0,7.0,6.0
 16/02/2024,FC Koln,Werder Bremen,0,1,A,5.0,3.0,4.0,4.0,2.0,4.0
 17/02/2024,Darmstadt,Stuttgart,1,2,A,5.0,3.0,4.0,5.0,9.0,4.0
 17/02/2024,Heidenheim,Leverkusen,1,2,A,4.0,5.0,2.0,1.0,3.0,4.0
 17/02/2024,Hoffenheim,Union Berlin,0,1,A,6.0,2.0,3.0,4.0,4.0,3.0
 17/02/2024,Mainz,Augsburg,1,0,H,7.0,7.0,3.0,2.0,4.0,4.0
-17/02/2024,Wolfsburg,Dortmund,1,1,D,5.0,3.0,3.0,1.0,4.0,5.0
 17/02/2024,RB Leipzig,M'gladbach,2,0,H,8.0,4.0,1.0,5.0,9.0,0.0
-18/02/2024,Freiburg,Ein Frankfurt,3,3,D,6.0,1.0,0.0,0.0,8.0,6.0
+17/02/2024,Wolfsburg,Dortmund,1,1,D,5.0,3.0,3.0,1.0,4.0,5.0
 18/02/2024,Bochum,Bayern Munich,3,2,H,4.0,9.0,2.0,4.0,5.0,10.0
+18/02/2024,Freiburg,Ein Frankfurt,3,3,D,6.0,1.0,0.0,0.0,8.0,6.0
 23/02/2024,Leverkusen,Mainz,2,1,H,11.0,2.0,3.0,5.0,7.0,4.0
+24/02/2024,Bayern Munich,RB Leipzig,2,1,H,6.0,4.0,3.0,3.0,4.0,5.0
 24/02/2024,M'gladbach,Bochum,5,2,H,5.0,6.0,2.0,4.0,6.0,5.0
 24/02/2024,Stuttgart,FC Koln,1,1,D,9.0,4.0,1.0,0.0,5.0,6.0
 24/02/2024,Union Berlin,Heidenheim,2,2,D,4.0,2.0,2.0,1.0,3.0,4.0
 24/02/2024,Werder Bremen,Darmstadt,1,1,D,4.0,6.0,3.0,4.0,4.0,3.0
-24/02/2024,Bayern Munich,RB Leipzig,2,1,H,6.0,4.0,3.0,3.0,4.0,5.0
-25/02/2024,Ein Frankfurt,Wolfsburg,2,2,D,5.0,3.0,2.0,1.0,5.0,8.0
-25/02/2024,Dortmund,Hoffenheim,2,3,A,10.0,3.0,2.0,3.0,7.0,5.0
 25/02/2024,Augsburg,Freiburg,2,1,H,10.0,2.0,3.0,1.0,8.0,1.0
+25/02/2024,Dortmund,Hoffenheim,2,3,A,10.0,3.0,2.0,3.0,7.0,5.0
+25/02/2024,Ein Frankfurt,Wolfsburg,2,2,D,5.0,3.0,2.0,1.0,5.0,8.0
 01/03/2024,Freiburg,Bayern Munich,2,2,D,3.0,6.0,1.0,2.0,5.0,9.0
 02/03/2024,Bochum,RB Leipzig,1,4,A,2.0,5.0,3.0,2.0,4.0,4.0
 02/03/2024,Darmstadt,Augsburg,0,6,A,3.0,6.0,2.0,0.0,5.0,6.0
@@ -533,35 +533,35 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 15/03/2024,FC Koln,RB Leipzig,1,5,A,3.0,6.0,2.0,2.0,2.0,7.0
 16/03/2024,Darmstadt,Bayern Munich,2,5,A,2.0,9.0,1.0,0.0,3.0,6.0
 16/03/2024,Heidenheim,M'gladbach,1,1,D,10.0,4.0,1.0,3.0,5.0,2.0
+16/03/2024,Hoffenheim,Stuttgart,0,3,A,5.0,6.0,1.0,0.0,1.0,12.0
 16/03/2024,Mainz,Bochum,2,0,H,7.0,6.0,4.0,3.0,4.0,4.0
 16/03/2024,Union Berlin,Werder Bremen,2,1,H,4.0,3.0,3.0,5.0,5.0,2.0
 16/03/2024,Wolfsburg,Augsburg,1,3,A,8.0,6.0,1.0,3.0,4.0,5.0
-16/03/2024,Hoffenheim,Stuttgart,0,3,A,5.0,6.0,1.0,0.0,1.0,12.0
-17/03/2024,Freiburg,Leverkusen,2,3,A,2.0,8.0,1.0,0.0,3.0,7.0
 17/03/2024,Dortmund,Ein Frankfurt,3,1,H,8.0,3.0,1.0,2.0,6.0,6.0
+17/03/2024,Freiburg,Leverkusen,2,3,A,2.0,8.0,1.0,0.0,3.0,7.0
+30/03/2024,Bayern Munich,Dortmund,0,2,A,7.0,4.0,0.0,0.0,3.0,5.0
 30/03/2024,Ein Frankfurt,Union Berlin,0,0,D,6.0,2.0,3.0,1.0,4.0,2.0
 30/03/2024,Leverkusen,Hoffenheim,2,1,H,9.0,2.0,0.0,1.0,12.0,2.0
 30/03/2024,M'gladbach,Freiburg,0,3,A,14.0,1.0,1.0,0.0,4.0,8.0
 30/03/2024,RB Leipzig,Mainz,0,0,D,12.0,2.0,2.0,5.0,10.0,2.0
 30/03/2024,Werder Bremen,Wolfsburg,0,2,A,3.0,6.0,4.0,4.0,1.0,5.0
-30/03/2024,Bayern Munich,Dortmund,0,2,A,7.0,4.0,0.0,0.0,3.0,5.0
 31/03/2024,Augsburg,FC Koln,1,1,D,12.0,6.0,0.0,3.0,6.0,2.0
-31/03/2024,Stuttgart,Heidenheim,3,3,D,6.0,7.0,1.0,0.0,6.0,3.0
 31/03/2024,Bochum,Darmstadt,2,2,D,6.0,5.0,2.0,2.0,7.0,3.0
+31/03/2024,Stuttgart,Heidenheim,3,3,D,6.0,7.0,1.0,0.0,6.0,3.0
 05/04/2024,Ein Frankfurt,Werder Bremen,1,1,D,9.0,0.0,3.0,2.0,5.0,7.0
+06/04/2024,Dortmund,Stuttgart,0,1,A,8.0,3.0,2.0,4.0,7.0,2.0
 06/04/2024,FC Koln,Bochum,2,1,H,9.0,4.0,3.0,3.0,6.0,2.0
 06/04/2024,Freiburg,RB Leipzig,1,4,A,8.0,4.0,3.0,4.0,4.0,6.0
 06/04/2024,Heidenheim,Bayern Munich,3,2,H,3.0,3.0,2.0,0.0,4.0,8.0
 06/04/2024,Mainz,Darmstadt,4,0,H,5.0,1.0,2.0,3.0,9.0,2.0
 06/04/2024,Union Berlin,Leverkusen,0,1,A,7.0,10.0,3.0,2.0,1.0,8.0
-06/04/2024,Dortmund,Stuttgart,0,1,A,8.0,3.0,2.0,4.0,7.0,2.0
 07/04/2024,Hoffenheim,Augsburg,3,1,H,11.0,6.0,3.0,1.0,6.0,7.0
 07/04/2024,Wolfsburg,M'gladbach,1,3,A,4.0,4.0,2.0,2.0,4.0,6.0
 12/04/2024,Augsburg,Union Berlin,2,0,H,5.0,4.0,1.0,1.0,4.0,4.0
 13/04/2024,Bayern Munich,FC Koln,2,0,H,5.0,5.0,0.0,3.0,7.0,5.0
 13/04/2024,Bochum,Heidenheim,1,1,D,6.0,2.0,4.0,1.0,5.0,3.0
-13/04/2024,Mainz,Hoffenheim,4,1,H,9.0,3.0,0.0,2.0,8.0,1.0
 13/04/2024,M'gladbach,Dortmund,1,2,A,2.0,4.0,1.0,4.0,5.0,4.0
+13/04/2024,Mainz,Hoffenheim,4,1,H,9.0,3.0,0.0,2.0,8.0,1.0
 13/04/2024,RB Leipzig,Wolfsburg,3,0,H,6.0,4.0,2.0,4.0,6.0,3.0
 13/04/2024,Stuttgart,Ein Frankfurt,3,0,H,4.0,5.0,1.0,3.0,6.0,3.0
 14/04/2024,Darmstadt,Freiburg,0,1,A,2.0,2.0,0.0,1.0,4.0,3.0
@@ -570,38 +570,38 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 20/04/2024,FC Koln,Darmstadt,0,2,A,4.0,3.0,0.0,1.0,4.0,6.0
 20/04/2024,Heidenheim,RB Leipzig,1,2,A,2.0,6.0,3.0,1.0,5.0,4.0
 20/04/2024,Hoffenheim,M'gladbach,4,3,H,6.0,5.0,1.0,3.0,9.0,7.0
-20/04/2024,Wolfsburg,Bochum,1,0,H,5.0,8.0,4.0,3.0,5.0,1.0
 20/04/2024,Union Berlin,Bayern Munich,1,5,A,5.0,3.0,0.0,0.0,4.0,9.0
-21/04/2024,Werder Bremen,Stuttgart,2,1,H,1.0,7.0,3.0,3.0,2.0,5.0
+20/04/2024,Wolfsburg,Bochum,1,0,H,5.0,8.0,4.0,3.0,5.0,1.0
 21/04/2024,Dortmund,Leverkusen,1,1,D,2.0,6.0,4.0,3.0,2.0,5.0
 21/04/2024,Freiburg,Mainz,1,1,D,2.0,4.0,3.0,4.0,3.0,4.0
+21/04/2024,Werder Bremen,Stuttgart,2,1,H,1.0,7.0,3.0,3.0,2.0,5.0
 26/04/2024,Bochum,Hoffenheim,3,2,H,10.0,4.0,1.0,1.0,13.0,4.0
 27/04/2024,Augsburg,Werder Bremen,0,3,A,6.0,4.0,1.0,2.0,1.0,8.0
 27/04/2024,Bayern Munich,Ein Frankfurt,2,1,H,4.0,2.0,0.0,3.0,9.0,3.0
 27/04/2024,Freiburg,Wolfsburg,1,2,A,3.0,6.0,4.0,2.0,3.0,5.0
-27/04/2024,RB Leipzig,Dortmund,4,1,H,5.0,8.0,1.0,2.0,7.0,5.0
 27/04/2024,Leverkusen,Stuttgart,2,2,D,5.0,2.0,4.0,3.0,6.0,4.0
+27/04/2024,RB Leipzig,Dortmund,4,1,H,5.0,8.0,1.0,2.0,7.0,5.0
+28/04/2024,Darmstadt,Heidenheim,0,1,A,3.0,8.0,2.0,1.0,4.0,6.0
 28/04/2024,M'gladbach,Union Berlin,0,0,D,3.0,4.0,2.0,2.0,4.0,7.0
 28/04/2024,Mainz,FC Koln,1,1,D,6.0,6.0,4.0,4.0,4.0,6.0
-28/04/2024,Darmstadt,Heidenheim,0,1,A,3.0,8.0,2.0,1.0,4.0,6.0
 03/05/2024,Hoffenheim,RB Leipzig,1,1,D,4.0,4.0,1.0,3.0,8.0,5.0
 04/05/2024,Dortmund,Augsburg,5,1,H,6.0,9.0,0.0,1.0,10.0,4.0
+04/05/2024,FC Koln,Freiburg,0,0,D,7.0,1.0,1.0,1.0,7.0,0.0
 04/05/2024,Stuttgart,Bayern Munich,3,1,H,3.0,1.0,1.0,2.0,11.0,3.0
 04/05/2024,Werder Bremen,M'gladbach,2,2,D,7.0,2.0,0.0,0.0,6.0,7.0
 04/05/2024,Wolfsburg,Darmstadt,3,0,H,9.0,2.0,0.0,3.0,6.0,1.0
-04/05/2024,FC Koln,Freiburg,0,0,D,7.0,1.0,1.0,1.0,7.0,0.0
-05/05/2024,Union Berlin,Bochum,3,4,A,6.0,4.0,0.0,1.0,6.0,5.0
 05/05/2024,Ein Frankfurt,Leverkusen,1,5,A,10.0,5.0,0.0,0.0,5.0,6.0
 05/05/2024,Heidenheim,Mainz,1,1,D,6.0,3.0,2.0,3.0,6.0,4.0
+05/05/2024,Union Berlin,Bochum,3,4,A,6.0,4.0,0.0,1.0,6.0,5.0
 10/05/2024,Augsburg,Stuttgart,0,1,A,5.0,5.0,4.0,2.0,1.0,7.0
 11/05/2024,FC Koln,Union Berlin,3,2,H,6.0,8.0,3.0,2.0,5.0,6.0
 11/05/2024,Freiburg,Heidenheim,1,1,D,2.0,4.0,1.0,1.0,3.0,3.0
 11/05/2024,M'gladbach,Ein Frankfurt,1,1,D,2.0,8.0,1.0,0.0,3.0,1.0
-11/05/2024,RB Leipzig,Werder Bremen,1,1,D,4.0,3.0,1.0,0.0,5.0,1.0
 11/05/2024,Mainz,Dortmund,3,0,H,4.0,2.0,2.0,2.0,6.0,2.0
-12/05/2024,Darmstadt,Hoffenheim,0,6,A,2.0,3.0,3.0,0.0,1.0,7.0
+11/05/2024,RB Leipzig,Werder Bremen,1,1,D,4.0,3.0,1.0,0.0,5.0,1.0
 12/05/2024,Bayern Munich,Wolfsburg,2,0,H,4.0,0.0,0.0,2.0,3.0,2.0
 12/05/2024,Bochum,Leverkusen,0,5,A,2.0,6.0,2.0,1.0,0.0,10.0
+12/05/2024,Darmstadt,Hoffenheim,0,6,A,2.0,3.0,3.0,0.0,1.0,7.0
 18/05/2024,Dortmund,Darmstadt,4,0,H,7.0,3.0,0.0,3.0,10.0,1.0
 18/05/2024,Ein Frankfurt,RB Leipzig,2,2,D,8.0,3.0,2.0,2.0,6.0,5.0
 18/05/2024,Heidenheim,FC Koln,4,1,H,5.0,12.0,1.0,3.0,7.0,9.0
@@ -613,65 +613,65 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 18/05/2024,Wolfsburg,Mainz,1,3,A,1.0,3.0,2.0,3.0,4.0,6.0
 23/08/2024,M'gladbach,Leverkusen,2,3,A,2.0,4.0,1.0,0.0,7.0,9.0
 24/08/2024,Augsburg,Werder Bremen,2,2,D,4.0,2.0,3.0,1.0,3.0,6.0
+24/08/2024,Dortmund,Ein Frankfurt,2,0,H,7.0,7.0,0.0,1.0,5.0,2.0
 24/08/2024,Freiburg,Stuttgart,3,1,H,6.0,3.0,2.0,1.0,4.0,2.0
 24/08/2024,Hoffenheim,Holstein Kiel,3,2,H,8.0,6.0,2.0,3.0,8.0,6.0
 24/08/2024,Mainz,Union Berlin,1,1,D,8.0,9.0,1.0,3.0,3.0,4.0
 24/08/2024,RB Leipzig,Bochum,1,0,H,9.0,3.0,1.0,3.0,3.0,4.0
-24/08/2024,Dortmund,Ein Frankfurt,2,0,H,7.0,7.0,0.0,1.0,5.0,2.0
-25/08/2024,Wolfsburg,Bayern Munich,2,3,A,1.0,7.0,2.0,3.0,2.0,8.0
 25/08/2024,St Pauli,Heidenheim,0,2,A,4.0,2.0,2.0,3.0,3.0,3.0
+25/08/2024,Wolfsburg,Bayern Munich,2,3,A,1.0,7.0,2.0,3.0,2.0,8.0
 30/08/2024,Union Berlin,St Pauli,1,0,H,5.0,4.0,3.0,1.0,5.0,2.0
 31/08/2024,Bochum,M'gladbach,0,2,A,3.0,4.0,1.0,0.0,4.0,6.0
 31/08/2024,Ein Frankfurt,Hoffenheim,3,1,H,1.0,4.0,0.0,3.0,7.0,3.0
 31/08/2024,Holstein Kiel,Wolfsburg,0,2,A,1.0,7.0,4.0,7.0,5.0,4.0
+31/08/2024,Leverkusen,RB Leipzig,2,3,A,18.0,2.0,3.0,1.0,10.0,4.0
 31/08/2024,Stuttgart,Mainz,3,3,D,11.0,2.0,4.0,2.0,13.0,7.0
 31/08/2024,Werder Bremen,Dortmund,0,0,D,5.0,6.0,2.0,7.0,1.0,4.0
-31/08/2024,Leverkusen,RB Leipzig,2,3,A,18.0,2.0,3.0,1.0,10.0,4.0
-01/09/2024,Heidenheim,Augsburg,4,0,H,5.0,6.0,0.0,3.0,9.0,1.0
 01/09/2024,Bayern Munich,Freiburg,2,0,H,2.0,4.0,1.0,0.0,4.0,4.0
+01/09/2024,Heidenheim,Augsburg,4,0,H,5.0,6.0,0.0,3.0,9.0,1.0
 13/09/2024,Dortmund,Heidenheim,4,2,H,8.0,1.0,2.0,2.0,7.0,4.0
 14/09/2024,Freiburg,Bochum,2,1,H,5.0,6.0,0.0,3.0,9.0,2.0
 14/09/2024,Hoffenheim,Leverkusen,1,4,A,4.0,12.0,2.0,2.0,5.0,8.0
+14/09/2024,Holstein Kiel,Bayern Munich,1,6,A,2.0,10.0,0.0,1.0,1.0,13.0
 14/09/2024,M'gladbach,Stuttgart,1,3,A,6.0,2.0,2.0,2.0,7.0,7.0
 14/09/2024,RB Leipzig,Union Berlin,0,0,D,6.0,5.0,2.0,3.0,3.0,3.0
 14/09/2024,Wolfsburg,Ein Frankfurt,1,2,A,5.0,4.0,1.0,2.0,4.0,7.0
-14/09/2024,Holstein Kiel,Bayern Munich,1,6,A,2.0,10.0,0.0,1.0,1.0,13.0
 15/09/2024,Augsburg,St Pauli,3,1,H,7.0,7.0,4.0,3.0,10.0,3.0
 15/09/2024,Mainz,Werder Bremen,1,2,A,10.0,4.0,3.0,1.0,5.0,5.0
 20/09/2024,Augsburg,Mainz,2,3,A,14.0,1.0,3.0,5.0,9.0,3.0
 21/09/2024,Bochum,Holstein Kiel,2,2,D,2.0,5.0,4.0,1.0,3.0,4.0
+21/09/2024,Ein Frankfurt,M'gladbach,2,0,H,8.0,5.0,1.0,1.0,4.0,7.0
 21/09/2024,Heidenheim,Freiburg,0,3,A,3.0,9.0,1.0,1.0,2.0,5.0
 21/09/2024,Union Berlin,Hoffenheim,2,1,H,5.0,5.0,3.0,3.0,2.0,3.0
 21/09/2024,Werder Bremen,Bayern Munich,0,5,A,1.0,4.0,0.0,3.0,0.0,7.0
-21/09/2024,Ein Frankfurt,M'gladbach,2,0,H,8.0,5.0,1.0,1.0,4.0,7.0
 22/09/2024,Leverkusen,Wolfsburg,4,3,H,6.0,2.0,4.0,5.0,7.0,4.0
-22/09/2024,Stuttgart,Dortmund,5,1,H,6.0,4.0,1.0,3.0,9.0,3.0
 22/09/2024,St Pauli,RB Leipzig,0,0,D,3.0,1.0,2.0,1.0,4.0,5.0
+22/09/2024,Stuttgart,Dortmund,5,1,H,6.0,4.0,1.0,3.0,9.0,3.0
 27/09/2024,Dortmund,Bochum,4,2,H,11.0,0.0,2.0,0.0,8.0,6.0
+28/09/2024,Bayern Munich,Leverkusen,1,1,D,6.0,1.0,1.0,3.0,3.0,3.0
 28/09/2024,Freiburg,St Pauli,0,3,A,4.0,2.0,3.0,3.0,2.0,4.0
-28/09/2024,Mainz,Heidenheim,0,2,A,7.0,6.0,4.0,4.0,2.0,7.0
 28/09/2024,M'gladbach,Union Berlin,1,0,H,2.0,4.0,3.0,1.0,3.0,3.0
+28/09/2024,Mainz,Heidenheim,0,2,A,7.0,6.0,4.0,4.0,2.0,7.0
 28/09/2024,RB Leipzig,Augsburg,4,0,H,8.0,5.0,1.0,2.0,7.0,1.0
 28/09/2024,Wolfsburg,Stuttgart,2,2,D,1.0,3.0,5.0,2.0,2.0,5.0
-28/09/2024,Bayern Munich,Leverkusen,1,1,D,6.0,1.0,1.0,3.0,3.0,3.0
-29/09/2024,Holstein Kiel,Ein Frankfurt,2,4,A,4.0,9.0,1.0,3.0,5.0,10.0
 29/09/2024,Hoffenheim,Werder Bremen,3,4,A,2.0,6.0,3.0,3.0,5.0,10.0
+29/09/2024,Holstein Kiel,Ein Frankfurt,2,4,A,4.0,9.0,1.0,3.0,5.0,10.0
 04/10/2024,Augsburg,M'gladbach,2,1,H,6.0,5.0,2.0,4.0,5.0,5.0
 05/10/2024,Bochum,Wolfsburg,1,3,A,7.0,6.0,1.0,2.0,5.0,5.0
 05/10/2024,Leverkusen,Holstein Kiel,2,2,D,12.0,3.0,2.0,2.0,7.0,4.0
+05/10/2024,St Pauli,Mainz,0,3,A,2.0,2.0,0.0,3.0,4.0,4.0
 05/10/2024,Union Berlin,Dortmund,2,1,H,3.0,3.0,4.0,4.0,5.0,5.0
 05/10/2024,Werder Bremen,Freiburg,0,1,A,7.0,5.0,1.0,2.0,3.0,3.0
-05/10/2024,St Pauli,Mainz,0,3,A,2.0,2.0,0.0,3.0,4.0,4.0
-06/10/2024,Heidenheim,RB Leipzig,0,1,A,3.0,2.0,2.0,2.0,4.0,2.0
 06/10/2024,Ein Frankfurt,Bayern Munich,3,3,D,0.0,11.0,1.0,1.0,4.0,13.0
+06/10/2024,Heidenheim,RB Leipzig,0,1,A,3.0,2.0,2.0,2.0,4.0,2.0
 06/10/2024,Stuttgart,Hoffenheim,1,1,D,10.0,5.0,1.0,4.0,7.0,5.0
 18/10/2024,Dortmund,St Pauli,2,1,H,7.0,1.0,2.0,1.0,7.0,3.0
+19/10/2024,Bayern Munich,Stuttgart,4,0,H,7.0,3.0,0.0,2.0,10.0,1.0
 19/10/2024,Freiburg,Augsburg,3,1,H,5.0,4.0,1.0,1.0,6.0,3.0
 19/10/2024,Hoffenheim,Bochum,3,1,H,4.0,2.0,1.0,1.0,7.0,4.0
 19/10/2024,Leverkusen,Ein Frankfurt,2,1,H,8.0,3.0,2.0,1.0,9.0,2.0
-19/10/2024,Mainz,RB Leipzig,0,2,A,5.0,3.0,1.0,3.0,2.0,5.0
 19/10/2024,M'gladbach,Heidenheim,3,2,H,6.0,3.0,3.0,3.0,10.0,6.0
-19/10/2024,Bayern Munich,Stuttgart,4,0,H,7.0,3.0,0.0,2.0,10.0,1.0
+19/10/2024,Mainz,RB Leipzig,0,2,A,5.0,3.0,1.0,3.0,2.0,5.0
 20/10/2024,Holstein Kiel,Union Berlin,0,2,A,7.0,3.0,2.0,1.0,5.0,4.0
 20/10/2024,Wolfsburg,Werder Bremen,2,4,A,4.0,4.0,1.0,1.0,6.0,7.0
 25/10/2024,Mainz,M'gladbach,1,1,D,2.0,4.0,3.0,2.0,6.0,5.0
@@ -681,44 +681,44 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 26/10/2024,Stuttgart,Holstein Kiel,2,1,H,9.0,5.0,3.0,6.0,6.0,3.0
 26/10/2024,Werder Bremen,Leverkusen,2,2,D,3.0,5.0,1.0,1.0,8.0,6.0
 27/10/2024,Bochum,Bayern Munich,0,5,A,2.0,5.0,1.0,1.0,2.0,9.0
-27/10/2024,Union Berlin,Ein Frankfurt,1,1,D,4.0,5.0,5.0,3.0,4.0,5.0
 27/10/2024,Heidenheim,Hoffenheim,0,0,D,7.0,3.0,1.0,2.0,3.0,4.0
+27/10/2024,Union Berlin,Ein Frankfurt,1,1,D,4.0,5.0,5.0,3.0,4.0,5.0
 01/11/2024,Leverkusen,Stuttgart,0,0,D,10.0,2.0,3.0,4.0,5.0,1.0
 02/11/2024,Bayern Munich,Union Berlin,3,0,H,7.0,4.0,0.0,2.0,7.0,1.0
+02/11/2024,Dortmund,RB Leipzig,2,1,H,4.0,0.0,3.0,4.0,7.0,3.0
 02/11/2024,Ein Frankfurt,Bochum,7,2,H,5.0,2.0,1.0,2.0,9.0,8.0
 02/11/2024,Hoffenheim,St Pauli,0,2,A,7.0,2.0,0.0,2.0,6.0,3.0
 02/11/2024,Holstein Kiel,Heidenheim,1,0,H,5.0,6.0,4.0,5.0,6.0,4.0
 02/11/2024,Wolfsburg,Augsburg,1,1,D,8.0,1.0,1.0,3.0,6.0,1.0
-02/11/2024,Dortmund,RB Leipzig,2,1,H,4.0,0.0,3.0,4.0,7.0,3.0
 03/11/2024,Freiburg,Mainz,0,0,D,8.0,4.0,1.0,2.0,2.0,2.0
 03/11/2024,M'gladbach,Werder Bremen,4,1,H,7.0,7.0,1.0,4.0,8.0,5.0
 08/11/2024,Union Berlin,Freiburg,0,0,D,4.0,1.0,2.0,0.0,6.0,4.0
 09/11/2024,Bochum,Leverkusen,1,1,D,6.0,4.0,0.0,1.0,3.0,3.0
 09/11/2024,Mainz,Dortmund,3,1,H,8.0,0.0,3.0,1.0,9.0,1.0
+09/11/2024,RB Leipzig,M'gladbach,0,0,D,8.0,4.0,2.0,2.0,4.0,4.0
 09/11/2024,St Pauli,Bayern Munich,0,1,A,5.0,10.0,2.0,2.0,0.0,6.0
 09/11/2024,Werder Bremen,Holstein Kiel,2,1,H,6.0,3.0,3.0,2.0,5.0,5.0
-09/11/2024,RB Leipzig,M'gladbach,0,0,D,8.0,4.0,2.0,2.0,4.0,4.0
 10/11/2024,Augsburg,Hoffenheim,0,0,D,10.0,6.0,2.0,3.0,4.0,2.0
-10/11/2024,Stuttgart,Ein Frankfurt,2,3,A,8.0,3.0,2.0,3.0,11.0,5.0
 10/11/2024,Heidenheim,Wolfsburg,1,3,A,5.0,5.0,1.0,6.0,4.0,6.0
+10/11/2024,Stuttgart,Ein Frankfurt,2,3,A,8.0,3.0,2.0,3.0,11.0,5.0
 22/11/2024,Bayern Munich,Augsburg,3,0,H,8.0,0.0,0.0,2.0,14.0,1.0
 23/11/2024,Dortmund,Freiburg,4,0,H,7.0,0.0,1.0,2.0,7.0,3.0
+23/11/2024,Ein Frankfurt,Werder Bremen,1,0,H,5.0,6.0,2.0,2.0,5.0,1.0
 23/11/2024,Hoffenheim,RB Leipzig,4,3,H,4.0,3.0,2.0,1.0,7.0,6.0
 23/11/2024,Leverkusen,Heidenheim,5,2,H,6.0,0.0,0.0,0.0,10.0,3.0
 23/11/2024,Stuttgart,Bochum,2,0,H,7.0,4.0,2.0,3.0,5.0,2.0
 23/11/2024,Wolfsburg,Union Berlin,1,0,H,8.0,5.0,1.0,2.0,5.0,4.0
-23/11/2024,Ein Frankfurt,Werder Bremen,1,0,H,5.0,6.0,2.0,2.0,5.0,1.0
 24/11/2024,Holstein Kiel,Mainz,0,3,A,2.0,6.0,1.0,0.0,2.0,7.0
 24/11/2024,M'gladbach,St Pauli,2,0,H,5.0,4.0,1.0,0.0,4.0,3.0
 29/11/2024,St Pauli,Holstein Kiel,3,1,H,4.0,4.0,2.0,5.0,4.0,3.0
 30/11/2024,Augsburg,Bochum,1,0,H,6.0,1.0,3.0,3.0,4.0,1.0
+30/11/2024,Dortmund,Bayern Munich,1,1,D,2.0,3.0,2.0,2.0,2.0,5.0
 30/11/2024,Freiburg,M'gladbach,3,1,H,4.0,6.0,1.0,1.0,7.0,4.0
 30/11/2024,RB Leipzig,Wolfsburg,1,5,A,7.0,3.0,2.0,1.0,4.0,8.0
 30/11/2024,Union Berlin,Leverkusen,1,2,A,1.0,3.0,4.0,2.0,2.0,3.0
 30/11/2024,Werder Bremen,Stuttgart,2,2,D,11.0,2.0,1.0,1.0,6.0,4.0
-30/11/2024,Dortmund,Bayern Munich,1,1,D,2.0,3.0,2.0,2.0,2.0,5.0
-01/12/2024,Mainz,Hoffenheim,2,0,H,8.0,3.0,1.0,3.0,8.0,2.0
 01/12/2024,Heidenheim,Ein Frankfurt,0,4,A,6.0,5.0,0.0,2.0,1.0,8.0
+01/12/2024,Mainz,Hoffenheim,2,0,H,8.0,3.0,1.0,3.0,8.0,2.0
 06/12/2024,Stuttgart,Union Berlin,3,2,H,1.0,6.0,1.0,6.0,5.0,3.0
 07/12/2024,Bayern Munich,Heidenheim,4,2,H,8.0,0.0,1.0,0.0,10.0,2.0
 07/12/2024,Bochum,Werder Bremen,0,1,A,9.0,5.0,1.0,1.0,2.0,1.0
@@ -726,41 +726,41 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 07/12/2024,Holstein Kiel,RB Leipzig,0,2,A,6.0,1.0,4.0,3.0,5.0,5.0
 07/12/2024,Leverkusen,St Pauli,2,1,H,7.0,4.0,1.0,3.0,2.0,4.0
 07/12/2024,M'gladbach,Dortmund,1,1,D,7.0,4.0,3.0,2.0,3.0,3.0
-08/12/2024,Wolfsburg,Mainz,4,3,H,3.0,5.0,3.0,4.0,5.0,5.0
 08/12/2024,Hoffenheim,Freiburg,1,1,D,6.0,1.0,1.0,1.0,5.0,4.0
+08/12/2024,Wolfsburg,Mainz,4,3,H,3.0,5.0,3.0,4.0,5.0,5.0
 13/12/2024,Freiburg,Wolfsburg,3,2,H,5.0,6.0,4.0,1.0,9.0,5.0
 14/12/2024,Augsburg,Leverkusen,0,2,A,4.0,9.0,3.0,0.0,4.0,3.0
-14/12/2024,Mainz,Bayern Munich,2,1,H,3.0,2.0,3.0,2.0,4.0,1.0
 14/12/2024,M'gladbach,Holstein Kiel,4,1,H,5.0,2.0,1.0,1.0,6.0,3.0
-14/12/2024,Union Berlin,Bochum,0,2,A,,,,,,
+14/12/2024,Mainz,Bayern Munich,2,1,H,3.0,2.0,3.0,2.0,4.0,1.0
 14/12/2024,St Pauli,Werder Bremen,0,2,A,4.0,5.0,2.0,3.0,4.0,4.0
-15/12/2024,Heidenheim,Stuttgart,1,3,A,9.0,6.0,4.0,3.0,2.0,7.0
+14/12/2024,Union Berlin,Bochum,0,2,A,,,,,,
 15/12/2024,Dortmund,Hoffenheim,1,1,D,3.0,9.0,5.0,2.0,2.0,1.0
+15/12/2024,Heidenheim,Stuttgart,1,3,A,9.0,6.0,4.0,3.0,2.0,7.0
 15/12/2024,RB Leipzig,Ein Frankfurt,2,1,H,6.0,7.0,1.0,3.0,9.0,3.0
 20/12/2024,Bayern Munich,RB Leipzig,5,1,H,8.0,1.0,5.0,2.0,9.0,1.0
 21/12/2024,Ein Frankfurt,Mainz,1,3,A,17.0,2.0,1.0,1.0,9.0,3.0
 21/12/2024,Hoffenheim,M'gladbach,1,2,A,8.0,4.0,0.0,0.0,8.0,3.0
 21/12/2024,Holstein Kiel,Augsburg,5,1,H,3.0,8.0,0.0,4.0,6.0,4.0
+21/12/2024,Leverkusen,Freiburg,5,1,H,4.0,2.0,1.0,2.0,12.0,2.0
 21/12/2024,Stuttgart,St Pauli,0,1,A,9.0,1.0,2.0,2.0,5.0,5.0
 21/12/2024,Werder Bremen,Union Berlin,4,1,H,4.0,9.0,2.0,2.0,6.0,4.0
-21/12/2024,Leverkusen,Freiburg,5,1,H,4.0,2.0,1.0,2.0,12.0,2.0
 22/12/2024,Bochum,Heidenheim,2,0,H,5.0,2.0,2.0,7.0,4.0,2.0
 22/12/2024,Wolfsburg,Dortmund,1,3,A,10.0,4.0,3.0,2.0,5.0,4.0
 10/01/2025,Dortmund,Leverkusen,2,3,A,6.0,1.0,1.0,2.0,5.0,5.0
 11/01/2025,Freiburg,Holstein Kiel,3,2,H,7.0,1.0,2.0,3.0,5.0,7.0
 11/01/2025,Heidenheim,Union Berlin,2,0,H,5.0,4.0,0.0,1.0,9.0,6.0
 11/01/2025,Hoffenheim,Wolfsburg,0,1,A,4.0,8.0,1.0,2.0,2.0,3.0
+11/01/2025,M'gladbach,Bayern Munich,0,1,A,4.0,10.0,3.0,1.0,0.0,10.0
 11/01/2025,Mainz,Bochum,2,0,H,5.0,6.0,0.0,2.0,5.0,2.0
 11/01/2025,St Pauli,Ein Frankfurt,0,1,A,3.0,3.0,0.0,3.0,4.0,6.0
-11/01/2025,M'gladbach,Bayern Munich,0,1,A,4.0,10.0,3.0,1.0,0.0,10.0
-12/01/2025,RB Leipzig,Werder Bremen,4,2,H,4.0,1.0,1.0,1.0,7.0,2.0
 12/01/2025,Augsburg,Stuttgart,0,1,A,3.0,9.0,5.0,1.0,2.0,5.0
-14/01/2025,Holstein Kiel,Dortmund,4,2,H,1.0,9.0,2.0,2.0,7.0,4.0
+12/01/2025,RB Leipzig,Werder Bremen,4,2,H,4.0,1.0,1.0,1.0,7.0,2.0
 14/01/2025,Ein Frankfurt,Freiburg,4,1,H,8.0,1.0,1.0,1.0,8.0,5.0
+14/01/2025,Holstein Kiel,Dortmund,4,2,H,1.0,9.0,2.0,2.0,7.0,4.0
 14/01/2025,Leverkusen,Mainz,1,0,H,8.0,4.0,2.0,3.0,9.0,4.0
 14/01/2025,Wolfsburg,M'gladbach,5,1,H,4.0,7.0,1.0,0.0,5.0,5.0
-15/01/2025,Bochum,St Pauli,1,0,H,6.0,7.0,1.0,3.0,5.0,1.0
 15/01/2025,Bayern Munich,Hoffenheim,5,0,H,13.0,1.0,1.0,1.0,10.0,2.0
+15/01/2025,Bochum,St Pauli,1,0,H,6.0,7.0,1.0,3.0,5.0,1.0
 15/01/2025,Stuttgart,RB Leipzig,2,1,H,5.0,0.0,2.0,7.0,6.0,3.0
 15/01/2025,Union Berlin,Augsburg,0,2,A,7.0,4.0,1.0,2.0,2.0,5.0
 15/01/2025,Werder Bremen,Heidenheim,3,3,D,4.0,2.0,5.0,3.0,5.0,5.0
@@ -769,17 +769,17 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 18/01/2025,Bochum,RB Leipzig,3,3,D,6.0,3.0,4.0,0.0,3.0,3.0
 18/01/2025,Heidenheim,St Pauli,0,2,A,4.0,4.0,1.0,2.0,1.0,4.0
 18/01/2025,Holstein Kiel,Hoffenheim,1,3,A,4.0,3.0,2.0,1.0,3.0,6.0
-18/01/2025,Stuttgart,Freiburg,4,0,H,4.0,1.0,5.0,3.0,7.0,0.0
 18/01/2025,Leverkusen,M'gladbach,3,1,H,7.0,6.0,0.0,2.0,5.0,4.0
+18/01/2025,Stuttgart,Freiburg,4,0,H,4.0,1.0,5.0,3.0,7.0,0.0
 19/01/2025,Union Berlin,Mainz,2,1,H,2.0,2.0,2.0,2.0,4.0,1.0
 19/01/2025,Werder Bremen,Augsburg,0,2,A,6.0,2.0,1.0,2.0,2.0,4.0
 24/01/2025,Wolfsburg,Holstein Kiel,2,2,D,10.0,3.0,2.0,4.0,5.0,2.0
 25/01/2025,Augsburg,Heidenheim,2,1,H,6.0,4.0,1.0,0.0,7.0,6.0
 25/01/2025,Dortmund,Werder Bremen,2,2,D,5.0,5.0,1.0,4.0,4.0,4.0
 25/01/2025,Freiburg,Bayern Munich,1,2,A,2.0,4.0,4.0,2.0,2.0,3.0
+25/01/2025,M'gladbach,Bochum,3,0,H,8.0,7.0,1.0,3.0,6.0,4.0
 25/01/2025,Mainz,Stuttgart,2,0,H,9.0,2.0,4.0,3.0,4.0,5.0
 25/01/2025,RB Leipzig,Leverkusen,2,2,D,7.0,3.0,0.0,0.0,4.0,7.0
-25/01/2025,M'gladbach,Bochum,3,0,H,8.0,7.0,1.0,3.0,6.0,4.0
 26/01/2025,Hoffenheim,Ein Frankfurt,2,2,D,9.0,3.0,3.0,0.0,8.0,7.0
 26/01/2025,St Pauli,Union Berlin,3,0,H,5.0,7.0,0.0,3.0,5.0,2.0
 31/01/2025,Werder Bremen,Mainz,1,0,H,3.0,8.0,8.0,4.0,5.0,2.0
@@ -795,65 +795,65 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 08/02/2025,Dortmund,Stuttgart,1,2,A,9.0,4.0,5.0,2.0,5.0,2.0
 08/02/2025,Freiburg,Heidenheim,1,0,H,6.0,3.0,3.0,1.0,3.0,5.0
 08/02/2025,Hoffenheim,Union Berlin,0,4,A,8.0,4.0,2.0,1.0,4.0,7.0
+08/02/2025,M'gladbach,Ein Frankfurt,1,1,D,6.0,1.0,3.0,3.0,3.0,7.0
 08/02/2025,Mainz,Augsburg,0,0,D,1.0,3.0,3.0,3.0,5.0,2.0
 08/02/2025,Wolfsburg,Leverkusen,0,0,D,3.0,9.0,2.0,3.0,8.0,1.0
-08/02/2025,M'gladbach,Ein Frankfurt,1,1,D,6.0,1.0,3.0,3.0,3.0,7.0
 09/02/2025,Holstein Kiel,Bochum,2,2,D,3.0,5.0,2.0,2.0,3.0,6.0
 09/02/2025,RB Leipzig,St Pauli,2,0,H,5.0,4.0,2.0,2.0,6.0,4.0
 14/02/2025,Augsburg,RB Leipzig,0,0,D,8.0,9.0,2.0,1.0,2.0,4.0
 15/02/2025,Bochum,Dortmund,2,0,H,2.0,8.0,1.0,0.0,9.0,2.0
+15/02/2025,Leverkusen,Bayern Munich,0,0,D,6.0,0.0,2.0,3.0,3.0,0.0
 15/02/2025,St Pauli,Freiburg,0,1,A,2.0,6.0,1.0,0.0,1.0,4.0
 15/02/2025,Stuttgart,Wolfsburg,1,2,A,7.0,5.0,3.0,4.0,4.0,3.0
 15/02/2025,Union Berlin,M'gladbach,1,2,A,4.0,5.0,0.0,1.0,3.0,5.0
-15/02/2025,Leverkusen,Bayern Munich,0,0,D,6.0,0.0,2.0,3.0,3.0,0.0
-16/02/2025,Werder Bremen,Hoffenheim,1,3,A,6.0,4.0,2.0,3.0,1.0,7.0
 16/02/2025,Ein Frankfurt,Holstein Kiel,3,1,H,4.0,6.0,2.0,0.0,9.0,4.0
 16/02/2025,Heidenheim,Mainz,0,2,A,8.0,4.0,1.0,3.0,3.0,5.0
+16/02/2025,Werder Bremen,Hoffenheim,1,3,A,6.0,4.0,2.0,3.0,1.0,7.0
 21/02/2025,Freiburg,Werder Bremen,5,0,H,3.0,7.0,3.0,0.0,8.0,3.0
-22/02/2025,Holstein Kiel,Leverkusen,0,2,A,5.0,11.0,4.0,1.0,3.0,8.0
-22/02/2025,Mainz,St Pauli,2,0,H,6.0,5.0,3.0,3.0,5.0,0.0
-22/02/2025,M'gladbach,Augsburg,0,3,A,2.0,4.0,3.0,2.0,5.0,4.0
-22/02/2025,Wolfsburg,Bochum,1,1,D,3.0,5.0,2.0,3.0,6.0,5.0
 22/02/2025,Dortmund,Union Berlin,6,0,H,5.0,3.0,2.0,2.0,8.0,1.0
-23/02/2025,RB Leipzig,Heidenheim,2,2,D,7.0,4.0,3.0,3.0,6.0,2.0
+22/02/2025,Holstein Kiel,Leverkusen,0,2,A,5.0,11.0,4.0,1.0,3.0,8.0
+22/02/2025,M'gladbach,Augsburg,0,3,A,2.0,4.0,3.0,2.0,5.0,4.0
+22/02/2025,Mainz,St Pauli,2,0,H,6.0,5.0,3.0,3.0,5.0,0.0
+22/02/2025,Wolfsburg,Bochum,1,1,D,3.0,5.0,2.0,3.0,6.0,5.0
 23/02/2025,Bayern Munich,Ein Frankfurt,4,0,H,4.0,1.0,1.0,1.0,12.0,2.0
 23/02/2025,Hoffenheim,Stuttgart,1,1,D,4.0,8.0,0.0,0.0,2.0,7.0
+23/02/2025,RB Leipzig,Heidenheim,2,2,D,7.0,4.0,3.0,3.0,6.0,2.0
 28/02/2025,Stuttgart,Bayern Munich,1,3,A,4.0,6.0,5.0,3.0,3.0,8.0
 01/03/2025,Bochum,Hoffenheim,0,1,A,8.0,5.0,0.0,1.0,3.0,2.0
+01/03/2025,Ein Frankfurt,Leverkusen,1,4,A,2.0,6.0,1.0,1.0,3.0,9.0
 01/03/2025,Heidenheim,M'gladbach,0,3,A,6.0,2.0,2.0,3.0,5.0,5.0
 01/03/2025,RB Leipzig,Mainz,1,2,A,7.0,1.0,1.0,1.0,4.0,3.0
 01/03/2025,St Pauli,Dortmund,0,2,A,7.0,1.0,1.0,2.0,1.0,3.0
 01/03/2025,Werder Bremen,Wolfsburg,1,2,A,8.0,2.0,2.0,0.0,7.0,3.0
-01/03/2025,Ein Frankfurt,Leverkusen,1,4,A,2.0,6.0,1.0,1.0,3.0,9.0
-02/03/2025,Union Berlin,Holstein Kiel,0,1,A,11.0,3.0,4.0,0.0,3.0,3.0
 02/03/2025,Augsburg,Freiburg,0,0,D,5.0,2.0,1.0,1.0,5.0,3.0
+02/03/2025,Union Berlin,Holstein Kiel,0,1,A,11.0,3.0,4.0,0.0,3.0,3.0
 07/03/2025,M'gladbach,Mainz,1,3,A,4.0,3.0,0.0,1.0,4.0,8.0
 08/03/2025,Bayern Munich,Bochum,2,3,A,9.0,3.0,0.0,6.0,5.0,5.0
 08/03/2025,Dortmund,Augsburg,0,1,A,12.0,3.0,1.0,4.0,1.0,1.0
+08/03/2025,Freiburg,RB Leipzig,0,0,D,2.0,6.0,0.0,3.0,2.0,3.0
 08/03/2025,Holstein Kiel,Stuttgart,2,2,D,3.0,1.0,1.0,2.0,5.0,2.0
 08/03/2025,Leverkusen,Werder Bremen,0,2,A,10.0,3.0,4.0,4.0,4.0,7.0
 08/03/2025,Wolfsburg,St Pauli,1,1,D,6.0,6.0,1.0,0.0,4.0,4.0
-08/03/2025,Freiburg,RB Leipzig,0,0,D,2.0,6.0,0.0,3.0,2.0,3.0
 09/03/2025,Ein Frankfurt,Union Berlin,1,2,A,1.0,5.0,3.0,0.0,3.0,3.0
 09/03/2025,Hoffenheim,Heidenheim,1,1,D,6.0,4.0,2.0,3.0,3.0,5.0
 14/03/2025,St Pauli,Hoffenheim,1,0,H,11.0,2.0,0.0,1.0,5.0,0.0
 15/03/2025,Augsburg,Wolfsburg,1,0,H,1.0,4.0,1.0,2.0,2.0,2.0
 15/03/2025,Mainz,Freiburg,2,2,D,1.0,4.0,1.0,2.0,4.0,8.0
+15/03/2025,RB Leipzig,Dortmund,2,0,H,3.0,12.0,3.0,3.0,5.0,9.0
 15/03/2025,Union Berlin,Bayern Munich,1,1,D,2.0,14.0,1.0,2.0,3.0,4.0
 15/03/2025,Werder Bremen,M'gladbach,2,4,A,4.0,1.0,1.0,2.0,2.0,7.0
-15/03/2025,RB Leipzig,Dortmund,2,0,H,3.0,12.0,3.0,3.0,5.0,9.0
 16/03/2025,Bochum,Ein Frankfurt,1,3,A,8.0,3.0,4.0,1.0,7.0,7.0
 16/03/2025,Heidenheim,Holstein Kiel,3,1,H,3.0,5.0,1.0,3.0,5.0,4.0
 16/03/2025,Stuttgart,Leverkusen,3,4,A,1.0,10.0,3.0,2.0,6.0,4.0
 28/03/2025,Leverkusen,Bochum,3,1,H,3.0,2.0,0.0,1.0,5.0,3.0
 29/03/2025,Bayern Munich,St Pauli,3,2,H,5.0,4.0,3.0,0.0,9.0,4.0
+29/03/2025,Ein Frankfurt,Stuttgart,1,0,H,6.0,10.0,1.0,3.0,6.0,2.0
 29/03/2025,Hoffenheim,Augsburg,1,1,D,2.0,2.0,1.0,2.0,4.0,4.0
 29/03/2025,Holstein Kiel,Werder Bremen,0,3,A,3.0,4.0,4.0,1.0,0.0,7.0
 29/03/2025,M'gladbach,RB Leipzig,1,0,H,5.0,8.0,2.0,2.0,3.0,3.0
 29/03/2025,Wolfsburg,Heidenheim,0,1,A,4.0,5.0,2.0,4.0,2.0,4.0
-29/03/2025,Ein Frankfurt,Stuttgart,1,0,H,6.0,10.0,1.0,3.0,6.0,2.0
-30/03/2025,Freiburg,Union Berlin,1,2,A,3.0,3.0,3.0,4.0,3.0,6.0
 30/03/2025,Dortmund,Mainz,3,1,H,6.0,4.0,2.0,0.0,7.0,3.0
+30/03/2025,Freiburg,Union Berlin,1,2,A,3.0,3.0,3.0,4.0,3.0,6.0
 04/04/2025,Augsburg,Bayern Munich,1,3,A,2.0,4.0,4.0,0.0,3.0,7.0
 05/04/2025,Bochum,Stuttgart,0,4,A,2.0,4.0,1.0,1.0,2.0,6.0
 05/04/2025,Freiburg,Dortmund,1,4,A,3.0,4.0,1.0,0.0,3.0,7.0
@@ -864,57 +864,57 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 06/04/2025,St Pauli,M'gladbach,1,1,D,11.0,2.0,0.0,2.0,9.0,3.0
 06/04/2025,Union Berlin,Wolfsburg,1,0,H,6.0,4.0,0.0,1.0,3.0,3.0
 11/04/2025,Wolfsburg,RB Leipzig,2,3,A,8.0,5.0,2.0,3.0,6.0,5.0
+12/04/2025,Bayern Munich,Dortmund,2,2,D,6.0,5.0,0.0,0.0,11.0,3.0
 12/04/2025,Bochum,Augsburg,1,2,A,7.0,6.0,2.0,1.0,9.0,5.0
 12/04/2025,Hoffenheim,Mainz,2,0,H,4.0,7.0,4.0,2.0,5.0,1.0
 12/04/2025,Holstein Kiel,St Pauli,1,2,A,3.0,3.0,3.0,4.0,2.0,6.0
 12/04/2025,Leverkusen,Union Berlin,0,0,D,7.0,3.0,2.0,1.0,3.0,3.0
 12/04/2025,M'gladbach,Freiburg,1,2,A,4.0,6.0,0.0,1.0,1.0,7.0
-12/04/2025,Bayern Munich,Dortmund,2,2,D,6.0,5.0,0.0,0.0,11.0,3.0
-13/04/2025,Stuttgart,Werder Bremen,1,2,A,3.0,4.0,3.0,2.0,4.0,5.0
 13/04/2025,Ein Frankfurt,Heidenheim,3,0,H,5.0,3.0,1.0,1.0,8.0,3.0
+13/04/2025,Stuttgart,Werder Bremen,1,2,A,3.0,4.0,3.0,2.0,4.0,5.0
 19/04/2025,Freiburg,Hoffenheim,3,2,H,2.0,6.0,3.0,2.0,6.0,6.0
 19/04/2025,Heidenheim,Bayern Munich,0,4,A,4.0,4.0,3.0,1.0,1.0,11.0
 19/04/2025,Mainz,Wolfsburg,2,2,D,7.0,5.0,2.0,3.0,7.0,4.0
 19/04/2025,RB Leipzig,Holstein Kiel,1,1,D,9.0,7.0,1.0,2.0,4.0,3.0
-19/04/2025,Werder Bremen,Bochum,1,0,H,2.0,7.0,3.0,3.0,4.0,1.0
 19/04/2025,Union Berlin,Stuttgart,4,4,D,3.0,5.0,0.0,2.0,5.0,6.0
+19/04/2025,Werder Bremen,Bochum,1,0,H,2.0,7.0,3.0,3.0,4.0,1.0
 20/04/2025,Augsburg,Ein Frankfurt,0,0,D,3.0,9.0,2.0,1.0,2.0,5.0
 20/04/2025,Dortmund,M'gladbach,3,2,H,6.0,2.0,1.0,2.0,6.0,3.0
 20/04/2025,St Pauli,Leverkusen,1,1,D,4.0,4.0,1.0,4.0,5.0,4.0
 25/04/2025,Stuttgart,Heidenheim,0,1,A,6.0,5.0,0.0,4.0,3.0,2.0
 26/04/2025,Bayern Munich,Mainz,3,0,H,4.0,4.0,2.0,2.0,6.0,3.0
+26/04/2025,Ein Frankfurt,RB Leipzig,4,0,H,8.0,4.0,1.0,2.0,6.0,3.0
 26/04/2025,Hoffenheim,Dortmund,2,3,A,2.0,5.0,5.0,1.0,3.0,8.0
 26/04/2025,Holstein Kiel,M'gladbach,4,3,H,7.0,8.0,2.0,1.0,11.0,7.0
 26/04/2025,Leverkusen,Augsburg,2,0,H,3.0,7.0,0.0,1.0,5.0,2.0
 26/04/2025,Wolfsburg,Freiburg,0,1,A,3.0,2.0,3.0,1.0,1.0,2.0
-26/04/2025,Ein Frankfurt,RB Leipzig,4,0,H,8.0,4.0,1.0,2.0,6.0,3.0
 27/04/2025,Bochum,Union Berlin,1,1,D,10.0,4.0,3.0,2.0,4.0,1.0
 27/04/2025,Werder Bremen,St Pauli,0,0,D,1.0,3.0,2.0,3.0,2.0,4.0
 02/05/2025,Heidenheim,Bochum,0,0,D,6.0,4.0,0.0,1.0,3.0,3.0
+03/05/2025,Dortmund,Wolfsburg,4,0,H,4.0,3.0,0.0,1.0,5.0,2.0
 03/05/2025,M'gladbach,Hoffenheim,4,4,D,4.0,7.0,0.0,0.0,7.0,8.0
 03/05/2025,RB Leipzig,Bayern Munich,3,3,D,2.0,7.0,3.0,1.0,6.0,6.0
 03/05/2025,St Pauli,Stuttgart,0,1,A,4.0,4.0,6.0,3.0,1.0,8.0
 03/05/2025,Union Berlin,Werder Bremen,2,2,D,5.0,5.0,2.0,3.0,7.0,6.0
-03/05/2025,Dortmund,Wolfsburg,4,0,H,4.0,3.0,0.0,1.0,5.0,2.0
 04/05/2025,Augsburg,Holstein Kiel,1,3,A,12.0,0.0,0.0,2.0,10.0,5.0
 04/05/2025,Freiburg,Leverkusen,2,2,D,4.0,1.0,1.0,2.0,4.0,2.0
 04/05/2025,Mainz,Ein Frankfurt,1,1,D,8.0,1.0,1.0,0.0,3.0,2.0
 09/05/2025,Wolfsburg,Hoffenheim,2,2,D,5.0,6.0,0.0,2.0,5.0,7.0
+10/05/2025,Bayern Munich,M'gladbach,2,0,H,4.0,9.0,1.0,1.0,9.0,6.0
 10/05/2025,Bochum,Mainz,1,4,A,6.0,6.0,3.0,0.0,6.0,8.0
 10/05/2025,Holstein Kiel,Freiburg,1,2,A,2.0,5.0,1.0,0.0,3.0,4.0
 10/05/2025,Union Berlin,Heidenheim,0,3,A,1.0,2.0,2.0,0.0,1.0,4.0
 10/05/2025,Werder Bremen,RB Leipzig,0,0,D,11.0,4.0,1.0,3.0,6.0,4.0
-10/05/2025,Bayern Munich,M'gladbach,2,0,H,4.0,9.0,1.0,1.0,9.0,6.0
-11/05/2025,Leverkusen,Dortmund,2,4,A,12.0,0.0,0.0,2.0,10.0,5.0
 11/05/2025,Ein Frankfurt,St Pauli,2,2,D,3.0,1.0,2.0,2.0,5.0,2.0
+11/05/2025,Leverkusen,Dortmund,2,4,A,12.0,0.0,0.0,2.0,10.0,5.0
 11/05/2025,Stuttgart,Augsburg,4,0,H,11.0,2.0,1.0,1.0,11.0,0.0
 17/05/2025,Augsburg,Union Berlin,1,2,A,4.0,0.0,0.0,0.0,4.0,4.0
 17/05/2025,Dortmund,Holstein Kiel,3,0,H,7.0,1.0,3.0,1.0,6.0,2.0
 17/05/2025,Freiburg,Ein Frankfurt,1,3,A,4.0,7.0,2.0,4.0,1.0,6.0
 17/05/2025,Heidenheim,Werder Bremen,1,4,A,6.0,4.0,2.0,2.0,8.0,7.0
 17/05/2025,Hoffenheim,Bayern Munich,0,4,A,1.0,4.0,0.0,0.0,2.0,5.0
-17/05/2025,Mainz,Leverkusen,2,2,D,7.0,3.0,2.0,6.0,6.0,4.0
 17/05/2025,M'gladbach,Wolfsburg,0,1,A,7.0,10.0,0.0,0.0,3.0,6.0
+17/05/2025,Mainz,Leverkusen,2,2,D,7.0,3.0,2.0,6.0,6.0,4.0
 17/05/2025,RB Leipzig,Stuttgart,2,3,A,5.0,8.0,1.0,0.0,5.0,7.0
 17/05/2025,St Pauli,Bochum,0,2,A,7.0,4.0,0.0,0.0,2.0,6.0
 22/08/2025,Bayern Munich,RB Leipzig,6,0,H,5.0,5.0,4.0,1.0,10.0,1.0
@@ -922,160 +922,160 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 23/08/2025,Freiburg,Augsburg,1,3,A,5.0,5.0,4.0,5.0,4.0,5.0
 23/08/2025,Heidenheim,Wolfsburg,1,3,A,2.0,5.0,2.0,3.0,2.0,5.0
 23/08/2025,Leverkusen,Hoffenheim,1,2,A,6.0,4.0,0.0,4.0,2.0,5.0
-23/08/2025,Union Berlin,Stuttgart,2,1,H,5.0,11.0,4.0,4.0,2.0,6.0
 23/08/2025,St Pauli,Dortmund,3,3,D,5.0,2.0,2.0,3.0,7.0,7.0
-24/08/2025,Mainz,FC Koln,0,1,A,8.0,3.0,0.0,2.0,2.0,2.0
+23/08/2025,Union Berlin,Stuttgart,2,1,H,5.0,11.0,4.0,4.0,2.0,6.0
 24/08/2025,M'gladbach,Hamburg,0,0,D,7.0,6.0,2.0,1.0,4.0,2.0
+24/08/2025,Mainz,FC Koln,0,1,A,8.0,3.0,0.0,2.0,2.0,2.0
 29/08/2025,Hamburg,St Pauli,0,2,A,2.0,5.0,3.0,3.0,2.0,6.0
+30/08/2025,Augsburg,Bayern Munich,2,3,A,7.0,5.0,3.0,4.0,3.0,10.0
 30/08/2025,Hoffenheim,Ein Frankfurt,1,3,A,4.0,5.0,2.0,3.0,5.0,6.0
 30/08/2025,RB Leipzig,Heidenheim,2,0,H,4.0,3.0,2.0,5.0,5.0,3.0
 30/08/2025,Stuttgart,M'gladbach,1,0,H,6.0,10.0,2.0,1.0,5.0,6.0
 30/08/2025,Werder Bremen,Leverkusen,3,3,D,3.0,7.0,4.0,3.0,5.0,4.0
-30/08/2025,Augsburg,Bayern Munich,2,3,A,7.0,5.0,3.0,4.0,3.0,10.0
-31/08/2025,Wolfsburg,Mainz,1,1,D,3.0,10.0,3.0,5.0,3.0,3.0
 31/08/2025,Dortmund,Union Berlin,3,0,H,4.0,6.0,0.0,0.0,6.0,3.0
 31/08/2025,FC Koln,Freiburg,4,1,H,3.0,5.0,2.0,1.0,6.0,2.0
+31/08/2025,Wolfsburg,Mainz,1,1,D,3.0,10.0,3.0,5.0,3.0,3.0
 12/09/2025,Leverkusen,Ein Frankfurt,3,1,H,4.0,8.0,5.0,3.0,8.0,2.0
+13/09/2025,Bayern Munich,Hamburg,5,0,H,5.0,3.0,2.0,2.0,12.0,2.0
 13/09/2025,Freiburg,Stuttgart,3,1,H,7.0,1.0,1.0,1.0,6.0,2.0
 13/09/2025,Heidenheim,Dortmund,0,2,A,5.0,4.0,2.0,3.0,1.0,8.0
 13/09/2025,Mainz,RB Leipzig,0,1,A,3.0,5.0,1.0,0.0,2.0,3.0
 13/09/2025,Union Berlin,Hoffenheim,2,4,A,9.0,2.0,1.0,1.0,7.0,8.0
 13/09/2025,Wolfsburg,FC Koln,3,3,D,7.0,4.0,2.0,3.0,6.0,8.0
-13/09/2025,Bayern Munich,Hamburg,5,0,H,5.0,3.0,2.0,2.0,12.0,2.0
-14/09/2025,St Pauli,Augsburg,2,1,H,3.0,1.0,1.0,4.0,7.0,5.0
 14/09/2025,M'gladbach,Werder Bremen,0,4,A,9.0,4.0,1.0,0.0,3.0,7.0
+14/09/2025,St Pauli,Augsburg,2,1,H,3.0,1.0,1.0,4.0,7.0,5.0
 19/09/2025,Stuttgart,St Pauli,2,0,H,8.0,4.0,0.0,2.0,8.0,2.0
 20/09/2025,Augsburg,Mainz,1,4,A,6.0,6.0,1.0,2.0,5.0,4.0
 20/09/2025,Hamburg,Heidenheim,2,1,H,1.0,12.0,5.0,1.0,9.0,8.0
 20/09/2025,Hoffenheim,Bayern Munich,1,4,A,5.0,5.0,1.0,2.0,4.0,10.0
-20/09/2025,Werder Bremen,Freiburg,0,3,A,2.0,0.0,5.0,2.0,5.0,5.0
 20/09/2025,RB Leipzig,FC Koln,3,1,H,9.0,5.0,1.0,1.0,8.0,2.0
+20/09/2025,Werder Bremen,Freiburg,0,3,A,2.0,0.0,5.0,2.0,5.0,5.0
+21/09/2025,Dortmund,Wolfsburg,1,0,H,9.0,3.0,1.0,0.0,4.0,1.0
 21/09/2025,Ein Frankfurt,Union Berlin,3,4,A,5.0,1.0,3.0,2.0,10.0,5.0
 21/09/2025,Leverkusen,M'gladbach,1,1,D,3.0,4.0,5.0,5.0,9.0,7.0
-21/09/2025,Dortmund,Wolfsburg,1,0,H,9.0,3.0,1.0,0.0,4.0,1.0
 26/09/2025,Bayern Munich,Werder Bremen,4,0,H,7.0,6.0,2.0,0.0,13.0,3.0
 27/09/2025,Heidenheim,Augsburg,2,1,H,3.0,2.0,1.0,6.0,5.0,2.0
+27/09/2025,M'gladbach,Ein Frankfurt,4,6,A,4.0,6.0,1.0,2.0,8.0,7.0
 27/09/2025,Mainz,Dortmund,0,2,A,7.0,5.0,2.0,1.0,2.0,4.0
 27/09/2025,St Pauli,Leverkusen,1,2,A,13.0,1.0,3.0,5.0,6.0,4.0
 27/09/2025,Wolfsburg,RB Leipzig,0,1,A,6.0,11.0,2.0,2.0,4.0,6.0
-27/09/2025,M'gladbach,Ein Frankfurt,4,6,A,4.0,6.0,1.0,2.0,8.0,7.0
-28/09/2025,Freiburg,Hoffenheim,1,1,D,6.0,8.0,3.0,1.0,1.0,4.0
 28/09/2025,FC Koln,Stuttgart,1,2,A,8.0,8.0,2.0,2.0,6.0,5.0
+28/09/2025,Freiburg,Hoffenheim,1,1,D,6.0,8.0,3.0,1.0,1.0,4.0
 28/09/2025,Union Berlin,Hamburg,0,0,D,5.0,3.0,2.0,2.0,2.0,6.0
 03/10/2025,Hoffenheim,FC Koln,0,1,A,11.0,6.0,3.0,1.0,4.0,4.0
 04/10/2025,Augsburg,Wolfsburg,3,1,H,10.0,5.0,2.0,1.0,5.0,4.0
 04/10/2025,Dortmund,RB Leipzig,1,1,D,7.0,7.0,1.0,3.0,3.0,3.0
+04/10/2025,Ein Frankfurt,Bayern Munich,0,3,A,4.0,3.0,1.0,2.0,1.0,3.0
 04/10/2025,Leverkusen,Union Berlin,2,0,H,4.0,4.0,1.0,3.0,3.0,3.0
 04/10/2025,Werder Bremen,St Pauli,1,0,H,4.0,1.0,3.0,1.0,5.0,3.0
-04/10/2025,Ein Frankfurt,Bayern Munich,0,3,A,4.0,3.0,1.0,2.0,1.0,3.0
-05/10/2025,Stuttgart,Heidenheim,1,0,H,1.0,1.0,1.0,1.0,6.0,1.0
 05/10/2025,Hamburg,Mainz,4,0,H,1.0,4.0,2.0,3.0,9.0,4.0
 05/10/2025,M'gladbach,Freiburg,0,0,D,4.0,1.0,3.0,1.0,5.0,1.0
+05/10/2025,Stuttgart,Heidenheim,1,0,H,1.0,1.0,1.0,1.0,6.0,1.0
 17/10/2025,Union Berlin,M'gladbach,3,1,H,6.0,6.0,5.0,3.0,5.0,2.0
+18/10/2025,Bayern Munich,Dortmund,2,1,H,4.0,3.0,1.0,3.0,7.0,1.0
 18/10/2025,FC Koln,Augsburg,1,1,D,5.0,2.0,2.0,2.0,2.0,4.0
 18/10/2025,Heidenheim,Werder Bremen,2,2,D,12.0,2.0,1.0,3.0,11.0,4.0
 18/10/2025,Mainz,Leverkusen,3,4,A,2.0,3.0,4.0,4.0,4.0,8.0
 18/10/2025,RB Leipzig,Hamburg,2,1,H,3.0,5.0,3.0,1.0,4.0,3.0
 18/10/2025,Wolfsburg,Stuttgart,0,3,A,3.0,8.0,1.0,1.0,3.0,7.0
-18/10/2025,Bayern Munich,Dortmund,2,1,H,4.0,3.0,1.0,3.0,7.0,1.0
 19/10/2025,Freiburg,Ein Frankfurt,2,2,D,3.0,1.0,2.0,3.0,5.0,3.0
 19/10/2025,St Pauli,Hoffenheim,0,3,A,9.0,7.0,1.0,3.0,2.0,5.0
 24/10/2025,Werder Bremen,Union Berlin,1,0,H,5.0,6.0,4.0,0.0,3.0,2.0
 25/10/2025,Augsburg,RB Leipzig,0,6,A,2.0,3.0,3.0,1.0,2.0,8.0
+25/10/2025,Dortmund,FC Koln,1,0,H,17.0,2.0,2.0,2.0,9.0,0.0
 25/10/2025,Ein Frankfurt,St Pauli,2,0,H,1.0,3.0,0.0,1.0,6.0,1.0
 25/10/2025,Hamburg,Wolfsburg,0,1,A,11.0,1.0,1.0,5.0,6.0,2.0
 25/10/2025,Hoffenheim,Heidenheim,3,1,H,7.0,5.0,1.0,1.0,7.0,3.0
 25/10/2025,M'gladbach,Bayern Munich,0,3,A,1.0,8.0,0.0,3.0,0.0,11.0
-25/10/2025,Dortmund,FC Koln,1,0,H,17.0,2.0,2.0,2.0,9.0,0.0
 26/10/2025,Leverkusen,Freiburg,2,0,H,2.0,3.0,1.0,2.0,4.0,3.0
 26/10/2025,Stuttgart,Mainz,2,1,H,7.0,5.0,4.0,3.0,8.0,2.0
 31/10/2025,Augsburg,Dortmund,0,1,A,4.0,3.0,4.0,1.0,1.0,1.0
+01/11/2025,Bayern Munich,Leverkusen,3,0,H,10.0,4.0,1.0,1.0,4.0,1.0
 01/11/2025,Heidenheim,Ein Frankfurt,1,1,D,2.0,8.0,0.0,2.0,4.0,3.0
 01/11/2025,Mainz,Werder Bremen,1,1,D,2.0,0.0,1.0,3.0,5.0,3.0
 01/11/2025,RB Leipzig,Stuttgart,3,1,H,5.0,5.0,1.0,2.0,9.0,4.0
 01/11/2025,St Pauli,M'gladbach,0,4,A,8.0,1.0,4.0,0.0,4.0,11.0
 01/11/2025,Union Berlin,Freiburg,0,0,D,5.0,5.0,6.0,1.0,2.0,4.0
-01/11/2025,Bayern Munich,Leverkusen,3,0,H,10.0,4.0,1.0,1.0,4.0,1.0
 02/11/2025,FC Koln,Hamburg,4,1,H,2.0,3.0,1.0,6.0,10.0,5.0
 02/11/2025,Wolfsburg,Hoffenheim,2,3,A,2.0,2.0,0.0,2.0,6.0,4.0
 07/11/2025,Werder Bremen,Wolfsburg,2,1,H,13.0,3.0,2.0,0.0,7.0,4.0
 08/11/2025,Hamburg,Dortmund,1,1,D,2.0,6.0,1.0,1.0,3.0,1.0
 08/11/2025,Hoffenheim,RB Leipzig,3,1,H,5.0,5.0,3.0,2.0,4.0,5.0
 08/11/2025,Leverkusen,Heidenheim,6,0,H,11.0,1.0,0.0,1.0,10.0,0.0
-08/11/2025,Union Berlin,Bayern Munich,2,2,D,6.0,5.0,2.0,4.0,4.0,4.0
 08/11/2025,M'gladbach,FC Koln,3,1,H,2.0,6.0,2.0,3.0,4.0,5.0
+08/11/2025,Union Berlin,Bayern Munich,2,2,D,6.0,5.0,2.0,4.0,4.0,4.0
+09/11/2025,Ein Frankfurt,Mainz,1,0,H,4.0,3.0,0.0,5.0,4.0,0.0
 09/11/2025,Freiburg,St Pauli,2,1,H,9.0,3.0,2.0,2.0,4.0,2.0
 09/11/2025,Stuttgart,Augsburg,3,2,H,4.0,4.0,2.0,3.0,6.0,6.0
-09/11/2025,Ein Frankfurt,Mainz,1,0,H,4.0,3.0,0.0,5.0,4.0,0.0
 21/11/2025,Mainz,Hoffenheim,1,1,D,7.0,4.0,3.0,2.0,3.0,5.0
 22/11/2025,Augsburg,Hamburg,1,0,H,4.0,3.0,2.0,3.0,6.0,6.0
 22/11/2025,Bayern Munich,Freiburg,6,2,H,3.0,5.0,1.0,0.0,8.0,2.0
 22/11/2025,Dortmund,Stuttgart,3,3,D,2.0,4.0,1.0,1.0,6.0,6.0
+22/11/2025,FC Koln,Ein Frankfurt,3,4,A,3.0,3.0,0.0,0.0,5.0,7.0
 22/11/2025,Heidenheim,M'gladbach,0,3,A,4.0,5.0,2.0,0.0,2.0,4.0
 22/11/2025,Wolfsburg,Leverkusen,1,3,A,9.0,1.0,2.0,1.0,10.0,3.0
-22/11/2025,FC Koln,Ein Frankfurt,3,4,A,3.0,3.0,0.0,0.0,5.0,7.0
 23/11/2025,RB Leipzig,Werder Bremen,2,0,H,13.0,7.0,1.0,2.0,13.0,6.0
 23/11/2025,St Pauli,Union Berlin,0,1,A,8.0,2.0,1.0,1.0,3.0,3.0
 28/11/2025,M'gladbach,RB Leipzig,0,0,D,5.0,6.0,0.0,3.0,1.0,4.0
 29/11/2025,Bayern Munich,St Pauli,3,1,H,10.0,2.0,1.0,1.0,4.0,1.0
 29/11/2025,Hoffenheim,Augsburg,3,0,H,7.0,2.0,1.0,0.0,3.0,4.0
+29/11/2025,Leverkusen,Dortmund,1,2,A,10.0,3.0,3.0,4.0,4.0,4.0
 29/11/2025,Union Berlin,Heidenheim,1,2,A,5.0,5.0,3.0,2.0,2.0,2.0
 29/11/2025,Werder Bremen,FC Koln,1,1,D,4.0,0.0,2.0,4.0,4.0,2.0
-29/11/2025,Leverkusen,Dortmund,1,2,A,10.0,3.0,3.0,4.0,4.0,4.0
-30/11/2025,Hamburg,Stuttgart,2,1,H,4.0,6.0,2.0,4.0,2.0,3.0
 30/11/2025,Ein Frankfurt,Wolfsburg,1,1,D,14.0,1.0,1.0,4.0,3.0,3.0
 30/11/2025,Freiburg,Mainz,4,0,H,6.0,2.0,0.0,2.0,10.0,1.0
+30/11/2025,Hamburg,Stuttgart,2,1,H,4.0,6.0,2.0,4.0,2.0,3.0
 05/12/2025,Mainz,M'gladbach,0,1,A,8.0,6.0,2.0,1.0,2.0,5.0
 06/12/2025,Augsburg,Leverkusen,2,0,H,5.0,7.0,4.0,3.0,6.0,2.0
 06/12/2025,FC Koln,St Pauli,1,1,D,5.0,4.0,0.0,1.0,8.0,1.0
 06/12/2025,Heidenheim,Freiburg,2,1,H,8.0,6.0,2.0,1.0,3.0,2.0
+06/12/2025,RB Leipzig,Ein Frankfurt,6,0,H,4.0,0.0,1.0,2.0,7.0,2.0
 06/12/2025,Stuttgart,Bayern Munich,0,5,A,3.0,4.0,2.0,4.0,1.0,11.0
 06/12/2025,Wolfsburg,Union Berlin,3,1,H,0.0,11.0,4.0,1.0,3.0,6.0
-06/12/2025,RB Leipzig,Ein Frankfurt,6,0,H,4.0,0.0,1.0,2.0,7.0,2.0
-07/12/2025,Hamburg,Werder Bremen,3,2,H,5.0,3.0,1.0,6.0,6.0,3.0
 07/12/2025,Dortmund,Hoffenheim,2,0,H,7.0,5.0,0.0,2.0,4.0,3.0
+07/12/2025,Hamburg,Werder Bremen,3,2,H,5.0,3.0,1.0,6.0,6.0,3.0
 12/12/2025,Union Berlin,RB Leipzig,3,1,H,4.0,6.0,2.0,2.0,6.0,3.0
 13/12/2025,Ein Frankfurt,Augsburg,1,0,H,2.0,6.0,2.0,3.0,4.0,1.0
 13/12/2025,Hoffenheim,Hamburg,4,1,H,3.0,3.0,1.0,3.0,6.0,5.0
+13/12/2025,Leverkusen,FC Koln,2,0,H,8.0,3.0,2.0,1.0,6.0,4.0
 13/12/2025,M'gladbach,Wolfsburg,1,3,A,6.0,3.0,0.0,1.0,4.0,6.0
 13/12/2025,St Pauli,Heidenheim,2,1,H,4.0,11.0,2.0,3.0,5.0,7.0
-13/12/2025,Leverkusen,FC Koln,2,0,H,8.0,3.0,2.0,1.0,6.0,4.0
-14/12/2025,Freiburg,Dortmund,1,1,D,6.0,0.0,3.0,2.0,6.0,4.0
 14/12/2025,Bayern Munich,Mainz,2,2,D,7.0,0.0,2.0,2.0,11.0,2.0
+14/12/2025,Freiburg,Dortmund,1,1,D,6.0,0.0,3.0,2.0,6.0,4.0
 14/12/2025,Werder Bremen,Stuttgart,0,4,A,0.0,9.0,2.0,0.0,3.0,12.0
 19/12/2025,Dortmund,M'gladbach,2,0,H,6.0,4.0,2.0,1.0,4.0,1.0
 20/12/2025,Augsburg,Werder Bremen,0,0,D,6.0,11.0,3.0,4.0,6.0,0.0
 20/12/2025,FC Koln,Union Berlin,0,1,A,3.0,6.0,2.0,5.0,2.0,3.0
 20/12/2025,Hamburg,Ein Frankfurt,1,1,D,5.0,5.0,0.0,0.0,3.0,3.0
+20/12/2025,RB Leipzig,Leverkusen,1,3,A,2.0,8.0,1.0,2.0,7.0,8.0
 20/12/2025,Stuttgart,Hoffenheim,0,0,D,4.0,2.0,3.0,2.0,3.0,1.0
 20/12/2025,Wolfsburg,Freiburg,3,4,A,2.0,6.0,1.0,1.0,6.0,8.0
-20/12/2025,RB Leipzig,Leverkusen,1,3,A,2.0,8.0,1.0,2.0,7.0,8.0
-21/12/2025,Mainz,St Pauli,0,0,D,9.0,5.0,1.0,1.0,1.0,1.0
 21/12/2025,Heidenheim,Bayern Munich,0,4,A,0.0,6.0,0.0,0.0,1.0,11.0
+21/12/2025,Mainz,St Pauli,0,0,D,9.0,5.0,1.0,1.0,1.0,1.0
 09/01/2026,Ein Frankfurt,Dortmund,3,3,D,2.0,5.0,3.0,3.0,6.0,6.0
 10/01/2026,Freiburg,Hamburg,2,1,H,0.0,3.0,3.0,5.0,7.0,5.0
 10/01/2026,Heidenheim,FC Koln,2,2,D,5.0,4.0,2.0,1.0,6.0,9.0
-10/01/2026,Union Berlin,Mainz,2,2,D,2.0,1.0,2.0,0.0,5.0,6.0
 10/01/2026,Leverkusen,Stuttgart,1,4,A,5.0,3.0,4.0,2.0,4.0,7.0
-11/01/2026,M'gladbach,Augsburg,4,0,H,2.0,2.0,0.0,1.0,7.0,2.0
+10/01/2026,Union Berlin,Mainz,2,2,D,2.0,1.0,2.0,0.0,5.0,6.0
 11/01/2026,Bayern Munich,Wolfsburg,8,1,H,6.0,2.0,0.0,1.0,10.0,3.0
-13/01/2026,Stuttgart,Ein Frankfurt,3,2,H,10.0,2.0,2.0,2.0,11.0,5.0
+11/01/2026,M'gladbach,Augsburg,4,0,H,2.0,2.0,0.0,1.0,7.0,2.0
 13/01/2026,Dortmund,Werder Bremen,3,0,H,3.0,3.0,2.0,0.0,8.0,3.0
 13/01/2026,Mainz,Heidenheim,2,1,H,4.0,1.0,2.0,2.0,6.0,4.0
-14/01/2026,Wolfsburg,St Pauli,2,1,H,7.0,4.0,1.0,2.0,5.0,4.0
+13/01/2026,Stuttgart,Ein Frankfurt,3,2,H,10.0,2.0,2.0,2.0,11.0,5.0
 14/01/2026,FC Koln,Bayern Munich,1,3,A,4.0,6.0,0.0,0.0,3.0,8.0
 14/01/2026,Hoffenheim,M'gladbach,5,1,H,6.0,2.0,1.0,1.0,10.0,5.0
 14/01/2026,RB Leipzig,Freiburg,2,0,H,7.0,2.0,0.0,4.0,7.0,1.0
+14/01/2026,Wolfsburg,St Pauli,2,1,H,7.0,4.0,1.0,2.0,5.0,4.0
 15/01/2026,Augsburg,Union Berlin,1,1,D,3.0,3.0,1.0,0.0,5.0,3.0
 16/01/2026,Werder Bremen,Ein Frankfurt,3,3,D,4.0,1.0,1.0,4.0,4.0,4.0
 17/01/2026,Dortmund,St Pauli,3,2,H,5.0,5.0,3.0,1.0,6.0,5.0
 17/01/2026,FC Koln,Mainz,2,1,H,9.0,5.0,4.0,4.0,6.0,7.0
 17/01/2026,Hamburg,M'gladbach,0,0,D,2.0,5.0,1.0,2.0,12.0,0.0
 17/01/2026,Hoffenheim,Leverkusen,1,0,H,3.0,5.0,2.0,1.0,8.0,2.0
-17/01/2026,Wolfsburg,Heidenheim,1,1,D,9.0,6.0,4.0,3.0,4.0,3.0
 17/01/2026,RB Leipzig,Bayern Munich,1,5,A,5.0,9.0,1.0,0.0,4.0,12.0
-18/01/2026,Stuttgart,Union Berlin,1,1,D,3.0,8.0,1.0,1.0,4.0,3.0
+17/01/2026,Wolfsburg,Heidenheim,1,1,D,9.0,6.0,4.0,3.0,4.0,3.0
 18/01/2026,Augsburg,Freiburg,2,2,D,9.0,6.0,3.0,2.0,5.0,5.0
+18/01/2026,Stuttgart,Union Berlin,1,1,D,3.0,8.0,1.0,1.0,4.0,3.0
 23/01/2026,St Pauli,Hamburg,0,0,D,5.0,4.0,1.0,1.0,3.0,2.0
 24/01/2026,Bayern Munich,Augsburg,1,2,A,9.0,3.0,1.0,1.0,6.0,6.0
 24/01/2026,Ein Frankfurt,Hoffenheim,1,3,A,6.0,6.0,0.0,4.0,3.0,5.0
@@ -1083,136 +1083,136 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 24/01/2026,Leverkusen,Werder Bremen,1,0,H,5.0,5.0,2.0,3.0,4.0,3.0
 24/01/2026,Mainz,Wolfsburg,3,1,H,15.0,1.0,3.0,2.0,9.0,2.0
 24/01/2026,Union Berlin,Dortmund,0,3,A,7.0,2.0,0.0,1.0,3.0,5.0
-25/01/2026,M'gladbach,Stuttgart,0,3,A,1.0,4.0,1.0,1.0,3.0,8.0
 25/01/2026,Freiburg,FC Koln,2,1,H,5.0,5.0,1.0,2.0,5.0,4.0
+25/01/2026,M'gladbach,Stuttgart,0,3,A,1.0,4.0,1.0,1.0,3.0,8.0
 27/01/2026,St Pauli,RB Leipzig,1,1,D,4.0,3.0,0.0,1.0,2.0,5.0
 27/01/2026,Werder Bremen,Hoffenheim,0,2,A,6.0,7.0,2.0,2.0,3.0,3.0
 30/01/2026,FC Koln,Wolfsburg,1,0,H,3.0,4.0,1.0,4.0,3.0,3.0
 31/01/2026,Augsburg,St Pauli,2,1,H,5.0,5.0,3.0,1.0,6.0,5.0
 31/01/2026,Ein Frankfurt,Leverkusen,1,3,A,8.0,3.0,3.0,1.0,4.0,4.0
+31/01/2026,Hamburg,Bayern Munich,2,2,D,3.0,9.0,6.0,4.0,4.0,7.0
 31/01/2026,Hoffenheim,Union Berlin,3,1,H,3.0,10.0,2.0,2.0,4.0,3.0
 31/01/2026,RB Leipzig,Mainz,1,2,A,5.0,4.0,0.0,4.0,4.0,4.0
 31/01/2026,Werder Bremen,M'gladbach,1,1,D,7.0,3.0,0.0,1.0,6.0,2.0
-31/01/2026,Hamburg,Bayern Munich,2,2,D,3.0,9.0,6.0,4.0,4.0,7.0
-01/02/2026,Stuttgart,Freiburg,1,0,H,6.0,2.0,3.0,1.0,7.0,2.0
 01/02/2026,Dortmund,Heidenheim,3,2,H,12.0,3.0,2.0,2.0,5.0,3.0
+01/02/2026,Stuttgart,Freiburg,1,0,H,6.0,2.0,3.0,1.0,7.0,2.0
 06/02/2026,Union Berlin,Ein Frankfurt,1,1,D,5.0,2.0,4.0,3.0,3.0,1.0
 07/02/2026,Freiburg,Werder Bremen,1,0,H,4.0,8.0,0.0,1.0,2.0,5.0
 07/02/2026,Heidenheim,Hamburg,0,2,A,10.0,8.0,0.0,2.0,4.0,5.0
+07/02/2026,M'gladbach,Leverkusen,1,1,D,2.0,2.0,2.0,3.0,6.0,2.0
 07/02/2026,Mainz,Augsburg,2,0,H,6.0,4.0,2.0,2.0,6.0,6.0
 07/02/2026,St Pauli,Stuttgart,2,1,H,5.0,5.0,0.0,2.0,7.0,3.0
 07/02/2026,Wolfsburg,Dortmund,1,2,A,4.0,8.0,1.0,1.0,2.0,4.0
-07/02/2026,M'gladbach,Leverkusen,1,1,D,2.0,2.0,2.0,3.0,6.0,2.0
-08/02/2026,FC Koln,RB Leipzig,1,2,A,4.0,3.0,1.0,4.0,3.0,4.0
 08/02/2026,Bayern Munich,Hoffenheim,5,1,H,8.0,3.0,2.0,2.0,14.0,4.0
+08/02/2026,FC Koln,RB Leipzig,1,2,A,4.0,3.0,1.0,4.0,3.0,4.0
 13/02/2026,Dortmund,Mainz,4,0,H,7.0,2.0,3.0,2.0,8.0,5.0
 14/02/2026,Ein Frankfurt,M'gladbach,3,0,H,2.0,8.0,3.0,2.0,9.0,3.0
 14/02/2026,Hamburg,Union Berlin,3,2,H,6.0,3.0,3.0,0.0,4.0,5.0
 14/02/2026,Hoffenheim,Freiburg,3,0,H,6.0,6.0,3.0,1.0,7.0,3.0
 14/02/2026,Leverkusen,St Pauli,4,0,H,8.0,3.0,0.0,1.0,7.0,1.0
-14/02/2026,Werder Bremen,Bayern Munich,0,3,A,2.0,4.0,3.0,1.0,3.0,8.0
 14/02/2026,Stuttgart,FC Koln,3,1,H,2.0,5.0,4.0,1.0,4.0,3.0
+14/02/2026,Werder Bremen,Bayern Munich,0,3,A,2.0,4.0,3.0,1.0,3.0,8.0
 15/02/2026,Augsburg,Heidenheim,1,0,H,4.0,5.0,1.0,2.0,4.0,2.0
 15/02/2026,RB Leipzig,Wolfsburg,2,2,D,6.0,2.0,1.0,2.0,10.0,3.0
 20/02/2026,Mainz,Hamburg,1,1,D,7.0,2.0,3.0,2.0,3.0,5.0
 21/02/2026,Bayern Munich,Ein Frankfurt,3,2,H,8.0,2.0,0.0,3.0,11.0,3.0
 21/02/2026,FC Koln,Hoffenheim,2,2,D,3.0,10.0,1.0,3.0,4.0,6.0
+21/02/2026,RB Leipzig,Dortmund,2,2,D,6.0,2.0,3.0,4.0,3.0,5.0
 21/02/2026,Union Berlin,Leverkusen,1,0,H,4.0,5.0,5.0,2.0,4.0,1.0
 21/02/2026,Wolfsburg,Augsburg,2,3,A,4.0,10.0,3.0,4.0,4.0,6.0
-21/02/2026,RB Leipzig,Dortmund,2,2,D,6.0,2.0,3.0,4.0,3.0,5.0
 22/02/2026,Freiburg,M'gladbach,2,1,H,3.0,3.0,1.0,2.0,6.0,2.0
-22/02/2026,St Pauli,Werder Bremen,2,1,H,1.0,5.0,2.0,6.0,4.0,4.0
 22/02/2026,Heidenheim,Stuttgart,3,3,D,3.0,4.0,1.0,2.0,6.0,8.0
+22/02/2026,St Pauli,Werder Bremen,2,1,H,1.0,5.0,2.0,6.0,4.0,4.0
 27/02/2026,Augsburg,FC Koln,2,0,H,6.0,9.0,4.0,1.0,4.0,3.0
+28/02/2026,Dortmund,Bayern Munich,2,3,A,5.0,2.0,1.0,0.0,2.0,6.0
 28/02/2026,Hoffenheim,St Pauli,0,1,A,10.0,3.0,1.0,2.0,11.0,3.0
 28/02/2026,Leverkusen,Mainz,1,1,D,6.0,2.0,1.0,2.0,5.0,4.0
 28/02/2026,M'gladbach,Union Berlin,1,0,H,6.0,2.0,4.0,5.0,7.0,2.0
 28/02/2026,Werder Bremen,Heidenheim,2,0,H,3.0,2.0,1.0,0.0,6.0,0.0
-28/02/2026,Dortmund,Bayern Munich,2,3,A,5.0,2.0,1.0,0.0,2.0,6.0
-01/03/2026,Stuttgart,Wolfsburg,4,0,H,7.0,3.0,1.0,0.0,11.0,3.0
 01/03/2026,Ein Frankfurt,Freiburg,2,0,H,5.0,6.0,1.0,2.0,7.0,2.0
 01/03/2026,Hamburg,RB Leipzig,1,2,A,4.0,9.0,3.0,2.0,3.0,5.0
+01/03/2026,Stuttgart,Wolfsburg,4,0,H,7.0,3.0,1.0,0.0,11.0,3.0
 04/03/2026,Hamburg,Leverkusen,0,1,A,2.0,7.0,0.0,2.0,3.0,4.0
 06/03/2026,Bayern Munich,M'gladbach,4,1,H,7.0,1.0,1.0,0.0,9.0,5.0
+07/03/2026,FC Koln,Dortmund,1,2,A,9.0,4.0,1.0,1.0,4.0,5.0
 07/03/2026,Freiburg,Leverkusen,3,3,D,5.0,2.0,3.0,3.0,9.0,5.0
 07/03/2026,Heidenheim,Hoffenheim,2,4,A,4.0,3.0,0.0,0.0,2.0,7.0
 07/03/2026,Mainz,Stuttgart,2,2,D,5.0,6.0,0.0,2.0,6.0,4.0
 07/03/2026,RB Leipzig,Augsburg,2,1,H,6.0,8.0,0.0,2.0,8.0,5.0
 07/03/2026,Wolfsburg,Hamburg,1,2,A,7.0,3.0,3.0,3.0,4.0,7.0
-07/03/2026,FC Koln,Dortmund,1,2,A,9.0,4.0,1.0,1.0,4.0,5.0
 08/03/2026,St Pauli,Ein Frankfurt,0,0,D,6.0,5.0,2.0,1.0,2.0,2.0
 08/03/2026,Union Berlin,Werder Bremen,1,4,A,1.0,3.0,1.0,3.0,2.0,5.0
 13/03/2026,M'gladbach,St Pauli,2,0,H,2.0,2.0,1.0,2.0,4.0,1.0
 14/03/2026,Dortmund,Augsburg,2,0,H,12.0,2.0,0.0,0.0,5.0,3.0
 14/03/2026,Ein Frankfurt,Heidenheim,1,0,H,5.0,4.0,3.0,2.0,4.0,1.0
+14/03/2026,Hamburg,FC Koln,1,1,D,1.0,8.0,2.0,4.0,1.0,2.0
 14/03/2026,Hoffenheim,Wolfsburg,1,1,D,16.0,4.0,0.0,3.0,6.0,2.0
 14/03/2026,Leverkusen,Bayern Munich,1,1,D,4.0,1.0,3.0,4.0,7.0,5.0
-14/03/2026,Hamburg,FC Koln,1,1,D,1.0,8.0,2.0,4.0,1.0,2.0
-15/03/2026,Werder Bremen,Mainz,0,2,A,9.0,4.0,2.0,1.0,3.0,2.0
 15/03/2026,Freiburg,Union Berlin,0,1,A,6.0,2.0,0.0,2.0,6.0,4.0
 15/03/2026,Stuttgart,RB Leipzig,1,0,H,5.0,6.0,1.0,2.0,4.0,4.0
+15/03/2026,Werder Bremen,Mainz,0,2,A,9.0,4.0,2.0,1.0,3.0,2.0
 20/03/2026,RB Leipzig,Hoffenheim,5,0,H,1.0,3.0,1.0,1.0,9.0,2.0
 21/03/2026,Bayern Munich,Union Berlin,4,0,H,12.0,1.0,1.0,2.0,9.0,1.0
+21/03/2026,Dortmund,Hamburg,3,2,H,11.0,3.0,2.0,3.0,8.0,4.0
 21/03/2026,FC Koln,M'gladbach,3,3,D,5.0,3.0,8.0,2.0,5.0,3.0
 21/03/2026,Heidenheim,Leverkusen,3,3,D,2.0,5.0,4.0,4.0,5.0,5.0
 21/03/2026,Wolfsburg,Werder Bremen,0,1,A,8.0,4.0,3.0,0.0,4.0,3.0
-21/03/2026,Dortmund,Hamburg,3,2,H,11.0,3.0,2.0,3.0,8.0,4.0
+22/03/2026,Augsburg,Stuttgart,2,5,A,2.0,5.0,1.0,3.0,7.0,8.0
 22/03/2026,Mainz,Ein Frankfurt,2,1,H,5.0,3.0,2.0,1.0,5.0,4.0
 22/03/2026,St Pauli,Freiburg,1,2,A,3.0,2.0,1.0,1.0,5.0,6.0
-22/03/2026,Augsburg,Stuttgart,2,5,A,2.0,5.0,1.0,3.0,7.0,8.0
 04/04/2026,Freiburg,Bayern Munich,2,3,A,5.0,8.0,3.0,3.0,4.0,9.0
 04/04/2026,Hamburg,Augsburg,1,1,D,9.0,2.0,2.0,3.0,4.0,3.0
 04/04/2026,Hoffenheim,Mainz,1,2,A,7.0,3.0,4.0,1.0,5.0,5.0
 04/04/2026,Leverkusen,Wolfsburg,6,3,H,12.0,2.0,1.0,3.0,11.0,5.0
 04/04/2026,M'gladbach,Heidenheim,2,2,D,2.0,3.0,4.0,0.0,7.0,7.0
-04/04/2026,Werder Bremen,RB Leipzig,1,2,A,1.0,0.0,2.0,1.0,5.0,2.0
 04/04/2026,Stuttgart,Dortmund,0,2,A,5.0,2.0,2.0,4.0,3.0,3.0
-05/04/2026,Union Berlin,St Pauli,1,1,D,7.0,2.0,0.0,2.0,8.0,2.0
+04/04/2026,Werder Bremen,RB Leipzig,1,2,A,1.0,0.0,2.0,1.0,5.0,2.0
 05/04/2026,Ein Frankfurt,FC Koln,2,2,D,8.0,0.0,1.0,2.0,7.0,9.0
+05/04/2026,Union Berlin,St Pauli,1,1,D,7.0,2.0,0.0,2.0,8.0,2.0
 10/04/2026,Augsburg,Hoffenheim,2,2,D,4.0,4.0,5.0,3.0,8.0,4.0
 11/04/2026,Dortmund,Leverkusen,0,1,A,5.0,5.0,3.0,0.0,1.0,4.0
 11/04/2026,Heidenheim,Union Berlin,3,1,H,3.0,5.0,0.0,2.0,3.0,3.0
 11/04/2026,RB Leipzig,M'gladbach,1,0,H,11.0,4.0,4.0,1.0,11.0,3.0
-11/04/2026,Wolfsburg,Ein Frankfurt,1,2,A,7.0,7.0,2.0,1.0,7.0,4.0
 11/04/2026,St Pauli,Bayern Munich,0,5,A,3.0,4.0,1.0,2.0,3.0,8.0
+11/04/2026,Wolfsburg,Ein Frankfurt,1,2,A,7.0,7.0,2.0,1.0,7.0,4.0
 12/04/2026,FC Koln,Werder Bremen,3,1,H,8.0,5.0,3.0,2.0,8.0,2.0
-12/04/2026,Stuttgart,Hamburg,4,0,H,8.0,2.0,2.0,1.0,11.0,5.0
 12/04/2026,Mainz,Freiburg,0,1,A,6.0,4.0,1.0,3.0,3.0,3.0
+12/04/2026,Stuttgart,Hamburg,4,0,H,8.0,2.0,2.0,1.0,11.0,5.0
 17/04/2026,St Pauli,FC Koln,1,1,D,8.0,5.0,4.0,1.0,6.0,1.0
+18/04/2026,Ein Frankfurt,RB Leipzig,1,3,A,4.0,6.0,0.0,1.0,5.0,8.0
 18/04/2026,Hoffenheim,Dortmund,2,1,H,4.0,3.0,2.0,3.0,4.0,3.0
 18/04/2026,Leverkusen,Augsburg,1,2,A,11.0,4.0,2.0,1.0,10.0,5.0
 18/04/2026,Union Berlin,Wolfsburg,1,2,A,11.0,4.0,1.0,1.0,7.0,4.0
 18/04/2026,Werder Bremen,Hamburg,3,1,H,7.0,3.0,4.0,3.0,10.0,3.0
-18/04/2026,Ein Frankfurt,RB Leipzig,1,3,A,4.0,6.0,0.0,1.0,5.0,8.0
-19/04/2026,Freiburg,Heidenheim,2,1,H,5.0,4.0,1.0,0.0,4.0,2.0
 19/04/2026,Bayern Munich,Stuttgart,4,2,H,11.0,3.0,0.0,0.0,9.0,7.0
+19/04/2026,Freiburg,Heidenheim,2,1,H,5.0,4.0,1.0,0.0,4.0,2.0
 19/04/2026,M'gladbach,Mainz,1,1,D,0.0,6.0,5.0,2.0,4.0,7.0
 24/04/2026,RB Leipzig,Union Berlin,3,1,H,10.0,4.0,1.0,1.0,10.0,1.0
 25/04/2026,Augsburg,Ein Frankfurt,1,1,D,9.0,7.0,1.0,2.0,3.0,7.0
 25/04/2026,FC Koln,Leverkusen,1,2,A,2.0,5.0,1.0,2.0,10.0,3.0
+25/04/2026,Hamburg,Hoffenheim,1,2,A,4.0,9.0,2.0,4.0,4.0,6.0
 25/04/2026,Heidenheim,St Pauli,2,0,H,6.0,6.0,0.0,1.0,5.0,2.0
 25/04/2026,Mainz,Bayern Munich,3,4,A,4.0,4.0,1.0,2.0,8.0,6.0
 25/04/2026,Wolfsburg,M'gladbach,0,0,D,8.0,5.0,1.0,3.0,4.0,2.0
-25/04/2026,Hamburg,Hoffenheim,1,2,A,4.0,9.0,2.0,4.0,4.0,6.0
-26/04/2026,Stuttgart,Werder Bremen,1,1,D,14.0,2.0,0.0,1.0,4.0,3.0
 26/04/2026,Dortmund,Freiburg,4,0,H,5.0,0.0,1.0,0.0,5.0,4.0
+26/04/2026,Stuttgart,Werder Bremen,1,1,D,14.0,2.0,0.0,1.0,4.0,3.0
 02/05/2026,Bayern Munich,Heidenheim,3,3,D,13.0,5.0,3.0,2.0,7.0,5.0
 02/05/2026,Ein Frankfurt,Hamburg,1,2,A,9.0,4.0,6.0,1.0,5.0,4.0
 02/05/2026,Hoffenheim,Stuttgart,3,3,D,4.0,5.0,3.0,1.0,9.0,5.0
+02/05/2026,Leverkusen,RB Leipzig,4,1,H,7.0,3.0,1.0,3.0,8.0,5.0
 02/05/2026,Union Berlin,FC Koln,2,2,D,2.0,5.0,2.0,3.0,3.0,4.0
 02/05/2026,Werder Bremen,Augsburg,1,3,A,8.0,2.0,1.0,1.0,4.0,7.0
-02/05/2026,Leverkusen,RB Leipzig,4,1,H,7.0,3.0,1.0,3.0,8.0,5.0
-03/05/2026,St Pauli,Mainz,1,2,A,7.0,7.0,3.0,1.0,3.0,6.0
-03/05/2026,M'gladbach,Dortmund,1,0,H,1.0,1.0,3.0,1.0,4.0,1.0
 03/05/2026,Freiburg,Wolfsburg,1,1,D,1.0,7.0,1.0,1.0,3.0,4.0
+03/05/2026,M'gladbach,Dortmund,1,0,H,1.0,1.0,3.0,1.0,4.0,1.0
+03/05/2026,St Pauli,Mainz,1,2,A,7.0,7.0,3.0,1.0,3.0,6.0
 08/05/2026,Dortmund,Ein Frankfurt,3,2,H,6.0,2.0,3.0,0.0,8.0,4.0
 09/05/2026,Augsburg,M'gladbach,3,1,H,2.0,2.0,2.0,2.0,10.0,4.0
 09/05/2026,Hoffenheim,Werder Bremen,1,0,H,8.0,3.0,1.0,2.0,4.0,2.0
 09/05/2026,RB Leipzig,St Pauli,2,1,H,3.0,5.0,2.0,0.0,5.0,3.0
 09/05/2026,Stuttgart,Leverkusen,3,1,H,7.0,6.0,2.0,1.0,9.0,5.0
 09/05/2026,Wolfsburg,Bayern Munich,0,1,A,6.0,3.0,1.0,0.0,5.0,9.0
-10/05/2026,Hamburg,Freiburg,3,2,H,2.0,4.0,2.0,2.0,5.0,3.0
 10/05/2026,FC Koln,Heidenheim,1,3,A,6.0,4.0,2.0,2.0,7.0,5.0
+10/05/2026,Hamburg,Freiburg,3,2,H,2.0,4.0,2.0,2.0,5.0,3.0
 10/05/2026,Mainz,Union Berlin,1,3,A,7.0,8.0,2.0,1.0,3.0,9.0
 16/05/2026,Bayern Munich,FC Koln,5,1,H,5.0,5.0,1.0,1.0,7.0,2.0
 16/05/2026,Ein Frankfurt,Stuttgart,2,2,D,6.0,6.0,2.0,3.0,7.0,7.0
@@ -1223,3 +1223,4 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 16/05/2026,St Pauli,Wolfsburg,1,3,A,8.0,9.0,2.0,3.0,2.0,10.0
 16/05/2026,Union Berlin,Augsburg,4,0,H,4.0,9.0,3.0,1.0,9.0,1.0
 16/05/2026,Werder Bremen,Dortmund,0,2,A,4.0,5.0,0.0,0.0,3.0,9.0
+28/08/2026,Bayern Munich,Stuttgart,5,1,H,,,,,,
