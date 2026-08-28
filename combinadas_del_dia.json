@@ -1,1 +1,68 @@
-[]
+[
+  {
+    "nombre": "Combinada #1",
+    "es_gratis": true,
+    "partidos": [
+      {
+        "fecha": "2026-08-28 18:45:00",
+        "local": "Milan",
+        "visitante": "Venezia",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 81.3,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-08-28 19:30:00",
+        "local": "Alaves",
+        "visitante": "Villarreal",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 80.1,
+        "liga": "la_liga"
+      },
+      {
+        "fecha": "2026-08-28 18:30:00",
+        "local": "Bayern Munich",
+        "visitante": "Stuttgart",
+        "pick_recomendado": "Over 2.5 goles + Over 5.5 corners",
+        "pick_probabilidad": 80.0,
+        "liga": "bundesliga"
+      }
+    ],
+    "probabilidad_combinada": 52.1,
+    "cuota_combinada": 1.82,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-08-28 17:00:00",
+        "local": "Real Racing Club de Santander",
+        "visitante": "Elche",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 86.6,
+        "liga": "la_liga"
+      },
+      {
+        "fecha": "2026-08-28 18:45:00",
+        "local": "Lille",
+        "visitante": "Paris SG",
+        "pick_recomendado": "Over 5.5 corners",
+        "pick_probabilidad": 82.7,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-08-28 19:00:00",
+        "local": "Crystal Palace",
+        "visitante": "Man City",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 81.7,
+        "liga": "premier_league"
+      }
+    ],
+    "probabilidad_combinada": 58.5,
+    "cuota_combinada": 1.61,
+    "liga": "mixta"
+  }
+]

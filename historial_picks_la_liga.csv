@@ -1,5 +1,7 @@
 fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_cuota_aprox,fecha_generado,resultado_real,acierto
-2026-08-25 19:00:00,Valencia,Betis,Under 13.5 corners,False,80.3,1.15,2026-08-21,,
-2026-08-26 19:00:00,Real Madrid,Sociedad,Over 6.5 corners,False,81.6,1.13,2026-08-21,,
-2026-08-27 18:30:00,Celta,Osasuna,Under 11.5 corners,False,82.7,1.11,2026-08-21,,
-2026-08-27 19:00:00,Barcelona,Ath Bilbao,Under 13.5 corners,False,80.6,1.14,2026-08-21,,
+2026-08-25 19:00:00,Valencia,Betis,Under 13.5 corners,False,80.3,1.15,2026-08-21,0-1,True
+2026-08-26 19:00:00,Real Madrid,Sociedad,Over 6.5 corners,False,81.6,1.13,2026-08-21,4-1,True
+2026-08-27 18:30:00,Celta,Osasuna,Under 11.5 corners,False,82.7,1.11,2026-08-21,1-2,True
+2026-08-27 19:00:00,Barcelona,Ath Bilbao,Under 13.5 corners,False,80.6,1.14,2026-08-21,2-0,False
+2026-08-28 17:00:00,Real Racing Club de Santander,Elche,Over 1.5 goles,False,86.6,1.05,2026-08-28,,
+2026-08-28 19:30:00,Alaves,Villarreal,Under 12.5 corners,False,80.1,1.15,2026-08-28,,
