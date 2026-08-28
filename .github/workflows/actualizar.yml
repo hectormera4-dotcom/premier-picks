@@ -76,6 +76,11 @@ jobs:
                       `Log completo: ${runUrl}\n\n` +
                       `Este Issue se cierra solo automaticamente en cuanto una corrida futura sea exitosa.`,
                 labels: [label],
+                // Asignado al dueno del repo -- asi la notificacion push del
+                // celular se dispara de forma confiable (activando el tipo
+                // "Asignado" en la app de GitHub), sin depender de la
+                // configuracion de "watching" del repo.
+                assignees: [context.repo.owner],
               });
             }
 
