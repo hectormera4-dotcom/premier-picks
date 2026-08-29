@@ -2079,7 +2079,14 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
 
     print(f"\n{'#'*70}\n# COMBINADAS MULTI-LIGA (pool de {len(pool_picks)} picks seguros)\n{'#'*70}")
 
-    combinadas = calcular_combinadas_multiples(pool_picks, cuota_objetivo=1.70, max_combinadas=4, max_partidos_por_combinada=3)
+    # max_partidos_por_combinada=5 (el default de la funcion, antes forzado
+    # a 3 aqui): agregar una pierna mas a una combinada SIEMPRE sube la
+    # cuota (nunca la baja -- cada probabilidad que se multiplica es menor
+    # a 1). Con solo 3 piernas de tope, en dias donde los picks
+    # individuales son muy seguros (ej. 85%+, como pasa seguido con el
+    # umbral mas alto de corners al arranque de temporada) la combinada se
+    # quedaba corta del piso minimo de cuota sin poder seguir subiendo.
+    combinadas = calcular_combinadas_multiples(pool_picks, cuota_objetivo=1.70, max_combinadas=4, max_partidos_por_combinada=5)
 
     # A cada combinada le calculamos su "liga": si todos sus partidos son
     # de la misma liga, usamos esa; si mezcla varias, la marcamos "mixta"
