@@ -4,22 +4,6 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Southampton",
-        "visitante": "Millwall",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 86.3,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Blackburn",
-        "visitante": "QPR",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 86.2,
-        "liga": "championship"
-      },
-      {
         "fecha": "2026-08-29 18:45:00",
         "local": "Brest",
         "visitante": "Toulouse",
@@ -34,10 +18,26 @@
         "pick_recomendado": "Under 12.5 corners",
         "pick_probabilidad": 85.5,
         "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-08-29 18:45:00",
+        "local": "Juventus",
+        "visitante": "Parma",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 84.7,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-08-29 16:30:00",
+        "local": "Fiorentina",
+        "visitante": "Frosinone",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 83.6,
+        "liga": "serie_a"
       }
     ],
-    "probabilidad_combinada": 54.5,
-    "cuota_combinada": 1.73,
+    "probabilidad_combinada": 51.9,
+    "cuota_combinada": 1.83,
     "liga": "mixta"
   },
   {
@@ -53,14 +53,6 @@
         "liga": "ligue_1"
       },
       {
-        "fecha": "2026-08-29 11:30:00",
-        "local": "Middlesbrough",
-        "visitante": "West Brom",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 87.6,
-        "liga": "championship"
-      },
-      {
         "fecha": "2026-08-29 16:30:00",
         "local": "Tottenham",
         "visitante": "Newcastle",
@@ -69,45 +61,12 @@
         "liga": "premier_league"
       },
       {
-        "fecha": "2026-08-29 15:00:00",
-        "local": "Levante",
-        "visitante": "Betis",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 87.2,
-        "liga": "la_liga"
-      }
-    ],
-    "probabilidad_combinada": 58.5,
-    "cuota_combinada": 1.61,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
-      {
         "fecha": "2026-08-29 19:30:00",
         "local": "Sevilla",
         "visitante": "Ath Madrid",
         "pick_recomendado": "Under 13.5 corners",
         "pick_probabilidad": 87.2,
         "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Bristol City",
-        "visitante": "Portsmouth",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 87.2,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Charlton",
-        "visitante": "Preston",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 87.0,
-        "liga": "championship"
       },
       {
         "fecha": "2026-08-29 17:00:00",
@@ -118,41 +77,41 @@
         "liga": "la_liga"
       }
     ],
-    "probabilidad_combinada": 57.4,
-    "cuota_combinada": 1.64,
+    "probabilidad_combinada": 57.9,
+    "cuota_combinada": 1.63,
     "liga": "mixta"
   },
   {
-    "nombre": "Combinada #4",
+    "nombre": "Combinada #3",
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-08-29 11:30:00",
-        "local": "Derby",
-        "visitante": "Swansea",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 85.3,
-        "liga": "championship"
+        "fecha": "2026-08-29 16:30:00",
+        "local": "Dortmund",
+        "visitante": "Hamburg",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 81.5,
+        "liga": "bundesliga"
       },
       {
-        "fecha": "2026-08-29 15:15:00",
-        "local": "Strasbourg",
-        "visitante": "Lens",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 85.2,
+        "fecha": "2026-08-29 18:45:00",
+        "local": "Lorient",
+        "visitante": "Troyes",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 80.4,
         "liga": "ligue_1"
       },
       {
-        "fecha": "2026-08-29 14:00:00",
-        "local": "Bournemouth",
-        "visitante": "Everton",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 85.2,
-        "liga": "premier_league"
+        "fecha": "2026-08-29 18:45:00",
+        "local": "Auxerre",
+        "visitante": "Angers",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 80.4,
+        "liga": "ligue_1"
       }
     ],
-    "probabilidad_combinada": 61.9,
-    "cuota_combinada": 1.51,
+    "probabilidad_combinada": 52.7,
+    "cuota_combinada": 1.8,
     "liga": "mixta"
   }
 ]
