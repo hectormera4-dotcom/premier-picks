@@ -23,6 +23,22 @@ HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
 MAX_GOLES = 6
 
+# ---------- Arranque de temporada: umbral mas exigente para corners/
+# tarjetas/tiros a puerta ----------
+# El modelo de esos 3 mercados pondera fuerte los partidos recientes, pero
+# la ponderacion por antiguedad (vida media de 365 dias) es lenta -- no
+# "olvida" la temporada pasada rapido. Al arrancar una temporada nueva, el
+# equipo puede tener un tecnico o sistema tactico distinto que cambia
+# cuantos corners/tarjetas/tiros genera, y el modelo todavia no tiene
+# suficientes partidos DE ESTA temporada para confirmar que el patron
+# viejo sigue vigente. Mientras un equipo lleve pocos partidos jugados
+# esta temporada, esos 3 mercados exigen un umbral mas alto (no se
+# desactivan del todo, para no perder demasiado volumen de picks) --
+# goles/resultado/ambos anotan NO se ven afectados, siguen con el umbral
+# normal desde el primer partido.
+MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS = 3
+UMBRAL_EXTRA_INICIO_TEMPORADA = 0.85
+
 # ---------- Configuracion de cada liga soportada ----------
 # Para agregar una liga nueva, solo hay que agregar una entrada aqui --
 # el resto del pipeline ya esta preparado para trabajar con cualquiera.
@@ -61,8 +77,12 @@ LIGAS = {
         "codigo_api": "PD",               # Primera Division
         "codigo_footballdata": "SP1",
         "archivo_historico": "la_liga_combinado.csv",
-        # Equipos recien ascendidos a Primera 2025/26, sin historial reciente
-        "equipos_sin_historial": ["Oviedo", "Levante", "Elche"],
+        # Equipos recien ascendidos a Primera 2026/27 (verificado en vivo --
+        # Levante y Elche, ascendidos el anio pasado, ya tienen una
+        # temporada completa real de datos y NO necesitan fallback; Oviedo
+        # se ascendio el anio pasado pero se volvio a descender este anio,
+        # asi que ya no aparece en los partidos de esta liga en absoluto).
+        "equipos_sin_historial": ["Malaga", "La Coruna", "Santander"],
         "mapeo_nombres": {
             "Real Madrid CF": "Real Madrid",
             "FC Barcelona": "Barcelona",
@@ -84,6 +104,13 @@ LIGAS = {
             "Levante UD": "Levante",
             "Elche CF": "Elche",
             "Deportivo Alavés": "Alaves",
+            # Ascendidos 2026/27 -- confirmados en vivo (ver commit), antes
+            # ausentes de este mapeo por completo, lo que hacia que NINGUN
+            # pick se generara jamas para sus partidos (el nombre de la API
+            # pasaba sin traducir y nunca calzaba con el historico).
+            "Málaga CF": "Malaga",
+            "RC Deportivo La Coruña": "La Coruna",
+            "Real Racing Club de Santander": "Santander",
         },
     },
     "serie_a": {
@@ -133,6 +160,7 @@ LIGAS = {
             "Le Havre AC": "Le Havre",
             "Le Mans FC": "Le Mans",
             "RC Lens": "Lens",
+            "Racing Club de Lens": "Lens",  # la API a veces manda este nombre en vez de "RC Lens"
             "Lille OSC": "Lille",
             "FC Lorient": "Lorient",
             "Olympique Lyonnais": "Lyon",
@@ -480,6 +508,28 @@ def actualizar_estadisticas_extra(historico, codigo_footballdata="E0"):
 
 # ---------- Paso 3: modelo (fuerzas + Dixon-Coles) ----------
 
+def calcular_inicio_temporada_actual():
+    """Fecha de referencia del arranque de la temporada actual (1 de julio
+    del anio de TEMPORADA_ACTUAL) -- las ligas europeas que manejamos
+    arrancan todas a mediados/fines de agosto, asi que julio es un margen
+    seguro que nunca deja colar partidos de la temporada anterior."""
+    return pd.Timestamp(year=TEMPORADA_ACTUAL, month=7, day=1)
+
+def contar_partidos_temporada_actual(historico):
+    """Devuelve un dict {equipo: cuantos partidos lleva jugados en la
+    temporada actual}. Se usa para decidir si corners/tarjetas/tiros a
+    puerta ya tienen suficiente informacion fresca de ESTE anio para
+    confiar en ellos al mismo nivel que el resto de mercados (ver
+    MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS)."""
+    inicio = calcular_inicio_temporada_actual()
+    esta_temporada = historico[historico["Date"] >= inicio]
+    conteo = {}
+    if len(esta_temporada) == 0:
+        return conteo
+    for equipo in pd.unique(esta_temporada[["HomeTeam", "AwayTeam"]].values.ravel()):
+        conteo[equipo] = int(((esta_temporada["HomeTeam"] == equipo) | (esta_temporada["AwayTeam"] == equipo)).sum())
+    return conteo
+
 class _FuerzasConFallbackAutomatico(dict):
     """Dict de fuerzas para competencias con FALLBACK_AUTOMATICO=True (ver
     LIGAS["champions_league"]): CUALQUIER equipo desconocido se trata como
@@ -805,7 +855,8 @@ def calibrar_probabilidad(prob):
     z = INTERCEPTO + PENDIENTE * prob
     return 1 / (1 + np.exp(-z))
 
-def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None):
+def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None,
+                       umbral_extra_minimo=None):
     """
     Evalua mercados de goles/resultado (individuales + combos de 2 validos).
     mercados_extra: TODOS los mercados adicionales (corners, tarjetas, etc.)
@@ -813,12 +864,22 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
     mercados_extra_combinables: SOLO el subconjunto de esos que ya se valido
     con datos reales como razonablemente independiente de los goles -- esos
     tambien se prueban en combo de 1 mercado de goles + 1 de este subconjunto.
+
+    umbral_extra_minimo: umbral SEPARADO (mas alto) que deben superar los
+    candidatos que incluyen un mercado extra (corners/tarjetas/tiros a
+    puerta), usado al arranque de temporada cuando esos mercados todavia
+    no tienen suficientes partidos de la temporada actual para confiar en
+    ellos al mismo nivel que goles/resultado/ambos anotan. Si es None, se
+    usa el mismo umbral_minimo para todo (comportamiento identico a antes).
     """
-    candidatos = []
+    if umbral_extra_minimo is None:
+        umbral_extra_minimo = umbral_minimo
+
+    candidatos = []  # cada item: (nombres, prob_cruda, es_mercado_extra)
 
     for nombre, cond in CONDICIONES.items():
         prob = calcular_combo(matriz, [nombre])
-        candidatos.append(([nombre], prob))
+        candidatos.append(([nombre], prob, False))
 
     nombres = list(CONDICIONES.keys())
     for i in range(len(nombres)):
@@ -827,24 +888,24 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
             if CATEGORIAS[n1] == CATEGORIAS[n2]:
                 continue
             prob = calcular_combo(matriz, [n1, n2])
-            candidatos.append(([n1, n2], prob))
+            candidatos.append(([n1, n2], prob, False))
 
     if mercados_extra:
         for nombre, prob in mercados_extra.items():
-            candidatos.append(([nombre], prob))
+            candidatos.append(([nombre], prob, True))
 
     if mercados_extra_combinables:
         for nombre_goles in CONDICIONES:
             prob_goles = calcular_combo(matriz, [nombre_goles])
             for nombre_extra, prob_extra in mercados_extra_combinables.items():
-                candidatos.append(([nombre_goles, nombre_extra], prob_goles * prob_extra))
+                candidatos.append(([nombre_goles, nombre_extra], prob_goles * prob_extra, True))
 
     # Calibramos TODOS los candidatos antes de decidir -- asi el umbral de
     # seguridad se aplica sobre el acierto real esperado, no sobre el
     # numero optimista que sale directo del modelo estadistico
-    candidatos = [(nombres, calibrar_probabilidad(prob)) for nombres, prob in candidatos]
+    candidatos = [(nombres, calibrar_probabilidad(prob), es_extra) for nombres, prob, es_extra in candidatos]
 
-    seguros = [c for c in candidatos if c[1] >= umbral_minimo]
+    seguros = [c for c in candidatos if c[1] >= (umbral_extra_minimo if c[2] else umbral_minimo)]
 
     if seguros:
         mejor = min(seguros, key=lambda c: c[1])
@@ -853,7 +914,7 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
         mejor = max(candidatos, key=lambda c: c[1])
         cumple_umbral = False
 
-    nombres_pick, prob = mejor
+    nombres_pick, prob, _ = mejor
     # Restamos un pequeño margen (0.10) a la cuota que mostramos: la cuota
     # "justa" que calculamos es teorica, y las casas de apuestas reales
     # siempre pagan un poco menos por su propio margen de ganancia. Esto
@@ -1581,7 +1642,8 @@ def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                    fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, corners_combinable=False,
                    fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False,
-                   fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False):
+                   fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False,
+                   partidos_temporada_actual=None):
     programados = [p for p in partidos if p["status"] in ("SCHEDULED", "TIMED")]
     picks = []
 
@@ -1651,8 +1713,20 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         if tiros_combinable:
             mercados_extra_combinables.update(mercados_tiros)
 
+        # Arranque de temporada: si CUALQUIERA de los 2 equipos todavia
+        # lleva pocos partidos jugados esta temporada, corners/tarjetas/
+        # tiros a puerta exigen un umbral mas alto (no se desactivan del
+        # todo) -- goles/resultado/ambos anotan no se ven afectados.
+        conteo = partidos_temporada_actual or {}
+        es_inicio_temporada = (
+            conteo.get(local, 0) < MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS or
+            conteo.get(visitante, 0) < MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS
+        )
+        umbral_extra = UMBRAL_EXTRA_INICIO_TEMPORADA if es_inicio_temporada else None
+
         nombres_pick, pick_prob, pick_cuota, cumple_umbral = elegir_mejor_pick(
-            matriz, umbral_seguro, mercados_extra=mercados_extra_todos, mercados_extra_combinables=mercados_extra_combinables)
+            matriz, umbral_seguro, mercados_extra=mercados_extra_todos, mercados_extra_combinables=mercados_extra_combinables,
+            umbral_extra_minimo=umbral_extra)
         es_combo = len(nombres_pick) > 1
 
         picks.append({
@@ -1861,6 +1935,8 @@ def preparar_liga(liga_key):
     historial = cargar_historial_picks()
     historial = verificar_picks_resueltos(historial, historico)
 
+    partidos_temporada_actual = contar_partidos_temporada_actual(historico)
+
     return {
         "config": config, "partidos": partidos, "historico": historico,
         "fuerzas": fuerzas, "prom_l": prom_l, "prom_v": prom_v, "rho": rho,
@@ -1872,6 +1948,7 @@ def preparar_liga(liga_key):
         "fuerzas_tiros": fuerzas_tiros, "prom_l_tiros": prom_l_tiros, "prom_v_tiros": prom_v_tiros,
         "tiros_combinable": tiros_combinable,
         "historial": historial,
+        "partidos_temporada_actual": partidos_temporada_actual,
     }
 
 def generar_picks_liga(liga_key, ctx, umbral_dinamico):
@@ -1889,7 +1966,8 @@ def generar_picks_liga(liga_key, ctx, umbral_dinamico):
         prom_l_tarjetas=ctx["prom_l_tarjetas"], prom_v_tarjetas=ctx["prom_v_tarjetas"],
         tarjetas_combinable=ctx["tarjetas_combinable"],
         fuerzas_tiros=ctx["fuerzas_tiros"], prom_l_tiros=ctx["prom_l_tiros"], prom_v_tiros=ctx["prom_v_tiros"],
-        tiros_combinable=ctx["tiros_combinable"])
+        tiros_combinable=ctx["tiros_combinable"],
+        partidos_temporada_actual=ctx["partidos_temporada_actual"])
 
     historico = ctx["historico"]
     historial = ctx["historial"]
