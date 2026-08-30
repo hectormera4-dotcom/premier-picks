@@ -237,6 +237,23 @@
     color: rgba(239,235,226,0.6);
     white-space: nowrap;
   }
+  .etiqueta-fecha-picks {
+    max-width: 960px;
+    margin: 0 auto 14px;
+    padding: 0 20px;
+    text-align: center;
+  }
+  .etiqueta-fecha-picks span {
+    display: inline-block;
+    background: rgba(78,152,104,0.15);
+    border: 1px solid rgba(78,152,104,0.4);
+    color: var(--verde-claro);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.2px;
+  }
 
   /* ---------- Tabs ---------- */
   /* ---------- Navegacion principal (Picks / Historial) ---------- */
@@ -831,6 +848,7 @@
 </div>
 
 <div id="vista-picks">
+<div id="etiqueta-fecha-picks" class="etiqueta-fecha-picks"></div>
 <div id="banner-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
 <div class="tabs">
   <button class="tab activo">Gratis</button>
@@ -1152,6 +1170,7 @@ async function cargarTodo() {
     }
 
     renderMarcadorGlobal(porcentaje, resueltas.length);
+    actualizarEtiquetaFecha(picksRaw || [], combinadasRaw || []);
     render(picks, combinadas);
     window._historialCombinadasCache = historialRaw || [];
   } catch (err) {
@@ -1162,6 +1181,45 @@ async function cargarTodo() {
       </div>`;
     console.error(err);
   }
+}
+
+// Le muestra al usuario a que fecha de partidos pertenecen los picks y
+// combinadas que esta viendo (la fecha del partido MAS TEMPRANO entre
+// todos los que se estan mostrando) -- para que sepa si son de hoy, de
+// manana, o de un dia anterior si por alguna razon el pipeline no corrio.
+function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
+  const cont = document.getElementById("etiqueta-fecha-picks");
+  if (!cont) return;
+
+  const fechas = [];
+  for (const p of picksRaw) {
+    if (p.fecha) fechas.push(new Date(String(p.fecha).replace(" ", "T")));
+  }
+  for (const c of combinadasRaw) {
+    for (const p of (c.partidos_json || [])) {
+      if (p.fecha) fechas.push(new Date(String(p.fecha).replace(" ", "T")));
+    }
+  }
+  const validas = fechas.filter(f => !isNaN(f));
+  if (validas.length === 0) { cont.innerHTML = ""; return; }
+
+  const masTemprana = new Date(Math.min(...validas.map(f => f.getTime())));
+
+  const hoy = new Date();
+  const soloFecha = (f) => new Date(f.getFullYear(), f.getMonth(), f.getDate()).getTime();
+  const diffDias = Math.round((soloFecha(masTemprana) - soloFecha(hoy)) / 86400000);
+
+  const DIAS_LARGO = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  const fechaTexto = `${DIAS_LARGO[masTemprana.getDay()]} ${masTemprana.getDate()} de ${MESES_LARGO[masTemprana.getMonth()]}`;
+
+  let etiqueta;
+  if (diffDias === 0) etiqueta = `📅 Picks y combinadas de HOY, ${fechaTexto}`;
+  else if (diffDias === 1) etiqueta = `📅 Picks y combinadas de MAÑANA, ${fechaTexto}`;
+  else if (diffDias === -1) etiqueta = `📅 Picks y combinadas de AYER, ${fechaTexto}`;
+  else etiqueta = `📅 Picks y combinadas del ${fechaTexto}`;
+
+  cont.innerHTML = `<span>${etiqueta}</span>`;
 }
 
 function renderMarcadorGlobal(porcentaje, totalResueltos) {
@@ -1283,27 +1341,47 @@ async function verificarRetornoDePago() {
 }
 
 function crearCombinada(c) {
-  // "desbloqueada" = de verdad llegaron los datos (cuota_combinada no es
-  // null) -- porque es gratis, o porque el usuario actual es VIP/admin.
-  const desbloqueada = c.cuota_combinada !== null && c.cuota_combinada !== undefined;
+  // "desbloqueada" = de verdad llegaron los picks completos de cada
+  // partido (porque es gratis, o porque el usuario actual es VIP/admin).
+  // Ya NO se puede usar la presencia de cuota_combinada para esto -- desde
+  // que la vista de Supabase manda la cuota SIEMPRE (aunque la combinada
+  // este bloqueada), para que el usuario no-VIP la vea como "anzuelo" de
+  // venta. Lo que si sigue viniendo null cuando esta bloqueada es el pick
+  // recomendado de cada partido.
+  const desbloqueada = c.partidos.length > 0 && c.partidos[0].pick_recomendado !== undefined && c.partidos[0].pick_recomendado !== null;
+  const hayCuota = c.cuota_combinada !== null && c.cuota_combinada !== undefined;
 
   const filas = c.partidos.map(p => `
     <div class="combinada-fila">
       ${desbloqueada ? `<span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>` : ""}
       <span><b>${p.local} vs ${p.visitante}</b>${desbloqueada ? ` — ${p.pick_recomendado}` : ""}
-        <span class="card-liga-badge combinada-liga-badge">${nombreLiga(p.liga)}</span>
+        ${desbloqueada ? `<span class="card-liga-badge combinada-liga-badge">${nombreLiga(p.liga)}</span>` : ""}
       </span>
     </div>
   `).join("");
 
-  const pie = desbloqueada ? `
+  let pie;
+  if (desbloqueada) {
+    pie = `
       <div class="combinada-footer">
         <span class="combinada-cuota-label">cuota estimada</span>
         <span class="combinada-cuota">${c.cuota_combinada}</span>
-      </div>` : `
+      </div>`;
+  } else if (hayCuota) {
+    // "Anzuelo" de venta: el usuario ve la cuota real que se esta
+    // perdiendo (le da algo concreto que ganar si paga la membresia),
+    // pero los partidos y picks individuales siguen tapados.
+    pie = `
+      <div class="combinada-footer">
+        <span class="combinada-cuota-label">🔒 cuota estimada (desbloquea para ver los picks)</span>
+        <span class="combinada-cuota">${c.cuota_combinada}</span>
+      </div>`;
+  } else {
+    pie = `
       <div class="combinada-footer" style="justify-content:center;">
         <span class="lock-texto" style="max-width:none; text-align:center;">🔒 Picks y cuota visibles solo para VIP</span>
       </div>`;
+  }
 
   return `
     <div class="combinada ${desbloqueada ? 'gratis' : 'combinada-vip-preview'}">

@@ -2,8 +2,27 @@ name: Actualizar picks diariamente
 
 on:
   schedule:
-    # Corre todos los dias a las 12:00 UTC (ajusta segun tu zona horaria si quieres otra hora)
-    - cron: '0 12 * * *'
+    # 23:30 UTC = 18:30 hora Ecuador (UTC-5), todos los dias.
+    #
+    # Por que esta hora: el ultimo partido de cualquier liga activa
+    # (Premier League, LaLiga, Serie A, Ligue 1, Bundesliga, Championship)
+    # rara vez patea despues de las 21:00-21:45 hora local europea, lo que
+    # termina como muy tarde ~23:00-23:45 CEST/CET (21:00-22:45 UTC segun
+    # la epoca del año). 23:30 UTC deja margen de sobra (incluyendo tiempo
+    # extra/penales) para que TODOS los partidos del dia ya esten resueltos
+    # antes de correr -- asi las combinadas de hoy ya se saben si se
+    # cumplieron o no, y los picks/combinadas que se generan son los del
+    # dia SIGUIENTE, publicados con tiempo para hacer publicidad esa misma
+    # noche/madrugada.
+    - cron: '30 23 * * *'
+    # Respaldo: si por lo que sea la corrida de las 23:30 UTC no se
+    # dispara (GitHub documenta que su scheduler de cron es "best effort"
+    # y en momentos de carga alta puede saltarse una corrida programada
+    # por completo), esta segunda corrida 45 minutos despues actua como
+    # red de seguridad. Correr el pipeline dos veces el mismo dia es
+    # inofensivo -- todo lo que sube (picks, combinadas, historial) se
+    # reemplaza/deduplica, nunca se duplica.
+    - cron: '15 0 * * *'
   workflow_dispatch:
     # Esto permite correrlo manualmente desde GitHub cuando quieras, ademas del horario automatico
 

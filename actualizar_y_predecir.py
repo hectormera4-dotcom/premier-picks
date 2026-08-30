@@ -1637,6 +1637,22 @@ def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
     else:
         print(f"Aviso: fallo al sincronizar historial en Supabase ({resp.status_code}): {resp.text[:300]}")
 
+ZONA_ECUADOR_OFFSET_HORAS = 5  # Ecuador es UTC-5 todo el año, sin horario de verano
+
+def calcular_dia_objetivo_picks():
+    """El pipeline ahora corre de noche (23:30 UTC / 18:30 Ecuador, con
+    respaldo a las 00:15 UTC), despues de que terminan los partidos del dia
+    en curso, para publicar los picks/combinadas del dia SIGUIENTE con
+    tiempo de sobra para hacer publicidad. Por eso el "dia objetivo" ya no
+    es la fecha UTC de hoy -- es la fecha de Ecuador de hoy, mas un dia.
+    Anclamos el calculo a la fecha de Ecuador (no a la de UTC) para que
+    tanto la corrida principal (23:30 UTC) como la de respaldo (00:15 UTC,
+    que ya cae en el siguiente dia calendario UTC) calculen el MISMO dia
+    objetivo -- ambas caen todavia dentro del mismo dia calendario en
+    Ecuador (que recien cambia a las 05:00 UTC)."""
+    hora_ecuador = datetime.utcnow() - timedelta(hours=ZONA_ECUADOR_OFFSET_HORAS)
+    return hora_ecuador.date() + timedelta(days=1)
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
@@ -1650,15 +1666,16 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
     if not programados:
         return pd.DataFrame(picks)
 
-    # Nos quedamos SOLO con los partidos de HOY (fecha del calendario), no
-    # con toda la jornada -- una jornada puede estar repartida entre
-    # viernes y lunes, y no queremos mostrar el lunes un partido que se
-    # jugo el viernes, ni mostrar hoy un partido que es hasta el domingo.
-    # Si hoy no hay partidos, simplemente no se generan picks ese dia --
-    # es correcto, no hay que "adelantar" partidos de otro dia.
-    hoy = datetime.utcnow().date()
-    programados = [p for p in programados if pd.Timestamp(p["utcDate"]).date() == hoy]
-    print(f"DIAGNOSTICO: {len(programados)} partidos programados para hoy ({hoy}).")
+    # Nos quedamos SOLO con los partidos del dia OBJETIVO (fecha del
+    # calendario), no con toda la jornada -- una jornada puede estar
+    # repartida entre viernes y lunes, y no queremos mostrar el lunes un
+    # partido que se jugo el viernes, ni mostrar hoy un partido que es
+    # hasta el domingo. Si ese dia no hay partidos, simplemente no se
+    # generan picks -- es correcto, no hay que "adelantar" partidos de
+    # otro dia.
+    dia_objetivo = calcular_dia_objetivo_picks()
+    programados = [p for p in programados if pd.Timestamp(p["utcDate"]).date() == dia_objetivo]
+    print(f"DIAGNOSTICO: {len(programados)} partidos programados para el dia objetivo ({dia_objetivo}).")
 
     for p in programados:
         fecha_partido = pd.to_datetime(p["utcDate"]).tz_localize(None)
