@@ -12,7 +12,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-28 19:00:00,Crystal Palace,Man City,Doble oportunidad X2,False,81.1,1.13,2026-08-25,1-4,True
 2026-08-29 11:30:00,Liverpool,Nott'm Forest,Más corners: Liverpool,False,80.4,1.14,2026-08-25,,
 2026-08-29 14:00:00,Bournemouth,Everton,Over 7.5 corners,False,81.2,1.13,2026-08-25,,
-2026-08-29 14:00:00,Coventry,Hull,Over 1.5 goles,False,76.3,1.21,2026-08-25,,
+2026-08-29 14:00:00,Coventry,Hull,Over 1.5 goles,False,76.3,1.21,2026-08-25,0-1,False
 2026-08-29 16:30:00,Tottenham,Newcastle,Over 8.5 corners,False,80.7,1.14,2026-08-25,,
 2026-08-30 13:00:00,Sunderland,Fulham,Under 12.5 corners,False,80.9,1.14,2026-08-25,,
 2026-08-30 13:00:00,Chelsea,Brighton,Over 6.5 corners,False,84.4,1.09,2026-08-25,,
