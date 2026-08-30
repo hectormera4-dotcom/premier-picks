@@ -1216,10 +1216,10 @@ function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
   const fechaCapitalizada = fechaTexto.replace(/(^|de )([a-záéíóú])/g, (m, p1, p2) => p1 + p2.toUpperCase());
 
   let etiqueta;
-  if (diffDias === 0) etiqueta = `Combinadas para hoy ${fechaCapitalizada}`;
-  else if (diffDias === 1) etiqueta = `Combinadas para mañana ${fechaCapitalizada}`;
-  else if (diffDias === -1) etiqueta = `Combinadas de ayer ${fechaCapitalizada}`;
-  else etiqueta = `Combinadas para el ${fechaCapitalizada}`;
+  if (diffDias === 0) etiqueta = `📅 Combinadas para hoy ${fechaCapitalizada}`;
+  else if (diffDias === 1) etiqueta = `📅 Combinadas para mañana ${fechaCapitalizada}`;
+  else if (diffDias === -1) etiqueta = `📅 Combinadas de ayer ${fechaCapitalizada}`;
+  else etiqueta = `📅 Combinadas para el ${fechaCapitalizada}`;
 
   cont.innerHTML = `<span>${etiqueta}</span>`;
 }
