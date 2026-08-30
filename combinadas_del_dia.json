@@ -20,30 +20,13 @@
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-08-30 15:15:00",
-        "local": "Rennes",
-        "visitante": "Le Mans",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 86.7,
-        "liga": "ligue_1"
-      },
-      {
         "fecha": "2026-08-30 18:45:00",
         "local": "Lazio",
         "visitante": "Genoa",
         "pick_recomendado": "Under 13.5 corners",
         "pick_probabilidad": 86.0,
         "liga": "serie_a"
-      }
-    ],
-    "probabilidad_combinada": 56.9,
-    "cuota_combinada": 1.66,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #2",
-    "es_gratis": false,
-    "partidos": [
+      },
       {
         "fecha": "2026-08-30 16:30:00",
         "local": "Napoli",
@@ -51,15 +34,16 @@
         "pick_recomendado": "Under 12.5 corners",
         "pick_probabilidad": 85.4,
         "liga": "serie_a"
-      },
-      {
-        "fecha": "2026-08-30 15:30:00",
-        "local": "Man United",
-        "visitante": "Ipswich",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 82.3,
-        "liga": "premier_league"
-      },
+      }
+    ],
+    "probabilidad_combinada": 56.0,
+    "cuota_combinada": 1.68,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
       {
         "fecha": "2026-08-30 18:45:00",
         "local": "Cagliari",
@@ -67,16 +51,7 @@
         "pick_recomendado": "Over 1.5 goles",
         "pick_probabilidad": 80.9,
         "liga": "serie_a"
-      }
-    ],
-    "probabilidad_combinada": 56.9,
-    "cuota_combinada": 1.66,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
+      },
       {
         "fecha": "2026-08-30 18:45:00",
         "local": "Monaco",
@@ -84,17 +59,9 @@
         "pick_recomendado": "Over 1.5 goles",
         "pick_probabilidad": 80.8,
         "liga": "ligue_1"
-      },
-      {
-        "fecha": "2026-08-30 15:30:00",
-        "local": "Augsburg",
-        "visitante": "Schalke 04",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 80.8,
-        "liga": "bundesliga"
       }
     ],
-    "probabilidad_combinada": 65.3,
+    "probabilidad_combinada": 65.4,
     "cuota_combinada": 1.43,
     "liga": "mixta"
   }
