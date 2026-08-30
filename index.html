@@ -239,7 +239,7 @@
   }
   .etiqueta-fecha-picks {
     max-width: 960px;
-    margin: 0 auto 14px;
+    margin: 18px auto 14px;
     padding: 0 20px;
     text-align: center;
   }
@@ -1213,11 +1213,13 @@ function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
   const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
   const fechaTexto = `${DIAS_LARGO[masTemprana.getDay()]} ${masTemprana.getDate()} de ${MESES_LARGO[masTemprana.getMonth()]}`;
 
+  const fechaCapitalizada = fechaTexto.replace(/(^|de )([a-záéíóú])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+
   let etiqueta;
-  if (diffDias === 0) etiqueta = `📅 Picks y combinadas de HOY, ${fechaTexto}`;
-  else if (diffDias === 1) etiqueta = `📅 Picks y combinadas de MAÑANA, ${fechaTexto}`;
-  else if (diffDias === -1) etiqueta = `📅 Picks y combinadas de AYER, ${fechaTexto}`;
-  else etiqueta = `📅 Picks y combinadas del ${fechaTexto}`;
+  if (diffDias === 0) etiqueta = `Combinadas para hoy ${fechaCapitalizada}`;
+  else if (diffDias === 1) etiqueta = `Combinadas para mañana ${fechaCapitalizada}`;
+  else if (diffDias === -1) etiqueta = `Combinadas de ayer ${fechaCapitalizada}`;
+  else etiqueta = `Combinadas para el ${fechaCapitalizada}`;
 
   cont.innerHTML = `<span>${etiqueta}</span>`;
 }
@@ -1373,7 +1375,7 @@ function crearCombinada(c) {
     // pero los partidos y picks individuales siguen tapados.
     pie = `
       <div class="combinada-footer">
-        <span class="combinada-cuota-label">🔒 cuota estimada (desbloquea para ver los picks)</span>
+        <span class="combinada-cuota-label">cuota estimada</span>
         <span class="combinada-cuota">${c.cuota_combinada}</span>
       </div>`;
   } else {
