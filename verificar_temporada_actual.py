@@ -4,9 +4,15 @@ Verifica los datos de la temporada 2026/2027 en football-data.org:
 - Muestra los nombres EXACTOS de los equipos (para compararlos con los del CSV historico)
 - Cuenta cuantos partidos ya se jugaron vs cuantos faltan
 """
+import os
 import requests
 
-API_TOKEN = "98cececafb38425e9ace0546b73ffcff"
+# El token NUNCA va escrito aqui -- se lee de una variable de entorno para
+# no volver a exponerlo publicamente en el repo. Antes de correr este
+# script: set FOOTBALL_DATA_TOKEN=tu_token (PowerShell: $env:FOOTBALL_DATA_TOKEN="tu_token")
+API_TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "")
+if not API_TOKEN:
+    raise SystemExit("Falta la variable de entorno FOOTBALL_DATA_TOKEN. Configúrala antes de correr este script.")
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_TOKEN}
 
