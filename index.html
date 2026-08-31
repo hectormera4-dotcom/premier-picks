@@ -1139,7 +1139,7 @@ async function cargarTodo() {
     const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }] = await Promise.all([
       sb.from("picks_publicos").select("*"),
       sb.from("combinadas_publicas").select("*"),
-      sb.from("historial_combinadas").select("*").not("resultado", "is", null),
+      sb.from("historial_combinadas_publico").select("*").not("resultado", "is", null),
     ]);
 
     const picks = (picksRaw || []).map(transformarPick);
