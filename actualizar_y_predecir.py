@@ -1641,17 +1641,28 @@ ZONA_ECUADOR_OFFSET_HORAS = 5  # Ecuador es UTC-5 todo el año, sin horario de v
 
 def calcular_dia_objetivo_picks():
     """El pipeline ahora corre de noche (23:30 UTC / 18:30 Ecuador, con
-    respaldo a las 00:15 UTC), despues de que terminan los partidos del dia
-    en curso, para publicar los picks/combinadas del dia SIGUIENTE con
-    tiempo de sobra para hacer publicidad. Por eso el "dia objetivo" ya no
-    es la fecha UTC de hoy -- es la fecha de Ecuador de hoy, mas un dia.
-    Anclamos el calculo a la fecha de Ecuador (no a la de UTC) para que
-    tanto la corrida principal (23:30 UTC) como la de respaldo (00:15 UTC,
-    que ya cae en el siguiente dia calendario UTC) calculen el MISMO dia
-    objetivo -- ambas caen todavia dentro del mismo dia calendario en
-    Ecuador (que recien cambia a las 05:00 UTC)."""
+    respaldos a las 00:15 UTC y 01:00 UTC via cron-job.org), despues de que
+    terminan los partidos del dia en curso, para publicar los picks/
+    combinadas del dia SIGUIENTE con tiempo de sobra para hacer publicidad.
+
+    OJO: los horarios programados de GitHub Actions son "best effort" --
+    ya nos paso una vez que una corrida programada para las 23:30 UTC se
+    disparo recien a las 05:30 UTC del dia siguiente (6 horas de atraso).
+    Si el "dia objetivo" se calculara como "la fecha de Ecuador de AHORA
+    MISMO mas un dia", una corrida asi de atrasada que cae ya pasada la
+    medianoche de Ecuador terminaria calculando un dia de MAS de lo que
+    debia (paso de verdad: genero picks de martes en vez de lunes).
+
+    Para tolerar estos atrasos, anclamos el "dia logico" al MEDIODIA de
+    Ecuador en vez de a la medianoche: cualquier corrida entre el mediodia
+    de un dia y el mediodia del dia siguiente cuenta como si fuera "ese"
+    dia (el que empezo a mediodia), y calcula el dia objetivo como el
+    siguiente. Esto le da ~18 horas de margen de atraso (desde las 18:30
+    Ecuador hasta el mediodia del dia siguiente) antes de que se calcule
+    mal -- mucho mas que cualquier atraso que hayamos visto hasta ahora."""
     hora_ecuador = datetime.utcnow() - timedelta(hours=ZONA_ECUADOR_OFFSET_HORAS)
-    return hora_ecuador.date() + timedelta(days=1)
+    dia_logico = (hora_ecuador - timedelta(hours=12)).date()
+    return dia_logico + timedelta(days=1)
 
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
