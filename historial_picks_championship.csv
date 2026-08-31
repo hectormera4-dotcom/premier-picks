@@ -10,3 +10,11 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-29 14:00:00,Blackburn,QPR,Over 6.5 corners,False,86.2,1.06,2026-08-29,,
 2026-08-29 14:00:00,Cardiff,Sheffield United,Over 6.5 corners,False,85.1,1.08,2026-08-29,,
 2026-08-29 14:00:00,Watford,West Ham,Over 1.5 goles,False,84.7,1.08,2026-08-29,1-1,True
+2026-09-01 18:45:00,Preston,Bristol City,Over 6.5 corners,False,84.5,1.08,2026-08-31,,
+2026-09-01 18:45:00,West Ham,Wolves,Over 2.5 goles + Over 5.5 corners,True,80.1,1.15,2026-08-31,,
+2026-09-01 18:45:00,Lincoln,Blackburn,Over 7.5 corners,False,80.5,1.14,2026-08-31,,
+2026-09-01 18:45:00,Sheffield United,Bolton,Over 8.5 corners,False,83.6,1.1,2026-08-31,,
+2026-09-01 18:45:00,Portsmouth,Derby,Under 13.5 corners,False,80.2,1.15,2026-08-31,,
+2026-09-01 18:45:00,Swansea,Watford,Over 6.5 corners,False,81.4,1.13,2026-08-31,,
+2026-09-01 19:00:00,Stoke,Norwich,Over 6.5 corners,False,84.7,1.08,2026-08-31,,
+2026-09-01 19:00:00,Birmingham,Southampton,Over 7.5 corners,False,80.2,1.15,2026-08-31,,
