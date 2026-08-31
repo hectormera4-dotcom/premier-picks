@@ -837,16 +837,6 @@
   </div>
 </aside>
 
-<div class="marcador-global">
-  <div class="marcador-box">
-    <div class="marcador-numero">68<span style="font-size:20px;">%</span></div>
-    <div class="marcador-texto">
-      <strong>Track record verificable.</strong> Porcentaje real de aciertos sobre los últimos picks resueltos — se actualiza solo, automáticamente, después de cada jornada.
-    </div>
-    <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
-  </div>
-</div>
-
 <div id="vista-picks">
 <div id="etiqueta-fecha-picks" class="etiqueta-fecha-picks"></div>
 <div id="banner-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
@@ -1225,15 +1215,15 @@ function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
 }
 
 function renderMarcadorGlobal(porcentaje, totalResueltos) {
-  const numeroEl = document.querySelector(".marcador-numero");
-  const textoEl = document.querySelector(".marcador-texto");
-  if (porcentaje === null) {
-    numeroEl.innerHTML = `—`;
-    textoEl.innerHTML = `<strong>Track record verificable.</strong> Todavía no hay picks resueltos — se actualizará automáticamente después de la primera fecha.`;
-  } else {
-    numeroEl.innerHTML = `${porcentaje}<span style="font-size:20px;">%</span>`;
-    textoEl.innerHTML = `<strong>Track record verificable.</strong> ${porcentaje}% de acierto sobre ${totalResueltos} picks resueltos — se actualiza solo, automáticamente, después de cada jornada.`;
-  }
+  // Seccion del marcador (el "Track record verificable" de arriba de todo)
+  // quitada temporalmente de la portada -- con pocas combinadas resueltas
+  // todavia, ese % puede salir bajo por pura estadistica de muestra chica
+  // (una combinada de varias patas falla completa si UNA sola pata falla,
+  // aunque el resto acierte), y espanta a usuarios nuevos que no tienen
+  // contexto. Se vuelve a mostrar cuando haya mas historial acumulado.
+  // El calculo se deja intacto (por si se reactiva mas adelante), pero ya
+  // no hay elementos ".marcador-numero"/".marcador-texto" en el HTML para
+  // llenar.
 }
 
 function crearBannerVip() {
