@@ -1664,6 +1664,34 @@ def calcular_dia_objetivo_picks():
     dia_logico = (hora_ecuador - timedelta(hours=12)).date()
     return dia_logico + timedelta(days=1)
 
+ARCHIVO_MARCADOR_DIA_GENERADO = "ultimo_dia_generado.json"
+
+def dia_ya_fue_generado(dia_objetivo):
+    """El pipeline puede correr varias veces en la misma noche (corrida
+    principal + 2 respaldos, para que nunca se quede sin actualizar). Sin
+    este marcador, cada una de esas corridas volveria a calcular los picks
+    y combinadas desde cero -- y como el modelo usa datos que van
+    cambiando (historico mas fresco, arbitro ya asignado, etc.), cada
+    corrida podia terminar mostrando picks/combinadas LIGERAMENTE distintos
+    para el mismo dia. Eso arruina la publicidad: un usuario ve una
+    combinada a las 7pm, y para las 9pm ya cambio.
+    Con este marcador, la PRIMERA corrida que le toque generar el dia
+    objetivo lo deja guardado, y las corridas siguientes de esa misma
+    noche detectan que ese dia ya se genero y se saltan la generacion
+    (solo verifican resultados pendientes de dias anteriores)."""
+    if not os.path.exists(ARCHIVO_MARCADOR_DIA_GENERADO):
+        return False
+    try:
+        with open(ARCHIVO_MARCADOR_DIA_GENERADO, "r", encoding="utf-8") as f:
+            marcador = json.load(f)
+        return marcador.get("dia_objetivo") == str(dia_objetivo)
+    except Exception:
+        return False
+
+def marcar_dia_generado(dia_objetivo):
+    with open(ARCHIVO_MARCADOR_DIA_GENERADO, "w", encoding="utf-8") as f:
+        json.dump({"dia_objetivo": str(dia_objetivo), "generado_en_utc": datetime.utcnow().isoformat()}, f)
+
 # ---------- Paso 4: generar picks para los proximos partidos ----------
 
 def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
@@ -2076,6 +2104,28 @@ def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
     return picks_curados
 
 
+def verificar_combinadas_pendientes(pool_historico):
+    """Solo revisa y resuelve combinadas PENDIENTES de dias anteriores
+    (partidos que ya se jugaron desde la ultima corrida), sin generar
+    combinadas nuevas ni tocar la tabla 'combinadas' vigente en Supabase.
+
+    Se usa cuando el dia objetivo de hoy YA tuvo su propia corrida de
+    generacion antes (ver 'dia_ya_fue_generado' en el bloque principal) --
+    esta corrida solo necesita ponerse al dia con resultados nuevos, sin
+    cambiarle las combinadas que los usuarios ya estan viendo."""
+    print("\nActualizando historial de combinadas (verificando pendientes de dias anteriores)...")
+    historial_combinadas = cargar_historial_combinadas()
+    if pool_historico is not None and len(pool_historico) > 0:
+        historial_combinadas = verificar_combinadas_resueltas(historial_combinadas, pool_historico)
+    else:
+        print("Sin historico disponible todavia para verificar combinadas pendientes.")
+
+    historial_combinadas.to_csv(ARCHIVO_HISTORIAL_COMBINADAS_MULTILIGA, index=False)
+    if supabase_configurado():
+        subir_historial_combinadas_liga_ya_incluida(historial_combinadas)
+    return historial_combinadas
+
+
 def correr_combinadas_multiliga(pool_picks, pool_historico):
     """Arma las combinadas del dia usando el pool combinado de picks
     seguros de TODAS las ligas activas, en vez de una por liga -- asi hay
@@ -2211,5 +2261,22 @@ if __name__ == "__main__":
         historicos_completos.append(h)
     pool_historico_completo = pd.concat(historicos_completos, ignore_index=True) if historicos_completos else None
 
-    picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=15, n_gratis=3)
-    correr_combinadas_multiliga(picks_del_dia, pool_historico_completo)
+    # El pipeline puede correr varias veces la misma noche (corrida
+    # principal a las 23:30 UTC + 2 respaldos, para que nunca se quede sin
+    # actualizar) -- pero los picks/combinadas que se le muestran a los
+    # usuarios NO deben cambiar entre esas corridas, o se arruina la
+    # publicidad. Solo la PRIMERA corrida que le toque un dia objetivo
+    # nuevo genera y publica los picks/combinadas de ese dia; las
+    # corridas siguientes de la misma noche solo verifican resultados
+    # pendientes de dias anteriores, sin tocar lo que ya esta publicado.
+    dia_objetivo_hoy = calcular_dia_objetivo_picks()
+
+    if dia_ya_fue_generado(dia_objetivo_hoy):
+        print(f"\nLos picks y combinadas del {dia_objetivo_hoy} ya se generaron en una corrida "
+              f"anterior de hoy -- no se vuelven a generar (para no cambiarselos a mitad de dia a "
+              f"los usuarios que ya los vieron). Solo se verifican pendientes de dias anteriores.")
+        verificar_combinadas_pendientes(pool_historico_completo)
+    else:
+        picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=15, n_gratis=3)
+        correr_combinadas_multiliga(picks_del_dia, pool_historico_completo)
+        marcar_dia_generado(dia_objetivo_hoy)
