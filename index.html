@@ -837,6 +837,8 @@
   </div>
 </aside>
 
+<div id="marcador-global-contenedor"></div>
+
 <div id="vista-picks">
 <div id="etiqueta-fecha-picks" class="etiqueta-fecha-picks"></div>
 <div id="banner-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
@@ -851,12 +853,7 @@
 </div>
 
 <div id="vista-historial" style="display:none;">
-  <div class="marcador-global" style="margin-top:0;">
-    <div class="marcador-box">
-      <span class="marcador-numero" id="resumen-numero-historial">—</span>
-      <span class="marcador-texto" id="resumen-texto-historial">Cargando historial...</span>
-    </div>
-  </div>
+  <div id="resumen-historial-contenedor"></div>
   <main id="contenedor-fechas" style="padding-top: 18px;">
   </main>
 </div>
@@ -1214,16 +1211,35 @@ function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
   cont.innerHTML = `<span>${etiqueta}</span>`;
 }
 
+// Umbral minimo de acierto (sobre combinadas resueltas) para mostrar el
+// "Track record verificable" en la app. Por debajo de esto, la seccion se
+// oculta sola -- con pocas combinadas resueltas todavia, el % puede salir
+// bajo por pura estadistica de muestra chica (una combinada de varias
+// patas falla completa si UNA sola pata falla, aunque el resto acierte),
+// y mostrarlo asi genera desconfianza en usuarios nuevos sin contexto.
+// En cuanto el acierto real suba de este umbral, la seccion vuelve a
+// aparecer automaticamente, sin que haya que tocar codigo de nuevo.
+const UMBRAL_TRACK_RECORD_VISIBLE = 70;
+
 function renderMarcadorGlobal(porcentaje, totalResueltos) {
-  // Seccion del marcador (el "Track record verificable" de arriba de todo)
-  // quitada temporalmente de la portada -- con pocas combinadas resueltas
-  // todavia, ese % puede salir bajo por pura estadistica de muestra chica
-  // (una combinada de varias patas falla completa si UNA sola pata falla,
-  // aunque el resto acierte), y espanta a usuarios nuevos que no tienen
-  // contexto. Se vuelve a mostrar cuando haya mas historial acumulado.
-  // El calculo se deja intacto (por si se reactiva mas adelante), pero ya
-  // no hay elementos ".marcador-numero"/".marcador-texto" en el HTML para
-  // llenar.
+  const cont = document.getElementById("marcador-global-contenedor");
+  if (!cont) return;
+
+  if (porcentaje === null || porcentaje < UMBRAL_TRACK_RECORD_VISIBLE) {
+    cont.innerHTML = "";
+    return;
+  }
+
+  cont.innerHTML = `
+    <div class="marcador-global">
+      <div class="marcador-box">
+        <div class="marcador-numero">${porcentaje}<span style="font-size:20px;">%</span></div>
+        <div class="marcador-texto">
+          <strong>Track record verificable.</strong> ${porcentaje}% de acierto sobre ${totalResueltos} combinadas resueltas — se actualiza solo, automáticamente, después de cada jornada.
+        </div>
+        <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
+      </div>
+    </div>`;
 }
 
 function crearBannerVip() {
@@ -1693,12 +1709,13 @@ function crearTarjetaCombinadaHistorial(c) {
 
 async function cargarHistorialCombinadas() {
   const contenedor = document.getElementById("contenedor-fechas");
+  const resumenCont = document.getElementById("resumen-historial-contenedor");
   try {
     const datos = window._historialCombinadasCache || [];
 
     if (!datos.length) {
       contenedor.innerHTML = `<div class="vacio">Todavía no hay combinadas registradas. Vuelve después de la primera fecha.</div>`;
-      document.getElementById("resumen-texto-historial").textContent = "Sin historial todavía.";
+      resumenCont.innerHTML = "";
       return;
     }
 
@@ -1706,11 +1723,22 @@ async function cargarHistorialCombinadas() {
     if (resueltas.length > 0) {
       const cumplidas = resueltas.filter(d => d.resultado === "Cumplida").length;
       const porcentaje = Math.round((cumplidas / resueltas.length) * 100);
-      document.getElementById("resumen-numero-historial").innerHTML = `${porcentaje}<span style="font-size:20px;">%</span>`;
-      document.getElementById("resumen-texto-historial").innerHTML =
-        `<strong>${cumplidas} de ${resueltas.length}</strong> combinadas cumplidas — historial 100% real y verificable.`;
+      // Igual que el marcador de la portada: por debajo del umbral, esta
+      // seccion se queda oculta -- se muestra sola en cuanto el acierto
+      // real suba lo suficiente.
+      if (porcentaje >= UMBRAL_TRACK_RECORD_VISIBLE) {
+        resumenCont.innerHTML = `
+          <div class="marcador-global" style="margin-top:0;">
+            <div class="marcador-box">
+              <span class="marcador-numero">${porcentaje}<span style="font-size:20px;">%</span></span>
+              <span class="marcador-texto"><strong>${cumplidas} de ${resueltas.length}</strong> combinadas cumplidas — historial 100% real y verificable.</span>
+            </div>
+          </div>`;
+      } else {
+        resumenCont.innerHTML = "";
+      }
     } else {
-      document.getElementById("resumen-texto-historial").textContent = "Todavía no hay combinadas resueltas.";
+      resumenCont.innerHTML = "";
     }
 
     const grupos = {};
