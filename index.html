@@ -959,6 +959,16 @@ function transformarPick(fila) {
   };
 }
 
+// Escapa texto antes de insertarlo en innerHTML -- se usa en cualquier
+// dato que venga directo del usuario (ej. su propio correo), para que un
+// correo con caracteres especiales nunca pueda inyectar HTML/JS en su
+// propia sesion.
+function escaparHtml(texto) {
+  const div = document.createElement("div");
+  div.textContent = String(texto ?? "");
+  return div.innerHTML;
+}
+
 function nombreLiga(clave) {
   const encontrada = LIGAS_DISPONIBLES.find(l => l.clave === clave);
   return encontrada ? encontrada.nombre : (clave === "mixta" ? "Varias ligas" : "");
@@ -1045,7 +1055,7 @@ function renderBarraAuth() {
     const etiqueta = perfilActual.es_admin ? "Administrador" : (vipVigente(perfilActual) ? "VIP" : "Gratis");
     header.innerHTML = `
       ${botonInstalarApp()}
-      <span class="auth-estado">${sesionActual.user.email} · <b>${etiqueta}</b></span>
+      <span class="auth-estado">${escaparHtml(sesionActual.user.email)} · <b>${etiqueta}</b></span>
     `;
   } else {
     header.innerHTML = `
