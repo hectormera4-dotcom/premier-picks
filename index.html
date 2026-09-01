@@ -1110,22 +1110,20 @@ async function activarNotificaciones() {
     }
 
     const suscripcionJson = suscripcion.toJSON();
-    const resp = await fetch(`${SUPABASE_URL}/rest/v1/push_subscripciones?on_conflict=endpoint`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Prefer": "resolution=ignore-duplicates",
-      },
-      body: JSON.stringify({ endpoint: suscripcionJson.endpoint, suscripcion_json: suscripcionJson }),
+    // Usamos el cliente de Supabase (igual que el resto de la app) en vez
+    // de un fetch a mano -- si ya existe esa misma suscripcion (endpoint
+    // repetido), el error 23505 (llave duplicada) NO es un fallo real,
+    // solo significa que este dispositivo ya estaba suscrito.
+    const { error } = await sb.from("push_subscripciones").insert({
+      endpoint: suscripcionJson.endpoint,
+      suscripcion_json: suscripcionJson,
     });
 
-    if (resp.ok) {
+    if (!error || error.code === "23505") {
       localStorage.setItem("picksfc_notificaciones_activadas", "1");
       alert("¡Listo! Te vamos a avisar apenas se resuelva una combinada.");
     } else {
-      console.error(await resp.text());
+      console.error(error);
       alert("No se pudo activar la notificación. Intenta de nuevo más tarde.");
     }
   } catch (err) {
