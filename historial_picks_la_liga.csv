@@ -4,11 +4,11 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-27 18:30:00,Celta,Osasuna,Under 11.5 corners,False,82.7,1.11,2026-08-21,1-2,True
 2026-08-27 19:00:00,Barcelona,Ath Bilbao,Under 13.5 corners,False,80.6,1.14,2026-08-21,2-0,False
 2026-08-28 17:00:00,Real Racing Club de Santander,Elche,Over 1.5 goles,False,86.6,1.05,2026-08-28,3-2,True
-2026-08-28 19:30:00,Alaves,Villarreal,Under 12.5 corners,False,80.1,1.15,2026-08-28,,
-2026-08-29 15:00:00,Levante,Betis,Over 5.5 corners,False,87.2,1.05,2026-08-29,,
+2026-08-28 19:30:00,Alaves,Villarreal,Under 12.5 corners,False,80.1,1.15,2026-08-28,1-0,False
+2026-08-29 15:00:00,Levante,Betis,Over 5.5 corners,False,87.2,1.05,2026-08-29,5-2,True
 2026-08-29 17:00:00,Sociedad,Espanyol,Over 5.5 corners,False,86.8,1.05,2026-08-29,,
-2026-08-29 19:30:00,Sevilla,Ath Madrid,Under 13.5 corners,False,87.2,1.05,2026-08-29,,
-2026-08-30 17:30:00,La Coruna,Valencia,Under 12.5 corners,False,87.4,1.04,2026-08-30,,
-2026-08-30 19:30:00,Celta,Ath Bilbao,Under 13.5 corners,False,87.3,1.05,2026-08-30,,
-2026-08-31 17:30:00,Osasuna,Getafe,Under 13.5 corners,False,87.3,1.05,2026-08-30,,
-2026-08-31 19:30:00,Barcelona,Vallecano,Doble oportunidad 1X + Over 5.5 corners,True,85.9,1.06,2026-08-30,,
+2026-08-29 19:30:00,Sevilla,Ath Madrid,Under 13.5 corners,False,87.2,1.05,2026-08-29,1-3,True
+2026-08-30 17:30:00,La Coruna,Valencia,Under 12.5 corners,False,87.4,1.04,2026-08-30,3-1,True
+2026-08-30 19:30:00,Celta,Ath Bilbao,Under 13.5 corners,False,87.3,1.05,2026-08-30,0-2,True
+2026-08-31 17:30:00,Osasuna,Getafe,Under 13.5 corners,False,87.3,1.05,2026-08-30,1-0,True
+2026-08-31 19:30:00,Barcelona,Vallecano,Doble oportunidad 1X + Over 5.5 corners,True,85.9,1.06,2026-08-30,5-2,True

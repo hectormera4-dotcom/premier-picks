@@ -1,14 +1,14 @@
 fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_cuota_aprox,fecha_generado,resultado_real,acierto
 2026-08-29 11:30:00,Wolves,Stoke,Over 1.5 goles,False,82.6,1.11,2026-08-29,4-1,True
-2026-08-29 11:30:00,Derby,Swansea,Over 5.5 corners,False,85.3,1.07,2026-08-29,,
-2026-08-29 11:30:00,Middlesbrough,West Brom,Over 5.5 corners,False,87.6,1.04,2026-08-29,,
+2026-08-29 11:30:00,Derby,Swansea,Over 5.5 corners,False,85.3,1.07,2026-08-29,0-3,True
+2026-08-29 11:30:00,Middlesbrough,West Brom,Over 5.5 corners,False,87.6,1.04,2026-08-29,3-1,True
 2026-08-29 14:00:00,Norwich,Burnley,Doble oportunidad X2,False,80.6,1.14,2026-08-29,4-1,False
 2026-08-29 14:00:00,Bolton,Lincoln,Over 1.5 goles,False,83.9,1.09,2026-08-29,0-1,False
-2026-08-29 14:00:00,Bristol City,Portsmouth,Over 5.5 corners,False,87.2,1.05,2026-08-29,,
-2026-08-29 14:00:00,Southampton,Millwall,Over 6.5 corners,False,86.3,1.06,2026-08-29,,
-2026-08-29 14:00:00,Charlton,Preston,Under 13.5 corners,False,87.0,1.05,2026-08-29,,
-2026-08-29 14:00:00,Blackburn,QPR,Over 6.5 corners,False,86.2,1.06,2026-08-29,,
-2026-08-29 14:00:00,Cardiff,Sheffield United,Over 6.5 corners,False,85.1,1.08,2026-08-29,,
+2026-08-29 14:00:00,Bristol City,Portsmouth,Over 5.5 corners,False,87.2,1.05,2026-08-29,2-1,True
+2026-08-29 14:00:00,Southampton,Millwall,Over 6.5 corners,False,86.3,1.06,2026-08-29,5-1,True
+2026-08-29 14:00:00,Charlton,Preston,Under 13.5 corners,False,87.0,1.05,2026-08-29,1-0,True
+2026-08-29 14:00:00,Blackburn,QPR,Over 6.5 corners,False,86.2,1.06,2026-08-29,1-2,False
+2026-08-29 14:00:00,Cardiff,Sheffield United,Over 6.5 corners,False,85.1,1.08,2026-08-29,2-2,True
 2026-08-29 14:00:00,Watford,West Ham,Over 1.5 goles,False,84.7,1.08,2026-08-29,1-1,True
 2026-09-01 18:45:00,Preston,Bristol City,Over 6.5 corners,False,84.5,1.08,2026-08-31,,
 2026-09-01 18:45:00,West Ham,Wolves,Over 2.5 goles + Over 5.5 corners,True,80.1,1.15,2026-08-31,,

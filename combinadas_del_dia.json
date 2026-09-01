@@ -8,7 +8,7 @@
         "local": "Stoke",
         "visitante": "Norwich",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 84.7,
+        "pick_probabilidad": 84.6,
         "liga": "championship"
       },
       {
@@ -16,7 +16,7 @@
         "local": "Preston",
         "visitante": "Bristol City",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 84.5,
+        "pick_probabilidad": 84.4,
         "liga": "championship"
       },
       {
@@ -24,7 +24,7 @@
         "local": "Sheffield United",
         "visitante": "Bolton",
         "pick_recomendado": "Over 8.5 corners",
-        "pick_probabilidad": 83.6,
+        "pick_probabilidad": 83.5,
         "liga": "championship"
       },
       {
@@ -32,12 +32,12 @@
         "local": "Swansea",
         "visitante": "Watford",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 81.4,
+        "pick_probabilidad": 81.2,
         "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 48.7,
-    "cuota_combinada": 1.95,
+    "probabilidad_combinada": 48.4,
+    "cuota_combinada": 1.97,
     "liga": "championship"
   },
   {
@@ -46,31 +46,31 @@
     "partidos": [
       {
         "fecha": "2026-09-01 18:45:00",
-        "local": "Lincoln",
-        "visitante": "Blackburn",
-        "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 80.5,
+        "local": "Portsmouth",
+        "visitante": "Derby",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 80.4,
         "liga": "championship"
       },
       {
         "fecha": "2026-09-01 18:45:00",
-        "local": "Portsmouth",
-        "visitante": "Derby",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 80.2,
+        "local": "Lincoln",
+        "visitante": "Blackburn",
+        "pick_recomendado": "Over 7.5 corners",
+        "pick_probabilidad": 80.3,
         "liga": "championship"
       },
       {
-        "fecha": "2026-09-01 19:00:00",
-        "local": "Birmingham",
-        "visitante": "Southampton",
-        "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 80.2,
+        "fecha": "2026-09-01 18:45:00",
+        "local": "West Ham",
+        "visitante": "Wolves",
+        "pick_recomendado": "Over 2.5 goles + Over 5.5 corners",
+        "pick_probabilidad": 80.0,
         "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 51.8,
-    "cuota_combinada": 1.83,
+    "probabilidad_combinada": 51.6,
+    "cuota_combinada": 1.84,
     "liga": "championship"
   }
 ]
