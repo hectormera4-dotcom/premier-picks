@@ -390,7 +390,8 @@
     z-index: 2;
   }
   .menu-usuario-email { font-size: 12.5px; color: rgba(239,235,226,0.8); word-break: break-all; }
-  .menu-usuario-etiqueta { font-size: 11px; color: var(--verde-claro); margin: 2px 0 10px; }
+  .menu-usuario-etiqueta { font-size: 11px; color: var(--verde-claro); margin: 2px 0 4px; }
+  .menu-usuario-vencimiento { font-size: 11px; color: rgba(239,235,226,0.6); margin: 0 0 10px; }
   .btn-cerrar-sesion {
     width: 100%;
     background: rgba(163,75,62,0.15);
@@ -824,6 +825,9 @@
     <button class="menu-item" id="menu-historial" onclick="cambiarVista('historial'); cerrarMenuLateral();">
       📊 Historial
     </button>
+    <button class="menu-item" onclick="window.open('https://t.me/picksfc_soporte', '_blank')">
+      💬 Soporte
+    </button>
     <button class="menu-item" onclick="toggleSubmenuLigas()">
       🏆 Ligas <span id="flecha-ligas">▾</span>
     </button>
@@ -921,6 +925,15 @@ const ETIQUETAS_MERCADOS = {
 
 const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+// Formatea una fecha (string ISO o Date) como "10 de septiembre de 2026",
+// usado para mostrarle al usuario hasta cuando le dura su suscripcion VIP.
+function formatearFechaLarga(fechaStr) {
+  const f = new Date(fechaStr);
+  if (isNaN(f)) return "";
+  return `${f.getDate()} de ${MESES_LARGO[f.getMonth()]} de ${f.getFullYear()}`;
+}
 
 function formatearFecha(fechaStr) {
   const f = new Date(String(fechaStr).replace(" ", "T"));
@@ -1065,11 +1078,25 @@ function renderBarraAuth() {
     `;
   }
 
-  // Pie del menu lateral: SOLO el boton de cerrar sesion (nada si no hay sesion)
+  // Pie del menu lateral: correo, etiqueta de cuenta, fecha de vencimiento
+  // del VIP (si aplica) y el boton de cerrar sesion. Nada si no hay sesion.
   const pie = document.getElementById("menu-lateral-footer");
-  pie.innerHTML = sesionActual
-    ? `<button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>`
-    : "";
+  if (sesionActual && perfilActual) {
+    const etiqueta = perfilActual.es_admin ? "Administrador" : (vipVigente(perfilActual) ? "VIP" : "Gratis");
+    // La fecha de vencimiento solo tiene sentido mostrarla para un VIP con
+    // fecha real (no para el admin, que no depende de vip_hasta).
+    const vencimiento = (!perfilActual.es_admin && vipVigente(perfilActual) && perfilActual.vip_hasta)
+      ? `<div class="menu-usuario-vencimiento">Suscripción válida hasta: ${formatearFechaLarga(perfilActual.vip_hasta)}</div>`
+      : "";
+    pie.innerHTML = `
+      <div class="menu-usuario-email">${escaparHtml(sesionActual.user.email)}</div>
+      <div class="menu-usuario-etiqueta">${etiqueta}</div>
+      ${vencimiento}
+      <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar sesión</button>
+    `;
+  } else {
+    pie.innerHTML = "";
+  }
 }
 
 async function entrarConGoogle() {
@@ -1207,7 +1234,6 @@ function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
   const diffDias = Math.round((soloFecha(masTemprana) - soloFecha(hoy)) / 86400000);
 
   const DIAS_LARGO = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-  const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
   const fechaTexto = `${DIAS_LARGO[masTemprana.getDay()]} ${masTemprana.getDate()} de ${MESES_LARGO[masTemprana.getMonth()]}`;
 
   const fechaCapitalizada = fechaTexto.replace(/(^|de )([a-záéíóú])/g, (m, p1, p2) => p1 + p2.toUpperCase());
