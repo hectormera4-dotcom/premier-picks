@@ -100,6 +100,8 @@
   .auth-barra { display: flex; align-items: center; gap: 10px; }
   .auth-estado { font-size: 12.5px; color: rgba(239,235,226,0.7); }
   .auth-estado b { color: var(--verde-claro); }
+  .auth-estado-bloque { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.4; }
+  .auth-vencimiento { font-size: 10.5px; color: rgba(239,235,226,0.5); }
   .auth-btn {
     font-family: 'Oswald', sans-serif;
     font-size: 12px;
@@ -413,13 +415,26 @@
     padding: 0 20px;
   }
   .fecha-titulo {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
     font-family: 'Oswald', sans-serif;
     font-size: 13px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: rgba(239,235,226,0.55);
+    color: rgba(239,235,226,0.75);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--linea-oscura);
+    border-radius: 8px;
+    padding: 12px 16px;
     margin-bottom: 10px;
+    cursor: pointer;
   }
+  .fecha-titulo:hover { background: rgba(255,255,255,0.07); }
+  .fecha-titulo-resumen { font-size: 11px; letter-spacing: 0.02em; text-transform: none; color: rgba(239,235,226,0.5); }
+  .fecha-titulo-flecha { transition: transform 0.15s ease; }
+  .fecha-grupo.abierto .fecha-titulo-flecha { transform: rotate(180deg); }
+  .fecha-combinadas { display: none; }
+  .fecha-grupo.abierto .fecha-combinadas { display: block; }
   .combinada-card {
     background: var(--papel);
     color: var(--tinta);
@@ -825,15 +840,15 @@
     <button class="menu-item" id="menu-historial" onclick="cambiarVista('historial'); cerrarMenuLateral();">
       📊 Historial
     </button>
-    <button class="menu-item" onclick="window.open('https://t.me/picksfc_soporte', '_blank')">
-      💬 Soporte
-    </button>
     <button class="menu-item" onclick="toggleSubmenuLigas()">
       🏆 Ligas <span id="flecha-ligas">▾</span>
     </button>
     <div id="submenu-ligas" class="submenu-ligas" style="display:none;">
       <div class="grid-ligas" id="grid-ligas"><!-- se llena con JS --></div>
     </div>
+    <button class="menu-item" onclick="window.open('https://t.me/picksfc_soporte', '_blank')">
+      💬 Soporte
+    </button>
   </nav>
 
   <div class="menu-lateral-footer" id="menu-lateral-footer">
@@ -1061,14 +1076,26 @@ function vipVigente(perfil) {
   return !!(perfil.vip_hasta && new Date(perfil.vip_hasta) > new Date());
 }
 
+// El texto de vencimiento VIP se usa en 2 lugares (el header de arriba de
+// todo, y el pie del menu lateral) -- centralizado aqui para no repetir la
+// misma condicion en los 2 sitios.
+function textoVencimientoVip(perfil) {
+  if (!perfil || perfil.es_admin || !vipVigente(perfil) || !perfil.vip_hasta) return "";
+  return `Suscripción válida hasta: ${formatearFechaLarga(perfil.vip_hasta)}`;
+}
+
 function renderBarraAuth() {
   // Header: estado completo de sesion (igual que antes), + boton de instalar app
   const header = document.getElementById("auth-barra-header");
   if (sesionActual && perfilActual) {
     const etiqueta = perfilActual.es_admin ? "Administrador" : (vipVigente(perfilActual) ? "VIP" : "Gratis");
+    const vencimiento = textoVencimientoVip(perfilActual);
     header.innerHTML = `
       ${botonInstalarApp()}
-      <span class="auth-estado">${escaparHtml(sesionActual.user.email)} · <b>${etiqueta}</b></span>
+      <div class="auth-estado-bloque">
+        <span class="auth-estado">${escaparHtml(sesionActual.user.email)} · <b>${etiqueta}</b></span>
+        ${vencimiento ? `<span class="auth-vencimiento">${vencimiento}</span>` : ""}
+      </div>
     `;
   } else {
     header.innerHTML = `
@@ -1083,10 +1110,9 @@ function renderBarraAuth() {
   const pie = document.getElementById("menu-lateral-footer");
   if (sesionActual && perfilActual) {
     const etiqueta = perfilActual.es_admin ? "Administrador" : (vipVigente(perfilActual) ? "VIP" : "Gratis");
-    // La fecha de vencimiento solo tiene sentido mostrarla para un VIP con
-    // fecha real (no para el admin, que no depende de vip_hasta).
-    const vencimiento = (!perfilActual.es_admin && vipVigente(perfilActual) && perfilActual.vip_hasta)
-      ? `<div class="menu-usuario-vencimiento">Suscripción válida hasta: ${formatearFechaLarga(perfilActual.vip_hasta)}</div>`
+    const textoVencimiento = textoVencimientoVip(perfilActual);
+    const vencimiento = textoVencimiento
+      ? `<div class="menu-usuario-vencimiento">${textoVencimiento}</div>`
       : "";
     pie.innerHTML = `
       <div class="menu-usuario-email">${escaparHtml(sesionActual.user.email)}</div>
@@ -1785,12 +1811,26 @@ async function cargarHistorialCombinadas() {
     }
     const numerosFecha = Object.keys(grupos).map(Number).sort((a, b) => b - a);
 
-    contenedor.innerHTML = numerosFecha.map(n => `
-      <div class="fecha-grupo">
-        <div class="fecha-titulo">Fecha ${n}</div>
-        ${grupos[n].map(crearTarjetaCombinadaHistorial).join("")}
+    // Plegado en pestañas por Fecha, para que la lista no se amontone a
+    // medida que se acumulan mas jornadas -- solo la mas reciente arranca
+    // abierta, el resto se despliega al hacer click en su titulo.
+    contenedor.innerHTML = numerosFecha.map((n, i) => {
+      const combinadasDeEstaFecha = grupos[n];
+      const cumplidas = combinadasDeEstaFecha.filter(c => c.resultado === "Cumplida").length;
+      const falladas = combinadasDeEstaFecha.filter(c => c.resultado === "Fallada").length;
+      const resumen = (cumplidas + falladas) > 0 ? `${cumplidas}✓ / ${falladas}✕` : "pendiente";
+      return `
+      <div class="fecha-grupo ${i === 0 ? "abierto" : ""}">
+        <button class="fecha-titulo" onclick="this.parentElement.classList.toggle('abierto')">
+          <span>Fecha ${n}</span>
+          <span class="fecha-titulo-resumen">${resumen} <span class="fecha-titulo-flecha">▾</span></span>
+        </button>
+        <div class="fecha-combinadas">
+          ${combinadasDeEstaFecha.map(crearTarjetaCombinadaHistorial).join("")}
+        </div>
       </div>
-    `).join("");
+    `;
+    }).join("");
   } catch (err) {
     contenedor.innerHTML = `<div class="vacio">No se pudo cargar el historial todavía. Intenta de nuevo más tarde.</div>`;
     console.error(err);
