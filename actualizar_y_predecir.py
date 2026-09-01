@@ -1110,7 +1110,7 @@ def resumen_track_record(historial):
         return
     aciertos = resueltos["acierto"].astype(bool).sum()
     total = len(resueltos)
-    print(f"\n=== TRACK RECORD ===")
+    print("\n=== TRACK RECORD ===")
     print(f"Picks resueltos: {total}")
     print(f"Aciertos: {aciertos} ({aciertos/total*100:.1f}%)")
 
