@@ -1088,11 +1088,37 @@ function renderBotonNotificaciones() {
   boton.innerHTML = activadas ? "🔔 Notificaciones activadas ✓" : "🔔 Activar notificaciones";
 }
 
-async function activarNotificaciones() {
+function activarNotificaciones() {
+  // Antes de pedir el permiso del navegador (generico, sin contexto --
+  // por eso mucha gente lo rechaza pensando que es publicidad), le
+  // explicamos primero para que sirve especificamente en esta app. Esto
+  // mejora bastante cuantos usuarios terminan aceptando de verdad.
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
     alert("Tu navegador no soporta notificaciones push.");
     return;
   }
+  const html = `
+    <div class="auth-modal-fondo" onclick="cerrarModalNotificaciones(event)">
+      <div class="auth-modal" onclick="event.stopPropagation()">
+        <div class="auth-modal-titulo">🔔 Sabe al instante si ganaste</div>
+        <div style="font-size:13.5px; line-height:1.5;">
+          No son anuncios ni publicidad. Te avisamos SOLO cuando una combinada termina de resolverse
+          — minutos después de terminar el último partido, no al otro día — para que sepas de inmediato
+          si la ganaste o la perdiste.
+        </div>
+        <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="cerrarModalNotificaciones(); confirmarActivarNotificaciones();">Sí, avísame</button>
+        <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalNotificaciones()">Ahora no</button>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+function cerrarModalNotificaciones(event) {
+  if (event && event.target !== event.currentTarget) return;
+  document.querySelector(".auth-modal-fondo")?.remove();
+}
+
+async function confirmarActivarNotificaciones() {
   try {
     const permiso = await Notification.requestPermission();
     if (permiso !== "granted") {
