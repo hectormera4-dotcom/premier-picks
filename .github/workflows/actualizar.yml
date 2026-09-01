@@ -45,6 +45,23 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
+      - name: Traer los datos mas recientes (rama datos-pipeline)
+        # 'main' guarda solo CODIGO (protegido, requiere Pull Request); los
+        # datos que este pipeline genera y necesita leer entre corridas
+        # (historicos, historial de picks/combinadas, contadores) viven en
+        # la rama 'datos-pipeline', separada -- por eso hay que traerlos
+        # aqui antes de correr el script, que espera encontrarlos en el
+        # working directory tal como los dejo la corrida anterior.
+        run: |
+          git fetch origin datos-pipeline
+          git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'picks_del_dia_*.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'historial_picks_*.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'combinadas_del_dia.json' 'combinadas_del_dia_*.json' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'historial_combinadas.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'contador_fechas.json' 'contador_fechas_*.json' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'ultimo_dia_generado.json' 2>/dev/null || true
+
       - name: Correr el script de actualizacion
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
@@ -53,10 +70,33 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: python actualizar_y_predecir.py
 
-      - name: Guardar los cambios de vuelta en el repositorio
+      - name: Guardar los datos generados en la rama 'datos-pipeline'
+        # OJO: esto sube a 'datos-pipeline', NUNCA a 'main' -- 'main' esta
+        # protegida (solo acepta cambios via Pull Request, con las pruebas
+        # automaticas en verde) para que ningun cambio de CODIGO llegue a
+        # produccion sin revisarse. Los datos generados aqui no son codigo
+        # -- la app nunca los lee directo, todo lo que ve un usuario sale
+        # de Supabase -- asi que no tiene sentido, ni falta, que pasen por
+        # ese mismo filtro. Viven en su propia rama sin proteger para que
+        # el pipeline nunca se quede bloqueado esperando una aprobacion
+        # que no le corresponde.
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          mkdir -p /tmp/datos_generados
+          cp premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp picks_del_dia_*.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp historial_picks_*.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp combinadas_del_dia.json combinadas_del_dia_*.json /tmp/datos_generados/ 2>/dev/null || true
+          cp historial_combinadas.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp contador_fechas.json contador_fechas_*.json /tmp/datos_generados/ 2>/dev/null || true
+          cp ultimo_dia_generado.json /tmp/datos_generados/ 2>/dev/null || true
+
+          git fetch origin datos-pipeline
+          git checkout -B datos-pipeline origin/datos-pipeline
+          cp /tmp/datos_generados/* .
+
           git add premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv 2>/dev/null || true
           git add picks_del_dia_*.csv 2>/dev/null || true
           git add historial_picks_*.csv 2>/dev/null || true
@@ -64,12 +104,15 @@ jobs:
           git add historial_combinadas.csv 2>/dev/null || true
           git add contador_fechas.json contador_fechas_*.json 2>/dev/null || true
           git add ultimo_dia_generado.json 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "Actualizacion automatica de picks"
-          # Nos sincronizamos con lo ultimo del repositorio antes de subir,
-          # por si alguien (o otra corrida del workflow) subio algo mientras
-          # tanto -- esto evita el error "rejected (fetch first)".
-          git pull --rebase --autostash origin main
-          git push
+
+          if git diff --staged --quiet; then
+            echo "No hubo cambios en los datos -- nada que subir."
+            exit 0
+          fi
+
+          git commit -m "Actualizacion automatica de picks"
+          git pull --rebase --autostash origin datos-pipeline
+          git push origin datos-pipeline
 
       - name: Avisar si el pipeline fallo (crea o actualiza un Issue)
         if: failure()
