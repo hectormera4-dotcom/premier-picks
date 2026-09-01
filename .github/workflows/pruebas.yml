@@ -1,0 +1,61 @@
+name: Pruebas automaticas (antes de que un cambio llegue a produccion)
+
+# Corre en cada Pull Request hacia main, y tambien en cada push a
+# cualquier rama que NO sea main -- asi cualquier cambio se revisa ANTES
+# de fusionarse a la rama que ve todo el mundo. Con la regla de proteccion
+# de rama activada en GitHub (Settings -> Branches), un Pull Request no se
+# puede fusionar a main mientras este workflow no termine en verde.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]
+
+jobs:
+  pruebas-python:
+    name: Pruebas del pipeline (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el codigo
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements-dev.txt
+
+      - name: Revisar sintaxis y errores obvios (pyflakes)
+        run: python -m pyflakes actualizar_y_predecir.py
+
+      - name: Correr las pruebas automatizadas
+        run: python -m pytest tests/ -v
+
+  pruebas-frontend:
+    name: Pruebas del frontend (index.html)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el codigo
+        uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Revisar que el JavaScript de index.html no tenga errores de sintaxis
+        run: |
+          node -e "
+          const fs = require('fs');
+          const html = fs.readFileSync('index.html', 'utf-8');
+          const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+          if (scripts.length === 0) { console.error('No se encontro ningun bloque <script> en index.html'); process.exit(1); }
+          let ok = true;
+          scripts.forEach((s, i) => {
+            try { new Function(s); } catch (e) { ok = false; console.error('Bloque de script', i, 'ERROR:', e.message); }
+          });
+          if (!ok) process.exit(1);
+          console.log('Los', scripts.length, 'bloques de <script> de index.html no tienen errores de sintaxis.');
+          "

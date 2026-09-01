@@ -1,0 +1,5 @@
+# Dependencias SOLO para desarrollo/pruebas -- el pipeline de produccion
+# (.github/workflows/actualizar.yml) sigue usando unicamente requirements.txt.
+-r requirements.txt
+pytest
+pyflakes
