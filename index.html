@@ -864,6 +864,7 @@
 <div id="vista-picks">
 <div id="etiqueta-fecha-picks" class="etiqueta-fecha-picks"></div>
 <div id="banner-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
+<div id="banner-notificaciones-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
 <div class="tabs">
   <button class="tab activo">Gratis</button>
   <button class="tab">VIP</button>
@@ -1081,11 +1082,31 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
 }
 
+// Un solo texto, reutilizado en el banner de la portada y en la ventana
+// explicativa antes del permiso -- para no repetirlo distinto en 2 lados.
+const TEXTO_NOTIFICACIONES = "Activa las notificaciones para avisarte cuando una combinada termina de resolverse, minutos después de terminar el último partido.";
+
 function renderBotonNotificaciones() {
   const boton = document.getElementById("menu-notificaciones");
   if (!boton) return;
   const activadas = localStorage.getItem("picksfc_notificaciones_activadas") === "1";
   boton.innerHTML = activadas ? "🔔 Notificaciones activadas ✓" : "🔔 Activar notificaciones";
+}
+
+function renderBannerNotificaciones() {
+  const cont = document.getElementById("banner-notificaciones-contenedor");
+  if (!cont) return;
+  const activadas = localStorage.getItem("picksfc_notificaciones_activadas") === "1";
+  if (activadas) { cont.innerHTML = ""; return; }
+  cont.innerHTML = `
+    <div class="banner-vip" style="border-color: rgba(78,152,104,0.4);">
+      <div class="banner-vip-texto">
+        <div class="banner-vip-titulo">🔔 Entérate al instante si ganaste</div>
+        <div>${TEXTO_NOTIFICACIONES}</div>
+      </div>
+      <button class="btn-vip" onclick="activarNotificaciones()">Activar notificaciones</button>
+    </div>
+  `;
 }
 
 function activarNotificaciones() {
@@ -1100,12 +1121,8 @@ function activarNotificaciones() {
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarModalNotificaciones(event)">
       <div class="auth-modal" onclick="event.stopPropagation()">
-        <div class="auth-modal-titulo">🔔 Sabe al instante si ganaste</div>
-        <div style="font-size:13.5px; line-height:1.5;">
-          No son anuncios ni publicidad. Te avisamos SOLO cuando una combinada termina de resolverse
-          — minutos después de terminar el último partido, no al otro día — para que sepas de inmediato
-          si la ganaste o la perdiste.
-        </div>
+        <div class="auth-modal-titulo">🔔 Entérate al instante si ganaste</div>
+        <div style="font-size:13.5px; line-height:1.5;">${TEXTO_NOTIFICACIONES}</div>
         <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="cerrarModalNotificaciones(); confirmarActivarNotificaciones();">Sí, avísame</button>
         <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalNotificaciones()">Ahora no</button>
       </div>
@@ -1157,6 +1174,7 @@ async function confirmarActivarNotificaciones() {
     alert("Error al activar notificaciones: " + err.message);
   } finally {
     renderBotonNotificaciones();
+    renderBannerNotificaciones();
   }
 }
 
@@ -1656,6 +1674,7 @@ function crearTarjeta(p, i) {
 
 function render(picks, combinadas) {
   document.getElementById("banner-vip-contenedor").innerHTML = crearBannerVip();
+  renderBannerNotificaciones();
 
   const hayPicks = picks.length > 0;
   const hayCombinadas = combinadas.length > 0;
