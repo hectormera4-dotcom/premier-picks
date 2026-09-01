@@ -75,11 +75,52 @@ Deno.serve(async (req: Request) => {
       const planCorto = partes[1] || "m";
       const plan = planCorto === "s" ? "semana" : "mes";
 
+      const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+      // Un pago real de Payphone sigue confirmando "Approved" para
+      // siempre, aunque ya se haya usado -- sin este registro, alguien
+      // podria guardar el id+clientTransactionId de un solo pago real y
+      // volver a llamar a esta funcion cuantas veces quiera para
+      // extender su VIP sin pagar de nuevo. Insertamos el pago aqui
+      // ANTES de activar el VIP; si ya existia (mismo pago reenviado), la
+      // restriccion de llave primaria lo rechaza y no se vuelve a activar.
+      const { error: dedupeError } = await supabaseAdmin
+        .from("pagos_procesados")
+        .insert({ client_transaction_id: String(clientTransactionId) });
+
+      if (dedupeError) {
+        if (dedupeError.code === "23505") { // unique_violation: este pago ya se proceso antes
+          return new Response(JSON.stringify({
+            aprobado: true,
+            yaProcesado: true,
+            transactionStatus: data.transactionStatus,
+            amount: data.amount,
+          }), { headers: { ...CORS_HEADERS, "Content-Type": "application/json" } });
+        }
+        return new Response(JSON.stringify({ error: "Pago aprobado pero fallo verificar duplicado", detalle: dedupeError }), {
+          status: 500,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+        });
+      }
+
       const DIAS_POR_PLAN: Record<string, number> = { semana: 7, mes: 30 };
       const dias = DIAS_POR_PLAN[plan] || 30;
-      const vipHasta = new Date(Date.now() + dias * 24 * 60 * 60 * 1000).toISOString();
 
-      const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+      // Si el usuario todavia tenia VIP vigente al momento de pagar, el
+      // plan nuevo se SUMA a lo que le quedaba (en vez de reemplazarlo
+      // desde ahora) -- asi no pierde dias por renovar antes de que se le
+      // acabe el plan actual.
+      const { data: perfilActual } = await supabaseAdmin
+        .from("perfiles")
+        .select("vip_hasta")
+        .eq("id", userId)
+        .maybeSingle();
+
+      const ahora = Date.now();
+      const vipHastaActual = perfilActual?.vip_hasta ? new Date(perfilActual.vip_hasta).getTime() : 0;
+      const base = Math.max(ahora, vipHastaActual);
+      const vipHasta = new Date(base + dias * 24 * 60 * 60 * 1000).toISOString();
+
       const { error: updateError } = await supabaseAdmin
         .from("perfiles")
         .update({ es_vip: true, vip_hasta: vipHasta })
