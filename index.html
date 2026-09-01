@@ -1090,7 +1090,7 @@ function renderBotonNotificaciones() {
   const boton = document.getElementById("menu-notificaciones");
   if (!boton) return;
   const activadas = localStorage.getItem("picksfc_notificaciones_activadas") === "1";
-  boton.innerHTML = activadas ? "🔔 Notificaciones activadas ✓" : "🔔 Activar notificaciones";
+  boton.innerHTML = activadas ? "🔕 Desactivar notificaciones" : "🔔 Activar notificaciones";
 }
 
 function renderBannerNotificaciones() {
@@ -1110,6 +1110,14 @@ function renderBannerNotificaciones() {
 }
 
 function activarNotificaciones() {
+  // Si ya estaban activadas, este mismo boton/banner sirve para
+  // desactivarlas -- no tiene sentido volver a mostrarle la explicacion
+  // de "por que activarlas" a alguien que ya las activo.
+  if (localStorage.getItem("picksfc_notificaciones_activadas") === "1") {
+    desactivarNotificaciones();
+    return;
+  }
+
   // Antes de pedir el permiso del navegador (generico, sin contexto --
   // por eso mucha gente lo rechaza pensando que es publicidad), le
   // explicamos primero para que sirve especificamente en esta app. Esto
@@ -1172,6 +1180,29 @@ async function confirmarActivarNotificaciones() {
   } catch (err) {
     console.error(err);
     alert("Error al activar notificaciones: " + err.message);
+  } finally {
+    renderBotonNotificaciones();
+    renderBannerNotificaciones();
+  }
+}
+
+async function desactivarNotificaciones() {
+  try {
+    if ("serviceWorker" in navigator) {
+      const registro = await navigator.serviceWorker.ready;
+      const suscripcion = await registro.pushManager.getSubscription();
+      if (suscripcion) await suscripcion.unsubscribe();
+      // La fila en Supabase no hace falta borrarla desde aqui -- el
+      // navegador ya no la reconoce como valida, y revisar_combinadas_en_vivo.py
+      // la borra solo la proxima vez que intente mandarle un push y la
+      // reciba como vencida (esto evita tener que darle permiso al
+      // navegador para borrar filas ajenas en la base de datos).
+    }
+    localStorage.removeItem("picksfc_notificaciones_activadas");
+    alert("Notificaciones desactivadas.");
+  } catch (err) {
+    console.error(err);
+    alert("No se pudieron desactivar las notificaciones: " + err.message);
   } finally {
     renderBotonNotificaciones();
     renderBannerNotificaciones();
