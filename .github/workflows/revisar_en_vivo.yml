@@ -1,0 +1,71 @@
+name: Revisar combinadas en vivo (notificaciones push)
+
+# Corre cada 15 minutos, pero SOLO entre las 09:00 y las 23:45 UTC (4:00am
+# a 6:45pm hora Ecuador) -- la ventana en la que realistamente hay
+# partidos en curso o recien terminados de cualquiera de las 6 ligas
+# activas. Fuera de esa ventana no tiene sentido gastar llamadas a la API
+# revisando algo que no va a cambiar.
+on:
+  schedule:
+    - cron: '*/15 9-23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  revisar-en-vivo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Traer los datos mas recientes (rama datos-pipeline)
+        # Igual que en actualizar.yml: los datos (historicos, historial de
+        # combinadas) viven en la rama 'datos-pipeline', separada de
+        # 'main' (que solo tiene codigo y esta protegida por Pull Request).
+        run: |
+          git fetch origin datos-pipeline
+          git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'historial_combinadas.csv' 2>/dev/null || true
+
+      - name: Revisar partidos recien finalizados y avisar combinadas resueltas
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+        run: python revisar_combinadas_en_vivo.py
+
+      - name: Guardar los datos actualizados en la rama 'datos-pipeline' (si hubo)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          mkdir -p /tmp/datos_generados
+          cp premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp historial_combinadas.csv /tmp/datos_generados/ 2>/dev/null || true
+
+          git fetch origin datos-pipeline
+          git checkout -B datos-pipeline origin/datos-pipeline
+          cp /tmp/datos_generados/* .
+
+          git add premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv 2>/dev/null || true
+          git add historial_combinadas.csv 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No hubo cambios -- nada que subir."
+            exit 0
+          fi
+
+          git commit -m "Revision en vivo: partidos recien finalizados"
+          git pull --rebase --autostash origin datos-pipeline
+          git push origin datos-pipeline
