@@ -327,7 +327,7 @@ def normalizar_nombre_equipo(nombre):
 
 # ---------- Paso 1: traer datos de football-data.org ----------
 
-def _get_football_data_org(url, intentos=3):
+def _get_football_data_org(url, intentos=3, params=None):
     """
     GET a football-data.org con reintentos automaticos si nos topamos con el
     limite de peticiones por minuto del plan gratuito (HTTP 429) -- con 4
@@ -335,10 +335,14 @@ def _get_football_data_org(url, intentos=3):
     goleadores), y es facil pasarse del limite en la ultima liga del dia.
     Respeta el header 'Retry-After' si la API lo manda; si no, espera un
     tiempo fijo razonable antes de reintentar.
+
+    'params' (opcional): parametros de consulta (ej. dateFrom/dateTo) para
+    endpoints que los aceptan, como el llamado global /matches que usa
+    revisar_combinadas_en_vivo.py.
     """
     import time
     for intento in range(intentos):
-        resp = requests.get(url, headers=HEADERS)
+        resp = requests.get(url, headers=HEADERS, params=params)
         if resp.status_code != 429:
             return resp
         espera = int(resp.headers.get("Retry-After", 20))

@@ -35,3 +35,28 @@ self.addEventListener("fetch", (event) => {
     fetch(event.request).catch(() => caches.match(event.request))
   );
 });
+
+// ---------- Notificaciones push (combinadas resueltas) ----------
+// revisar_combinadas_en_vivo.py manda un push con { title, body } en
+// texto plano cada vez que una combinada pendiente termina de resolverse.
+self.addEventListener("push", (event) => {
+  let datos = { title: "Picks FC", body: "" };
+  try {
+    if (event.data) datos = event.data.json();
+  } catch (e) {
+    if (event.data) datos.body = event.data.text();
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(datos.title || "Picks FC", {
+      body: datos.body || "",
+      icon: "./icon-192.png",
+      badge: "./icon-192.png",
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(self.clients.openWindow("./"));
+});
