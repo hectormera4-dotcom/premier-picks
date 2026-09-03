@@ -4,24 +4,57 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-09-03 18:45:00",
-        "local": "Toulouse",
-        "visitante": "Lille",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 85.9,
+        "fecha": "2026-09-04 18:30:00",
+        "local": "Stuttgart",
+        "visitante": "FC Koln",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 83.5,
+        "liga": "bundesliga"
+      },
+      {
+        "fecha": "2026-09-04 17:00:00",
+        "local": "Lyon",
+        "visitante": "Auxerre",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 81.5,
         "liga": "ligue_1"
       },
       {
-        "fecha": "2026-09-03 19:00:00",
-        "local": "Sociedad",
-        "visitante": "Celta",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 82.8,
-        "liga": "la_liga"
+        "fecha": "2026-09-04 19:05:00",
+        "local": "Paris SG",
+        "visitante": "Monaco",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 81.2,
+        "liga": "ligue_1"
       }
     ],
-    "probabilidad_combinada": 71.1,
-    "cuota_combinada": 1.31,
+    "probabilidad_combinada": 55.3,
+    "cuota_combinada": 1.71,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-09-04 19:00:00",
+        "local": "Ipswich",
+        "visitante": "Liverpool",
+        "pick_recomendado": "Doble oportunidad X2 + Over 1.5 goles",
+        "pick_probabilidad": 80.5,
+        "liga": "premier_league"
+      },
+      {
+        "fecha": "2026-09-04 18:45:00",
+        "local": "Genoa",
+        "visitante": "Como",
+        "pick_recomendado": "Doble oportunidad X2",
+        "pick_probabilidad": 80.3,
+        "liga": "serie_a"
+      }
+    ],
+    "probabilidad_combinada": 64.6,
+    "cuota_combinada": 1.45,
     "liga": "mixta"
   }
 ]
