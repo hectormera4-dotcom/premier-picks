@@ -124,6 +124,17 @@ NOMBRES_ESTADISTICAS_SOFASCORE = {
     "shots on target": ("HST", "AST"),
 }
 
+# SofaScore puede bloquear peticiones que no se vean como un navegador
+# real (ej. sin Referer, sin Accept-Language) -- estos encabezados
+# imitan mejor una visita real a su pagina.
+HEADERS_SOFASCORE = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+    "Accept": "application/json",
+    "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
+    "Referer": "https://www.sofascore.com/",
+    "Origin": "https://www.sofascore.com",
+}
+
 
 def actualizar_extra_sofascore(liga_key, fecha):
     """Complementa actualizar_extra_liga(): trae corners/tarjetas/tiros a
@@ -150,7 +161,7 @@ def actualizar_extra_sofascore(liga_key, fecha):
     try:
         resp = requests.get(
             f"https://www.sofascore.com/api/v1/unique-tournament/{tournament_id}/scheduled-events/{fecha}",
-            headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+            headers=HEADERS_SOFASCORE, timeout=15)
         if resp.status_code == 404:
             return  # sin partidos programados ese dia para esta liga -- normal
         resp.raise_for_status()
@@ -186,7 +197,7 @@ def actualizar_extra_sofascore(liga_key, fecha):
         try:
             stats_resp = requests.get(
                 f"https://www.sofascore.com/api/v1/event/{ev['id']}/statistics",
-                headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+                headers=HEADERS_SOFASCORE, timeout=15)
             stats_resp.raise_for_status()
             stats = stats_resp.json()
         except Exception as e:
