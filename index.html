@@ -862,6 +862,7 @@
 <div id="marcador-global-contenedor"></div>
 
 <div id="vista-picks">
+<div id="banner-vencimiento-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
 <div id="banner-vip-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
 <div id="banner-notificaciones-contenedor" style="max-width:960px; margin:0 auto; padding:0 20px;"></div>
 <div id="etiqueta-fecha-picks" class="etiqueta-fecha-picks"></div>
@@ -1450,6 +1451,35 @@ function renderMarcadorGlobal(porcentaje, totalResueltos) {
     </div>`;
 }
 
+// Cuantos dias antes del vencimiento se le empieza a avisar al usuario
+// que renueve -- para que no se le venza sin darse cuenta.
+const DIAS_AVISO_VENCIMIENTO_VIP = 2;
+
+function crearBannerVencimientoVip() {
+  // Solo aplica a un VIP de verdad (con fecha), todavia vigente, que le
+  // quede POCO tiempo -- no al admin (no depende de vip_hasta), ni a un
+  // usuario gratis, ni a alguien a quien todavia le falta mucho.
+  if (!sesionActual || !perfilActual || perfilActual.es_admin) return "";
+  if (!vipVigente(perfilActual) || !perfilActual.vip_hasta) return "";
+
+  const msRestantes = new Date(perfilActual.vip_hasta) - new Date();
+  const diasRestantes = msRestantes / 86400000;
+  if (diasRestantes > DIAS_AVISO_VENCIMIENTO_VIP) return "";
+
+  return `
+    <div class="banner-vip" style="border-color: rgba(201,138,43,0.6);">
+      <div class="banner-vip-texto">
+        <div class="banner-vip-titulo">⏰ Tu suscripción VIP vence pronto</div>
+        <div>Vence el ${formatearFechaLarga(perfilActual.vip_hasta)}. Renueva ahora para no perder tu acceso a las combinadas VIP.</div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-vip" onclick="iniciarPagoVip(this, 'semana')">Plan Semanal — $5</button>
+        <button class="btn-vip" onclick="iniciarPagoVip(this, 'mes')">Plan Mensual — $15</button>
+      </div>
+    </div>
+  `;
+}
+
 function crearBannerVip() {
   const yaEsVip = vipVigente(perfilActual);
   if (yaEsVip) return "";
@@ -1703,6 +1733,7 @@ function crearTarjeta(p, i) {
 }
 
 function render(picks, combinadas) {
+  document.getElementById("banner-vencimiento-vip-contenedor").innerHTML = crearBannerVencimientoVip();
   document.getElementById("banner-vip-contenedor").innerHTML = crearBannerVip();
   renderBannerNotificaciones();
 
