@@ -118,6 +118,116 @@ def actualizar_extra_liga(liga_key):
     core.actualizar_estadisticas_extra(historico, config["codigo_footballdata"])
 
 
+NOMBRES_ESTADISTICAS_SOFASCORE = {
+    "corner kicks": ("HC", "AC"),
+    "yellow cards": ("HY", "AY"),
+    "shots on target": ("HST", "AST"),
+}
+
+
+def actualizar_extra_sofascore(liga_key, fecha):
+    """Complementa actualizar_extra_liga(): trae corners/tarjetas/tiros a
+    puerta desde SofaScore, que publica minutos despues de que termina el
+    partido (a diferencia de football-data.co.uk, que solo actualiza un
+    par de veces por semana). 'fecha' es un date de Python.
+
+    OJO -- esta es la API SIN DOCUMENTAR que usa la propia pagina web de
+    SofaScore (sin llave, sin costo, de uso comun en proyectos
+    independientes para esto mismo) -- no es un servicio contratado, y
+    podria cambiar de formato sin aviso. Por eso NO reemplaza a
+    football-data.co.uk, que sigue corriendo igual como respaldo: si
+    SofaScore alguna vez deja de funcionar, el sistema sigue resolviendo
+    todo, solo que otra vez al ritmo mas lento de antes de este cambio."""
+    config = core._fijar_globales_liga(liga_key)
+    tournament_id = config.get("sofascore_tournament_id")
+    mapeo = config.get("mapeo_sofascore")
+    if not tournament_id or not mapeo:
+        return
+    archivo = config["archivo_historico"]
+    if not os.path.exists(archivo):
+        return
+
+    try:
+        resp = requests.get(
+            f"https://www.sofascore.com/api/v1/unique-tournament/{tournament_id}/scheduled-events/{fecha}",
+            headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        if resp.status_code == 404:
+            return  # sin partidos programados ese dia para esta liga -- normal
+        resp.raise_for_status()
+        eventos = resp.json().get("events", [])
+    except Exception as e:
+        print(f"[{liga_key}] Aviso: SofaScore no disponible ahorita ({e}) -- sigue football-data.co.uk como respaldo.")
+        return
+
+    historico = pd.read_csv(archivo)
+    historico["Date"] = pd.to_datetime(historico["Date"], dayfirst=True).dt.normalize()
+    for col in ["HC", "AC", "HY", "AY", "HST", "AST"]:
+        if col not in historico.columns:
+            historico[col] = pd.NA
+
+    hubo_cambios = False
+    fecha_partido = pd.Timestamp(fecha)
+
+    for ev in eventos:
+        if ev.get("status", {}).get("type") != "finished":
+            continue
+
+        local = mapeo.get(ev.get("homeTeam", {}).get("name"))
+        visitante = mapeo.get(ev.get("awayTeam", {}).get("name"))
+        if not local or not visitante:
+            continue  # equipo que no reconocemos en la tabla -- lo agarra football-data.co.uk despues
+
+        mask = ((historico["Date"] == fecha_partido) &
+                (historico["HomeTeam"] == local) &
+                (historico["AwayTeam"] == visitante))
+        if not mask.any() or pd.notna(historico.loc[mask, "HC"].iloc[0]):
+            continue  # el partido no esta en nuestro historico, o ya tenemos sus corners
+
+        try:
+            stats_resp = requests.get(
+                f"https://www.sofascore.com/api/v1/event/{ev['id']}/statistics",
+                headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+            stats_resp.raise_for_status()
+            stats = stats_resp.json()
+        except Exception as e:
+            print(f"[{liga_key}] Aviso: no se pudo traer estadisticas de {local} vs {visitante} ({e}).")
+            continue
+
+        valores = {}
+        for grupo in stats.get("statistics", []):
+            if grupo.get("period") != "ALL":
+                continue
+            for categoria in grupo.get("groups", []):
+                for item in categoria.get("statisticsItems", []):
+                    columnas = NOMBRES_ESTADISTICAS_SOFASCORE.get(str(item.get("name", "")).lower())
+                    if not columnas:
+                        continue
+                    # SofaScore manda estos numeros como texto (ej. "7",
+                    # no 7) -- sin convertir, pandas rechaza guardarlos en
+                    # una columna numerica.
+                    try:
+                        valor_local = int(item.get("home"))
+                        valor_visitante = int(item.get("away"))
+                    except (TypeError, ValueError):
+                        continue
+                    valores[columnas[0]] = valor_local
+                    valores[columnas[1]] = valor_visitante
+
+        if not valores:
+            continue
+
+        for col, val in valores.items():
+            historico.loc[mask, col] = val
+        hubo_cambios = True
+        print(f"[{liga_key}] SofaScore: {local} vs {visitante} -> {valores}")
+
+    if hubo_cambios:
+        historico_a_guardar = historico.copy()
+        historico_a_guardar["Date"] = pd.to_datetime(historico_a_guardar["Date"]).dt.strftime("%d/%m/%Y")
+        historico_a_guardar.to_csv(archivo, index=False)
+        print(f"[{liga_key}] Estadisticas de SofaScore guardadas para {fecha}.")
+
+
 def enviar_notificacion_push(titulo, cuerpo):
     """Le manda la notificacion a TODAS las suscripciones guardadas.
     Si una suscripcion ya no es valida (el usuario desinstalo la app,
@@ -186,6 +296,15 @@ if __name__ == "__main__":
     # mercados se quedaba esperando a la corrida nocturna para resolverse.
     for liga_key in core.LIGAS_ACTIVAS:
         actualizar_extra_liga(liga_key)
+
+    # SofaScore (mas rapido, ver actualizar_extra_sofascore) -- revisamos
+    # hoy, ayer y antier por cada liga activa, para tambien destrabar
+    # cualquier combinada que se hubiera quedado pendiente uno o dos dias
+    # esperando a football-data.co.uk.
+    hoy_ecuador = (datetime.utcnow() - timedelta(hours=core.ZONA_ECUADOR_OFFSET_HORAS)).date()
+    for liga_key in core.LIGAS_ACTIVAS:
+        for hace_dias in (0, 1, 2):
+            actualizar_extra_sofascore(liga_key, hoy_ecuador - timedelta(days=hace_dias))
 
     # Juntamos el historico actualizado de TODAS las ligas activas (no solo
     # las que tuvieron partidos ahorita) para poder resolver cualquier
