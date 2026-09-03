@@ -160,7 +160,7 @@ def actualizar_extra_sofascore(liga_key, fecha):
 
     try:
         resp = requests.get(
-            f"https://www.sofascore.com/api/v1/unique-tournament/{tournament_id}/scheduled-events/{fecha}",
+            f"https://api.sofascore.com/api/v1/unique-tournament/{tournament_id}/scheduled-events/{fecha}",
             headers=HEADERS_SOFASCORE, timeout=15)
         if resp.status_code == 404:
             return  # sin partidos programados ese dia para esta liga -- normal
@@ -196,7 +196,7 @@ def actualizar_extra_sofascore(liga_key, fecha):
 
         try:
             stats_resp = requests.get(
-                f"https://www.sofascore.com/api/v1/event/{ev['id']}/statistics",
+                f"https://api.sofascore.com/api/v1/event/{ev['id']}/statistics",
                 headers=HEADERS_SOFASCORE, timeout=15)
             stats_resp.raise_for_status()
             stats = stats_resp.json()
