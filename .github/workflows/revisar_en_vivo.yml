@@ -1,4 +1,4 @@
-name: Revisar combinadas en vivo (notificaciones push)
+name: Revisar combinadas en vivo
 
 # Corre cada 15 minutos, pero SOLO entre las 09:00 y las 23:45 UTC (4:00am
 # a 6:45pm hora Ecuador) -- la ventana en la que realistamente hay
@@ -37,12 +37,11 @@ jobs:
           git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 2>/dev/null || true
           git checkout origin/datos-pipeline -- 'historial_combinadas.csv' 2>/dev/null || true
 
-      - name: Revisar partidos recien finalizados y avisar combinadas resueltas
+      - name: Revisar partidos recien finalizados y resolver combinadas pendientes
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
         run: python revisar_combinadas_en_vivo.py
 
       - name: Guardar los datos actualizados en la rama 'datos-pipeline' (si hubo)

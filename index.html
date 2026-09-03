@@ -1085,7 +1085,7 @@ function urlBase64ToUint8Array(base64String) {
 
 // Un solo texto, reutilizado en el banner de la portada y en la ventana
 // explicativa antes del permiso -- para no repetirlo distinto en 2 lados.
-const TEXTO_NOTIFICACIONES = "Activa las notificaciones para avisarte cuando una combinada termina de resolverse, minutos después de terminar el último partido.";
+const TEXTO_NOTIFICACIONES = "Activa las notificaciones para avisarte apenas los picks y combinadas del día ya estén disponibles.";
 
 function renderBotonNotificaciones() {
   const boton = document.getElementById("menu-notificaciones");
@@ -1102,7 +1102,7 @@ function renderBannerNotificaciones() {
   cont.innerHTML = `
     <div class="banner-vip" style="border-color: rgba(78,152,104,0.4);">
       <div class="banner-vip-texto">
-        <div class="banner-vip-titulo">🔔 Entérate al instante si ganaste</div>
+        <div class="banner-vip-titulo">🔔 Entérate cuando salgan los picks del día</div>
       </div>
       <button class="btn-vip" onclick="activarNotificaciones()">Activar notificaciones</button>
     </div>
@@ -1129,7 +1129,7 @@ function activarNotificaciones() {
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarModalNotificaciones(event)">
       <div class="auth-modal" onclick="event.stopPropagation()">
-        <div class="auth-modal-titulo">🔔 Entérate al instante si ganaste</div>
+        <div class="auth-modal-titulo">🔔 Entérate cuando salgan los picks del día</div>
         <div style="font-size:13.5px; line-height:1.5;">${TEXTO_NOTIFICACIONES}</div>
         <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="cerrarModalNotificaciones(); confirmarActivarNotificaciones();">Sí, avísame</button>
         <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalNotificaciones()">Ahora no</button>
@@ -1172,7 +1172,7 @@ async function confirmarActivarNotificaciones() {
 
     if (!error || error.code === "23505") {
       localStorage.setItem("picksfc_notificaciones_activadas", "1");
-      alert("¡Listo! Te vamos a avisar apenas se resuelva una combinada.");
+      alert("¡Listo! Te vamos a avisar apenas estén disponibles los picks del día.");
     } else {
       console.error(error);
       alert("No se pudo activar la notificación. Intenta de nuevo más tarde.");

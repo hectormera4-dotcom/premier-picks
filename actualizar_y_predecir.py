@@ -23,6 +23,12 @@ HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
 MAX_GOLES = 6
 
+# Notificaciones push (ver enviar_notificacion_push mas abajo) -- se usan
+# para avisar que ya estan disponibles los picks/combinadas del dia, justo
+# despues de publicarlos (ver el bloque "if __name__" al final del archivo).
+VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
+VAPID_CLAIMS_EMAIL = os.environ.get("VAPID_CLAIMS_EMAIL", "mailto:soporte@picksfc.app")
+
 # ---------- Arranque de temporada: umbral mas exigente para corners/
 # tarjetas/tiros a puerta ----------
 # El modelo de esos 3 mercados pondera fuerte los partidos recientes, pero
@@ -71,33 +77,6 @@ LIGAS = {
             "Sunderland AFC": "Sunderland",
             "Tottenham Hotspur FC": "Tottenham",
         },
-        # Para el chequeo en vivo de corners/tarjetas/tiros via SofaScore
-        # (ver revisar_combinadas_en_vivo.py) -- SofaScore nombra los
-        # equipos distinto a football-data.org, asi que necesita su
-        # propia tabla de equivalencia.
-        "sofascore_tournament_id": 17,
-        "mapeo_sofascore": {
-            "Arsenal": "Arsenal",
-            "Aston Villa": "Aston Villa",
-            "Bournemouth": "Bournemouth",
-            "Brentford": "Brentford",
-            "Brighton & Hove Albion": "Brighton",
-            "Chelsea": "Chelsea",
-            "Coventry City": "Coventry",
-            "Crystal Palace": "Crystal Palace",
-            "Everton": "Everton",
-            "Fulham": "Fulham",
-            "Hull City": "Hull",
-            "Ipswich Town": "Ipswich",
-            "Leeds United": "Leeds",
-            "Liverpool FC": "Liverpool",
-            "Manchester City": "Man City",
-            "Manchester United": "Man United",
-            "Newcastle United": "Newcastle",
-            "Nottingham Forest": "Nott'm Forest",
-            "Sunderland": "Sunderland",
-            "Tottenham Hotspur": "Tottenham",
-        },
     },
     "la_liga": {
         "nombre_mostrar": "LaLiga",
@@ -139,32 +118,6 @@ LIGAS = {
             "RC Deportivo La Coruña": "La Coruna",
             "Real Racing Club de Santander": "Santander",
         },
-        "sofascore_tournament_id": 8,
-        "mapeo_sofascore": {
-            "Real Madrid": "Real Madrid",
-            "FC Barcelona": "Barcelona",
-            "Atlético Madrid": "Ath Madrid",
-            "Athletic Club": "Ath Bilbao",
-            "Villarreal": "Villarreal",
-            "Real Betis": "Betis",
-            "Real Sociedad": "Sociedad",
-            "Celta Vigo": "Celta",
-            "Rayo Vallecano": "Vallecano",
-            "Getafe": "Getafe",
-            "Osasuna": "Osasuna",
-            "Sevilla": "Sevilla",
-            "Valencia": "Valencia",
-            "Girona": "Girona",
-            "Mallorca": "Mallorca",
-            "Real Oviedo": "Oviedo",
-            "Espanyol": "Espanyol",
-            "Levante UD": "Levante",
-            "Elche": "Elche",
-            "Deportivo Alavés": "Alaves",
-            "Málaga CF": "Malaga",
-            "Deportivo de A Coruña": "La Coruna",
-            "Real Racing Club": "Santander",
-        },
     },
     "serie_a": {
         "nombre_mostrar": "Serie A",
@@ -194,29 +147,6 @@ LIGAS = {
             "Venezia FC": "Venezia",
             "Frosinone Calcio": "Frosinone",
             "AC Monza": "Monza",
-        },
-        "sofascore_tournament_id": 23,
-        "mapeo_sofascore": {
-            "Atalanta": "Atalanta",
-            "Como": "Como",
-            "Inter": "Inter",
-            "AC Milan": "Milan",
-            "Bologna": "Bologna",
-            "Parma": "Parma",
-            "Sassuolo": "Sassuolo",
-            "AS Roma": "Roma",
-            "Lazio": "Lazio",
-            "Juventus": "Juventus",
-            "Torino": "Torino",
-            "Fiorentina": "Fiorentina",
-            "Lecce": "Lecce",
-            "SSC Napoli": "Napoli",
-            "Udinese": "Udinese",
-            "Genoa": "Genoa",
-            "Cagliari": "Cagliari",
-            "Venezia": "Venezia",
-            "Frosinone": "Frosinone",
-            "Monza": "Monza",
         },
     },
     "ligue_1": {
@@ -250,27 +180,6 @@ LIGAS = {
             "Toulouse FC": "Toulouse",
             "ES Troyes AC": "Troyes",
         },
-        "sofascore_tournament_id": 34,
-        "mapeo_sofascore": {
-            "Angers": "Angers",
-            "Auxerre": "Auxerre",
-            "Stade Brestois": "Brest",
-            "Le Havre": "Le Havre",
-            "Le Mans": "Le Mans",
-            "RC Lens": "Lens",
-            "Lille": "Lille",
-            "Lorient": "Lorient",
-            "Olympique Lyonnais": "Lyon",
-            "Olympique de Marseille": "Marseille",
-            "AS Monaco": "Monaco",
-            "Nice": "Nice",
-            "Paris FC": "Paris FC",
-            "Paris Saint-Germain": "Paris SG",
-            "Stade Rennais": "Rennes",
-            "RC Strasbourg": "Strasbourg",
-            "Toulouse": "Toulouse",
-            "Troyes": "Troyes",
-        },
     },
     "bundesliga": {
         "nombre_mostrar": "Bundesliga",
@@ -298,27 +207,6 @@ LIGAS = {
             "Bayer 04 Leverkusen": "Leverkusen",
             "1. FSV Mainz 05": "Mainz",
             "Borussia Mönchengladbach": "M'gladbach",
-            "FC Bayern München": "Bayern Munich",
-            "SC Paderborn 07": "Paderborn",
-            "FC Schalke 04": "Schalke 04",
-            "VfB Stuttgart": "Stuttgart",
-        },
-        "sofascore_tournament_id": 35,
-        "mapeo_sofascore": {
-            "FC Augsburg": "Augsburg",
-            "1. FC Union Berlin": "Union Berlin",
-            "SV Werder Bremen": "Werder Bremen",
-            "Borussia Dortmund": "Dortmund",
-            "SV 07 Elversberg": "Elversberg",
-            "Eintracht Frankfurt": "Ein Frankfurt",
-            "SC Freiburg": "Freiburg",
-            "Hamburger SV": "Hamburg",
-            "TSG Hoffenheim": "Hoffenheim",
-            "1. FC Köln": "FC Koln",
-            "RB Leipzig": "RB Leipzig",
-            "Bayer 04 Leverkusen": "Leverkusen",
-            "1. FSV Mainz 05": "Mainz",
-            "Borussia M'gladbach": "M'gladbach",
             "FC Bayern München": "Bayern Munich",
             "SC Paderborn 07": "Paderborn",
             "FC Schalke 04": "Schalke 04",
@@ -362,33 +250,6 @@ LIGAS = {
             "West Ham United FC": "West Ham",
             "Wolverhampton Wanderers FC": "Wolves",
             "Wrexham AFC": "Wrexham",
-        },
-        "sofascore_tournament_id": 18,
-        "mapeo_sofascore": {
-            "Birmingham City": "Birmingham",
-            "Blackburn Rovers": "Blackburn",
-            "Bolton Wanderers": "Bolton",
-            "Bristol City": "Bristol City",
-            "Burnley": "Burnley",
-            "Cardiff City": "Cardiff",
-            "Charlton Athletic": "Charlton",
-            "Derby County": "Derby",
-            "Lincoln City": "Lincoln",
-            "Middlesbrough": "Middlesbrough",
-            "Millwall": "Millwall",
-            "Norwich City": "Norwich",
-            "Portsmouth": "Portsmouth",
-            "Preston North End": "Preston",
-            "Queens Park Rangers": "QPR",
-            "Sheffield United": "Sheffield United",
-            "Southampton": "Southampton",
-            "Stoke City": "Stoke",
-            "Swansea City": "Swansea",
-            "Watford": "Watford",
-            "West Bromwich Albion": "West Brom",
-            "West Ham United": "West Ham",
-            "Wolverhampton": "Wolves",
-            "Wrexham": "Wrexham",
         },
     },
     "champions_league": {
@@ -1786,6 +1647,62 @@ def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
     else:
         print(f"Aviso: fallo al sincronizar historial en Supabase ({resp.status_code}): {resp.text[:300]}")
 
+
+def enviar_notificacion_push(titulo, cuerpo):
+    """Le manda una notificacion push a TODAS las suscripciones guardadas
+    (ver tabla push_subscripciones). Se usa para avisar que los picks y
+    combinadas del dia ya estan disponibles, justo despues de publicarlos
+    -- a diferencia de intentar avisar cuando una combinada individual se
+    resuelve (descartado: depende de fuentes de datos externas como
+    SofaScore/football-data.co.uk que no siempre actualizan rapido, asi
+    que no se puede garantizar que llegue al instante). Esta notificacion
+    si es 100% instantanea porque el disparador es el propio pipeline
+    terminando de publicar, no un dato externo.
+
+    Si una suscripcion ya no es valida (el usuario desinstalo la app, borro
+    el navegador, etc.), la borramos de la base -- asi no se acumulan
+    suscripciones muertas para siempre."""
+    if not VAPID_PRIVATE_KEY or not supabase_configurado():
+        print("Notificaciones push no configuradas (falta VAPID_PRIVATE_KEY o Supabase) -- se omite el envio.")
+        return
+
+    from pywebpush import webpush, WebPushException
+
+    resp = requests.get(
+        f"{SUPABASE_URL}/rest/v1/push_subscripciones?select=id,endpoint,suscripcion_json",
+        headers=supabase_headers(),
+    )
+    if resp.status_code != 200:
+        print(f"Aviso: no se pudieron leer las suscripciones ({resp.status_code}): {resp.text[:300]}")
+        return
+
+    suscripciones = resp.json()
+    payload = json.dumps({"title": titulo, "body": cuerpo})
+    enviados, muertas = 0, []
+
+    for s in suscripciones:
+        try:
+            webpush(
+                subscription_info=s["suscripcion_json"],
+                data=payload,
+                vapid_private_key=VAPID_PRIVATE_KEY,
+                vapid_claims={"sub": VAPID_CLAIMS_EMAIL},
+            )
+            enviados += 1
+        except WebPushException as e:
+            codigo = getattr(e.response, "status_code", None)
+            if codigo in (404, 410):  # suscripcion ya no existe (expiro o el usuario la borro)
+                muertas.append(s["id"])
+            else:
+                print(f"Aviso: fallo al enviar una notificacion ({codigo}): {e}")
+
+    if muertas:
+        ids_csv = ",".join(str(i) for i in muertas)
+        requests.delete(f"{SUPABASE_URL}/rest/v1/push_subscripciones?id=in.({ids_csv})", headers=supabase_headers())
+
+    print(f"Notificacion enviada a {enviados}/{len(suscripciones)} suscripciones ({len(muertas)} vencidas, borradas).")
+
+
 ZONA_ECUADOR_OFFSET_HORAS = 5  # Ecuador es UTC-5 todo el año, sin horario de verano
 
 def calcular_dia_objetivo_picks():
@@ -2429,3 +2346,13 @@ if __name__ == "__main__":
         picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=15, n_gratis=3)
         correr_combinadas_multiliga(picks_del_dia, pool_historico_completo)
         marcar_dia_generado(dia_objetivo_hoy)
+
+        # Avisamos por push que ya estan disponibles los picks/combinadas de
+        # hoy -- solo aqui, en la corrida que de verdad publica algo nuevo
+        # (nunca en las corridas de respaldo de la misma noche, que no
+        # cambian nada -- ver el "if dia_ya_fue_generado" arriba).
+        if picks_del_dia is not None and len(picks_del_dia) > 0:
+            enviar_notificacion_push(
+                "⚽ Nuevos picks disponibles",
+                "Ya estan listos los picks y combinadas de hoy. ¡Entra a revisarlos!",
+            )
