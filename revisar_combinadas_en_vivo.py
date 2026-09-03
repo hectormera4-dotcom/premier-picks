@@ -1,21 +1,29 @@
 # Revision liviana "en vivo": corre cada 15 minutos (via GitHub Actions,
 # ver .github/workflows/revisar_en_vivo.yml) mientras hay partidos en
-# curso, y hace SOLO 2 cosas -- a proposito no recalcula el modelo ni
+# curso, y hace SOLO 3 cosas -- a proposito no recalcula el modelo ni
 # genera picks nuevos (eso sigue siendo trabajo exclusivo del pipeline
 # nocturno, mas pesado y mas lento):
 #
 #   1. Revisa si algun partido de HOY ya termino (usando UN SOLO llamado a
 #      la API, que cubre todas las ligas activas de una vez -- para no
 #      exceder el limite gratuito de football-data.org al consultar cada
-#      15 minutos todo el dia).
-#   2. Si eso hace que alguna combinada pendiente termine de resolverse
-#      (todas sus patas ya jugadas), le manda una notificacion push a
-#      todos los que se suscribieron, avisando si se cumplio o fallo --
-#      minutos despues de que termino el ultimo partido, no horas.
+#      15 minutos todo el dia). Esto trae los GOLES.
+#   2. Refresca corners/tarjetas/tiros a puerta de cada liga activa desde
+#      football-data.co.uk (la fuente que SI tiene esos datos -- sin
+#      limite de peticiones, asi que se puede consultar cada 15 minutos
+#      sin problema). SIN ESTE PASO, una combinada armada con picks de
+#      corners/tarjetas/tiros nunca se resolvia aqui -- se quedaba
+#      "Pendiente" hasta la proxima corrida nocturna completa, aunque el
+#      partido ya llevara horas terminado (goles NO es lo mismo que
+#      corners: son 2 fuentes de datos distintas).
+#   3. Si con eso alguna combinada pendiente termina de resolverse (todas
+#      sus patas ya jugadas), le manda una notificacion push a todos los
+#      que se suscribieron, avisando si se cumplio o fallo -- minutos
+#      despues de que termino el ultimo partido, no horas.
 #
 # Reutiliza las funciones ya existentes y probadas de actualizar_y_predecir.py
-# (traduccion de nombres de equipo, verificacion de combinadas) en vez de
-# duplicar esa logica.
+# (traduccion de nombres de equipo, verificacion de combinadas, descarga de
+# corners/tarjetas) en vez de duplicar esa logica.
 
 import json
 import os
@@ -49,11 +57,9 @@ def obtener_partidos_de_hoy_todas_las_ligas():
 
 
 def actualizar_historico_liviano(liga_key, partidos_finalizados):
-    """Version liviana de actualizar_historico(): SOLO agrega los partidos
-    ya finalizados (goles) al historico de esa liga -- no descarga
-    corners/tarjetas/tiros (eso solo lo trae el pipeline nocturno desde
-    football-data.co.uk, que de todas formas actualiza pocas veces por
-    semana, no tiene sentido pedirselo cada 15 minutos)."""
+    """Version liviana de actualizar_historico(): SOLO agrega los goles de
+    los partidos ya finalizados al historico de esa liga (los datos de
+    corners/tarjetas/tiros se refrescan aparte, ver actualizar_extra_liga)."""
     config = core._fijar_globales_liga(liga_key)
     archivo = config["archivo_historico"]
     if not os.path.exists(archivo):
@@ -91,6 +97,25 @@ def actualizar_historico_liviano(liga_key, partidos_finalizados):
         hubo_cambios = True
 
     return hubo_cambios
+
+
+def actualizar_extra_liga(liga_key):
+    """Refresca corners/tarjetas/tiros a puerta de UNA liga desde
+    football-data.co.uk -- sin esto, una combinada armada solo con esos
+    mercados nunca se resuelve aqui (se queda esperando a la corrida
+    nocturna). football-data.co.uk no tiene el limite de peticiones que
+    si tiene football-data.org, asi que no hay problema en consultarlo
+    cada 15 minutos. (actualizar_estadisticas_extra ya se encarga de
+    guardar el archivo solo si de verdad hubo algun cambio real.)"""
+    config = core._fijar_globales_liga(liga_key)
+    if not config.get("codigo_footballdata"):
+        return  # esta liga no tiene esta fuente (ej. competencias europeas)
+    if not os.path.exists(config["archivo_historico"]):
+        return
+
+    historico = pd.read_csv(config["archivo_historico"])
+    historico["Date"] = pd.to_datetime(historico["Date"], dayfirst=True).dt.normalize()
+    core.actualizar_estadisticas_extra(historico, config["codigo_footballdata"])
 
 
 def enviar_notificacion_push(titulo, cuerpo):
@@ -149,18 +174,18 @@ if __name__ == "__main__":
             continue
         finalizados_por_liga.setdefault(liga_key, []).append(p)
 
-    if not finalizados_por_liga:
-        print("Ningun partido de las ligas activas termino en esta ventana de tiempo -- nada que revisar.")
-        raise SystemExit(0)
-
-    hubo_cambios_en_algun_historico = False
     for liga_key, partidos in finalizados_por_liga.items():
-        if actualizar_historico_liviano(liga_key, partidos):
-            hubo_cambios_en_algun_historico = True
+        actualizar_historico_liviano(liga_key, partidos)
 
-    if not hubo_cambios_en_algun_historico:
-        print("Los partidos finalizados que se vieron ya estaban registrados -- nada nuevo que resolver.")
-        raise SystemExit(0)
+    # Refrescamos corners/tarjetas/tiros de TODAS las ligas activas, no
+    # solo las que tuvieron un gol nuevo ahorita -- football-data.co.uk es
+    # una fuente totalmente aparte de football-data.org, con su propio
+    # ritmo de publicacion, asi que un partido puede llevar horas con el
+    # marcador de goles ya confirmado y sus corners recien apareciendo
+    # ahora. Sin este paso, cualquier combinada armada solo con esos
+    # mercados se quedaba esperando a la corrida nocturna para resolverse.
+    for liga_key in core.LIGAS_ACTIVAS:
+        actualizar_extra_liga(liga_key)
 
     # Juntamos el historico actualizado de TODAS las ligas activas (no solo
     # las que tuvieron partidos ahorita) para poder resolver cualquier
