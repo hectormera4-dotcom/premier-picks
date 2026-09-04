@@ -14,3 +14,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-31 19:30:00,Barcelona,Vallecano,Doble oportunidad 1X + Over 5.5 corners,True,85.9,1.06,2026-08-30,5-2,True
 2026-09-03 19:00:00,Sociedad,Celta,Over 5.5 corners,False,82.8,1.11,2026-09-03,0-0,True
 2026-09-04 19:00:00,Betis,Real Madrid,Over 6.5 corners,False,81.7,1.12,2026-09-04,,
+2026-09-05 14:15:00,Ath Bilbao,Ath Madrid,Under 12.5 corners,False,80.0,1.15,2026-09-04,,
+2026-09-05 16:30:00,Vallecano,Santander,Over 11.5 corners,False,81.6,1.12,2026-09-04,,
+2026-09-05 19:00:00,Villarreal,La Coruna,Over 7.5 corners,False,83.5,1.1,2026-09-04,,

@@ -10,3 +10,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-31 16:30:00,Lecce,Roma,Doble oportunidad X2,False,82.0,1.12,2026-08-30,0-4,True
 2026-08-31 18:45:00,Atalanta,Bologna,Under 12.5 corners,False,85.2,1.07,2026-08-30,1-0,True
 2026-09-04 18:45:00,Genoa,Como,Doble oportunidad X2,False,80.3,1.15,2026-09-03,,
+2026-09-05 13:00:00,Fiorentina,Torino,Under 12.5 corners,False,85.1,1.07,2026-09-04,,
+2026-09-05 16:00:00,Inter,Napoli,Under 12.5 corners,False,85.5,1.07,2026-09-04,,
+2026-09-05 18:45:00,Roma,Atalanta,Under 12.5 corners,False,86.6,1.05,2026-09-04,,
