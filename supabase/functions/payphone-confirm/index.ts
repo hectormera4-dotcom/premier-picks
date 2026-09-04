@@ -106,6 +106,28 @@ Deno.serve(async (req: Request) => {
       const DIAS_POR_PLAN: Record<string, number> = { semana: 7, mes: 30 };
       const dias = DIAS_POR_PLAN[plan] || 30;
 
+      // Precios EN CENTAVOS -- deben coincidir exactamente con PLANES en
+      // payphone-prepare/index.ts (es el mismo monto que se le cobro a
+      // Payphone al preparar este pago). Se usan estos valores fijos, en
+      // vez de confiar en data.amount que devuelve Payphone, para no
+      // depender de si esa API expresa el monto en centavos o no -- asi
+      // el panel de estadisticas (ver admin-stats/index.ts) siempre suma
+      // numeros consistentes.
+      const CENTAVOS_POR_PLAN: Record<string, number> = { semana: 500, mes: 1500 };
+      const montoCentavos = CENTAVOS_POR_PLAN[plan] || null;
+
+      // Guardamos quien pago, que plan y cuanto -- "mejor esfuerzo": si
+      // esto falla no debe tumbar la activacion real del VIP (que ya se
+      // confirmo arriba, el pago SI se proceso), solo dejaria ese pago
+      // puntual fuera de las estadisticas.
+      const { error: errorDetallePago } = await supabaseAdmin
+        .from("pagos_procesados")
+        .update({ user_id: userId, plan, monto_centavos: montoCentavos })
+        .eq("client_transaction_id", String(clientTransactionId));
+      if (errorDetallePago) {
+        console.error("No se pudo guardar el detalle del pago para estadisticas:", errorDetallePago);
+      }
+
       // Si el usuario todavia tenia VIP vigente al momento de pagar, el
       // plan nuevo se SUMA a lo que le quedaba (en vez de reemplazarlo
       // desde ahora) -- asi no pierde dias por renovar antes de que se le
