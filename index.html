@@ -1155,15 +1155,27 @@ function cerrarModalNotificaciones(event) {
 // su PRIMERA suscripcion paga real, confirmada por Payphone (ver
 // payphone-confirm/index.ts) -- ahi ya no hay forma de fingirlo.
 
+// El codigo de invitacion "real" son los primeros 8 caracteres hex del id
+// del usuario (ver abrirModalInvitar). Esta funcion acepta cualquier
+// forma en que alguien lo haya pegado -- el codigo corto solo, o un link
+// viejo con el uuid completo (por si quedo compartido de antes de este
+// cambio) -- y siempre devuelve el codigo corto normalizado, o null si no
+// encuentra nada con pinta de codigo valido.
+function normalizarCodigoReferido(texto) {
+  if (!texto) return null;
+  const uuidMatch = texto.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+  if (uuidMatch) return uuidMatch[0].slice(0, 8).toLowerCase();
+  const codigoMatch = texto.match(/\b[0-9a-f]{8}\b/i);
+  if (codigoMatch) return codigoMatch[0].toLowerCase();
+  return null;
+}
+
 function capturarReferidoDeUrl() {
   const params = new URLSearchParams(window.location.search);
   const ref = params.get("ref");
   if (!ref) return;
-  // Formato valido de un id de usuario (uuid) -- si no calza, lo ignoramos
-  // (evita guardar basura si alguien manda un link mal armado).
-  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ref)) {
-    localStorage.setItem("picksfc_ref_pendiente", ref);
-  }
+  const codigo = normalizarCodigoReferido(ref);
+  if (codigo) localStorage.setItem("picksfc_ref_pendiente", codigo);
   // Quitamos el parametro de la URL para que no se quede pegado si el
   // usuario comparte esta misma pagina despues (no queremos que su link
   // "propio" arrastre el ?ref= de quien lo invito a el).
@@ -1207,24 +1219,34 @@ function abrirModalInvitar() {
     mostrarFormAuth("signup");
     return;
   }
-  const link = `${window.location.origin}${window.location.pathname}?ref=${sesionActual.user.id}`;
+  // El "codigo" de invitacion son solo los primeros 8 caracteres del id
+  // del usuario -- mucho mas corto y facil de compartir a mano (por
+  // WhatsApp, de palabra, etc.) que el uuid completo. El link tambien
+  // usa ese mismo codigo corto en el ?ref=.
+  const codigo = sesionActual.user.id.slice(0, 8);
+  const link = `${window.location.origin}${window.location.pathname}?ref=${codigo}`;
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarModalInvitar(event)">
       <div class="auth-modal" onclick="event.stopPropagation()">
         <div class="auth-modal-titulo">🎁 Invita y gana 7 días VIP</div>
         <div style="font-size:13.5px; line-height:1.5;">
-          Comparte tu link con tus amigos. Apenas uno de ellos haga su primera suscripción
+          Comparte tu código con tus amigos. Apenas uno de ellos haga su primera suscripción
           (semanal o mensual), te regalamos 7 días VIP gratis, automáticamente.
         </div>
+        <div style="font-size:11px; color:var(--tinta-suave); margin-top:4px;">Tu código:</div>
+        <input type="text" readonly value="${codigo}" onclick="this.select()"
+               class="auth-input" style="font-size:20px; font-family:'IBM Plex Mono',monospace; text-align:center; letter-spacing:2px;">
+        <button class="auth-btn destacado" style="width:100%; margin-top:4px;" onclick="copiarLinkReferido('${codigo}')">Copiar código</button>
+        <div style="font-size:11px; color:var(--tinta-suave); margin-top:10px;">O comparte el link directo:</div>
         <input type="text" readonly value="${link}" onclick="this.select()"
                class="auth-input" style="font-size:12px;">
-        <div style="font-size:11.5px; line-height:1.4; color:var(--tinta-suave);">
+        <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="copiarLinkReferido('${link}')">Copiar link</button>
+        <div style="font-size:11.5px; line-height:1.4; color:var(--tinta-suave); margin-top:6px;">
           Condiciones: el beneficio se acredita solo cuando tu invitado hace su
-          <strong>primera suscripción paga</strong> (no al registrarse). Si el link no le abre
-          directo, también puede pegarlo a mano en el formulario de registro.
+          <strong>primera suscripción paga</strong> (no al registrarse). Puede pegar tu código o
+          tu link en el campo de invitación del formulario de registro.
         </div>
-        <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="copiarLinkReferido('${link}')">Copiar link</button>
-        <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalInvitar()">Cerrar</button>
+        <button class="auth-btn" style="width:100%; margin-top:8px; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalInvitar()">Cerrar</button>
       </div>
     </div>`;
   document.body.insertAdjacentHTML("beforeend", html);
@@ -1390,8 +1412,8 @@ async function entrarConGoogle() {
 function guardarReferidoDesdeInputManual() {
   const campo = document.getElementById("auth-ref-input");
   if (!campo || !campo.value.trim()) return;
-  const match = campo.value.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
-  if (match) localStorage.setItem("picksfc_ref_pendiente", match[0]);
+  const codigo = normalizarCodigoReferido(campo.value);
+  if (codigo) localStorage.setItem("picksfc_ref_pendiente", codigo);
 }
 
 function mostrarFormAuth(modo) {

@@ -1,8 +1,8 @@
 // Funcion: registrar-referido
 // Complementa al trigger manejar_nuevo_usuario() (ver sql/referidos.sql):
 // ese trigger ya guarda quien invito a un usuario nuevo cuando se
-// registra con correo/contraseña (el link ?ref=<id> viaja como metadata
-// del signUp). PERO signInWithOAuth (el boton "Continuar con Google") no
+// registra con correo/contraseña (el codigo de invitacion viaja como
+// metadata del signUp). PERO signInWithOAuth (el boton "Continuar con Google") no
 // permite mandar esa metadata al crear la cuenta -- Google es quien
 // decide que datos trae la cuenta nueva, no nosotros. Esta funcion es el
 // mismo registro, hecho aparte, justo despues de que el usuario vuelve a
@@ -31,7 +31,10 @@ const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 const MINUTOS_VENTANA_REGISTRO = 15;
-const REGEX_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+// El codigo que comparte cada usuario son solo los primeros 8 caracteres
+// hex de su id (ver abrirModalInvitar en index.html) -- mucho mas facil
+// de compartir a mano que el uuid completo.
+const REGEX_CODIGO = /^[0-9a-f]{8}$/i;
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -66,15 +69,15 @@ Deno.serve(async (req: Request) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const referidoPor = String(body?.referido_por || "");
+    const codigoReferido = String(body?.referido_por || "").toLowerCase();
 
-    if (!REGEX_UUID.test(referidoPor)) {
+    if (!REGEX_CODIGO.test(codigoReferido)) {
       return new Response(JSON.stringify({ error: "referido_por invalido" }), {
         status: 400,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
-    if (referidoPor.toLowerCase() === user.id.toLowerCase()) {
+    if (codigoReferido === user.id.slice(0, 8).toLowerCase()) {
       return new Response(JSON.stringify({ error: "No puedes ser tu propio invitador" }), {
         status: 400,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
@@ -112,12 +115,12 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const { data: perfilInvitador } = await supabaseAdmin
-      .from("perfiles")
-      .select("id")
-      .eq("id", referidoPor)
-      .maybeSingle();
-    if (!perfilInvitador) {
+    // Resolvemos el codigo corto al id real con la misma funcion que usa
+    // el trigger de registro por correo (ver sql/referidos.sql) -- asi la
+    // regla de "que significa un codigo valido" vive en un solo lugar.
+    const { data: idInvitador, error: errorBusqueda } = await supabaseAdmin
+      .rpc("buscar_id_por_codigo_referido", { codigo: codigoReferido });
+    if (errorBusqueda || !idInvitador) {
       return new Response(JSON.stringify({ error: "El invitador no existe" }), {
         status: 400,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
@@ -129,7 +132,7 @@ Deno.serve(async (req: Request) => {
     // primera que llegue de verdad escribe algo.
     const { error: updateError } = await supabaseAdmin
       .from("perfiles")
-      .update({ referido_por: referidoPor })
+      .update({ referido_por: idInvitador })
       .eq("id", user.id)
       .is("referido_por", null);
 
