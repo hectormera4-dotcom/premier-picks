@@ -54,7 +54,7 @@ jobs:
         # working directory tal como los dejo la corrida anterior.
         run: |
           git fetch origin datos-pipeline
-          git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 'eredivisie_combinado.csv' 'primeira_liga_combinado.csv' 2>/dev/null || true
           git checkout origin/datos-pipeline -- 'picks_del_dia_*.csv' 2>/dev/null || true
           git checkout origin/datos-pipeline -- 'historial_picks_*.csv' 2>/dev/null || true
           git checkout origin/datos-pipeline -- 'combinadas_del_dia.json' 'combinadas_del_dia_*.json' 2>/dev/null || true
@@ -86,7 +86,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           mkdir -p /tmp/datos_generados
-          cp premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv eredivisie_combinado.csv primeira_liga_combinado.csv /tmp/datos_generados/ 2>/dev/null || true
           cp picks_del_dia_*.csv /tmp/datos_generados/ 2>/dev/null || true
           cp historial_picks_*.csv /tmp/datos_generados/ 2>/dev/null || true
           cp combinadas_del_dia.json combinadas_del_dia_*.json /tmp/datos_generados/ 2>/dev/null || true
@@ -98,7 +98,7 @@ jobs:
           git checkout -B datos-pipeline origin/datos-pipeline
           cp /tmp/datos_generados/* .
 
-          git add premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv 2>/dev/null || true
+          git add premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv eredivisie_combinado.csv primeira_liga_combinado.csv 2>/dev/null || true
           git add picks_del_dia_*.csv 2>/dev/null || true
           git add historial_picks_*.csv 2>/dev/null || true
           git add combinadas_del_dia.json combinadas_del_dia_*.json 2>/dev/null || true

@@ -34,7 +34,7 @@ jobs:
         # 'main' (que solo tiene codigo y esta protegida por Pull Request).
         run: |
           git fetch origin datos-pipeline
-          git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 2>/dev/null || true
+          git checkout origin/datos-pipeline -- 'premier_league_combinado.csv' 'la_liga_combinado.csv' 'serie_a_combinado.csv' 'ligue_1_combinado.csv' 'bundesliga_combinado.csv' 'championship_combinado.csv' 'eredivisie_combinado.csv' 'primeira_liga_combinado.csv' 2>/dev/null || true
           git checkout origin/datos-pipeline -- 'historial_combinadas.csv' 2>/dev/null || true
 
       - name: Revisar partidos recien finalizados y resolver combinadas pendientes
@@ -50,14 +50,14 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           mkdir -p /tmp/datos_generados
-          cp premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv /tmp/datos_generados/ 2>/dev/null || true
+          cp premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv eredivisie_combinado.csv primeira_liga_combinado.csv /tmp/datos_generados/ 2>/dev/null || true
           cp historial_combinadas.csv /tmp/datos_generados/ 2>/dev/null || true
 
           git fetch origin datos-pipeline
           git checkout -B datos-pipeline origin/datos-pipeline
           cp /tmp/datos_generados/* .
 
-          git add premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv 2>/dev/null || true
+          git add premier_league_combinado.csv la_liga_combinado.csv serie_a_combinado.csv ligue_1_combinado.csv bundesliga_combinado.csv championship_combinado.csv eredivisie_combinado.csv primeira_liga_combinado.csv 2>/dev/null || true
           git add historial_combinadas.csv 2>/dev/null || true
 
           if git diff --staged --quiet; then
