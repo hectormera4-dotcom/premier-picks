@@ -23,6 +23,19 @@ HEADERS = {"X-Auth-Token": API_TOKEN}
 TEMPORADA_ACTUAL = 2026
 MAX_GOLES = 6
 
+# football-data.org a veces manda un valor mal formado en "status" para un
+# partido que en realidad esta programado normal (confirmado en vivo: un
+# partido real de La Liga trajo status="2026-09-04 18:00:00Z", una fecha,
+# en vez de "SCHEDULED"/"TIMED" -- causa desconocida del lado de ellos).
+# Antes filtrabamos "programados" exigiendo que el status fuera EXACTAMENTE
+# "SCHEDULED" o "TIMED", asi que un partido asi se perdia por completo (no
+# generaba pick ni aparecia en el calendario, aunque el partido si existiera
+# y fuera a jugarse). Ahora hacemos lo contrario: excluimos solo los
+# estados que de verdad significan "esto ya no necesita una prediccion" --
+# cualquier otra cosa (incluyendo un status raro/inesperado) se trata como
+# que todavia falta jugarse, que es la suposicion mas segura.
+ESTADOS_PARTIDO_YA_RESUELTO = {"FINISHED", "POSTPONED", "CANCELLED", "SUSPENDED", "AWARDED"}
+
 # Notificaciones push (ver enviar_notificacion_push mas abajo) -- se usan
 # para avisar que ya estan disponibles los picks/combinadas del dia, justo
 # despues de publicarlos (ver el bloque "if __name__" al final del archivo).
@@ -1512,7 +1525,7 @@ def actualizar_calendario_liga(liga_key, partidos):
         return
 
     finalizados = [p for p in partidos if p.get("status") == "FINISHED"]
-    programados = [p for p in partidos if p.get("status") in ("SCHEDULED", "TIMED")]
+    programados = [p for p in partidos if p.get("status") not in ESTADOS_PARTIDO_YA_RESUELTO]
 
     finalizados = sorted(finalizados, key=lambda p: p["utcDate"], reverse=True)[:8]
     programados = sorted(programados, key=lambda p: p["utcDate"])[:8]
@@ -1825,7 +1838,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                    fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False,
                    fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False,
                    partidos_temporada_actual=None):
-    programados = [p for p in partidos if p["status"] in ("SCHEDULED", "TIMED")]
+    programados = [p for p in partidos if p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO]
     picks = []
 
     if not programados:
