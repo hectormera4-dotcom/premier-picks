@@ -30,6 +30,16 @@ as $$
   select id from public.perfiles where substr(id::text, 1, 8) = lower(codigo) limit 1;
 $$;
 
+-- Por defecto Supabase le da permiso de EXECUTE en funciones nuevas del
+-- schema public a "anon" y "authenticated" -- sin este REVOKE, cualquiera
+-- podria llamar a esta funcion directo por la API REST y usarla para
+-- enumerar que codigos de 8 caracteres resuelven a un usuario real (no
+-- expone datos sensibles por si sola, pero no hay razon para dejarla
+-- invocable directo: solo la usan, internamente, el trigger
+-- manejar_nuevo_usuario y la funcion registrar-referido/index.ts, esta
+-- ultima con la llave de servicio, no afectada por este REVOKE).
+revoke execute on function public.buscar_id_por_codigo_referido(text) from public, anon, authenticated;
+
 -- Reemplaza la funcion que ya existia (manejar_nuevo_usuario, disparada
 -- por el trigger al_crear_usuario en auth.users) agregando la captura de
 -- quien invito a este usuario nuevo. El codigo del invitador viaja como
