@@ -2171,11 +2171,10 @@ async function cargarEstadisticasAdmin() {
         <div class="stat-card"><div class="stat-numero">${datos.usuarios_nuevos_mes}</div><div class="stat-etiqueta">Usuarios nuevos este mes</div></div>
         <div class="stat-card"><div class="stat-numero">${formatearDinero(datos.ingresos_mes_centavos)}</div><div class="stat-etiqueta">Ingresos este mes</div></div>
         <div class="stat-card"><div class="stat-numero">${datos.pagos_mes}</div><div class="stat-etiqueta">Pagos este mes</div></div>
-        <div class="stat-card"><div class="stat-numero">${formatearDinero(datos.ingresos_totales_centavos)}</div><div class="stat-etiqueta">Ingresos históricos*</div></div>
+        <div class="stat-card"><div class="stat-numero">${formatearDinero(datos.ingresos_totales_centavos)}</div><div class="stat-etiqueta">Ingresos históricos</div></div>
         <div class="stat-card"><div class="stat-numero">${datos.referidos_premiados_total}</div><div class="stat-etiqueta">Premios de referidos entregados</div></div>
       </div>
       <div style="margin-top:16px; font-size:13px; color:var(--tinta-suave);">Pagos por plan este mes: ${porPlan}</div>
-      <div style="margin-top:4px; font-size:11px; color:var(--tinta-suave);">*Solo incluye pagos procesados desde que se agregó este panel.</div>
       <button class="auth-btn" style="margin-top:16px;" onclick="document.getElementById('admin-stats-contenedor').dataset.cargado=''; cargarEstadisticasAdmin();">Actualizar</button>
     `;
     cont.dataset.cargado = "1";
