@@ -1460,10 +1460,64 @@ function mostrarFormAuth(modo) {
         ${campoReferido}
         <button class="auth-btn destacado" style="width:100%; margin-top:8px;"
                 onclick="${esLogin ? 'hacerLogin()' : 'hacerSignup()'}">${esLogin ? "Entrar" : "Registrarme"}</button>
+        ${esLogin ? `<div style="text-align:center; margin-top:4px;">
+          <a href="#" onclick="event.preventDefault(); recuperarContrasena();" style="font-size:12.5px; color:var(--tinta-suave);">¿Olvidaste tu contraseña?</a>
+        </div>` : ""}
         <div id="auth-error" class="auth-error"></div>
       </div>
     </div>`;
   document.body.insertAdjacentHTML("beforeend", html);
+}
+
+async function recuperarContrasena() {
+  const email = document.getElementById("auth-email").value.trim();
+  if (!email) {
+    document.getElementById("auth-error").textContent = "Escribe tu correo arriba primero, y dale de nuevo a este link.";
+    return;
+  }
+  const urlLimpia = window.location.origin + window.location.pathname;
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: urlLimpia });
+  const cont = document.getElementById("auth-error");
+  if (error) {
+    cont.style.color = "";
+    cont.textContent = error.message;
+  } else {
+    // A proposito NO decimos "no existe esa cuenta" si el correo no esta
+    // registrado -- eso dejaria que cualquiera use este formulario para
+    // averiguar que correos si tienen cuenta en la app.
+    cont.style.color = "var(--verde-claro)";
+    cont.textContent = "Si ese correo tiene una cuenta, te llegara un link para restablecer tu contraseña.";
+  }
+}
+
+function mostrarModalNuevaContrasena() {
+  if (document.getElementById("modal-nueva-contrasena")) return; // ya esta abierto
+  const html = `
+    <div class="auth-modal-fondo" id="modal-nueva-contrasena">
+      <div class="auth-modal" onclick="event.stopPropagation()">
+        <div class="auth-modal-titulo">Elige tu nueva contraseña</div>
+        <input type="password" id="nueva-contrasena-input" placeholder="Contraseña nueva" class="auth-input">
+        <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="guardarNuevaContrasena()">Guardar contraseña</button>
+        <div id="nueva-contrasena-error" class="auth-error"></div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+async function guardarNuevaContrasena() {
+  const nueva = document.getElementById("nueva-contrasena-input").value;
+  const cont = document.getElementById("nueva-contrasena-error");
+  if (!nueva || nueva.length < 6) {
+    cont.textContent = "La contraseña debe tener al menos 6 caracteres.";
+    return;
+  }
+  const { error } = await sb.auth.updateUser({ password: nueva });
+  if (error) {
+    cont.textContent = error.message;
+    return;
+  }
+  document.getElementById("modal-nueva-contrasena")?.remove();
+  alert("¡Listo! Tu contraseña se actualizó.");
 }
 
 function cerrarFormAuth(event) {
@@ -2267,7 +2321,18 @@ async function cargarHistorialCombinadas() {
   await actualizarSesion();
   await cargarTodo();
   await verificarRetornoDePago();
-  sb.auth.onAuthStateChange((_evento, session) => { aplicarSesion(session); cargarTodo(); });
+  sb.auth.onAuthStateChange((evento, session) => {
+    aplicarSesion(session);
+    cargarTodo();
+    // Cuando el usuario vuelve del link de "recuperar contraseña" que le
+    // llego por correo, Supabase ya le crea una sesion valida y dispara
+    // este evento -- aprovechamos para pedirle directo la contraseña
+    // nueva, en vez de dejarlo "logueado" sin darse cuenta de que ese era
+    // el proposito de haber entrado.
+    if (evento === "PASSWORD_RECOVERY") {
+      mostrarModalNuevaContrasena();
+    }
+  });
 
   // Limpieza de seguridad: si quedo un "#" suelto en la URL (residuo de
   // un login anterior), lo quitamos para que nunca se acumule con el
