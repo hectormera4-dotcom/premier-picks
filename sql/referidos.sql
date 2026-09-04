@@ -9,14 +9,35 @@ alter table public.perfiles
   add column if not exists referido_por uuid references public.perfiles(id),
   add column if not exists recompensa_referido_otorgada boolean not null default false;
 
+-- El "codigo" de invitacion que se comparte NO es el uuid completo (muy
+-- largo para compartir a mano) -- son solo sus primeros 8 caracteres hex
+-- (ver abrirModalInvitar en index.html). No se guarda como columna aparte
+-- ni se le exige ser unico (evitaria un choque rarisimo de raiz, pero a
+-- costo de poder bloquear el registro de una cuenta nueva por una
+-- coincidencia de 8 caracteres -- preferible que sea "mejor esfuerzo": si
+-- dos ids comparten los mismos 8 caracteres, el resultado es simplemente
+-- que la referencia. resuelve a cualquiera de los dos, sin romper nada).
+-- Esta funcion hace esa resolucion codigo -> id real, reutilizada tanto
+-- por el trigger de registro (correo/contraseña) como por la funcion
+-- registrar-referido (Google).
+create or replace function public.buscar_id_por_codigo_referido(codigo text)
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select id from public.perfiles where substr(id::text, 1, 8) = lower(codigo) limit 1;
+$$;
+
 -- Reemplaza la funcion que ya existia (manejar_nuevo_usuario, disparada
 -- por el trigger al_crear_usuario en auth.users) agregando la captura de
--- quien invito a este usuario nuevo. El id del invitador viaja como
+-- quien invito a este usuario nuevo. El codigo del invitador viaja como
 -- metadata del registro (ver hacerSignup() en index.html) -- se valida
--- aqui, del lado del servidor, que sea un uuid con formato valido, que no
--- sea el mismo usuario (auto-referido) y que exista de verdad en
--- perfiles; si algo no calza, simplemente queda NULL (no invitado), nunca
--- se rompe el registro de la cuenta.
+-- aqui, del lado del servidor, que tenga el formato de codigo (8 hex),
+-- que no sea el propio usuario (auto-referido) y que de verdad resuelva a
+-- alguien que existe; si algo no calza, simplemente queda NULL (no
+-- invitado), nunca se rompe el registro de la cuenta.
 create or replace function public.manejar_nuevo_usuario()
 returns trigger
 language plpgsql
@@ -30,9 +51,9 @@ begin
     new.email,
     new.email = 'hectormera4@gmail.com',
     case
-      when new.raw_user_meta_data->>'referido_por' ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
-       and new.raw_user_meta_data->>'referido_por' <> new.id::text
-      then (select p.id from public.perfiles p where p.id = (new.raw_user_meta_data->>'referido_por')::uuid)
+      when new.raw_user_meta_data->>'referido_por' ~* '^[0-9a-f]{8}$'
+       and lower(new.raw_user_meta_data->>'referido_por') <> substr(new.id::text, 1, 8)
+      then public.buscar_id_por_codigo_referido(new.raw_user_meta_data->>'referido_por')
       else null
     end
   );
