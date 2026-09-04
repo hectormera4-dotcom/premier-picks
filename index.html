@@ -1790,14 +1790,17 @@ function crearCombinada(c) {
         <span class="combinada-cuota">${c.cuota_combinada}</span>
       </div>`;
   } else if (hayCuota) {
-    // "Anzuelo" de venta: el usuario ve la cuota real que se esta
-    // perdiendo (le da algo concreto que ganar si paga la membresia),
-    // pero los partidos y picks individuales siguen tapados.
+    // "Anzuelo": el usuario ve la cuota real que se esta perdiendo (le da
+    // algo concreto que ganar si paga la membresia, o si simplemente
+    // inicia sesion cuando es gratis), pero los partidos y picks
+    // individuales siguen tapados.
+    const razon = c.es_gratis ? "Inicia sesión para ver los picks" : "Picks visibles solo para VIP";
     pie = `
       <div class="combinada-footer">
         <span class="combinada-cuota-label">cuota estimada</span>
         <span class="combinada-cuota">${c.cuota_combinada}</span>
-      </div>`;
+      </div>
+      <div class="lock-texto" style="max-width:none; text-align:center; margin-top:6px; font-size:11.5px;">🔒 ${razon}</div>`;
   } else {
     pie = `
       <div class="combinada-footer" style="justify-content:center;">
@@ -1833,10 +1836,16 @@ function crearGauge(prob, nivel) {
 }
 
 function crearTarjeta(p, i) {
-  // Caso 1: contenido VIP -- el usuario NO recibio el pick real (esta null),
-  // solo sabemos que existe. Mostramos el partido con candado, sin botones
-  // (el llamado a la accion vive una sola vez, arriba en el banner VIP).
+  // Caso 1: el usuario NO recibio el pick real (esta null) -- puede ser
+  // porque es contenido VIP y no lo es, o porque es gratis pero todavia
+  // no inicio sesion (los picks gratis tambien exigen estar logueado,
+  // aunque sea con cualquier cuenta -- ver picks_publicos en la base).
+  // Mostramos el partido con candado, sin botones (el llamado a la accion
+  // vive una sola vez, arriba en el banner correspondiente).
   if (!p.tieneDatos) {
+    const mensaje = p.esGratis
+      ? "🔒 Inicia sesión para ver este pick gratis"
+      : "🔒 Solo para VIP";
     return `
       <div class="card">
         <div class="card-top">
@@ -1846,7 +1855,7 @@ function crearTarjeta(p, i) {
           </div>
         </div>
         <div class="card-body" style="justify-content:center;">
-          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">🔒 Solo para VIP</div>
+          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">${mensaje}</div>
         </div>
       </div>
     `;
