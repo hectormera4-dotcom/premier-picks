@@ -1218,6 +1218,11 @@ function abrirModalInvitar() {
         </div>
         <input type="text" readonly value="${link}" onclick="this.select()"
                class="auth-input" style="font-size:12px;">
+        <div style="font-size:11.5px; line-height:1.4; color:var(--tinta-suave);">
+          Condiciones: el beneficio se acredita solo cuando tu invitado hace su
+          <strong>primera suscripción paga</strong> (no al registrarse). Si el link no le abre
+          directo, también puede pegarlo a mano en el formulario de registro.
+        </div>
         <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="copiarLinkReferido('${link}')">Copiar link</button>
         <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalInvitar()">Cerrar</button>
       </div>
@@ -1369,6 +1374,7 @@ function renderBarraAuth() {
 }
 
 async function entrarConGoogle() {
+  guardarReferidoDesdeInputManual();
   const urlLimpia = window.location.origin + window.location.pathname;
   await sb.auth.signInWithOAuth({
     provider: "google",
@@ -1376,8 +1382,29 @@ async function entrarConGoogle() {
   });
 }
 
+// Si la persona pego el link (o solo el codigo) de invitacion a mano en
+// el campo del formulario -- en vez de haber entrado directamente con
+// ese link -- le sacamos el id de invitador de ahi y lo guardamos igual
+// que si hubiera venido por URL (ver capturarReferidoDeUrl). Aceptamos
+// tanto el link completo como solo el codigo suelto.
+function guardarReferidoDesdeInputManual() {
+  const campo = document.getElementById("auth-ref-input");
+  if (!campo || !campo.value.trim()) return;
+  const match = campo.value.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
+  if (match) localStorage.setItem("picksfc_ref_pendiente", match[0]);
+}
+
 function mostrarFormAuth(modo) {
   const esLogin = modo === "login";
+  const refGuardado = localStorage.getItem("picksfc_ref_pendiente") || "";
+  const campoReferido = esLogin ? "" : `
+        <input type="text" id="auth-ref-input" value="${refGuardado}"
+               placeholder="Código o link de invitación (opcional)" class="auth-input">
+        <div style="font-size:11.5px; line-height:1.4; color:var(--tinta-suave); margin:-4px 0 4px;">
+          Si alguien te invitó, pega aquí su código o link. El beneficio (7 días VIP gratis)
+          es para quien te invitó, y se activa recién cuando hagas tu primera suscripción paga
+          en la app -- no apenas te registres.
+        </div>`;
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarFormAuth(event)">
       <div class="auth-modal" onclick="event.stopPropagation()">
@@ -1389,6 +1416,7 @@ function mostrarFormAuth(modo) {
         <div class="auth-separador"><span>o</span></div>
         <input type="email" id="auth-email" placeholder="Correo electrónico" class="auth-input">
         <input type="password" id="auth-password" placeholder="Contraseña" class="auth-input">
+        ${campoReferido}
         <button class="auth-btn destacado" style="width:100%; margin-top:8px;"
                 onclick="${esLogin ? 'hacerLogin()' : 'hacerSignup()'}">${esLogin ? "Entrar" : "Registrarme"}</button>
         <div id="auth-error" class="auth-error"></div>
@@ -1415,10 +1443,12 @@ async function hacerLogin() {
 async function hacerSignup() {
   const email = document.getElementById("auth-email").value;
   const password = document.getElementById("auth-password").value;
-  // Si esta persona entro con un link de invitacion (?ref=<id>), se lo
-  // mandamos al backend como metadata del registro -- el trigger que crea
-  // el perfil (del lado del servidor, no editable desde el navegador) es
-  // quien de verdad guarda quien la invito, ver manejar_nuevo_usuario().
+  // Si esta persona entro con un link de invitacion (?ref=<id>) o lo pego
+  // a mano en el campo del formulario, se lo mandamos al backend como
+  // metadata del registro -- el trigger que crea el perfil (del lado del
+  // servidor, no editable desde el navegador) es quien de verdad guarda
+  // quien la invito, ver manejar_nuevo_usuario().
+  guardarReferidoDesdeInputManual();
   const refPendiente = localStorage.getItem("picksfc_ref_pendiente");
   const { data, error } = await sb.auth.signUp({
     email, password,
