@@ -20,3 +20,9 @@ entrypoint = "./functions/payphone-confirm/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/payphone-confirm/*.html" ]
+
+[functions.registrar-referido]
+enabled = true
+verify_jwt = false
+import_map = "./functions/registrar-referido/deno.json"
+entrypoint = "./functions/registrar-referido/index.ts"
