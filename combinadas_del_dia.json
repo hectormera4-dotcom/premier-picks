@@ -4,6 +4,39 @@
     "es_gratis": true,
     "partidos": [
       {
+        "fecha": "2026-09-04 19:05:00",
+        "local": "Paris SG",
+        "visitante": "Monaco",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 81.2,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-09-04 19:00:00",
+        "local": "Ipswich",
+        "visitante": "Liverpool",
+        "pick_recomendado": "Doble oportunidad X2 + Over 1.5 goles",
+        "pick_probabilidad": 80.5,
+        "liga": "premier_league"
+      },
+      {
+        "fecha": "2026-09-04 19:15:00",
+        "local": "Porto",
+        "visitante": "Moreirense",
+        "pick_recomendado": "Doble oportunidad 1X + Más corners: Porto",
+        "pick_probabilidad": 80.3,
+        "liga": "primeira_liga"
+      }
+    ],
+    "probabilidad_combinada": 52.5,
+    "cuota_combinada": 1.81,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
         "fecha": "2026-09-04 18:30:00",
         "local": "Stuttgart",
         "visitante": "FC Koln",
@@ -20,41 +53,16 @@
         "liga": "ligue_1"
       },
       {
-        "fecha": "2026-09-04 19:05:00",
-        "local": "Paris SG",
-        "visitante": "Monaco",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 81.2,
-        "liga": "ligue_1"
+        "fecha": "2026-09-04 18:00:00",
+        "local": "Sparta Rotterdam",
+        "visitante": "Zwolle",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 81.5,
+        "liga": "eredivisie"
       }
     ],
-    "probabilidad_combinada": 55.3,
-    "cuota_combinada": 1.71,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #2",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-09-04 19:00:00",
-        "local": "Ipswich",
-        "visitante": "Liverpool",
-        "pick_recomendado": "Doble oportunidad X2 + Over 1.5 goles",
-        "pick_probabilidad": 80.5,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-04 18:45:00",
-        "local": "Genoa",
-        "visitante": "Como",
-        "pick_recomendado": "Doble oportunidad X2",
-        "pick_probabilidad": 80.3,
-        "liga": "serie_a"
-      }
-    ],
-    "probabilidad_combinada": 64.6,
-    "cuota_combinada": 1.45,
+    "probabilidad_combinada": 55.5,
+    "cuota_combinada": 1.7,
     "liga": "mixta"
   }
 ]
