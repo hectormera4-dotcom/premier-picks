@@ -849,6 +849,9 @@
     <button class="menu-item" id="menu-notificaciones" onclick="activarNotificaciones()">
       🔔 Activar notificaciones
     </button>
+    <button class="menu-item" onclick="abrirModalInvitar()">
+      🎁 Invita y gana 7 días VIP
+    </button>
     <button class="menu-item" onclick="window.open('https://t.me/picksfc_soporte', '_blank')">
       💬 Soporte
     </button>
@@ -1143,6 +1146,69 @@ function cerrarModalNotificaciones(event) {
   document.querySelector(".auth-modal-fondo")?.remove();
 }
 
+// ---------- Sistema de referidos ----------
+// El premio (7 dias VIP gratis) NO se otorga al momento del registro --
+// como la app no verifica el correo, cualquiera podria crear cuentas
+// fantasma con el link de otra persona para hacerla ganar premios sin
+// pagar nada. Por eso el premio se entrega solo cuando el referido hace
+// su PRIMERA suscripcion paga real, confirmada por Payphone (ver
+// payphone-confirm/index.ts) -- ahi ya no hay forma de fingirlo.
+
+function capturarReferidoDeUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get("ref");
+  if (!ref) return;
+  // Formato valido de un id de usuario (uuid) -- si no calza, lo ignoramos
+  // (evita guardar basura si alguien manda un link mal armado).
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ref)) {
+    localStorage.setItem("picksfc_ref_pendiente", ref);
+  }
+  // Quitamos el parametro de la URL para que no se quede pegado si el
+  // usuario comparte esta misma pagina despues (no queremos que su link
+  // "propio" arrastre el ?ref= de quien lo invito a el).
+  params.delete("ref");
+  const nuevaUrl = window.location.pathname + (params.toString() ? `?${params}` : "");
+  history.replaceState(null, "", nuevaUrl);
+}
+
+function abrirModalInvitar() {
+  if (!sesionActual) {
+    alert("Primero crea tu cuenta o inicia sesión para tener tu link de invitación.");
+    mostrarFormAuth("signup");
+    return;
+  }
+  const link = `${window.location.origin}${window.location.pathname}?ref=${sesionActual.user.id}`;
+  const html = `
+    <div class="auth-modal-fondo" onclick="cerrarModalInvitar(event)">
+      <div class="auth-modal" onclick="event.stopPropagation()">
+        <div class="auth-modal-titulo">🎁 Invita y gana 7 días VIP</div>
+        <div style="font-size:13.5px; line-height:1.5;">
+          Comparte tu link con tus amigos. Apenas uno de ellos haga su primera suscripción
+          (semanal o mensual), te regalamos 7 días VIP gratis, automáticamente.
+        </div>
+        <input type="text" readonly value="${link}" onclick="this.select()"
+               class="auth-input" style="font-size:12px;">
+        <button class="auth-btn destacado" style="width:100%; margin-top:8px;" onclick="copiarLinkReferido('${link}')">Copiar link</button>
+        <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalInvitar()">Cerrar</button>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML("beforeend", html);
+}
+
+function cerrarModalInvitar(event) {
+  if (event && event.target !== event.currentTarget) return;
+  document.querySelector(".auth-modal-fondo")?.remove();
+}
+
+async function copiarLinkReferido(link) {
+  try {
+    await navigator.clipboard.writeText(link);
+    alert("¡Link copiado! Compártelo con tus amigos.");
+  } catch (err) {
+    alert("No se pudo copiar automáticamente -- selecciona el link y cópialo manualmente.");
+  }
+}
+
 async function confirmarActivarNotificaciones() {
   try {
     const permiso = await Notification.requestPermission();
@@ -1319,8 +1385,17 @@ async function hacerLogin() {
 async function hacerSignup() {
   const email = document.getElementById("auth-email").value;
   const password = document.getElementById("auth-password").value;
-  const { data, error } = await sb.auth.signUp({ email, password });
+  // Si esta persona entro con un link de invitacion (?ref=<id>), se lo
+  // mandamos al backend como metadata del registro -- el trigger que crea
+  // el perfil (del lado del servidor, no editable desde el navegador) es
+  // quien de verdad guarda quien la invito, ver manejar_nuevo_usuario().
+  const refPendiente = localStorage.getItem("picksfc_ref_pendiente");
+  const { data, error } = await sb.auth.signUp({
+    email, password,
+    options: refPendiente ? { data: { referido_por: refPendiente } } : undefined,
+  });
   if (error) { document.getElementById("auth-error").textContent = error.message; return; }
+  localStorage.removeItem("picksfc_ref_pendiente");
 
   document.getElementById("auth-error").style.color = "var(--verde-claro)";
   if (data.session) {
@@ -2016,6 +2091,7 @@ async function cargarHistorialCombinadas() {
 }
 
 (async function iniciar() {
+  capturarReferidoDeUrl();
   renderGridLigas();
   await actualizarSesion();
   await cargarTodo();
