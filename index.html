@@ -1039,6 +1039,7 @@ async function aplicarSesion(session) {
     // quedar como visitante anonimo) -- asi los funnels de conversion a
     // VIP se pueden ver por usuario, no solo como numeros sueltos.
     if (window.posthog) posthog.identify(session.user.id, { email: session.user.email });
+    vincularReferidoPendienteSiHaceFalta();
   } else {
     perfilActual = null;
   }
@@ -1169,6 +1170,35 @@ function capturarReferidoDeUrl() {
   params.delete("ref");
   const nuevaUrl = window.location.pathname + (params.toString() ? `?${params}` : "");
   history.replaceState(null, "", nuevaUrl);
+}
+
+async function vincularReferidoPendienteSiHaceFalta() {
+  // El registro con correo/contraseña ya vincula el referido directo,
+  // del lado del servidor, al momento de crear la cuenta (ver
+  // hacerSignup() + manejar_nuevo_usuario() en la base). PERO
+  // "Continuar con Google" no permite mandar esa metadata al crear la
+  // cuenta -- Google decide que trae la cuenta nueva, no nosotros. Por
+  // eso, apenas hay sesion activa (login normal o vuelta de Google) y
+  // todavia queda un ?ref= guardado sin usar, se lo mandamos al backend
+  // aparte (ver registrar-referido/index.ts, que valida todo del lado
+  // del servidor: cuenta reciente, invitador real, no se puede repetir).
+  const refPendiente = localStorage.getItem("picksfc_ref_pendiente");
+  if (!refPendiente || !sesionActual) return;
+  localStorage.removeItem("picksfc_ref_pendiente"); // solo se intenta una vez, exista o no la cuenta ya vinculada
+
+  try {
+    await fetch(`${SUPABASE_URL}/functions/v1/registrar-referido`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${sesionActual.access_token}`,
+      },
+      body: JSON.stringify({ referido_por: refPendiente }),
+    });
+  } catch (err) {
+    console.error("No se pudo vincular el referido pendiente:", err);
+  }
 }
 
 function abrirModalInvitar() {
