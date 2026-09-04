@@ -252,6 +252,66 @@ LIGAS = {
             "Wrexham AFC": "Wrexham",
         },
     },
+    "eredivisie": {
+        "nombre_mostrar": "Eredivisie",
+        "codigo_api": "DED",
+        "codigo_footballdata": "N1",
+        "archivo_historico": "eredivisie_combinado.csv",
+        # Ascendidos 2026/27 (verificado en vivo comparando el roster de la
+        # temporada 2025/26 contra la actual en football-data.co.uk):
+        # Cambuur, Den Haag y Willem II. Heracles, NAC Breda y Volendam
+        # descendieron.
+        "equipos_sin_historial": ["Cambuur", "Den Haag", "Willem II"],
+        "mapeo_nombres": {
+            "ADO Den Haag": "Den Haag",
+            "AFC Ajax": "Ajax",
+            "AZ": "AZ Alkmaar",
+            "FC Groningen": "Groningen",
+            "FC Twente '65": "Twente",
+            "FC Utrecht": "Utrecht",
+            "Feyenoord Rotterdam": "Feyenoord",
+            "Fortuna Sittard": "For Sittard",
+            "Go Ahead Eagles": "Go Ahead Eagles",
+            "NEC": "Nijmegen",
+            "PEC Zwolle": "Zwolle",
+            "PSV": "PSV Eindhoven",
+            "SBV Excelsior": "Excelsior",
+            "SC Cambuur-Leeuwarden": "Cambuur",
+            "SC Heerenveen": "Heerenveen",
+            "Sparta Rotterdam": "Sparta Rotterdam",
+            "Telstar 1963": "Telstar",
+            "Willem II Tilburg": "Willem II",
+        },
+    },
+    "primeira_liga": {
+        "nombre_mostrar": "Primeira Liga",
+        "codigo_api": "PPL",
+        "codigo_footballdata": "P1",
+        "archivo_historico": "primeira_liga_combinado.csv",
+        # Ascendidos 2026/27 (mismo metodo que arriba): Academico de Viseu
+        # y Maritimo. AVS y Tondela descendieron.
+        "equipos_sin_historial": ["Academico Viseu", "Maritimo"],
+        "mapeo_nombres": {
+            "Académico de Viseu FC": "Academico Viseu",
+            "CD Nacional": "Nacional",
+            "CD Santa Clara": "Santa Clara",
+            "CF Estrela da Amadora": "Estrela",
+            "CS Marítimo": "Maritimo",
+            "Casa Pia AC": "Casa Pia",
+            "FC Alverca": "Alverca",
+            "FC Arouca": "Arouca",
+            "FC Famalicão": "Famalicao",
+            "FC Porto": "Porto",
+            "GD Estoril Praia": "Estoril",
+            "Gil Vicente FC": "Gil Vicente",
+            "Moreirense FC": "Moreirense",
+            "Rio Ave FC": "Rio Ave",
+            "Sport Lisboa e Benfica": "Benfica",
+            "Sporting Clube de Braga": "Sp Braga",
+            "Sporting Clube de Portugal": "Sp Lisbon",
+            "Vitória SC": "Guimaraes",
+        },
+    },
     "champions_league": {
         "nombre_mostrar": "Champions League",
         "codigo_api": "CL",
@@ -271,7 +331,7 @@ LIGAS = {
     },
 }
 
-LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1", "bundesliga", "championship"]  # cuales corren en cada ejecucion
+LIGAS_ACTIVAS = ["premier_league", "la_liga", "serie_a", "ligue_1", "bundesliga", "championship", "eredivisie", "primeira_liga"]  # cuales corren en cada ejecucion
 
 # Estas variables se reasignan al inicio de cada liga (ver correr_pipeline_liga
 # al final del archivo) -- el resto de las funciones las usan sin saber que
