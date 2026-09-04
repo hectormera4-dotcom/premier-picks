@@ -850,7 +850,7 @@
       🔔 Activar notificaciones
     </button>
     <button class="menu-item" onclick="abrirModalInvitar()">
-      🎁 Invita y gana 7 días VIP
+      🎁 Invita y Gana
     </button>
     <button class="menu-item" onclick="window.open('https://t.me/picksfc_soporte', '_blank')">
       💬 Soporte
@@ -1221,10 +1221,10 @@ function abrirModalInvitar() {
   }
   // El "codigo" de invitacion son solo los primeros 8 caracteres del id
   // del usuario -- mucho mas corto y facil de compartir a mano (por
-  // WhatsApp, de palabra, etc.) que el uuid completo. El link tambien
-  // usa ese mismo codigo corto en el ?ref=.
+  // WhatsApp, de palabra, etc.) que el uuid completo. El link (?ref=) sigue
+  // aceptando este mismo codigo (ver capturarReferidoDeUrl), pero ya no se
+  // muestra aqui -- el codigo solo es mas simple para compartir.
   const codigo = sesionActual.user.id.slice(0, 8);
-  const link = `${window.location.origin}${window.location.pathname}?ref=${codigo}`;
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarModalInvitar(event)">
       <div class="auth-modal" onclick="event.stopPropagation()">
@@ -1237,14 +1237,10 @@ function abrirModalInvitar() {
         <input type="text" readonly value="${codigo}" onclick="this.select()"
                class="auth-input" style="font-size:20px; font-family:'IBM Plex Mono',monospace; text-align:center; letter-spacing:2px;">
         <button class="auth-btn destacado" style="width:100%; margin-top:4px;" onclick="copiarLinkReferido('${codigo}')">Copiar código</button>
-        <div style="font-size:11px; color:var(--tinta-suave); margin-top:10px;">O comparte el link directo:</div>
-        <input type="text" readonly value="${link}" onclick="this.select()"
-               class="auth-input" style="font-size:12px;">
-        <button class="auth-btn" style="width:100%; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="copiarLinkReferido('${link}')">Copiar link</button>
         <div style="font-size:11.5px; line-height:1.4; color:var(--tinta-suave); margin-top:6px;">
-          Condiciones: el beneficio se acredita solo cuando tu invitado hace su
-          <strong>primera suscripción paga</strong> (no al registrarse). Puede pegar tu código o
-          tu link en el campo de invitación del formulario de registro.
+          Condiciones: el beneficio se acredita cuando tu invitado hace su
+          <strong>primera suscripción paga</strong>. Puede pegar tu código en el campo de
+          invitación del formulario de registro.
         </div>
         <button class="auth-btn" style="width:100%; margin-top:8px; background:transparent; border-color:var(--linea); color:var(--tinta);" onclick="cerrarModalInvitar()">Cerrar</button>
       </div>
@@ -1423,9 +1419,7 @@ function mostrarFormAuth(modo) {
         <input type="text" id="auth-ref-input" value="${refGuardado}"
                placeholder="Código o link de invitación (opcional)" class="auth-input">
         <div style="font-size:11.5px; line-height:1.4; color:var(--tinta-suave); margin:-4px 0 4px;">
-          Si alguien te invitó, pega aquí su código o link. El beneficio (7 días VIP gratis)
-          es para quien te invitó, y se activa recién cuando hagas tu primera suscripción paga
-          en la app -- no apenas te registres.
+          Si alguien te invitó, pega aquí su código.
         </div>`;
   const html = `
     <div class="auth-modal-fondo" onclick="cerrarFormAuth(event)">
