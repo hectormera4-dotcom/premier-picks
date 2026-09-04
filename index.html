@@ -1545,9 +1545,18 @@ async function hacerSignup() {
   // quien la invito, ver manejar_nuevo_usuario().
   guardarReferidoDesdeInputManual();
   const refPendiente = localStorage.getItem("picksfc_ref_pendiente");
+  // emailRedirectTo explicito: sin esto, el link de confirmacion depende
+  // del "Site URL" configurado en el panel de Supabase, que puede quedar
+  // desactualizado (o tardar en propagarse) sin que se note hasta que
+  // alguien intenta confirmar su correo y cae en un 404. Mandandolo
+  // nosotros mismos, siempre apunta a donde la app REALMENTE esta.
+  const urlLimpia = window.location.origin + window.location.pathname;
   const { data, error } = await sb.auth.signUp({
     email, password,
-    options: refPendiente ? { data: { referido_por: refPendiente } } : undefined,
+    options: {
+      emailRedirectTo: urlLimpia,
+      ...(refPendiente ? { data: { referido_por: refPendiente } } : {}),
+    },
   });
   if (error) { document.getElementById("auth-error").textContent = error.message; return; }
   localStorage.removeItem("picksfc_ref_pendiente");
