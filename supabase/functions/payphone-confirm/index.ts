@@ -132,6 +132,56 @@ Deno.serve(async (req: Request) => {
           headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
         });
       }
+
+      // Sistema de referidos: si quien acaba de pagar fue invitado por
+      // alguien (referido_por, guardado al registrarse -- ver
+      // manejar_nuevo_usuario() en la base) y todavia no le hemos dado el
+      // premio a ese invitador, esta es su PRIMERA suscripcion paga real
+      // (llegar hasta aqui significa que el pago con Payphone se aprobo y
+      // no era un duplicado, ver la deduplicacion arriba) -- justo el
+      // momento en el que dijimos que se entrega el premio, nunca antes,
+      // para que una cuenta fantasma sin pagar nunca le regale VIP a nadie.
+      const { data: perfilPagador } = await supabaseAdmin
+        .from("perfiles")
+        .select("referido_por, recompensa_referido_otorgada")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (perfilPagador?.referido_por && !perfilPagador.recompensa_referido_otorgada) {
+        const DIAS_PREMIO_REFERIDO = 7;
+        const referenteId = perfilPagador.referido_por;
+
+        const { data: perfilReferente } = await supabaseAdmin
+          .from("perfiles")
+          .select("vip_hasta")
+          .eq("id", referenteId)
+          .maybeSingle();
+
+        // Misma logica de "sumar dias" que una renovacion anticipada: si el
+        // invitador ya tenia VIP vigente, el premio se suma a lo que le
+        // quedaba en vez de reemplazarlo desde ahora.
+        const vipHastaReferenteActual = perfilReferente?.vip_hasta ? new Date(perfilReferente.vip_hasta).getTime() : 0;
+        const baseReferente = Math.max(Date.now(), vipHastaReferenteActual);
+        const nuevoVipHastaReferente = new Date(baseReferente + DIAS_PREMIO_REFERIDO * 24 * 60 * 60 * 1000).toISOString();
+
+        const { error: errorPremio } = await supabaseAdmin
+          .from("perfiles")
+          .update({ es_vip: true, vip_hasta: nuevoVipHastaReferente })
+          .eq("id", referenteId);
+
+        // Marcamos la bandera SIN IMPORTAR si el paso anterior fallo -- el
+        // premio es "mejor esfuerzo" (nunca debe tumbar la activacion del
+        // VIP del que si pago, que ya se confirmo arriba), pero solo debe
+        // poder dispararse una vez por cada referido, pase lo que pase.
+        if (!errorPremio) {
+          await supabaseAdmin
+            .from("perfiles")
+            .update({ recompensa_referido_otorgada: true })
+            .eq("id", userId);
+        } else {
+          console.error("Fallo al otorgar premio de referido:", errorPremio);
+        }
+      }
     }
 
     return new Response(JSON.stringify({
