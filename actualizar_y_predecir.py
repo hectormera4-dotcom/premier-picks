@@ -213,6 +213,7 @@ LIGAS = {
             "SV 07 Elversberg": "Elversberg",
             "Eintracht Frankfurt": "Ein Frankfurt",
             "Sport-Club Freiburg": "Freiburg",
+            "SC Freiburg": "Freiburg",  # football-data.org cambio el nombre oficial que devuelve (confirmado en vivo, 4 sept 2026)
             "Hamburger SV": "Hamburg",
             "TSG 1899 Hoffenheim": "Hoffenheim",
             "1. FC Köln": "FC Koln",
