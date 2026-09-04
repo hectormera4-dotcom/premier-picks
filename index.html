@@ -446,6 +446,19 @@
     gap: 14px;
   }
   .combinada-card.pendiente { opacity: 0.75; }
+  .grid-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .stat-card {
+    background: var(--papel);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-numero { font-size: 26px; font-weight: 700; color: var(--tinta); font-family: 'IBM Plex Mono', monospace; }
+  .stat-etiqueta { font-size: 11.5px; color: var(--tinta-suave); margin-top: 4px; }
   .icono-resultado {
     width: 34px; height: 34px;
     border-radius: 50%;
@@ -855,6 +868,9 @@
     <button class="menu-item" onclick="window.open('https://t.me/picksfc_soporte', '_blank')">
       💬 Soporte
     </button>
+    <button class="menu-item" id="menu-admin-stats" style="display:none;" onclick="cambiarVista('admin-stats'); cerrarMenuLateral();">
+      📊 Estadísticas (admin)
+    </button>
   </nav>
 
   <div class="menu-lateral-footer" id="menu-lateral-footer">
@@ -911,6 +927,13 @@
       <h3 class="seccion-liga-titulo">Próximos partidos</h3>
       <div id="liga-proximos"><div class="cargando-liga">Cargando próximos partidos...</div></div>
     </section>
+  </main>
+</div>
+
+<div id="vista-admin-stats" style="display:none;">
+  <main style="max-width:960px; margin:0 auto; padding:20px;">
+    <h2 style="margin-bottom:16px;">📊 Estadísticas</h2>
+    <div id="admin-stats-contenedor">Cargando...</div>
   </main>
 </div>
 
@@ -1043,6 +1066,8 @@ async function aplicarSesion(session) {
   } else {
     perfilActual = null;
   }
+  const botonAdmin = document.getElementById("menu-admin-stats");
+  if (botonAdmin) botonAdmin.style.display = (perfilActual && perfilActual.es_admin) ? "" : "none";
   renderBarraAuth();
 }
 
@@ -2068,10 +2093,14 @@ function cambiarVista(vista) {
   document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
   document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
   document.getElementById("vista-liga").style.display = vista === "liga" ? "block" : "none";
+  document.getElementById("vista-admin-stats").style.display = vista === "admin-stats" ? "block" : "none";
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
     cargarHistorialCombinadas();
+  }
+  if (vista === "admin-stats") {
+    cargarEstadisticasAdmin();
   }
 }
 
@@ -2096,6 +2125,64 @@ function crearTarjetaCombinadaHistorial(c) {
       </div>
     </div>
   `;
+}
+
+let estadisticasAdminYaCargadas = false;
+
+function formatearDinero(centavos) {
+  return `$${(centavos / 100).toFixed(2)}`;
+}
+
+const NOMBRES_PLAN = { semana: "Semanal", mes: "Mensual" };
+
+async function cargarEstadisticasAdmin() {
+  const cont = document.getElementById("admin-stats-contenedor");
+  // Se cachea en memoria (no localStorage -- son datos sensibles de
+  // negocio) solo para no re-pedirlas cada vez que se cambia de pestana
+  // sin haber recargado la pagina; el boton "Actualizar" fuerza un
+  // pedido fresco.
+  if (estadisticasAdminYaCargadas && cont.dataset.cargado === "1") return;
+
+  cont.innerHTML = "Cargando...";
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/admin-stats`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${session.access_token}`,
+      },
+    });
+    const datos = await resp.json();
+    if (!resp.ok || datos.error) {
+      cont.innerHTML = `<div class="vacio">No se pudieron cargar las estadísticas: ${escaparHtml(datos.error || "error desconocido")}</div>`;
+      return;
+    }
+
+    const porPlan = Object.entries(datos.pagos_por_plan_mes || {})
+      .map(([plan, cantidad]) => `${NOMBRES_PLAN[plan] || plan}: ${cantidad}`)
+      .join(" · ") || "Sin pagos este mes";
+
+    cont.innerHTML = `
+      <div class="grid-estadisticas">
+        <div class="stat-card"><div class="stat-numero">${datos.usuarios_totales}</div><div class="stat-etiqueta">Usuarios totales</div></div>
+        <div class="stat-card"><div class="stat-numero">${datos.usuarios_vip_activos}</div><div class="stat-etiqueta">VIP activos ahora</div></div>
+        <div class="stat-card"><div class="stat-numero">${datos.usuarios_nuevos_mes}</div><div class="stat-etiqueta">Usuarios nuevos este mes</div></div>
+        <div class="stat-card"><div class="stat-numero">${formatearDinero(datos.ingresos_mes_centavos)}</div><div class="stat-etiqueta">Ingresos este mes</div></div>
+        <div class="stat-card"><div class="stat-numero">${datos.pagos_mes}</div><div class="stat-etiqueta">Pagos este mes</div></div>
+        <div class="stat-card"><div class="stat-numero">${formatearDinero(datos.ingresos_totales_centavos)}</div><div class="stat-etiqueta">Ingresos históricos*</div></div>
+        <div class="stat-card"><div class="stat-numero">${datos.referidos_premiados_total}</div><div class="stat-etiqueta">Premios de referidos entregados</div></div>
+      </div>
+      <div style="margin-top:16px; font-size:13px; color:var(--tinta-suave);">Pagos por plan este mes: ${porPlan}</div>
+      <div style="margin-top:4px; font-size:11px; color:var(--tinta-suave);">*Solo incluye pagos procesados desde que se agregó este panel.</div>
+      <button class="auth-btn" style="margin-top:16px;" onclick="document.getElementById('admin-stats-contenedor').dataset.cargado=''; cargarEstadisticasAdmin();">Actualizar</button>
+    `;
+    cont.dataset.cargado = "1";
+    estadisticasAdminYaCargadas = true;
+  } catch (err) {
+    cont.innerHTML = `<div class="vacio">Error al cargar estadísticas: ${escaparHtml(err.message)}</div>`;
+  }
 }
 
 async function cargarHistorialCombinadas() {
