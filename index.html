@@ -2325,23 +2325,33 @@ async function cargarHistorialCombinadas() {
 }
 
 (async function iniciar() {
+  // El listener se registra ANTES que cualquier otra cosa a proposito --
+  // Supabase puede disparar el evento PASSWORD_RECOVERY (cuando alguien
+  // vuelve del link de "recuperar contraseña" de su correo) casi
+  // inmediatamente al cargar la pagina, mientras procesa el token de la
+  // URL. Si el listener se registraba mas tarde (como estaba antes, al
+  // final de esta funcion), esa primera vez el evento se perdia por
+  // completo -- la app abria normal, sin pedir nunca la contraseña nueva.
+  let primeraCargaLista = false;
+  sb.auth.onAuthStateChange((evento, session) => {
+    if (evento === "PASSWORD_RECOVERY") {
+      mostrarModalNuevaContrasena();
+    }
+    // El arranque inicial ya se maneja mas abajo con las llamadas
+    // explicitas (actualizarSesion + cargarTodo) -- sin este freno, el
+    // propio evento inicial de Supabase (INITIAL_SESSION) haria que se
+    // cargue todo dos veces apenas se abre la app.
+    if (!primeraCargaLista) return;
+    aplicarSesion(session);
+    cargarTodo();
+  });
+
   capturarReferidoDeUrl();
   renderGridLigas();
   await actualizarSesion();
   await cargarTodo();
   await verificarRetornoDePago();
-  sb.auth.onAuthStateChange((evento, session) => {
-    aplicarSesion(session);
-    cargarTodo();
-    // Cuando el usuario vuelve del link de "recuperar contraseña" que le
-    // llego por correo, Supabase ya le crea una sesion valida y dispara
-    // este evento -- aprovechamos para pedirle directo la contraseña
-    // nueva, en vez de dejarlo "logueado" sin darse cuenta de que ese era
-    // el proposito de haber entrado.
-    if (evento === "PASSWORD_RECOVERY") {
-      mostrarModalNuevaContrasena();
-    }
-  });
+  primeraCargaLista = true;
 
   // Limpieza de seguridad: si quedo un "#" suelto en la URL (residuo de
   // un login anterior), lo quitamos para que nunca se acumule con el
