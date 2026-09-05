@@ -8,8 +8,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-30 15:15:00,Rennes,Le Mans,Doble oportunidad 1X,False,86.7,1.05,2026-08-30,3-2,True
 2026-08-30 18:45:00,Monaco,Marseille,Over 1.5 goles,False,80.8,1.14,2026-08-30,2-0,True
 2026-09-03 18:45:00,Toulouse,Lille,Under 13.5 corners,False,85.9,1.06,2026-09-03,0-1,True
-2026-09-04 17:00:00,Lyon,Auxerre,Over 1.5 goles,False,81.5,1.13,2026-09-03,,
-2026-09-04 19:05:00,Paris SG,Monaco,Doble oportunidad 1X,False,81.2,1.13,2026-09-03,,
+2026-09-04 17:00:00,Lyon,Auxerre,Over 1.5 goles,False,81.5,1.13,2026-09-03,3-1,True
+2026-09-04 19:05:00,Paris SG,Monaco,Doble oportunidad 1X,False,81.2,1.13,2026-09-03,1-2,False
 2026-09-05 15:15:00,Lens,Lorient,Doble oportunidad 1X,False,81.6,1.12,2026-09-04,,
 2026-09-05 18:45:00,Le Havre,Brest,Under 13.5 corners,False,85.6,1.07,2026-09-04,,
 2026-09-05 18:45:00,Nice,Le Mans,Over 2.5 goles,False,80.8,1.14,2026-09-04,,

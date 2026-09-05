@@ -7,9 +7,10 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-08-29 13:30:00,FC Koln,Hoffenheim,Over 1.5 goles,False,84.3,1.09,2026-08-29,3-2,True
 2026-08-29 16:30:00,Dortmund,Hamburg,Over 1.5 goles,False,81.6,1.12,2026-08-29,2-0,True
 2026-08-30 15:30:00,Augsburg,Schalke 04,Doble oportunidad 1X,False,80.8,1.14,2026-08-30,3-0,True
-2026-09-04 18:30:00,Stuttgart,FC Koln,Doble oportunidad 1X,False,83.5,1.1,2026-09-03,,
+2026-09-04 18:30:00,Stuttgart,FC Koln,Doble oportunidad 1X,False,83.5,1.1,2026-09-03,4-1,True
 2026-09-05 13:30:00,Werder Bremen,RB Leipzig,Under 12.5 corners,False,86.2,1.06,2026-09-04,,
 2026-09-05 13:30:00,Hoffenheim,Dortmund,Over 1.5 goles,False,81.2,1.13,2026-09-04,,
 2026-09-05 13:30:00,Leverkusen,Union Berlin,Doble oportunidad 1X,False,84.3,1.09,2026-09-04,,
 2026-09-05 13:30:00,M'gladbach,Elversberg,Over 1.5 goles,False,80.7,1.14,2026-09-04,,
 2026-09-05 16:30:00,Schalke 04,Bayern Munich,Visitante gana + Over 1.5 goles,True,80.6,1.14,2026-09-04,,
+2026-09-05 13:30:00,Paderborn,Freiburg,Over 1.5 goles,False,75.2,1.23,2026-09-05,,
