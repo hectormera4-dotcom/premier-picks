@@ -4,36 +4,36 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-09-05 13:00:00",
-        "local": "Fiorentina",
-        "visitante": "Torino",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 85.1,
-        "liga": "serie_a"
+        "fecha": "2026-09-06 13:30:00",
+        "local": "Hamburg",
+        "visitante": "Mainz",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 85.7,
+        "liga": "bundesliga"
       },
       {
-        "fecha": "2026-09-05 14:00:00",
-        "local": "Man City",
-        "visitante": "Coventry",
-        "pick_recomendado": "Over 1.5 goles + Over 5.5 corners",
-        "pick_probabilidad": 85.1,
+        "fecha": "2026-09-06 18:45:00",
+        "local": "Marseille",
+        "visitante": "Paris FC",
+        "pick_recomendado": "Over 5.5 corners",
+        "pick_probabilidad": 85.7,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-09-06 13:00:00",
+        "local": "Everton",
+        "visitante": "Man United",
+        "pick_recomendado": "Over 5.5 corners",
+        "pick_probabilidad": 85.5,
         "liga": "premier_league"
       },
       {
-        "fecha": "2026-09-05 11:30:00",
-        "local": "Newcastle",
-        "visitante": "Bournemouth",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 85.1,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-05 16:45:00",
-        "local": "Utrecht",
-        "visitante": "Go Ahead Eagles",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 84.6,
-        "liga": "eredivisie"
+        "fecha": "2026-09-06 16:30:00",
+        "local": "Malaga",
+        "visitante": "Levante",
+        "pick_recomendado": "Over 8.5 corners",
+        "pick_probabilidad": 83.0,
+        "liga": "la_liga"
       }
     ],
     "probabilidad_combinada": 52.1,
@@ -45,40 +45,40 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-09-05 14:00:00",
-        "local": "Fulham",
-        "visitante": "Crystal Palace",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 87.0,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-05 14:00:00",
-        "local": "Brighton",
-        "visitante": "Leeds",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 86.9,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-05 18:45:00",
-        "local": "Roma",
-        "visitante": "Atalanta",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 86.6,
+        "fecha": "2026-09-06 13:00:00",
+        "local": "Frosinone",
+        "visitante": "Venezia",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 87.4,
         "liga": "serie_a"
       },
       {
-        "fecha": "2026-09-05 13:30:00",
-        "local": "Werder Bremen",
-        "visitante": "RB Leipzig",
+        "fecha": "2026-09-06 13:00:00",
+        "local": "Troyes",
+        "visitante": "Strasbourg",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 87.2,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-09-06 13:00:00",
+        "local": "Parma",
+        "visitante": "Monza",
         "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 86.2,
-        "liga": "bundesliga"
+        "pick_probabilidad": 86.4,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-09-06 15:15:00",
+        "local": "Angers",
+        "visitante": "Rennes",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 86.1,
+        "liga": "ligue_1"
       }
     ],
-    "probabilidad_combinada": 56.4,
-    "cuota_combinada": 1.67,
+    "probabilidad_combinada": 56.7,
+    "cuota_combinada": 1.66,
     "liga": "mixta"
   },
   {
@@ -86,40 +86,32 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-09-05 14:00:00",
-        "local": "Brentford",
-        "visitante": "Sunderland",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 85.6,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-05 18:45:00",
-        "local": "Le Havre",
-        "visitante": "Brest",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 85.6,
-        "liga": "ligue_1"
-      },
-      {
-        "fecha": "2026-09-05 16:00:00",
-        "local": "Inter",
-        "visitante": "Napoli",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 85.5,
-        "liga": "serie_a"
-      },
-      {
-        "fecha": "2026-09-05 14:00:00",
-        "local": "Nott'm Forest",
-        "visitante": "Tottenham",
+        "fecha": "2026-09-06 14:30:00",
+        "local": "Santa Clara",
+        "visitante": "Rio Ave",
         "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 85.3,
+        "pick_probabilidad": 82.4,
+        "liga": "primeira_liga"
+      },
+      {
+        "fecha": "2026-09-06 12:30:00",
+        "local": "Heerenveen",
+        "visitante": "AZ Alkmaar",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 82.3,
+        "liga": "eredivisie"
+      },
+      {
+        "fecha": "2026-09-06 15:30:00",
+        "local": "Arsenal",
+        "visitante": "Chelsea",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 82.1,
         "liga": "premier_league"
       }
     ],
-    "probabilidad_combinada": 53.4,
-    "cuota_combinada": 1.77,
+    "probabilidad_combinada": 55.7,
+    "cuota_combinada": 1.7,
     "liga": "mixta"
   },
   {
@@ -127,32 +119,32 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-09-05 13:30:00",
-        "local": "Leverkusen",
-        "visitante": "Union Berlin",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 84.3,
-        "liga": "bundesliga"
-      },
-      {
-        "fecha": "2026-09-05 14:00:00",
-        "local": "Millwall",
-        "visitante": "Bolton",
-        "pick_recomendado": "Más tiros a puerta: Millwall",
-        "pick_probabilidad": 84.1,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-09-05 14:30:00",
-        "local": "Estrela",
-        "visitante": "Famalicao",
+        "fecha": "2026-09-06 19:30:00",
+        "local": "Gil Vicente",
+        "visitante": "Academico Viseu",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 84.0,
+        "pick_probabilidad": 81.7,
         "liga": "primeira_liga"
+      },
+      {
+        "fecha": "2026-09-06 16:30:00",
+        "local": "Alaves",
+        "visitante": "Osasuna",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 81.4,
+        "liga": "la_liga"
+      },
+      {
+        "fecha": "2026-09-06 15:30:00",
+        "local": "Ein Frankfurt",
+        "visitante": "Augsburg",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 81.1,
+        "liga": "bundesliga"
       }
     ],
-    "probabilidad_combinada": 59.6,
-    "cuota_combinada": 1.58,
+    "probabilidad_combinada": 53.9,
+    "cuota_combinada": 1.75,
     "liga": "mixta"
   }
 ]
