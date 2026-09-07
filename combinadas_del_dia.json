@@ -4,147 +4,40 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-09-06 13:30:00",
-        "local": "Hamburg",
-        "visitante": "Mainz",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 85.7,
-        "liga": "bundesliga"
-      },
-      {
-        "fecha": "2026-09-06 18:45:00",
-        "local": "Marseille",
-        "visitante": "Paris FC",
+        "fecha": "2026-09-07 18:45:00",
+        "local": "Udinese",
+        "visitante": "Lazio",
         "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 85.7,
-        "liga": "ligue_1"
+        "pick_probabilidad": 86.3,
+        "liga": "serie_a"
       },
       {
-        "fecha": "2026-09-06 13:00:00",
-        "local": "Everton",
-        "visitante": "Man United",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 85.5,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-06 16:30:00",
-        "local": "Malaga",
-        "visitante": "Levante",
-        "pick_recomendado": "Over 8.5 corners",
-        "pick_probabilidad": 83.0,
-        "liga": "la_liga"
-      }
-    ],
-    "probabilidad_combinada": 52.1,
-    "cuota_combinada": 1.82,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #2",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-09-06 13:00:00",
-        "local": "Frosinone",
-        "visitante": "Venezia",
+        "fecha": "2026-09-07 16:30:00",
+        "local": "Cagliari",
+        "visitante": "Lecce",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 87.4,
-        "liga": "serie_a"
-      },
-      {
-        "fecha": "2026-09-06 13:00:00",
-        "local": "Troyes",
-        "visitante": "Strasbourg",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 87.2,
-        "liga": "ligue_1"
-      },
-      {
-        "fecha": "2026-09-06 13:00:00",
-        "local": "Parma",
-        "visitante": "Monza",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 86.4,
-        "liga": "serie_a"
-      },
-      {
-        "fecha": "2026-09-06 15:15:00",
-        "local": "Angers",
-        "visitante": "Rennes",
-        "pick_recomendado": "Under 13.5 corners",
         "pick_probabilidad": 86.1,
-        "liga": "ligue_1"
-      }
-    ],
-    "probabilidad_combinada": 56.7,
-    "cuota_combinada": 1.66,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-09-06 14:30:00",
-        "local": "Santa Clara",
-        "visitante": "Rio Ave",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 82.4,
-        "liga": "primeira_liga"
+        "liga": "serie_a"
       },
       {
-        "fecha": "2026-09-06 12:30:00",
-        "local": "Heerenveen",
-        "visitante": "AZ Alkmaar",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 82.3,
-        "liga": "eredivisie"
-      },
-      {
-        "fecha": "2026-09-06 15:30:00",
-        "local": "Arsenal",
-        "visitante": "Chelsea",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 82.1,
-        "liga": "premier_league"
-      }
-    ],
-    "probabilidad_combinada": 55.7,
-    "cuota_combinada": 1.7,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #4",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-09-06 19:30:00",
-        "local": "Gil Vicente",
-        "visitante": "Academico Viseu",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 81.7,
-        "liga": "primeira_liga"
-      },
-      {
-        "fecha": "2026-09-06 16:30:00",
-        "local": "Alaves",
-        "visitante": "Osasuna",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 81.4,
+        "fecha": "2026-09-07 17:00:00",
+        "local": "Getafe",
+        "visitante": "Celta",
+        "pick_recomendado": "Under 10.5 corners",
+        "pick_probabilidad": 84.7,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-09-06 15:30:00",
-        "local": "Ein Frankfurt",
-        "visitante": "Augsburg",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 81.1,
-        "liga": "bundesliga"
+        "fecha": "2026-09-07 19:15:00",
+        "local": "Estoril",
+        "visitante": "Arouca",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 81.9,
+        "liga": "primeira_liga"
       }
     ],
-    "probabilidad_combinada": 53.9,
-    "cuota_combinada": 1.75,
+    "probabilidad_combinada": 51.5,
+    "cuota_combinada": 1.84,
     "liga": "mixta"
   }
 ]

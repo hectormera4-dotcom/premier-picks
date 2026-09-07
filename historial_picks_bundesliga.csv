@@ -15,4 +15,4 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-05 16:30:00,Schalke 04,Bayern Munich,Visitante gana + Over 1.5 goles,True,80.6,1.14,2026-09-04,0-0,False
 2026-09-05 13:30:00,Paderborn,Freiburg,Over 1.5 goles,False,75.2,1.23,2026-09-05,0-1,False
 2026-09-06 13:30:00,Hamburg,Mainz,Under 13.5 corners,False,85.7,1.07,2026-09-06,,
-2026-09-06 15:30:00,Ein Frankfurt,Augsburg,Over 1.5 goles,False,81.1,1.13,2026-09-06,,
+2026-09-06 15:30:00,Ein Frankfurt,Augsburg,Over 1.5 goles,False,81.1,1.13,2026-09-06,1-4,True
