@@ -2354,6 +2354,101 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
         print("Supabase no configurado -- se omite la subida de combinadas.")
 
 
+def generar_analisis_champions_league(n_gratis=3, dias_adelante=10):
+    """Genera el panel de analisis de Champions League -- DISTINTO del
+    sistema de picks/combinadas normal:
+      - No se filtra por 'pick_es_seguro': se muestran TODOS los partidos
+        programados de la jornada actual, con el porcentaje real de cada
+        mercado de goles (no solo el mas seguro de cada partido).
+      - Nunca entran al pool de combinadas ni se mezclan con las ligas
+        domesticas -- Champions League mezcla equipos con historial muy
+        desigual entre si, asi que no se le exige el mismo estandar de
+        'seguro'.
+      - Se ordenan de mas a menos confiable (segun el mercado mas fuerte
+        de cada partido), y se marca claramente cuando un partido usa
+        'fuerza conservadora por defecto' (equipo sin historial
+        suficiente en la competencia) para que el usuario sepa que ese
+        partido en particular es menos confiable que uno con datos
+        completos.
+      - Solo mercados de GOLES -- football-data.co.uk no cubre
+        competencias europeas, no hay corners/tarjetas/tiros a puerta
+        para esto."""
+    try:
+        ctx = preparar_liga("champions_league")
+    except Exception as e:
+        print(f"\nERROR preparando Champions League: {e}")
+        return
+    if ctx is None:
+        print("\nSin historico disponible todavia para Champions League -- se omite el analisis.")
+        return
+
+    fuerzas = ctx["fuerzas"]
+    programados = [p for p in ctx["partidos"] if p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO]
+    limite = datetime.utcnow() + timedelta(days=dias_adelante)
+    programados = [p for p in programados if pd.to_datetime(p["utcDate"]).tz_localize(None) <= limite]
+    print(f"\nDIAGNOSTICO Champions League: {len(programados)} partidos programados en los proximos {dias_adelante} dias.")
+
+    filas = []
+    for p in programados:
+        local = _traducir_nombre_equipo(p["homeTeam"]["name"])
+        visitante = _traducir_nombre_equipo(p["awayTeam"]["name"])
+
+        matriz, lam, mu = matriz_marcadores(local, visitante, fuerzas, ctx["prom_l"], ctx["prom_v"], ctx["rho"])
+        if matriz is None:
+            continue
+        mercados = calcular_mercados(matriz)
+        mercados_calibrados = {k: round(calibrar_probabilidad(v) * 100, 1) for k, v in mercados.items()}
+
+        # dict.__contains__ (no el __contains__ sobreescrito de la clase de
+        # fallback, que siempre da True) nos dice si el equipo de verdad
+        # tiene historial real calculado, o si va a usar/uso la fuerza
+        # conservadora por defecto.
+        tiene_historial_local = dict.__contains__(fuerzas, local) if FALLBACK_AUTOMATICO else local in fuerzas
+        tiene_historial_visitante = dict.__contains__(fuerzas, visitante) if FALLBACK_AUTOMATICO else visitante in fuerzas
+        calidad = "completo" if (tiene_historial_local and tiene_historial_visitante) else "limitado"
+
+        confianza = max(mercados_calibrados.values())
+
+        filas.append({
+            "fecha": p["utcDate"],
+            "local": local, "visitante": visitante,
+            "escudo_local": p["homeTeam"].get("crest"), "escudo_visitante": p["awayTeam"].get("crest"),
+            "prob_local": mercados_calibrados["prob_local"], "prob_empate": mercados_calibrados["prob_empate"],
+            "prob_visitante": mercados_calibrados["prob_visitante"],
+            "doble_op_1x": mercados_calibrados["doble_op_1X"], "doble_op_x2": mercados_calibrados["doble_op_X2"],
+            "over_25": mercados_calibrados["over_25"], "under_25": mercados_calibrados["under_25"],
+            "btts_si": mercados_calibrados["btts_si"], "btts_no": mercados_calibrados["btts_no"],
+            "calidad_datos": calidad,
+            "confianza": confianza,
+        })
+
+    if not filas:
+        print("No hay partidos de Champions League para analizar en este momento.")
+        if supabase_configurado():
+            requests.delete(f"{SUPABASE_URL}/rest/v1/analisis_champions?id=gt.0", headers=supabase_headers())
+        return
+
+    filas.sort(key=lambda f: f["confianza"], reverse=True)
+    for i, fila in enumerate(filas):
+        fila["orden"] = i
+        fila["es_gratis"] = i < n_gratis
+        del fila["confianza"]
+
+    print(f"Analisis de Champions League: {len(filas)} partidos ({sum(f['es_gratis'] for f in filas)} gratis, "
+          f"{sum(not f['es_gratis'] for f in filas)} VIP), "
+          f"{sum(1 for f in filas if f['calidad_datos']=='limitado')} con datos limitados.")
+
+    if not supabase_configurado():
+        print("Supabase no configurado -- se omite la subida del analisis de Champions League.")
+        return
+    requests.delete(f"{SUPABASE_URL}/rest/v1/analisis_champions?id=gt.0", headers=supabase_headers())
+    resp = requests.post(f"{SUPABASE_URL}/rest/v1/analisis_champions", headers=supabase_headers(), json=filas)
+    if resp.status_code in (200, 201):
+        print("Analisis de Champions League subido a Supabase.")
+    else:
+        print(f"Aviso: fallo al subir el analisis de Champions League ({resp.status_code}): {resp.text[:300]}")
+
+
 if __name__ == "__main__":
     # FASE 1: preparar datos y modelo de cada liga activa (sin generar picks
     # todavia). Esto resuelve los picks pendientes de dias anteriores en el
@@ -2438,3 +2533,12 @@ if __name__ == "__main__":
                 "⚽ Nuevos picks disponibles",
                 "Ya estan listos los picks y combinadas de hoy. ¡Entra a revisarlos!",
             )
+
+    # El analisis de Champions League es independiente del "dia objetivo" de
+    # las ligas domesticas (Champions League no juega todos los dias) -- se
+    # refresca en TODAS las corridas, incluso las de respaldo de la misma
+    # noche, para que siempre muestre la jornada vigente mas actualizada.
+    try:
+        generar_analisis_champions_league(n_gratis=3)
+    except Exception as e:
+        print(f"\nERROR generando el analisis de Champions League: {e}")
