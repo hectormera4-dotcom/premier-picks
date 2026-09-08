@@ -1083,6 +1083,19 @@ async function aplicarSesion(session) {
   const botonAdmin = document.getElementById("menu-admin-stats");
   if (botonAdmin) botonAdmin.style.display = (perfilActual && perfilActual.es_admin) ? "" : "none";
   renderBarraAuth();
+
+  // El panel de Champions League se cachea en memoria (championsYaCargado)
+  // para no repetir la consulta cada vez que se cambia de pestaña dentro de
+  // la misma sesion -- pero si el estado de sesion cambia (login/logout)
+  // despues de haberlo visto una vez, esa cache queda mostrando datos (o
+  // candados VIP) del estado de sesion ANTERIOR. Forzamos a que se vuelva a
+  // pedir la proxima vez que se abra, y si ya esta abierto ahora mismo, se
+  // recarga de inmediato.
+  championsYaCargado = false;
+  if (document.getElementById("vista-champions").style.display === "block") {
+    championsYaCargado = true;
+    cargarAnalisisChampions();
+  }
 }
 
 let promptInstalacion = null;

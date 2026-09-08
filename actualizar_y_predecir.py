@@ -2386,7 +2386,18 @@ def generar_analisis_champions_league(n_gratis=3, dias_adelante=10):
     programados = [p for p in ctx["partidos"] if p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO]
     limite = datetime.utcnow() + timedelta(days=dias_adelante)
     programados = [p for p in programados if pd.to_datetime(p["utcDate"]).tz_localize(None) <= limite]
-    print(f"\nDIAGNOSTICO Champions League: {len(programados)} partidos programados en los proximos {dias_adelante} dias.")
+
+    # Solo se muestra la PROXIMA jornada -- la fecha calendario mas cercana
+    # entre los partidos programados -- no toda la ventana de dias_adelante.
+    # Champions League no juega todos los dias (una jornada suele repartirse
+    # entre martes y miercoles, o miercoles y jueves); sin este filtro, la
+    # corrida de un martes ya mostraba de una vez los partidos del miercoles
+    # Y del jueves siguiente, un dia antes de que le tocara.
+    if programados:
+        fecha_mas_cercana = min(pd.to_datetime(p["utcDate"]).tz_localize(None).date() for p in programados)
+        programados = [p for p in programados if pd.to_datetime(p["utcDate"]).tz_localize(None).date() == fecha_mas_cercana]
+
+    print(f"\nDIAGNOSTICO Champions League: {len(programados)} partidos programados en la proxima jornada.")
 
     filas = []
     for p in programados:
