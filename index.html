@@ -936,10 +936,7 @@
 <div id="vista-champions" style="display:none;">
   <main style="max-width:720px; margin:0 auto; padding:20px 20px 40px;">
     <h2 style="margin-bottom:4px;">🏆 Champions League</h2>
-    <div style="font-size:13px; color:var(--tinta-suave); margin-bottom:18px;">
-      Todos los partidos de la jornada, ordenados del más al menos confiable, con el porcentaje real de cada mercado.
-      Solo mercados de goles (esta competencia no tiene fuente de corners/tarjetas/tiros a puerta).
-    </div>
+    <div id="champions-subtitulo" style="font-size:13px; color:var(--tinta-suave); margin-bottom:18px;"></div>
     <div id="champions-contenedor">Cargando...</div>
   </main>
 </div>
@@ -2303,6 +2300,10 @@ function crearTarjetaChampions(fila) {
   const desbloqueada = fila.prob_local !== null && fila.prob_local !== undefined;
 
   if (!desbloqueada) {
+    // Si es gratis pero llego bloqueada, es porque nadie ha iniciado sesion
+    // (la RLS solo destapa lo gratis a usuarios con sesion) -- ese mensaje
+    // es distinto al de un partido que de verdad es exclusivo VIP.
+    const mensaje = fila.es_gratis ? "🔒 Inicia sesión para ver el análisis" : "🔒 Solo para VIP";
     return `
       <div class="card" style="margin-bottom:10px;">
         <div class="card-top">
@@ -2312,7 +2313,7 @@ function crearTarjetaChampions(fila) {
           </div>
         </div>
         <div class="card-body" style="justify-content:center;">
-          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">🔒 Solo para VIP</div>
+          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">${mensaje}</div>
         </div>
       </div>`;
   }
@@ -2342,6 +2343,7 @@ function crearTarjetaChampions(fila) {
 
 async function cargarAnalisisChampions() {
   const cont = document.getElementById("champions-contenedor");
+  const subtitulo = document.getElementById("champions-subtitulo");
   try {
     const { data, error } = await sb.from("analisis_champions_publico").select("*").order("orden", { ascending: true });
     if (error) {
@@ -2349,9 +2351,17 @@ async function cargarAnalisisChampions() {
       return;
     }
     if (!data || data.length === 0) {
+      subtitulo.textContent = "";
       cont.innerHTML = `<div class="vacio">No hay partidos de Champions League programados en los próximos días.</div>`;
       return;
     }
+    // Todos los partidos que llegan aqui ya son de la misma jornada (el
+    // backend solo sube la fecha calendario mas cercana), asi que basta
+    // con tomar la fecha del primero para el titulo.
+    const fechaJornada = new Date(String(data[0].fecha).replace(" ", "T"));
+    subtitulo.textContent = isNaN(fechaJornada)
+      ? ""
+      : `Todos los partidos de la jornada del ${DIAS[fechaJornada.getDay()]} ${fechaJornada.getDate()} de ${MESES_LARGO[fechaJornada.getMonth()]}, ordenados del más al menos confiable.`;
     cont.innerHTML = data.map(crearTarjetaChampions).join("");
   } catch (err) {
     cont.innerHTML = `<div class="vacio">Error al cargar el análisis: ${escaparHtml(err.message)}</div>`;
