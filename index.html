@@ -853,6 +853,9 @@
     <button class="menu-item" id="menu-historial" onclick="cambiarVista('historial'); cerrarMenuLateral();">
       📊 Historial
     </button>
+    <button class="menu-item" id="menu-champions" onclick="cambiarVista('champions'); cerrarMenuLateral();">
+      🏆 Champions League
+    </button>
     <button class="menu-item" onclick="toggleSubmenuLigas()">
       🏆 Ligas <span id="flecha-ligas">▾</span>
     </button>
@@ -927,6 +930,17 @@
       <h3 class="seccion-liga-titulo">Próximos partidos</h3>
       <div id="liga-proximos"><div class="cargando-liga">Cargando próximos partidos...</div></div>
     </section>
+  </main>
+</div>
+
+<div id="vista-champions" style="display:none;">
+  <main style="max-width:720px; margin:0 auto; padding:20px 20px 40px;">
+    <h2 style="margin-bottom:4px;">🏆 Champions League</h2>
+    <div style="font-size:13px; color:var(--tinta-suave); margin-bottom:18px;">
+      Todos los partidos de la jornada, ordenados del más al menos confiable, con el porcentaje real de cada mercado.
+      Solo mercados de goles (esta competencia no tiene fuente de corners/tarjetas/tiros a puerta).
+    </div>
+    <div id="champions-contenedor">Cargando...</div>
   </main>
 </div>
 
@@ -2018,6 +2032,7 @@ function toggleDetalle(i) {
 // ---------- Pestaña de Historial ----------
 
 let historialYaCargado = false;
+let championsYaCargado = false;
 
 // ---------- Menu lateral ----------
 
@@ -2164,14 +2179,20 @@ function toggleSubmenuLigas() {
 function cambiarVista(vista) {
   document.getElementById("menu-picks").classList.toggle("activo", vista === "picks");
   document.getElementById("menu-historial").classList.toggle("activo", vista === "historial");
+  document.getElementById("menu-champions").classList.toggle("activo", vista === "champions");
   document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
   document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
   document.getElementById("vista-liga").style.display = vista === "liga" ? "block" : "none";
+  document.getElementById("vista-champions").style.display = vista === "champions" ? "block" : "none";
   document.getElementById("vista-admin-stats").style.display = vista === "admin-stats" ? "block" : "none";
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
     cargarHistorialCombinadas();
+  }
+  if (vista === "champions" && !championsYaCargado) {
+    championsYaCargado = true;
+    cargarAnalisisChampions();
   }
   if (vista === "admin-stats") {
     cargarEstadisticasAdmin();
@@ -2255,6 +2276,72 @@ async function cargarEstadisticasAdmin() {
     estadisticasAdminYaCargadas = true;
   } catch (err) {
     cont.innerHTML = `<div class="vacio">Error al cargar estadísticas: ${escaparHtml(err.message)}</div>`;
+  }
+}
+
+const ETIQUETAS_MERCADOS_CHAMPIONS = {
+  prob_local: "Local gana", prob_empate: "Empate", prob_visitante: "Visitante gana",
+  doble_op_1x: "Doble oportunidad 1X", doble_op_x2: "Doble oportunidad X2",
+  over_25: "Over 2.5 goles", under_25: "Under 2.5 goles",
+  btts_si: "Ambos anotan - Sí", btts_no: "Ambos anotan - No",
+};
+
+function crearTarjetaChampions(fila) {
+  const desbloqueada = fila.prob_local !== null && fila.prob_local !== undefined;
+
+  if (!desbloqueada) {
+    return `
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-top">
+          <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
+          <div class="card-equipos">
+            <span>${fila.local}</span><span class="vs">vs</span><span>${fila.visitante}</span>
+          </div>
+        </div>
+        <div class="card-body" style="justify-content:center;">
+          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">🔒 Solo para VIP</div>
+        </div>
+      </div>`;
+  }
+
+  const filasMercados = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS).map(([col, etiqueta]) => `
+    <div class="mercado-fila"><span>${etiqueta}</span><span>${fila[col]}%</span></div>
+  `).join("");
+
+  const badgeCalidad = fila.calidad_datos === "limitado"
+    ? `<span class="badge badge-moderado" title="Al menos un equipo no tiene historial suficiente en esta competencia">⚠️ Datos limitados</span>`
+    : `<span class="badge badge-seguro">📊 Historial completo</span>`;
+
+  return `
+    <div class="card" style="margin-bottom:10px;">
+      <div class="card-top">
+        <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
+        <div class="card-equipos">
+          <span>${fila.local}</span><span class="vs">vs</span><span>${fila.visitante}</span>
+        </div>
+      </div>
+      <div class="card-body" style="flex-direction:column; align-items:stretch; gap:6px;">
+        ${badgeCalidad}
+        <div class="card-detalle" style="display:block; padding-top:6px;">${filasMercados}</div>
+      </div>
+    </div>`;
+}
+
+async function cargarAnalisisChampions() {
+  const cont = document.getElementById("champions-contenedor");
+  try {
+    const { data, error } = await sb.from("analisis_champions_publico").select("*").order("orden", { ascending: true });
+    if (error) {
+      cont.innerHTML = `<div class="vacio">No se pudo cargar el análisis: ${escaparHtml(error.message)}</div>`;
+      return;
+    }
+    if (!data || data.length === 0) {
+      cont.innerHTML = `<div class="vacio">No hay partidos de Champions League programados en los próximos días.</div>`;
+      return;
+    }
+    cont.innerHTML = data.map(crearTarjetaChampions).join("");
+  } catch (err) {
+    cont.innerHTML = `<div class="vacio">Error al cargar el análisis: ${escaparHtml(err.message)}</div>`;
   }
 }
 
