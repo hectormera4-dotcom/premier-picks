@@ -1040,11 +1040,36 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
+  // Si jsdelivr (el CDN principal) no cargo por lo que sea -- red
+  // inestable, un bloqueador de contenido, el CDN caido -- reintentamos
+  // con un CDN alterno antes de arrancar la app. Sin esto, un solo fallo
+  // de red en un usuario dejaba la app entera en blanco con un
+  // "ReferenceError: supabase is not defined" (visto en Sentry).
+  if (typeof supabase === "undefined") {
+    document.write('<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"><\/script>');
+  }
+</script>
+<script>
 // ---------- Conexion a Supabase ----------
 // Reemplaza estos dos valores con los tuyos (Settings -> API Keys en Supabase).
 // La Publishable key es segura para el navegador siempre que RLS este activo.
 const SUPABASE_URL = "https://vkmugemzjvgucdmbkgvj.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_ROY7OYSprRvhtZJGGyqNEg_eV2PPAh0";
+
+// Si ni el CDN principal ni el alterno cargaron, no tiene sentido seguir
+// -- en vez de dejar que reviente mas abajo con un ReferenceError y la
+// pagina quede en blanco sin explicacion, avisamos claramente y paramos
+// aqui mismo.
+if (typeof supabase === "undefined") {
+  document.body.innerHTML = `
+    <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:32px; background:#16221A; color:#EFEBE2; font-family:sans-serif;">
+      <div>
+        <p style="font-size:16px; margin-bottom:12px;">No se pudo cargar la app.</p>
+        <p style="font-size:13px; opacity:0.75;">Revisa tu conexión a internet y recarga la página.</p>
+      </div>
+    </div>`;
+  throw new Error("Supabase no se pudo cargar desde ningun CDN.");
+}
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
