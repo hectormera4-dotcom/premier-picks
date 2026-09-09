@@ -678,6 +678,55 @@
   .mercado-fila span:first-child { color: var(--tinta-suave); }
   .mercado-fila span:last-child { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
 
+  /* --- Champions League: escudos, barras de confianza, mercado destacado --- */
+  .card-champions { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .card-champions:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); }
+
+  .equipo-conescudo { display: flex; align-items: center; gap: 7px; min-width: 0; }
+  .escudo-equipo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+
+  .mercado-fila-champions {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    margin-bottom: 3px;
+    border-radius: 6px;
+    background: rgba(23,32,26,0.04);
+    overflow: hidden;
+  }
+  .mercado-fila-champions .mercado-barra {
+    position: absolute;
+    inset: 0;
+    left: 0;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+  .mercado-barra.barra-alta { background: rgba(47,110,69,0.20); }
+  .mercado-barra.barra-media { background: rgba(201,138,43,0.20); }
+  .mercado-barra.barra-baja { background: rgba(23,32,26,0.07); }
+  .mercado-fila-champions .mercado-etiqueta,
+  .mercado-fila-champions .mercado-valor { position: relative; z-index: 1; }
+  .mercado-fila-champions .mercado-etiqueta { color: var(--tinta-suave); font-size: 12.5px; }
+  .mercado-fila-champions .mercado-valor { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12.5px; }
+  .mercado-fila-champions.destacado { background: rgba(47,110,69,0.10); }
+  .mercado-fila-champions.destacado .mercado-etiqueta,
+  .mercado-fila-champions.destacado .mercado-valor { color: var(--verde); font-weight: 700; }
+  .chip-destacado {
+    display: inline-block;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--verde);
+    background: rgba(47,110,69,0.18);
+    border-radius: 999px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+
   /* --- Tarjeta bloqueada (VIP) --- */
   .lock-overlay {
     position: absolute;
@@ -2296,6 +2345,13 @@ const ETIQUETAS_MERCADOS_CHAMPIONS = {
   btts_si: "Ambos anotan - Sí", btts_no: "Ambos anotan - No",
 };
 
+function escudoImg(url, alt) {
+  // Si el escudo no vino en los datos (pasa con algunos equipos chicos),
+  // simplemente no ocupamos su espacio en vez de dejar un icono roto.
+  if (!url) return "";
+  return `<img class="escudo-equipo" src="${escaparHtml(url)}" alt="" loading="lazy" onerror="this.remove()">`;
+}
+
 function crearTarjetaChampions(fila) {
   const desbloqueada = fila.prob_local !== null && fila.prob_local !== undefined;
 
@@ -2305,11 +2361,13 @@ function crearTarjetaChampions(fila) {
     // es distinto al de un partido que de verdad es exclusivo VIP.
     const mensaje = fila.es_gratis ? "🔒 Inicia sesión para ver el análisis" : "🔒 Solo para VIP";
     return `
-      <div class="card" style="margin-bottom:10px;">
+      <div class="card card-champions" style="margin-bottom:10px;">
         <div class="card-top">
           <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
           <div class="card-equipos">
-            <span>${fila.local}</span><span class="vs">vs</span><span>${fila.visitante}</span>
+            <span class="equipo-conescudo">${escudoImg(fila.escudo_local)}<span>${fila.local}</span></span>
+            <span class="vs">vs</span>
+            <span class="equipo-conescudo">${escudoImg(fila.escudo_visitante)}<span>${fila.visitante}</span></span>
           </div>
         </div>
         <div class="card-body" style="justify-content:center;">
@@ -2318,20 +2376,36 @@ function crearTarjetaChampions(fila) {
       </div>`;
   }
 
-  const filasMercados = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS).map(([col, etiqueta]) => `
-    <div class="mercado-fila"><span>${etiqueta}</span><span>${fila[col]}%</span></div>
-  `).join("");
+  // El mercado con el porcentaje mas alto de este partido se resalta --
+  // es, en la practica, "el pick" de esa tarjeta entre los 9 mercados.
+  const entradas = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS);
+  const colMasFuerte = entradas.reduce((a, b) => (fila[b[0]] > fila[a[0]] ? b : a))[0];
+
+  const filasMercados = entradas.map(([col, etiqueta]) => {
+    const valor = fila[col];
+    const destacado = col === colMasFuerte;
+    const nivel = valor >= 60 ? "alta" : valor >= 35 ? "media" : "baja";
+    const chip = destacado ? `<span class="chip-destacado">★ Más probable</span>` : "";
+    return `
+      <div class="mercado-fila-champions ${destacado ? "destacado" : ""}">
+        <div class="mercado-barra barra-${nivel}" style="width:${valor}%;"></div>
+        <span class="mercado-etiqueta">${etiqueta}${chip}</span>
+        <span class="mercado-valor">${valor}%</span>
+      </div>`;
+  }).join("");
 
   const badgeCalidad = fila.calidad_datos === "limitado"
     ? `<span class="badge badge-moderado" title="Al menos un equipo no tiene historial suficiente en esta competencia">⚠️ Datos limitados</span>`
     : `<span class="badge badge-seguro">📊 Historial completo</span>`;
 
   return `
-    <div class="card" style="margin-bottom:10px;">
+    <div class="card card-champions" style="margin-bottom:10px;">
       <div class="card-top">
         <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
         <div class="card-equipos">
-          <span>${fila.local}</span><span class="vs">vs</span><span>${fila.visitante}</span>
+          <span class="equipo-conescudo">${escudoImg(fila.escudo_local)}<span>${fila.local}</span></span>
+          <span class="vs">vs</span>
+          <span class="equipo-conescudo">${escudoImg(fila.escudo_visitante)}<span>${fila.visitante}</span></span>
         </div>
       </div>
       <div class="card-body" style="flex-direction:column; align-items:stretch; gap:6px;">
