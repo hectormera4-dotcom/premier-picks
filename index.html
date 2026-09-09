@@ -1929,13 +1929,27 @@ async function verificarRetornoDePago() {
   const clientTransactionId = params.get("clientTransactionId");
   if (!id || !clientTransactionId) return;
 
+  // payphone-confirm ahora exige sesion (ver el porque en su propio
+  // archivo) -- a esta altura del arranque (ver iniciar(), esto se llama
+  // despues de actualizarSesion()) sesionActual ya deberia estar lista si
+  // el usuario esta logueado, que tiene que estarlo para haber llegado
+  // hasta aqui (pagar exige sesion desde payphone-prepare).
+  if (!sesionActual) {
+    alert("No se pudo verificar el pago: tu sesión no está activa. Inicia sesión y contacta soporte si ya pagaste.");
+    return;
+  }
+
   const cont = document.getElementById("grid");
   cont.innerHTML = `<div class="combinada" style="grid-column:1/-1; text-align:center;">Verificando tu pago, un momento...</div>` + cont.innerHTML;
 
   try {
     const resp = await fetch(`${SUPABASE_URL}/functions/v1/payphone-confirm`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY },
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${sesionActual.access_token}`,
+      },
       body: JSON.stringify({ id, clientTransactionId }),
     });
     const data = await resp.json();
