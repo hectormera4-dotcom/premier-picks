@@ -2354,7 +2354,7 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
         print("Supabase no configurado -- se omite la subida de combinadas.")
 
 
-def generar_analisis_champions_league(n_gratis=3, dias_adelante=10):
+def generar_analisis_champions_league(n_gratis=2, dias_adelante=10):
     """Genera el panel de analisis de Champions League -- DISTINTO del
     sistema de picks/combinadas normal:
       - No se filtra por 'pick_es_seguro': se muestran TODOS los partidos
@@ -2372,7 +2372,10 @@ def generar_analisis_champions_league(n_gratis=3, dias_adelante=10):
         completos.
       - Solo mercados de GOLES -- football-data.co.uk no cubre
         competencias europeas, no hay corners/tarjetas/tiros a puerta
-        para esto."""
+        para esto.
+      - Los n_gratis partidos gratis no son "los mas confiables" sin mas:
+        se elige uno con historial completo y otro con datos limitados,
+        para que quien no es VIP vea ambos casos de forma transparente."""
     try:
         ctx = preparar_liga("champions_league")
     except Exception as e:
@@ -2442,7 +2445,28 @@ def generar_analisis_champions_league(n_gratis=3, dias_adelante=10):
     filas.sort(key=lambda f: f["confianza"], reverse=True)
     for i, fila in enumerate(filas):
         fila["orden"] = i
-        fila["es_gratis"] = i < n_gratis
+
+    # Los partidos gratis no son simplemente "los N mas confiables" -- se
+    # elige a proposito UNO con historial completo (para que quien no es
+    # VIP vea la app funcionando en su mejor caso) y UNO con datos
+    # limitados (para que vea tambien, de forma transparente, como se
+    # marca un partido con menos historial disponible). Si no hay de
+    # alguna de las dos calidades, o sobran cupos de n_gratis, se rellena
+    # con los siguientes mas confiables en el orden ya calculado.
+    indices_gratis = set()
+    idx_completo = next((i for i, f in enumerate(filas) if f["calidad_datos"] == "completo"), None)
+    if idx_completo is not None:
+        indices_gratis.add(idx_completo)
+    idx_limitado = next((i for i, f in enumerate(filas) if f["calidad_datos"] == "limitado"), None)
+    if idx_limitado is not None:
+        indices_gratis.add(idx_limitado)
+    i = 0
+    while len(indices_gratis) < n_gratis and i < len(filas):
+        indices_gratis.add(i)
+        i += 1
+
+    for i, fila in enumerate(filas):
+        fila["es_gratis"] = i in indices_gratis
         del fila["confianza"]
 
     print(f"Analisis de Champions League: {len(filas)} partidos ({sum(f['es_gratis'] for f in filas)} gratis, "
@@ -2550,6 +2574,6 @@ if __name__ == "__main__":
     # refresca en TODAS las corridas, incluso las de respaldo de la misma
     # noche, para que siempre muestre la jornada vigente mas actualizada.
     try:
-        generar_analisis_champions_league(n_gratis=3)
+        generar_analisis_champions_league(n_gratis=2)
     except Exception as e:
         print(f"\nERROR generando el analisis de Champions League: {e}")
