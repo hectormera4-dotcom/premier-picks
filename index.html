@@ -683,6 +683,11 @@
   /* --- Champions League: escudos, barras de confianza, mercado destacado --- */
   .card-champions { transition: transform 0.15s ease, box-shadow 0.15s ease; }
   .card-champions:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); }
+  .card-champions-resaltada { animation: destelloChampions 1.6s ease; }
+  @keyframes destelloChampions {
+    0% { box-shadow: 0 0 0 3px rgba(78,152,104,0.6); }
+    100% { box-shadow: 0 0 0 3px rgba(78,152,104,0); }
+  }
 
   .equipo-conescudo { display: flex; align-items: center; gap: 7px; min-width: 0; }
   .escudo-equipo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
@@ -823,6 +828,16 @@
     color: var(--verde-claro);
     flex-shrink: 0;
   }
+  .combinada-fila-clickeable {
+    cursor: pointer;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+  }
+  .combinada-fila-clickeable:hover { background: rgba(255,255,255,0.06); }
+  .combinada-fila-equipos { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .combinada-fila-equipos .escudo-equipo { width: 15px; height: 15px; }
   .combinada-footer {
     display: flex;
     justify-content: space-between;
@@ -2409,7 +2424,7 @@ function crearTarjetaChampions(fila, i) {
   // los mercados") -- de entrada solo se ve el partido y su badge de
   // calidad, para que la seccion no se sienta como una pared de numeros.
   return `
-    <div class="card card-champions" style="margin-bottom:10px;">
+    <div class="card card-champions" id="tarjeta-champions-${i}" style="margin-bottom:10px;">
       <div class="card-top">
         <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
         <div class="card-equipos">
@@ -2459,10 +2474,10 @@ function renderMercadosRecomendadosChampions(data) {
   const UMBRAL = 80;
   const entradas = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS);
   const recomendados = data
-    .map(fila => {
+    .map((fila, i) => {
       if (fila.prob_local === null || fila.prob_local === undefined) return null;
       const [col, etiqueta] = entradas.reduce((a, b) => (fila[b[0]] > fila[a[0]] ? b : a));
-      return fila[col] >= UMBRAL ? { fila, etiqueta, valor: fila[col] } : null;
+      return fila[col] >= UMBRAL ? { fila, etiqueta, valor: fila[col], i } : null;
     })
     .filter(Boolean)
     .sort((a, b) => b.valor - a.valor);
@@ -2472,10 +2487,16 @@ function renderMercadosRecomendadosChampions(data) {
     return;
   }
 
+  // Cada fila es clickeable: baja hasta la tarjeta de ese partido mas
+  // abajo en la pantalla y despliega su analisis completo, para conectar
+  // el resumen con el detalle en vez de dejarlos como dos listas sueltas.
   const filas = recomendados.map(r => `
-    <div class="combinada-fila">
+    <div class="combinada-fila combinada-fila-clickeable" onclick="irAPartidoChampions(${r.i})">
       <span class="prob-mini">${r.valor}%</span>
-      <span><b>${r.fila.local} vs ${r.fila.visitante}</b> — ${r.etiqueta}</span>
+      <span class="combinada-fila-equipos">
+        ${escudoImg(r.fila.escudo_local)}<b>${r.fila.local}</b> vs ${escudoImg(r.fila.escudo_visitante)}<b>${r.fila.visitante}</b>
+      </span>
+      <span>— ${r.etiqueta}</span>
     </div>
   `).join("");
 
@@ -2486,6 +2507,15 @@ function renderMercadosRecomendadosChampions(data) {
       </div>
       <div class="combinada-partidos">${filas}</div>
     </div>`;
+}
+
+function irAPartidoChampions(i) {
+  const tarjeta = document.getElementById(`tarjeta-champions-${i}`);
+  if (!tarjeta) return;
+  document.getElementById(`detalle-champions-${i}`).classList.add("abierto");
+  tarjeta.scrollIntoView({ behavior: "smooth", block: "center" });
+  tarjeta.classList.add("card-champions-resaltada");
+  setTimeout(() => tarjeta.classList.remove("card-champions-resaltada"), 1600);
 }
 
 async function cargarAnalisisChampions() {
