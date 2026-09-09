@@ -907,10 +907,21 @@ def verificar_combinadas_resueltas(historial_combinadas, historico_partidos):
             if pd.isna(match.iloc[0].get("FTHG")):
                 completa = False
                 break
-            resultado_leg = verificar_pick_individual(p["pick_recomendado"], match.iloc[0])
-            if resultado_leg is None:
+            # El pick de un partido puede ser un COMBO ("Doble oportunidad 1X
+            # + Over 5.5 corners") -- verificar_pick_individual solo entiende
+            # UNA condicion a la vez, asi que hay que partirlo primero y
+            # exigir que TODAS se cumplan (misma logica que ya usa
+            # verificar_picks_resueltos() para el historial individual). Sin
+            # este split, cualquier combinada con un leg de tipo combo se
+            # quedaba "Pendiente" para siempre -- verificar_pick_individual
+            # nunca reconoce el nombre combinado como un mercado valido y
+            # devuelve None, aunque el partido ya tenga resultado.
+            condiciones_leg = p["pick_recomendado"].split(" + ")
+            resultados_condiciones = [verificar_pick_individual(c, match.iloc[0]) for c in condiciones_leg]
+            if any(r is None for r in resultados_condiciones):
                 completa = False
                 break
+            resultado_leg = all(resultados_condiciones)
             resultados_legs.append(resultado_leg)
 
         if not completa:
