@@ -305,6 +305,16 @@
   .menu-item.activo { background: rgba(78,152,104,0.18); color: var(--verde-claro); }
   .menu-item:hover { background: rgba(255,255,255,0.05); }
   .menu-item-escudo { width: 16px; height: 16px; object-fit: contain; vertical-align: -3px; margin-right: 2px; }
+  /* El escudo de Champions League es negro sobre fondo transparente -- se
+     pierde por completo contra el fondo oscuro de la app. Un fondo circular
+     claro detras lo hace visible sin importar de que color venga el logo. */
+  .menu-item-escudo-fondo {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--papel); vertical-align: -6px; margin-right: 2px;
+    flex-shrink: 0;
+  }
+  .menu-item-escudo-fondo img { width: 70%; height: 70%; object-fit: contain; }
 
   .submenu-ligas { padding: 4px 4px 10px 8px; }
   .grid-ligas {
@@ -828,16 +838,32 @@
     color: var(--verde-claro);
     flex-shrink: 0;
   }
-  .combinada-fila-clickeable {
-    cursor: pointer;
-    padding: 4px 6px;
-    margin: -4px -6px;
-    border-radius: 6px;
-    transition: background 0.15s ease;
-  }
-  .combinada-fila-clickeable:hover { background: rgba(255,255,255,0.06); }
   .combinada-fila-equipos { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .combinada-fila-equipos .escudo-equipo { width: 15px; height: 15px; }
+  .combinada-fila-equipos .vs { color: rgba(239,235,226,0.5); font-size: 10.5px; }
+
+  /* --- Mercados recomendados (Champions League) --- */
+  .mercado-recomendado-fila {
+    cursor: pointer;
+    padding: 9px 8px;
+    margin: 0 -8px;
+    border-radius: 6px;
+    border-bottom: 1px dashed rgba(239,235,226,0.15);
+    transition: background 0.15s ease;
+  }
+  .mercado-recomendado-fila:last-child { border-bottom: none; }
+  .mercado-recomendado-fila:hover { background: rgba(255,255,255,0.06); }
+  .mercado-recomendado-top {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    margin-bottom: 3px;
+  }
+  .mercado-recomendado-pick {
+    font-size: 12px;
+    color: var(--verde-claro);
+    padding-left: 24px;
+  }
   .combinada-footer {
     display: flex;
     justify-content: space-between;
@@ -907,7 +933,7 @@
       📊 Historial
     </button>
     <button class="menu-item" id="menu-champions" onclick="cambiarVista('champions'); cerrarMenuLateral();">
-      <img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" class="menu-item-escudo" onerror="this.remove();"> Champions League
+      <span class="menu-item-escudo-fondo"><img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" onerror="this.parentElement.remove();"></span> Champions League
     </button>
     <button class="menu-item" onclick="toggleSubmenuLigas()">
       🏆 Ligas <span id="flecha-ligas">▾</span>
@@ -988,8 +1014,8 @@
 
 <div id="vista-champions" style="display:none;">
   <main style="max-width:720px; margin:0 auto; padding:20px 20px 40px;">
-    <h2 style="margin-bottom:4px; display:flex; align-items:center; gap:8px;">
-      <img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" style="width:26px; height:26px; object-fit:contain;" onerror="this.remove();">
+    <h2 style="margin-bottom:4px; display:flex; align-items:center; gap:10px;">
+      <span class="menu-item-escudo-fondo" style="width:34px; height:34px;"><img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" onerror="this.parentElement.remove();"></span>
       Champions League
     </h2>
     <div id="champions-subtitulo" style="font-size:13px; color:var(--tinta-suave); margin-bottom:18px;"></div>
@@ -2490,13 +2516,20 @@ function renderMercadosRecomendadosChampions(data) {
   // Cada fila es clickeable: baja hasta la tarjeta de ese partido mas
   // abajo en la pantalla y despliega su analisis completo, para conectar
   // el resumen con el detalle en vez de dejarlos como dos listas sueltas.
+  // Partido y mercado van en lineas separadas (en vez de todo en una sola
+  // linea con "vs" y guiones) para que no se sienta amontonado al envolver
+  // en pantallas angostas.
   const filas = recomendados.map(r => `
-    <div class="combinada-fila combinada-fila-clickeable" onclick="irAPartidoChampions(${r.i})">
-      <span class="prob-mini">${r.valor}%</span>
-      <span class="combinada-fila-equipos">
-        ${escudoImg(r.fila.escudo_local)}<b>${r.fila.local}</b> vs ${escudoImg(r.fila.escudo_visitante)}<b>${r.fila.visitante}</b>
-      </span>
-      <span>— ${r.etiqueta}</span>
+    <div class="mercado-recomendado-fila" onclick="irAPartidoChampions(${r.i})">
+      <div class="mercado-recomendado-top">
+        <span class="prob-mini">${r.valor}%</span>
+        <span class="combinada-fila-equipos">
+          ${escudoImg(r.fila.escudo_local)}<b>${r.fila.local}</b>
+          <span class="vs">vs</span>
+          ${escudoImg(r.fila.escudo_visitante)}<b>${r.fila.visitante}</b>
+        </span>
+      </div>
+      <div class="mercado-recomendado-pick">${r.etiqueta}</div>
     </div>
   `).join("");
 
