@@ -2525,12 +2525,19 @@ function renderMercadosRecomendadosChampions(data) {
     return;
   }
 
-  // Umbral de 80%, el mismo que usa el resto de la app para marcar un pick
-  // como "seguro" (ver curar_y_subir_picks_del_dia / combinadas). Solo
-  // consideramos partidos DESBLOQUEADOS -- si esta bloqueado, prob_local
-  // llega null y ninguno de sus mercados puede superar el umbral, asi que
-  // ya queda afuera sin necesidad de un chequeo aparte.
-  const UMBRAL = 80;
+  // Umbral de 70%, NO el 80% que usa el resto de la app para un pick
+  // "seguro" -- un backtest walk-forward propio para Champions League (ver
+  // calibrar_probabilidad_champions() en actualizar_y_predecir.py) demostro
+  // que, con la calibracion honesta, ningun mercado de esta competencia
+  // llega nunca al 80% real: el rango 70-80% es el mas alto que quedo bien
+  // calibrado fuera de muestra (71.1% declarado vs 72.1% real). Usar 80%
+  // aqui dejaria esta seccion vacia casi siempre, no porque la calibracion
+  // este mal sino porque Champions League es mas pareja/impredecible que
+  // las ligas domesticas. Solo consideramos partidos DESBLOQUEADOS -- si
+  // esta bloqueado, prob_local llega null y ninguno de sus mercados puede
+  // superar el umbral, asi que ya queda afuera sin necesidad de un chequeo
+  // aparte.
+  const UMBRAL = 70;
   const entradas = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS);
   const recomendados = data
     .map((fila, i) => {
