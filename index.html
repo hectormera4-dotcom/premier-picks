@@ -713,19 +713,6 @@
   .mercado-fila-champions.destacado { background: rgba(47,110,69,0.10); }
   .mercado-fila-champions.destacado .mercado-etiqueta,
   .mercado-fila-champions.destacado .mercado-valor { color: var(--verde); font-weight: 700; }
-  .chip-destacado {
-    display: inline-block;
-    font-size: 8.5px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--verde);
-    background: rgba(47,110,69,0.18);
-    border-radius: 999px;
-    padding: 1px 6px;
-    margin-left: 6px;
-    text-transform: uppercase;
-    vertical-align: middle;
-  }
 
   /* --- Tarjeta bloqueada (VIP) --- */
   .lock-overlay {
@@ -2385,11 +2372,10 @@ function crearTarjetaChampions(fila) {
     const valor = fila[col];
     const destacado = col === colMasFuerte;
     const nivel = valor >= 60 ? "alta" : valor >= 35 ? "media" : "baja";
-    const chip = destacado ? `<span class="chip-destacado">★ Más probable</span>` : "";
     return `
       <div class="mercado-fila-champions ${destacado ? "destacado" : ""}">
         <div class="mercado-barra barra-${nivel}" style="width:${valor}%;"></div>
-        <span class="mercado-etiqueta">${etiqueta}${chip}</span>
+        <span class="mercado-etiqueta">${etiqueta}</span>
         <span class="mercado-valor">${valor}%</span>
       </div>`;
   }).join("");
