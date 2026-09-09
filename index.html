@@ -857,10 +857,12 @@
     display: flex;
     align-items: baseline;
     gap: 7px;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
+    font-size: 13px;
   }
   .mercado-recomendado-pick {
-    font-size: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
     color: var(--verde-claro);
     padding-left: 24px;
   }
@@ -2139,13 +2141,18 @@ let championsYaCargado = false;
 // (ver assets/ligas/ligue1.svg, recortado del archivo oficial de Wikimedia
 // Commons "Ligue 1 Uber Eats logo.svg" quitandole el texto/patrocinador).
 const LIGAS_DISPONIBLES = [
-  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#3D195B", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/47.png" },
+  // Premier League y Eredivisie usan fondo claro (en vez del color de marca)
+  // porque sus escudos son oscuros (lila oscuro / azul marino) sobre fondo
+  // transparente -- con un circulo del mismo tono de marca detras, el
+  // escudo se perdia por falta de contraste (mismo problema que tuvo el
+  // escudo de Champions League contra el fondo oscuro de la app).
+  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#EFEBE2", textoOscuro: true, activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/47.png" },
   { clave: "la_liga", nombre: "LaLiga", abrev: "LL", color: "#EE8707", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/87.png" },
   { clave: "serie_a", nombre: "Serie A", abrev: "SA", color: "#024494", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/55.png" },
   { clave: "ligue_1", nombre: "Ligue 1", abrev: "L1", color: "#091C3E", activa: true, escudo: "assets/ligas/ligue1.svg" },
   { clave: "bundesliga", nombre: "Bundesliga", abrev: "BL", color: "#D3010C", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/54.png" },
   { clave: "championship", nombre: "Championship", abrev: "CH", color: "#00A650", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/48.png" },
-  { clave: "eredivisie", nombre: "Eredivisie", abrev: "ER", color: "#00337A", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/57.png" },
+  { clave: "eredivisie", nombre: "Eredivisie", abrev: "ER", color: "#EFEBE2", textoOscuro: true, activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/57.png" },
   { clave: "primeira_liga", nombre: "Primeira Liga", abrev: "PP", color: "#006241", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/61.png" },
 ];
 
@@ -2157,7 +2164,7 @@ function renderGridLigas() {
   document.getElementById("grid-ligas").innerHTML = LIGAS_DISPONIBLES.map(liga => `
     <button class="liga-box ${!liga.activa ? 'liga-proximamente' : ''} ${ligaSeleccionada === liga.clave ? 'liga-activa-seleccionada' : ''}"
             onclick="${liga.activa ? `seleccionarLiga('${liga.clave}')` : ''}">
-      <div class="liga-escudo" style="background:${liga.color}">
+      <div class="liga-escudo" style="background:${liga.color}; ${liga.textoOscuro ? 'color:var(--tinta);' : ''}">
         <img src="${liga.escudo}" alt="" loading="lazy" onerror="this.remove(); this.parentElement.textContent='${liga.abrev}';">
       </div>
       <div class="liga-nombre">${liga.nombre}</div>
@@ -2178,6 +2185,7 @@ async function mostrarVistaLiga(liga) {
   const infoLiga = LIGAS_DISPONIBLES.find(l => l.clave === liga);
   document.getElementById("liga-titulo").textContent = infoLiga ? infoLiga.nombre : liga;
   document.getElementById("liga-escudo-titulo").style.background = infoLiga ? infoLiga.color : "#4E9868";
+  document.getElementById("liga-escudo-titulo").style.color = infoLiga && infoLiga.textoOscuro ? "var(--tinta)" : "#fff";
   document.getElementById("liga-escudo-titulo").innerHTML = infoLiga
     ? `<img src="${infoLiga.escudo}" alt="" onerror="this.remove(); this.parentElement.textContent='${infoLiga.abrev}';">`
     : "";
