@@ -326,6 +326,7 @@
     color: #fff; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 700;
     margin: 0 auto 6px;
   }
+  .liga-escudo img { width: 70%; height: 70%; object-fit: contain; }
   .liga-nombre { font-size: 11px; color: rgba(239,235,226,0.85); line-height: 1.2; }
   .liga-badge-proximamente {
     font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.03em;
@@ -973,6 +974,7 @@
   <main style="max-width:720px; margin:0 auto; padding:20px 20px 40px;">
     <h2 style="margin-bottom:4px;">🏆 Champions League</h2>
     <div id="champions-subtitulo" style="font-size:13px; color:var(--tinta-suave); margin-bottom:18px;"></div>
+    <div id="champions-recomendados-contenedor"></div>
     <div id="champions-contenedor">Cargando...</div>
   </main>
 </div>
@@ -2083,14 +2085,14 @@ let championsYaCargado = false;
 // ---------- Menu lateral ----------
 
 const LIGAS_DISPONIBLES = [
-  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#3D195B", activa: true },
-  { clave: "la_liga", nombre: "LaLiga", abrev: "LL", color: "#EE8707", activa: true },
-  { clave: "serie_a", nombre: "Serie A", abrev: "SA", color: "#024494", activa: true },
-  { clave: "ligue_1", nombre: "Ligue 1", abrev: "L1", color: "#091C3E", activa: true },
-  { clave: "bundesliga", nombre: "Bundesliga", abrev: "BL", color: "#D3010C", activa: true },
-  { clave: "championship", nombre: "Championship", abrev: "CH", color: "#00A650", activa: true },
-  { clave: "eredivisie", nombre: "Eredivisie", abrev: "ER", color: "#00337A", activa: true },
-  { clave: "primeira_liga", nombre: "Primeira Liga", abrev: "PP", color: "#006241", activa: true },
+  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#3D195B", activa: true, escudo: "https://crests.football-data.org/PL.png" },
+  { clave: "la_liga", nombre: "LaLiga", abrev: "LL", color: "#EE8707", activa: true, escudo: "https://crests.football-data.org/PD.png" },
+  { clave: "serie_a", nombre: "Serie A", abrev: "SA", color: "#024494", activa: true, escudo: "https://crests.football-data.org/SA.png" },
+  { clave: "ligue_1", nombre: "Ligue 1", abrev: "L1", color: "#091C3E", activa: true, escudo: "https://crests.football-data.org/FL1.png" },
+  { clave: "bundesliga", nombre: "Bundesliga", abrev: "BL", color: "#D3010C", activa: true, escudo: "https://crests.football-data.org/BL1.png" },
+  { clave: "championship", nombre: "Championship", abrev: "CH", color: "#00A650", activa: true, escudo: "https://crests.football-data.org/ELC.png" },
+  { clave: "eredivisie", nombre: "Eredivisie", abrev: "ER", color: "#00337A", activa: true, escudo: "https://commons.wikimedia.org/wiki/Special:FilePath/Eredivisie_nieuw_logo_2017-.svg" },
+  { clave: "primeira_liga", nombre: "Primeira Liga", abrev: "PP", color: "#006241", activa: true, escudo: "https://crests.football-data.org/PPL.png" },
 ];
 
 let ligaSeleccionada = "todas";
@@ -2099,7 +2101,9 @@ function renderGridLigas() {
   document.getElementById("grid-ligas").innerHTML = LIGAS_DISPONIBLES.map(liga => `
     <button class="liga-box ${!liga.activa ? 'liga-proximamente' : ''} ${ligaSeleccionada === liga.clave ? 'liga-activa-seleccionada' : ''}"
             onclick="${liga.activa ? `seleccionarLiga('${liga.clave}')` : ''}">
-      <div class="liga-escudo" style="background:${liga.color}">${liga.abrev}</div>
+      <div class="liga-escudo" style="background:${liga.color}">
+        <img src="${liga.escudo}" alt="" loading="lazy" onerror="this.remove(); this.parentElement.textContent='${liga.abrev}';">
+      </div>
       <div class="liga-nombre">${liga.nombre}</div>
       ${!liga.activa ? '<div class="liga-badge-proximamente">Próximamente</div>' : ''}
     </button>
@@ -2339,7 +2343,7 @@ function escudoImg(url, alt) {
   return `<img class="escudo-equipo" src="${escaparHtml(url)}" alt="" loading="lazy" onerror="this.remove()">`;
 }
 
-function crearTarjetaChampions(fila) {
+function crearTarjetaChampions(fila, i) {
   const desbloqueada = fila.prob_local !== null && fila.prob_local !== undefined;
 
   if (!desbloqueada) {
@@ -2384,6 +2388,9 @@ function crearTarjetaChampions(fila) {
     ? `<span class="badge badge-moderado" title="Al menos un equipo no tiene historial suficiente en esta competencia">⚠️ Datos limitados</span>`
     : `<span class="badge badge-seguro">📊 Historial completo</span>`;
 
+  // Colapsado por defecto (como ya hacen los picks normales con "Ver todos
+  // los mercados") -- de entrada solo se ve el partido y su badge de
+  // calidad, para que la seccion no se sienta como una pared de numeros.
   return `
     <div class="card card-champions" style="margin-bottom:10px;">
       <div class="card-top">
@@ -2396,14 +2403,59 @@ function crearTarjetaChampions(fila) {
       </div>
       <div class="card-body" style="flex-direction:column; align-items:stretch; gap:6px;">
         ${badgeCalidad}
-        <div class="card-detalle" style="display:block; padding-top:6px;">${filasMercados}</div>
+        <button class="card-toggle" onclick="toggleDetalleChampions(${i})">Ver análisis del partido ▾</button>
+        <div class="card-detalle" id="detalle-champions-${i}">${filasMercados}</div>
       </div>
+    </div>`;
+}
+
+function toggleDetalleChampions(i) {
+  document.getElementById(`detalle-champions-${i}`).classList.toggle("abierto");
+}
+
+function renderMercadosRecomendadosChampions(data) {
+  const cont = document.getElementById("champions-recomendados-contenedor");
+  // Umbral de 80%, el mismo que usa el resto de la app para marcar un pick
+  // como "seguro" (ver curar_y_subir_picks_del_dia / combinadas). Solo
+  // consideramos partidos DESBLOQUEADOS -- si esta bloqueado, prob_local
+  // llega null y ninguno de sus mercados puede superar el umbral, asi que
+  // ya queda afuera sin necesidad de un chequeo aparte.
+  const UMBRAL = 80;
+  const entradas = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS);
+  const recomendados = data
+    .map(fila => {
+      if (fila.prob_local === null || fila.prob_local === undefined) return null;
+      const [col, etiqueta] = entradas.reduce((a, b) => (fila[b[0]] > fila[a[0]] ? b : a));
+      return fila[col] >= UMBRAL ? { fila, etiqueta, valor: fila[col] } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.valor - a.valor);
+
+  if (recomendados.length === 0) {
+    cont.innerHTML = "";
+    return;
+  }
+
+  const filas = recomendados.map(r => `
+    <div class="combinada-fila">
+      <span class="prob-mini">${r.valor}%</span>
+      <span><b>${r.fila.local} vs ${r.fila.visitante}</b> — ${r.etiqueta}</span>
+    </div>
+  `).join("");
+
+  cont.innerHTML = `
+    <div class="combinada gratis" style="margin-bottom:18px;">
+      <div class="combinada-header">
+        <span class="combinada-titulo">🎯 Mercados recomendados</span>
+      </div>
+      <div class="combinada-partidos">${filas}</div>
     </div>`;
 }
 
 async function cargarAnalisisChampions() {
   const cont = document.getElementById("champions-contenedor");
   const subtitulo = document.getElementById("champions-subtitulo");
+  const recomendadosCont = document.getElementById("champions-recomendados-contenedor");
   try {
     const { data, error } = await sb.from("analisis_champions_publico").select("*").order("orden", { ascending: true });
     if (error) {
@@ -2412,6 +2464,7 @@ async function cargarAnalisisChampions() {
     }
     if (!data || data.length === 0) {
       subtitulo.textContent = "";
+      recomendadosCont.innerHTML = "";
       cont.innerHTML = `<div class="vacio">No hay partidos de Champions League programados en los próximos días.</div>`;
       return;
     }
@@ -2422,7 +2475,8 @@ async function cargarAnalisisChampions() {
     subtitulo.textContent = isNaN(fechaJornada)
       ? ""
       : `Todos los partidos de la jornada del ${DIAS[fechaJornada.getDay()]} ${fechaJornada.getDate()} de ${MESES_LARGO[fechaJornada.getMonth()]}, ordenados del más al menos confiable.`;
-    cont.innerHTML = data.map(crearTarjetaChampions).join("");
+    renderMercadosRecomendadosChampions(data);
+    cont.innerHTML = data.map((fila, i) => crearTarjetaChampions(fila, i)).join("");
   } catch (err) {
     cont.innerHTML = `<div class="vacio">Error al cargar el análisis: ${escaparHtml(err.message)}</div>`;
   }
