@@ -304,6 +304,7 @@
   }
   .menu-item.activo { background: rgba(78,152,104,0.18); color: var(--verde-claro); }
   .menu-item:hover { background: rgba(255,255,255,0.05); }
+  .menu-item-escudo { width: 16px; height: 16px; object-fit: contain; vertical-align: -3px; margin-right: 2px; }
 
   .submenu-ligas { padding: 4px 4px 10px 8px; }
   .grid-ligas {
@@ -891,7 +892,7 @@
       📊 Historial
     </button>
     <button class="menu-item" id="menu-champions" onclick="cambiarVista('champions'); cerrarMenuLateral();">
-      🏆 Champions League
+      <img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" class="menu-item-escudo" onerror="this.remove();"> Champions League
     </button>
     <button class="menu-item" onclick="toggleSubmenuLigas()">
       🏆 Ligas <span id="flecha-ligas">▾</span>
@@ -972,7 +973,10 @@
 
 <div id="vista-champions" style="display:none;">
   <main style="max-width:720px; margin:0 auto; padding:20px 20px 40px;">
-    <h2 style="margin-bottom:4px;">🏆 Champions League</h2>
+    <h2 style="margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+      <img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" style="width:26px; height:26px; object-fit:contain;" onerror="this.remove();">
+      Champions League
+    </h2>
     <div id="champions-subtitulo" style="font-size:13px; color:var(--tinta-suave); margin-bottom:18px;"></div>
     <div id="champions-recomendados-contenedor"></div>
     <div id="champions-contenedor">Cargando...</div>
@@ -2084,16 +2088,27 @@ let championsYaCargado = false;
 
 // ---------- Menu lateral ----------
 
+// Escudos: usamos el set de fotmob (icono limpio, fondo transparente, sin
+// texto ni wordmarks) para que las 8 ligas se vean consistentes entre si --
+// el set de football-data.org que usabamos antes traia el logo de Premier
+// League como el WORDMARK completo (no el escudo), que a tamaño pequeño se
+// veia como una mancha morada ilegible. Ligue 1 es la unica excepcion: el
+// escudo que fotmob tiene indexado es una version vieja (pre-2020) que ya
+// no se usa, asi que autohospedamos un recorte del escudo oficial vigente
+// (ver assets/ligas/ligue1.svg, recortado del archivo oficial de Wikimedia
+// Commons "Ligue 1 Uber Eats logo.svg" quitandole el texto/patrocinador).
 const LIGAS_DISPONIBLES = [
-  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#3D195B", activa: true, escudo: "https://crests.football-data.org/PL.png" },
-  { clave: "la_liga", nombre: "LaLiga", abrev: "LL", color: "#EE8707", activa: true, escudo: "https://crests.football-data.org/PD.png" },
-  { clave: "serie_a", nombre: "Serie A", abrev: "SA", color: "#024494", activa: true, escudo: "https://crests.football-data.org/SA.png" },
-  { clave: "ligue_1", nombre: "Ligue 1", abrev: "L1", color: "#091C3E", activa: true, escudo: "https://crests.football-data.org/FL1.png" },
-  { clave: "bundesliga", nombre: "Bundesliga", abrev: "BL", color: "#D3010C", activa: true, escudo: "https://crests.football-data.org/BL1.png" },
-  { clave: "championship", nombre: "Championship", abrev: "CH", color: "#00A650", activa: true, escudo: "https://crests.football-data.org/ELC.png" },
-  { clave: "eredivisie", nombre: "Eredivisie", abrev: "ER", color: "#00337A", activa: true, escudo: "https://commons.wikimedia.org/wiki/Special:FilePath/Eredivisie_nieuw_logo_2017-.svg" },
-  { clave: "primeira_liga", nombre: "Primeira Liga", abrev: "PP", color: "#006241", activa: true, escudo: "https://crests.football-data.org/PPL.png" },
+  { clave: "premier_league", nombre: "Premier League", abrev: "PL", color: "#3D195B", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/47.png" },
+  { clave: "la_liga", nombre: "LaLiga", abrev: "LL", color: "#EE8707", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/87.png" },
+  { clave: "serie_a", nombre: "Serie A", abrev: "SA", color: "#024494", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/55.png" },
+  { clave: "ligue_1", nombre: "Ligue 1", abrev: "L1", color: "#091C3E", activa: true, escudo: "assets/ligas/ligue1.svg" },
+  { clave: "bundesliga", nombre: "Bundesliga", abrev: "BL", color: "#D3010C", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/54.png" },
+  { clave: "championship", nombre: "Championship", abrev: "CH", color: "#00A650", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/48.png" },
+  { clave: "eredivisie", nombre: "Eredivisie", abrev: "ER", color: "#00337A", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/57.png" },
+  { clave: "primeira_liga", nombre: "Primeira Liga", abrev: "PP", color: "#006241", activa: true, escudo: "https://images.fotmob.com/image_resources/logo/leaguelogo/61.png" },
 ];
+
+const ESCUDO_CHAMPIONS_LEAGUE = "https://images.fotmob.com/image_resources/logo/leaguelogo/42.png";
 
 let ligaSeleccionada = "todas";
 
@@ -2122,7 +2137,9 @@ async function mostrarVistaLiga(liga) {
   const infoLiga = LIGAS_DISPONIBLES.find(l => l.clave === liga);
   document.getElementById("liga-titulo").textContent = infoLiga ? infoLiga.nombre : liga;
   document.getElementById("liga-escudo-titulo").style.background = infoLiga ? infoLiga.color : "#4E9868";
-  document.getElementById("liga-escudo-titulo").textContent = infoLiga ? infoLiga.abrev : "";
+  document.getElementById("liga-escudo-titulo").innerHTML = infoLiga
+    ? `<img src="${infoLiga.escudo}" alt="" onerror="this.remove(); this.parentElement.textContent='${infoLiga.abrev}';">`
+    : "";
 
   document.getElementById("liga-tabla-posiciones").innerHTML = `<div class="cargando-liga">Cargando tabla de posiciones...</div>`;
   document.getElementById("liga-tabla-goleadores").innerHTML = `<div class="cargando-liga">Cargando goleadores...</div>`;
@@ -2415,6 +2432,25 @@ function toggleDetalleChampions(i) {
 
 function renderMercadosRecomendadosChampions(data) {
   const cont = document.getElementById("champions-recomendados-contenedor");
+
+  // Esta seccion junta los mejores mercados de TODOS los partidos, sin
+  // importar si cada uno individualmente es gratis o VIP -- por eso, a
+  // diferencia de las tarjetas de partido (que respetan el gratis/VIP de
+  // cada una), el resumen completo se reserva solo para VIP/admin. Si no,
+  // seria un atajo para ver de un vistazo el pick fuerte de un partido VIP
+  // sin pagar, aunque ese partido individual siga bloqueado mas abajo.
+  if (!vipVigente(perfilActual)) {
+    cont.innerHTML = `
+      <div class="card card-champions" style="margin-bottom:18px;">
+        <div class="card-body" style="justify-content:center; padding:16px 18px;">
+          <div class="lock-texto" style="max-width:none; color: var(--tinta-suave); text-align:center;">
+            🔒 Los mercados recomendados de la jornada son solo para VIP
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
   // Umbral de 80%, el mismo que usa el resto de la app para marcar un pick
   // como "seguro" (ver curar_y_subir_picks_del_dia / combinadas). Solo
   // consideramos partidos DESBLOQUEADOS -- si esta bloqueado, prob_local
