@@ -33,7 +33,14 @@ select
   case
     when (es_gratis and auth.uid() is not null) or es_usuario_vip_o_admin() then partidos_json
     else (
-      select jsonb_agg(jsonb_build_object('local', elem.value->>'local', 'visitante', elem.value->>'visitante'))
+      -- Los escudos NO son informacion sensible (igual que en el panel de
+      -- Champions League) -- se dejan pasar aunque la combinada este
+      -- bloqueada, para que la tarjeta "anzuelo" tambien se vea bien en
+      -- vez de solo texto plano.
+      select jsonb_agg(jsonb_build_object(
+        'local', elem.value->>'local', 'visitante', elem.value->>'visitante',
+        'escudo_local', elem.value->'escudo_local', 'escudo_visitante', elem.value->'escudo_visitante'
+      ))
       from jsonb_array_elements(combinadas.partidos_json) elem
     )
   end as partidos_json,

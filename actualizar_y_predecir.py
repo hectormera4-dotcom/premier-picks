@@ -1275,7 +1275,12 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         combinadas.append({
             "nombre": f"Combinada #{n+1}",
             "es_gratis": False,  # se decide despues, cuando ya tenemos todas generadas
-            "partidos": elegidos_df[["fecha", "local", "visitante", "pick_recomendado", "pick_probabilidad", "liga"]].to_dict("records"),
+            # reindex (no [[...]] directo) para que esto no reviente si algun
+            # dia picks_df no trae escudo_local/escudo_visitante (ej. pruebas
+            # con datos de ejemplo, o un pick armado antes de este cambio) --
+            # simplemente quedan en None, el frontend ya sabe omitir el
+            # escudo cuando no viene.
+            "partidos": elegidos_df.reindex(columns=["fecha", "local", "visitante", "escudo_local", "escudo_visitante", "pick_recomendado", "pick_probabilidad", "liga"]).to_dict("records"),
             "probabilidad_combinada": round(prob_acumulada*100, 1),
             "cuota_combinada": round(max(1/prob_acumulada - 0.10, 1.01), 2),
         })
@@ -1677,7 +1682,7 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
     top_indices = df.sort_values("pick_probabilidad", ascending=False).head(n_gratis).index
     df.loc[top_indices, "es_gratis"] = True
 
-    columnas_base = {"fecha", "local", "visitante", "pick_recomendado", "es_combo",
+    columnas_base = {"fecha", "local", "visitante", "escudo_local", "escudo_visitante", "pick_recomendado", "es_combo",
                       "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis", "liga"}
 
     registros = []
@@ -1966,6 +1971,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
 
         picks.append({
             "fecha": fecha_partido, "local": local, "visitante": visitante,
+            "escudo_local": p["homeTeam"].get("crest"), "escudo_visitante": p["awayTeam"].get("crest"),
             "goles_esperados_local": round(lam, 2), "goles_esperados_visitante": round(mu, 2),
             "pick_recomendado": " + ".join(nombres_pick),
             "es_combo": es_combo,
