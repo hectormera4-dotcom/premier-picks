@@ -2543,6 +2543,11 @@ function renderMercadosRecomendadosChampions(data) {
   const recomendados = data
     .map((fila, i) => {
       if (fila.prob_local === null || fila.prob_local === undefined) return null;
+      // Solo partidos con historial COMPLETO -- uno con datos limitados
+      // (algun equipo usando la fuerza conservadora por defecto) no tiene
+      // la misma precision, y no queremos que un analisis menos confiable
+      // se cuele entre "los mejores" solo porque su numero salio alto.
+      if (fila.calidad_datos !== "completo") return null;
       const [col, etiqueta] = entradas.reduce((a, b) => (fila[b[0]] > fila[a[0]] ? b : a));
       return { fila, etiqueta, valor: fila[col], i };
     })
