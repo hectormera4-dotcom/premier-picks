@@ -2525,28 +2525,30 @@ function renderMercadosRecomendadosChampions(data) {
     return;
   }
 
-  // Umbral de 70%, NO el 80% que usa el resto de la app para un pick
-  // "seguro" -- un backtest walk-forward propio para Champions League (ver
-  // calibrar_probabilidad_champions() en actualizar_y_predecir.py) demostro
-  // que, con la calibracion honesta, ningun mercado de esta competencia
-  // llega nunca al 80% real: el rango 70-80% es el mas alto que quedo bien
-  // calibrado fuera de muestra (71.1% declarado vs 72.1% real). Usar 80%
-  // aqui dejaria esta seccion vacia casi siempre, no porque la calibracion
-  // este mal sino porque Champions League es mas pareja/impredecible que
-  // las ligas domesticas. Solo consideramos partidos DESBLOQUEADOS -- si
-  // esta bloqueado, prob_local llega null y ninguno de sus mercados puede
-  // superar el umbral, asi que ya queda afuera sin necesidad de un chequeo
-  // aparte.
-  const UMBRAL = 70;
+  // NO hay un umbral minimo fijo -- un backtest walk-forward propio para
+  // Champions League (ver calibrar_probabilidad_champions() en
+  // actualizar_y_predecir.py) demostro que, con la calibracion honesta,
+  // ningun mercado de esta competencia llega nunca al 80% real que usa el
+  // resto de la app para un pick "seguro" -- exigir un minimo aqui dejaba
+  // esta seccion vacia casi siempre, no porque la calibracion estuviera
+  // mal sino porque Champions League es mas pareja/impredecible que las
+  // ligas domesticas. En vez de eso: se muestran siempre los
+  // MAX_MERCADOS_RECOMENDADOS mercados mas confiables de la jornada, sean
+  // cuales sean sus porcentajes -- el numero mostrado siempre es real, solo
+  // cambia el criterio de que tan seguido aparece algo en esta lista. Solo
+  // consideramos partidos DESBLOQUEADOS -- si esta bloqueado, prob_local
+  // llega null y se descarta sin necesidad de un chequeo aparte.
+  const MAX_MERCADOS_RECOMENDADOS = 4;
   const entradas = Object.entries(ETIQUETAS_MERCADOS_CHAMPIONS);
   const recomendados = data
     .map((fila, i) => {
       if (fila.prob_local === null || fila.prob_local === undefined) return null;
       const [col, etiqueta] = entradas.reduce((a, b) => (fila[b[0]] > fila[a[0]] ? b : a));
-      return fila[col] >= UMBRAL ? { fila, etiqueta, valor: fila[col], i } : null;
+      return { fila, etiqueta, valor: fila[col], i };
     })
     .filter(Boolean)
-    .sort((a, b) => b.valor - a.valor);
+    .sort((a, b) => b.valor - a.valor)
+    .slice(0, MAX_MERCADOS_RECOMENDADOS);
 
   if (recomendados.length === 0) {
     cont.innerHTML = "";
