@@ -864,7 +864,6 @@
     font-size: 13.5px;
     font-weight: 600;
     color: var(--verde-claro);
-    padding-left: 24px;
   }
   .combinada-footer {
     display: flex;
@@ -2566,10 +2565,15 @@ function renderMercadosRecomendadosChampions(data) {
   // Partido y mercado van en lineas separadas (en vez de todo en una sola
   // linea con "vs" y guiones) para que no se sienta amontonado al envolver
   // en pantallas angostas.
+  // Sin el porcentaje a la vista: para alguien que no sabe como funciona
+  // el modelo, ver un numero "modesto" (60-70%) a primera vista genera
+  // desconfianza en vez de venderlo -- el analisis completo con el
+  // porcentaje real sigue disponible un click mas abajo, en la tarjeta
+  // del partido (ahi si tiene contexto: los otros 8 mercados, el badge de
+  // calidad de datos, etc., no es un numero suelto).
   const filas = recomendados.map(r => `
     <div class="mercado-recomendado-fila" onclick="irAPartidoChampions(${r.i})">
       <div class="mercado-recomendado-top">
-        <span class="prob-mini">${r.valor}%</span>
         <span class="combinada-fila-equipos">
           ${escudoImg(r.fila.escudo_local)}<b>${r.fila.local}</b>
           <span class="vs">vs</span>
