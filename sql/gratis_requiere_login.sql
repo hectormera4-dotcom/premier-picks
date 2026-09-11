@@ -14,6 +14,8 @@ select
   fecha,
   local,
   visitante,
+  escudo_local,
+  escudo_visitante,
   es_gratis,
   case when (es_gratis and auth.uid() is not null) or es_usuario_vip_o_admin() then pick_recomendado else null::text end as pick_recomendado,
   case when (es_gratis and auth.uid() is not null) or es_usuario_vip_o_admin() then pick_probabilidad else null::numeric end as pick_probabilidad,
