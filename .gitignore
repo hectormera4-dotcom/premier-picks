@@ -3,3 +3,22 @@ __pycache__/
 *.pyc
 log_actualizacion.txt
 .pytest_cache/
+
+# Datos generados por el pipeline -- viven UNICAMENTE en la rama
+# 'datos-pipeline' (rama sin proteger), nunca en 'main' (protegida, solo
+# codigo). Varios de estos quedaron rastreados en main por accidente
+# antes de que esta regla existiera, y eso rompio el workflow (git no
+# podia cambiar de rama con una version "local" distinta pisada encima --
+# ver commit que agrega este bloque). Este patron evita que se vuelva a
+# repetir con un 'git add .' descuidado.
+*_combinado.csv
+combinadas_del_dia.json
+combinadas_del_dia_*.json
+contador_fechas.json
+contador_fechas_*.json
+historial_combinadas.csv
+historial_picks.csv
+historial_picks_*.csv
+picks_del_dia.csv
+picks_del_dia_*.csv
+ultimo_dia_generado.json
