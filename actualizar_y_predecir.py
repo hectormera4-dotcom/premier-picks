@@ -1692,6 +1692,8 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
             "fecha": str(fila["fecha"]),
             "local": fila["local"],
             "visitante": fila["visitante"],
+            "escudo_local": fila.get("escudo_local") if pd.notna(fila.get("escudo_local")) else None,
+            "escudo_visitante": fila.get("escudo_visitante") if pd.notna(fila.get("escudo_visitante")) else None,
             "pick_recomendado": fila["pick_recomendado"],
             "es_combo": bool(fila["es_combo"]),
             "pick_probabilidad": float(fila["pick_probabilidad"]),

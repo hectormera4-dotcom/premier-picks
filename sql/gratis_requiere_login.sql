@@ -21,7 +21,15 @@ select
   case when (es_gratis and auth.uid() is not null) or es_usuario_vip_o_admin() then pick_es_seguro else null::boolean end as pick_es_seguro,
   case when (es_gratis and auth.uid() is not null) or es_usuario_vip_o_admin() then es_combo else null::boolean end as es_combo,
   case when (es_gratis and auth.uid() is not null) or es_usuario_vip_o_admin() then mercados_json else null::jsonb end as mercados_json,
-  liga
+  liga,
+  -- IMPORTANTE: escudo_local/escudo_visitante van AL FINAL de la lista de
+  -- columnas a proposito -- Postgres no permite que CREATE OR REPLACE VIEW
+  -- inserte columnas nuevas en medio de las que ya existian (solo agregar
+  -- al final), o falla con "cannot change name of view column". El orden
+  -- de las columnas no afecta nada en el codigo (index.html las lee por
+  -- nombre, no por posicion).
+  escudo_local,
+  escudo_visitante
 from public.picks;
 
 create or replace view public.combinadas_publicas as
