@@ -1,1 +1,80 @@
-[]
+[
+  {
+    "nombre": "Combinada #1",
+    "es_gratis": true,
+    "partidos": [
+      {
+        "fecha": "2026-09-11 18:45:00",
+        "local": "Rennes",
+        "visitante": "Marseille",
+        "escudo_local": "https://crests.football-data.org/529.png",
+        "escudo_visitante": "https://crests.football-data.org/516.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 81.0,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-09-11 19:00:00",
+        "local": "West Ham",
+        "visitante": "Wrexham",
+        "escudo_local": "https://crests.football-data.org/563.png",
+        "escudo_visitante": "https://crests.football-data.org/404.png",
+        "pick_recomendado": "Over 1.5 goles + Over 5.5 corners",
+        "pick_probabilidad": 80.8,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-09-11 18:00:00",
+        "local": "AZ Alkmaar",
+        "visitante": "Willem II",
+        "escudo_local": "https://crests.football-data.org/682.png",
+        "escudo_visitante": "https://crests.football-data.org/672.png",
+        "pick_recomendado": "Over 7.5 corners",
+        "pick_probabilidad": 80.4,
+        "liga": "eredivisie"
+      }
+    ],
+    "probabilidad_combinada": 52.6,
+    "cuota_combinada": 1.8,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-09-11 18:30:00",
+        "local": "Union Berlin",
+        "visitante": "Schalke 04",
+        "escudo_local": "https://crests.football-data.org/28.png",
+        "escudo_visitante": "https://crests.football-data.org/6.png",
+        "pick_recomendado": "Doble oportunidad 1X + Over 5.5 corners",
+        "pick_probabilidad": 85.5,
+        "liga": "bundesliga"
+      },
+      {
+        "fecha": "2026-09-11 19:00:00",
+        "local": "Sevilla",
+        "visitante": "Valencia",
+        "escudo_local": "https://crests.football-data.org/559.png",
+        "escudo_visitante": "https://crests.football-data.org/95.png",
+        "pick_recomendado": "Under 11.5 corners",
+        "pick_probabilidad": 82.2,
+        "liga": "la_liga"
+      },
+      {
+        "fecha": "2026-09-11 18:45:00",
+        "local": "Venezia",
+        "visitante": "Fiorentina",
+        "escudo_local": "https://crests.football-data.org/454.png",
+        "escudo_visitante": "https://crests.football-data.org/99.png",
+        "pick_recomendado": "Over 5.5 corners",
+        "pick_probabilidad": 81.0,
+        "liga": "serie_a"
+      }
+    ],
+    "probabilidad_combinada": 56.9,
+    "cuota_combinada": 1.66,
+    "liga": "mixta"
+  }
+]
