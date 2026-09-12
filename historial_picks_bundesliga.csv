@@ -17,3 +17,9 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-06 13:30:00,Hamburg,Mainz,Under 13.5 corners,False,85.7,1.07,2026-09-06,0-5,True
 2026-09-06 15:30:00,Ein Frankfurt,Augsburg,Over 1.5 goles,False,81.1,1.13,2026-09-06,1-4,True
 2026-09-11 18:30:00,Union Berlin,Schalke 04,Doble oportunidad 1X + Over 5.5 corners,True,85.5,1.07,2026-09-11,,
+2026-09-12 13:30:00,Hoffenheim,Stuttgart,Ambos anotan - Si,False,80.5,1.14,2026-09-12,,
+2026-09-12 13:30:00,Dortmund,Paderborn,Over 9.5 corners,False,85.5,1.07,2026-09-12,,
+2026-09-12 13:30:00,Augsburg,Leverkusen,Over 5.5 corners,False,85.8,1.07,2026-09-12,,
+2026-09-12 13:30:00,Mainz,Ein Frankfurt,Over 5.5 corners,False,85.9,1.06,2026-09-12,,
+2026-09-12 13:30:00,Freiburg,M'gladbach,Over 1.5 goles,False,81.7,1.12,2026-09-12,,
+2026-09-12 16:30:00,FC Koln,Werder Bremen,Over 1.5 goles,False,82.0,1.12,2026-09-12,,

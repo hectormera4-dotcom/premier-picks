@@ -24,3 +24,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-07 17:00:00,Getafe,Celta,Under 10.5 corners,False,84.7,1.08,2026-09-07,1-1,True
 2026-09-07 19:30:00,Elche,Sociedad,Over 5.5 corners,False,80.9,1.14,2026-09-07,2-3,True
 2026-09-11 19:00:00,Sevilla,Valencia,Under 11.5 corners,False,82.2,1.12,2026-09-11,,
+2026-09-12 12:00:00,Santander,Alaves,Over 2.5 goles + Over 6.5 corners,True,80.0,1.15,2026-09-12,,
+2026-09-12 14:15:00,Osasuna,Espanyol,Over 5.5 corners,False,82.1,1.12,2026-09-12,,
+2026-09-12 16:30:00,Ath Bilbao,Elche,Doble oportunidad 1X,False,80.5,1.14,2026-09-12,,
+2026-09-12 19:00:00,Real Madrid,Vallecano,Over 7.5 corners,False,81.2,1.13,2026-09-12,,

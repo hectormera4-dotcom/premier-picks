@@ -29,3 +29,10 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-05 16:30:00,Hull,Aston Villa,Local gana,False,82.4,1.11,2026-09-04,0-0,False
 2026-09-06 13:00:00,Everton,Man United,Over 5.5 corners,False,85.5,1.07,2026-09-06,2-2,True
 2026-09-06 15:30:00,Arsenal,Chelsea,Doble oportunidad 1X,False,82.1,1.12,2026-09-06,2-1,True
+2026-09-12 14:00:00,Crystal Palace,Ipswich,Over 1.5 goles,False,81.3,1.13,2026-09-12,,
+2026-09-12 14:00:00,Liverpool,Fulham,Doble oportunidad 1X,False,82.1,1.12,2026-09-12,,
+2026-09-12 14:00:00,Aston Villa,Nott'm Forest,Over 1.5 goles,False,81.4,1.13,2026-09-12,,
+2026-09-12 14:00:00,Bournemouth,Brentford,Over 8.5 corners,False,82.2,1.12,2026-09-12,,
+2026-09-12 14:00:00,Chelsea,Hull,Under 7.0 tiros a puerta,False,80.0,1.15,2026-09-12,,
+2026-09-12 16:30:00,Tottenham,Everton,Over 8.5 corners,False,81.4,1.13,2026-09-12,,
+2026-09-12 19:00:00,Sunderland,Arsenal,Más corners: Arsenal,False,80.2,1.15,2026-09-12,,

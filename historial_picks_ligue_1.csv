@@ -17,3 +17,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-06 15:15:00,Angers,Rennes,Under 13.5 corners,False,86.1,1.06,2026-09-06,1-2,False
 2026-09-06 18:45:00,Marseille,Paris FC,Over 5.5 corners,False,85.7,1.07,2026-09-06,2-3,True
 2026-09-11 18:45:00,Rennes,Marseille,Over 6.5 corners,False,81.0,1.14,2026-09-11,,
+2026-09-12 15:15:00,Strasbourg,Monaco,Under 12.5 corners,False,80.9,1.14,2026-09-12,,
+2026-09-12 18:45:00,Lorient,Toulouse,Under 11.5 corners,False,82.5,1.11,2026-09-12,,
+2026-09-12 18:45:00,Auxerre,Nice,Over 6.5 corners,False,84.1,1.09,2026-09-12,,
+2026-09-12 18:45:00,Le Havre,Angers,Under 11.5 corners,False,82.5,1.11,2026-09-12,,
+2026-09-12 18:45:00,Paris FC,Lyon,Over 1.5 goles,False,80.7,1.14,2026-09-12,,
