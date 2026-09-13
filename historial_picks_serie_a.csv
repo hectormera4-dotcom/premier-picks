@@ -23,3 +23,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-12 13:00:00,Genoa,Frosinone,Over 6.5 corners,False,81.5,1.13,2026-09-12,,
 2026-09-12 16:00:00,Lazio,Milan,Under 11.5 corners,False,82.2,1.12,2026-09-12,,
 2026-09-12 18:45:00,Atalanta,Cagliari,Under 12.5 corners,False,81.9,1.12,2026-09-12,,
+2026-09-13 13:00:00,Lecce,Monza,Over 5.5 corners,False,82.3,1.12,2026-09-13,,
+2026-09-13 16:00:00,Napoli,Bologna,Under 11.5 corners,False,83.8,1.09,2026-09-13,,
+2026-09-13 18:45:00,Sassuolo,Juventus,Over 6.5 corners,False,80.1,1.15,2026-09-13,,
