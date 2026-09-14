@@ -739,11 +739,58 @@ def _marcadores_mas_probables(matriz, top_n=5):
     ]
 
 
-def _explicacion_ia(local, visitante, lam, mu, fuerzas):
-    """Arma un par de frases explicando por que el modelo favorece a un
-    equipo, usando UNICAMENTE numeros que ya calculamos nosotros mismos
-    (goles esperados del propio Dixon-Coles, indices de ataque/defensa de
-    calcular_fuerzas). A proposito NO menciona "xG" ni "ELO" ni ningun otro
+def _racha_y_forma(equipo, historico, n=5):
+    """Ultimos N partidos de un equipo (local o visitante) en el historico
+    real, mas recientes primero. Devuelve (partidos_jugados, victorias,
+    empates, derrotas, racha_tipo, racha_n) -- racha_tipo/racha_n describen
+    una racha ACTUAL de 2+ resultados iguales consecutivos ('G' o 'P'),
+    o (None, 0) si no hay racha (un empate la corta)."""
+    partidos = historico[(historico["HomeTeam"] == equipo) | (historico["AwayTeam"] == equipo)]
+    partidos = partidos.sort_values("Date", ascending=False).head(n)
+    resultados = []
+    for _, fila in partidos.iterrows():
+        es_local = fila["HomeTeam"] == equipo
+        gf = fila["FTHG"] if es_local else fila["FTAG"]
+        gc = fila["FTAG"] if es_local else fila["FTHG"]
+        resultados.append("G" if gf > gc else ("E" if gf == gc else "P"))
+
+    racha_tipo, racha_n = None, 0
+    for r in resultados:
+        if r == "E":
+            break
+        if racha_tipo is None:
+            racha_tipo, racha_n = r, 1
+        elif r == racha_tipo:
+            racha_n += 1
+        else:
+            break
+
+    return (len(resultados), resultados.count("G"), resultados.count("E"),
+            resultados.count("P"), racha_tipo, racha_n)
+
+
+def _frase_forma_reciente(equipo, historico, n=5):
+    """Frase de forma reciente para un equipo, o None si no hay historico
+    disponible (ej. equipos recien ascendidos, o cuando no se paso el
+    historico a generar_picks)."""
+    if historico is None:
+        return None
+    jugados, v, e, d, racha_tipo, racha_n = _racha_y_forma(equipo, historico, n)
+    if jugados == 0:
+        return None
+    frase = f"Forma reciente de {equipo} (últimos {jugados}): {v}V-{e}E-{d}D"
+    if racha_n >= 2:
+        verbo = "ganar" if racha_tipo == "G" else "perder"
+        frase += f" — viene de {verbo} {racha_n} partidos consecutivos"
+    return frase
+
+
+def _explicacion_ia(local, visitante, lam, mu, fuerzas, historico=None):
+    """Arma varias frases explicando por que el modelo favorece a un
+    equipo, usando UNICAMENTE numeros que ya calculamos/tenemos nosotros
+    mismos (goles esperados del propio Dixon-Coles, indices de ataque/
+    defensa de calcular_fuerzas, record real de partidos recientes del
+    propio historico). A proposito NO menciona "xG" ni "ELO" ni ningun otro
     termino que sugiera una fuente de datos externa que no tenemos -- ver
     discusion del [FutDatos-style panel] en el hilo del proyecto."""
     favorito = local if lam > mu else (visitante if mu > lam else None)
@@ -759,6 +806,10 @@ def _explicacion_ia(local, visitante, lam, mu, fuerzas):
             f"{mu:.2f} {visitante} (partido muy parejo)"
         )
 
+    for frase in (_frase_forma_reciente(local, historico), _frase_forma_reciente(visitante, historico)):
+        if frase:
+            frases.append(frase)
+
     fl, fv = fuerzas[local], fuerzas[visitante]
     frases.append(
         f"Índice de ataque (nuestro modelo): {local} {fl['ataque_local']:.2f} de local "
@@ -770,6 +821,44 @@ def _explicacion_ia(local, visitante, lam, mu, fuerzas):
         f"vs {visitante} {fv['defensa_visitante']:.2f} de visitante "
         f"(más bajo = defensa más sólida)"
     )
+    return frases
+
+
+def _explicacion_pick_especifico(nombres_pick, pick_prob, local, visitante,
+                                  fuerzas_corners=None, fuerzas_tarjetas=None, fuerzas_tiros=None):
+    """Explica el/los mercado(s) puntual(es) que se terminaron recomendando
+    -- no solo el resultado del partido en general. Si el pick es de
+    corners/tarjetas/tiros a puerta, usa el MISMO tipo de indice de
+    ataque/defensa que ya calculamos para ese mercado especifico
+    (calcular_fuerzas_corners/tarjetas/tiros, misma estructura que
+    calcular_fuerzas de goles) para justificar por que ese mercado en
+    particular tiene una probabilidad alta -- en vez de quedarse solo en
+    la explicacion generica de goles esperados."""
+    familias = (
+        ("corners", fuerzas_corners, "córners"),
+        ("tarjetas", fuerzas_tarjetas, "tarjetas"),
+        ("tiros a puerta", fuerzas_tiros, "tiros a puerta"),
+    )
+    frases = []
+    ya_explicadas = set()
+    for nombre in nombres_pick:
+        nombre_normalizado = nombre.lower()
+        for clave, fuerzas_extra, etiqueta in familias:
+            if (clave in nombre_normalizado and clave not in ya_explicadas
+                    and fuerzas_extra and local in fuerzas_extra and visitante in fuerzas_extra):
+                ya_explicadas.add(clave)
+                fl, fv = fuerzas_extra[local], fuerzas_extra[visitante]
+                frases.append(
+                    f"Índice de {etiqueta} (nuestro modelo): {local} genera {fl['ataque_local']:.2f} de local "
+                    f"vs {visitante} {fv['ataque_visitante']:.2f} de visitante "
+                    f"(1.00 = promedio de la liga) — esto respalda el mercado de {etiqueta} recomendado"
+                )
+
+    if nombres_pick:
+        frases.append(
+            f"El pick recomendado, \"{' + '.join(nombres_pick)}\", alcanza {pick_prob*100:.1f}% "
+            f"de probabilidad calibrada según nuestro modelo."
+        )
     return frases
 
 
@@ -1939,7 +2028,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                    fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, corners_combinable=False,
                    fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False,
                    fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False,
-                   partidos_temporada_actual=None):
+                   partidos_temporada_actual=None, historico=None):
     programados = [p for p in partidos if p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO]
     picks = []
 
@@ -2031,7 +2120,13 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             "escudo_local": p["homeTeam"].get("crest"), "escudo_visitante": p["awayTeam"].get("crest"),
             "goles_esperados_local": round(lam, 2), "goles_esperados_visitante": round(mu, 2),
             "marcadores_probables": _marcadores_mas_probables(matriz),
-            "explicacion_ia": _explicacion_ia(local, visitante, lam, mu, fuerzas),
+            "explicacion_ia": (
+                _explicacion_ia(local, visitante, lam, mu, fuerzas, historico=historico)
+                + _explicacion_pick_especifico(nombres_pick, pick_prob, local, visitante,
+                                                fuerzas_corners=fuerzas_corners,
+                                                fuerzas_tarjetas=fuerzas_tarjetas,
+                                                fuerzas_tiros=fuerzas_tiros)
+            ),
             "pick_recomendado": " + ".join(nombres_pick),
             "es_combo": es_combo,
             "pick_probabilidad": round(pick_prob*100, 1),
@@ -2267,7 +2362,7 @@ def generar_picks_liga(liga_key, ctx, umbral_dinamico):
         tarjetas_combinable=ctx["tarjetas_combinable"],
         fuerzas_tiros=ctx["fuerzas_tiros"], prom_l_tiros=ctx["prom_l_tiros"], prom_v_tiros=ctx["prom_v_tiros"],
         tiros_combinable=ctx["tiros_combinable"],
-        partidos_temporada_actual=ctx["partidos_temporada_actual"])
+        partidos_temporada_actual=ctx["partidos_temporada_actual"], historico=ctx["historico"])
 
     historico = ctx["historico"]
     historial = ctx["historial"]
