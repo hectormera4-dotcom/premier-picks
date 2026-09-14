@@ -1560,12 +1560,13 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST
 06/09/2026,Valencia,Barcelona,0,5,A,1.0,4.0,1.0,3.0,2.0,10.0
 07/09/2026,Elche,Sociedad,2,3,A,6.0,7.0,4.0,1.0,10.0,6.0
 07/09/2026,Getafe,Celta,1,1,D,3.0,5.0,4.0,2.0,2.0,3.0
-11/09/2026,Sevilla,Valencia,1,0,H,,,,,,
-12/09/2026,Ath Bilbao,Elche,1,1,D,,,,,,
+11/09/2026,Sevilla,Valencia,1,0,H,6.0,4.0,1.0,2.0,4.0,0.0
+12/09/2026,Ath Bilbao,Elche,1,1,D,7.0,1.0,3.0,3.0,3.0,1.0
 12/09/2026,Osasuna,Espanyol,0,2,A,,,,,,
-12/09/2026,Real Madrid,Vallecano,4,1,H,,,,,,
-12/09/2026,Santander,Alaves,2,1,H,,,,,,
-13/09/2026,Celta,Malaga,1,1,D,,,,,,
-13/09/2026,Getafe,La Coruna,1,1,D,,,,,,
-13/09/2026,Levante,Barcelona,2,4,A,,,,,,
-13/09/2026,Sociedad,Ath Madrid,0,3,A,,,,,,
+12/09/2026,Real Madrid,Vallecano,4,1,H,11.0,5.0,0.0,1.0,11.0,7.0
+12/09/2026,Santander,Alaves,2,1,H,4.0,6.0,2.0,3.0,4.0,8.0
+13/09/2026,Celta,Malaga,1,1,D,1.0,5.0,1.0,1.0,5.0,2.0
+13/09/2026,Getafe,La Coruna,1,1,D,3.0,7.0,3.0,1.0,4.0,3.0
+13/09/2026,Levante,Barcelona,2,4,A,3.0,5.0,1.0,1.0,7.0,6.0
+13/09/2026,Sociedad,Ath Madrid,0,3,A,9.0,3.0,3.0,1.0,3.0,5.0
+14/09/2026,Villarreal,Betis,1,2,A,7.0,4.0,1.0,0.0,8.0,12.0
