@@ -721,15 +721,30 @@
      en vez de sentirse un dato estatico mas (pedido explicito del usuario). */
   .prob-bar-1x2 { width: 100%; }
   .prob-bar-1x2-track {
-    animation: barraApareceEntrada 0.4s ease;
+    position: relative;
+    overflow: hidden;
   }
-  @keyframes barraApareceEntrada {
-    from { opacity: 0; transform: scaleY(0.3); }
-    to { opacity: 1; transform: scaleY(1); }
+  /* Barrido de brillo que cruza la barra una vez que termina de llenarse
+     (el fill dura 0.9s, el brillo arranca justo despues) -- es lo que hace
+     que la barra se sienta "viva" en vez de un elemento estatico. */
+  .prob-bar-1x2-track::after {
+    content: "";
+    position: absolute; top: 0; left: -35%; width: 35%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+    animation: brilloBarra1X2 1.1s ease 0.9s 1;
+  }
+  @keyframes brilloBarra1X2 {
+    from { left: -35%; }
+    to { left: 100%; }
   }
   .prob-bar-seg {
     height: 100%;
-    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    width: var(--w, 0%);
+    animation: llenarBarra1X2 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes llenarBarra1X2 {
+    from { width: 0%; }
+    to { width: var(--w); }
   }
   .prob-bar-local { background: var(--verde); }
   .prob-bar-empate { background: var(--ambar); }
@@ -751,8 +766,8 @@
     50% { text-shadow: 0 0 8px rgba(47,110,69,0.55); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .prob-bar-seg { transition: none; }
-    .prob-bar-1x2-track { animation: none; }
+    .prob-bar-seg { animation: none; width: var(--w, 0%); }
+    .prob-bar-1x2-track::after { animation: none; content: none; }
     .prob-bar-1x2-etiquetas .prob-bar-fav { animation: none; }
   }
 
@@ -2280,19 +2295,33 @@ function crearTarjeta(p, i) {
 
 // Barra de 1X2 (Local/Empate/Visitante), pieza central de la tarjeta
 // colapsada -- mismos numeros que ya calculabamos (prob_local/prob_empate/
-// prob_visitante), pero ahora se "llenan" animadas al aparecer en pantalla
-// (ver animarBarrasProb1X2) y el favorito tiene un resplandor pulsante,
-// para que llame la atencion en vez de verse estatica.
+// prob_visitante). Dos ajustes sobre la primera version:
+//
+// 1. Los 3 valores son CALIBRADOS por separado (Platt Scaling se aplica
+//    mercado por mercado -- ver calibrar_probabilidad en el pipeline), asi
+//    que rara vez suman exactamente 100% (normalmente suman ~80%). Sin
+//    normalizar, la barra dejaba un tramo gris sin llenar que se veia como
+//    un "4to color" confuso. Aqui se normalizan SOLO los anchos visuales
+//    (proporcion entre los 3), la etiqueta sigue mostrando el % calibrado
+//    real -- no se inventa ni se infla ningun numero, solo se redistribuye
+//    el ancho de la barra para que sea legible.
+// 2. La animacion de llenado ahora es un @keyframes de CSS puro (variable
+//    --w, ver .prob-bar-seg) en vez de JS + requestAnimationFrame -- se
+//    dispara siempre que el elemento se crea, sin depender de timing de
+//    renderizado (la version anterior podia no animar si el navegador
+//    pintaba antes de que el doble rAF corriera).
 function crearBarraProb1X2(p) {
   const { probLocal: pL, probEmpate: pE, probVisitante: pV } = p;
   if (pL == null || pE == null || pV == null) return "";
+  const suma = pL + pE + pV || 1;
+  const wL = (pL / suma) * 100, wE = (pE / suma) * 100, wV = (pV / suma) * 100;
   const max = Math.max(pL, pE, pV);
   return `
     <div class="prob-bar-1x2">
       <div class="prob-bar-1x2-track">
-        <div class="prob-bar-seg prob-bar-local" data-w="${pL}" style="width:0%"></div>
-        <div class="prob-bar-seg prob-bar-empate" data-w="${pE}" style="width:0%"></div>
-        <div class="prob-bar-seg prob-bar-visitante" data-w="${pV}" style="width:0%"></div>
+        <div class="prob-bar-seg prob-bar-local" style="--w:${wL}%"></div>
+        <div class="prob-bar-seg prob-bar-empate" style="--w:${wE}%"></div>
+        <div class="prob-bar-seg prob-bar-visitante" style="--w:${wV}%"></div>
       </div>
       <div class="prob-bar-1x2-etiquetas">
         <span class="${pL === max ? "prob-bar-fav" : ""}">${p.local} <b>${pL}%</b></span>
@@ -2301,19 +2330,6 @@ function crearBarraProb1X2(p) {
       </div>
     </div>
   `;
-}
-
-// Anima el "llenado" de las barras 1X2 recien insertadas en el DOM --
-// arrancan en width:0 (puesto arriba en crearBarraProb1X2) y aqui se les
-// asigna su ancho real, dentro de un doble requestAnimationFrame para que
-// el navegador pinte el 0% primero y la transicion CSS (ver .prob-bar-seg)
-// se note. Sin este truco el navegador podria saltar directo al valor
-// final sin animar.
-function animarBarrasProb1X2() {
-  const segmentos = document.querySelectorAll(".prob-bar-seg[data-w]");
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    segmentos.forEach(seg => { seg.style.width = `${seg.dataset.w}%`; });
-  }));
 }
 
 function render(picks, combinadas) {
@@ -2345,7 +2361,6 @@ function render(picks, combinadas) {
   }
 
   document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picks.map(crearTarjeta).join("");
-  animarBarrasProb1X2();
 }
 
 function toggleDetalle(i) {
