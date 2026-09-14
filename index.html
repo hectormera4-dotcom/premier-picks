@@ -690,6 +690,18 @@
   .mercado-fila span:first-child { color: var(--tinta-suave); }
   .mercado-fila span:last-child { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
 
+  /* --- Marcadores mas probables (chips) y Explicacion IA --- */
+  .marcadores-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .marcador-chip {
+    font-size: 11.5px; padding: 3px 8px; border-radius: 20px;
+    background: var(--papel-alt); border: 1px solid var(--linea);
+    color: var(--tinta-suave); white-space: nowrap;
+  }
+  .marcador-chip b { color: var(--tinta); font-family: 'IBM Plex Mono', monospace; }
+  .explicacion-ia { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--linea); }
+  .explicacion-ia-titulo { font-size: 12.5px; font-weight: 700; color: var(--tinta); margin-bottom: 6px; }
+  .explicacion-ia-fila { font-size: 12.5px; color: var(--tinta-suave); padding: 3px 0; line-height: 1.4; }
+
   /* --- Champions League: escudos, barras de confianza, mercado destacado --- */
   .card-champions { transition: transform 0.15s ease, box-shadow 0.15s ease; }
   .card-champions:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.16); }
@@ -1150,6 +1162,8 @@ function transformarPick(fila) {
     fecha: formatearFecha(fila.fecha),
     local: fila.local, visitante: fila.visitante,
     escudoLocal: fila.escudo_local, escudoVisitante: fila.escudo_visitante,
+    marcadoresProbables: fila.marcadores_probables || [],
+    explicacionIA: fila.explicacion_ia || [],
     esGratis, tieneDatos, seguro,
     pick: tieneDatos ? fila.pick_recomendado : null,
     prob: tieneDatos ? Math.round(fila.pick_probabilidad) : null,
@@ -2101,6 +2115,21 @@ function crearTarjeta(p, i) {
     <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
   `).join("");
 
+  const explicacionHtml = p.explicacionIA.length ? `
+    <div class="explicacion-ia">
+      <div class="explicacion-ia-titulo">🧠 Por qué lo dice el modelo</div>
+      ${p.explicacionIA.map(frase => `<div class="explicacion-ia-fila">${frase}</div>`).join("")}
+    </div>
+  ` : "";
+
+  const marcadoresHtml = p.marcadoresProbables.length ? `
+    <div class="marcadores-chip-row">
+      ${p.marcadoresProbables.slice(0, 3).map(m => `
+        <span class="marcador-chip">${m.marcador} <b>${m.probabilidad}%</b></span>
+      `).join("")}
+    </div>
+  ` : "";
+
   // Caso 2: es gratis, pero el partido no tiene ningun mercado que llegue
   // al umbral. No inventamos una recomendacion, lo mostramos como "parejo".
   if (!p.seguro) {
@@ -2117,10 +2146,11 @@ function crearTarjeta(p, i) {
         <div class="card-body">
           <div class="card-info">
             <div class="sin-pick-texto">Partido parejo — ningún mercado alcanza nuestro estándar de seguridad esta fecha.</div>
+            ${marcadoresHtml}
           </div>
         </div>
         <button class="card-toggle" onclick="toggleDetalle(${i})">Ver probabilidades de todas formas ▾</button>
-        <div class="card-detalle" id="detalle-${i}">${detalleFilas}</div>
+        <div class="card-detalle" id="detalle-${i}">${explicacionHtml}${detalleFilas}</div>
       </div>
     `;
   }
@@ -2149,10 +2179,11 @@ function crearTarjeta(p, i) {
             ${comboBadge}
             <span class="cuota">cuota ~${p.cuota}</span>
           </div>
+          ${marcadoresHtml}
         </div>
       </div>
-      <button class="card-toggle" onclick="toggleDetalle(${i})">Ver todos los mercados ▾</button>
-      <div class="card-detalle" id="detalle-${i}">${detalleFilas}</div>
+      <button class="card-toggle" onclick="toggleDetalle(${i})">Ver análisis y todos los mercados ▾</button>
+      <div class="card-detalle" id="detalle-${i}">${explicacionHtml}${detalleFilas}</div>
     </div>
   `;
 }
