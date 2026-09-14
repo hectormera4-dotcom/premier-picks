@@ -725,6 +725,54 @@ def matriz_marcadores(local, visitante, fuerzas, prom_l, prom_v, rho):
     matriz = matriz / matriz.sum()
     return matriz, lam, mu
 
+def _marcadores_mas_probables(matriz, top_n=5):
+    """A partir de la matriz de probabilidades por marcador exacto que ya
+    calcula Dixon-Coles (la misma que usa calcular_mercados para sumar los
+    mercados de goles), devuelve los N marcadores mas probables tal cual --
+    no es un dato nuevo, es exponer algo que ya calculabamos internamente."""
+    n = matriz.shape[0]
+    celdas = [(matriz[i][j], i, j) for i in range(n) for j in range(n)]
+    celdas.sort(key=lambda c: c[0], reverse=True)
+    return [
+        {"marcador": f"{i}-{j}", "probabilidad": round(prob * 100, 1)}
+        for prob, i, j in celdas[:top_n]
+    ]
+
+
+def _explicacion_ia(local, visitante, lam, mu, fuerzas):
+    """Arma un par de frases explicando por que el modelo favorece a un
+    equipo, usando UNICAMENTE numeros que ya calculamos nosotros mismos
+    (goles esperados del propio Dixon-Coles, indices de ataque/defensa de
+    calcular_fuerzas). A proposito NO menciona "xG" ni "ELO" ni ningun otro
+    termino que sugiera una fuente de datos externa que no tenemos -- ver
+    discusion del [FutDatos-style panel] en el hilo del proyecto."""
+    favorito = local if lam > mu else (visitante if mu > lam else None)
+    frases = []
+    if favorito:
+        frases.append(
+            f"Goles esperados según nuestro modelo: {local} {lam:.2f} — "
+            f"{mu:.2f} {visitante} (favorece a {favorito})"
+        )
+    else:
+        frases.append(
+            f"Goles esperados según nuestro modelo: {local} {lam:.2f} — "
+            f"{mu:.2f} {visitante} (partido muy parejo)"
+        )
+
+    fl, fv = fuerzas[local], fuerzas[visitante]
+    frases.append(
+        f"Índice de ataque (nuestro modelo): {local} {fl['ataque_local']:.2f} de local "
+        f"vs {visitante} {fv['ataque_visitante']:.2f} de visitante "
+        f"(1.00 = promedio de la liga)"
+    )
+    frases.append(
+        f"Índice de defensa (nuestro modelo): {local} {fl['defensa_local']:.2f} de local "
+        f"vs {visitante} {fv['defensa_visitante']:.2f} de visitante "
+        f"(más bajo = defensa más sólida)"
+    )
+    return frases
+
+
 def calcular_mercados(matriz):
     n = matriz.shape[0]
     p_local = sum(matriz[i][j] for i in range(n) for j in range(n) if i > j)
@@ -1682,7 +1730,12 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
     top_indices = df.sort_values("pick_probabilidad", ascending=False).head(n_gratis).index
     df.loc[top_indices, "es_gratis"] = True
 
-    columnas_base = {"fecha", "local", "visitante", "escudo_local", "escudo_visitante", "pick_recomendado", "es_combo",
+    # marcadores_probables/explicacion_ia son listas (no numeros sueltos),
+    # asi que no pueden pasar por el catch-all de "mercados" de abajo (pd.notna
+    # sobre una lista no funciona) -- se suben como campos propios, igual que
+    # escudo_local/escudo_visitante.
+    columnas_base = {"fecha", "local", "visitante", "escudo_local", "escudo_visitante",
+                      "marcadores_probables", "explicacion_ia", "pick_recomendado", "es_combo",
                       "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis", "liga"}
 
     registros = []
@@ -1694,6 +1747,8 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
             "visitante": fila["visitante"],
             "escudo_local": fila.get("escudo_local") if pd.notna(fila.get("escudo_local")) else None,
             "escudo_visitante": fila.get("escudo_visitante") if pd.notna(fila.get("escudo_visitante")) else None,
+            "marcadores_probables": fila.get("marcadores_probables") or [],
+            "explicacion_ia": fila.get("explicacion_ia") or [],
             "pick_recomendado": fila["pick_recomendado"],
             "es_combo": bool(fila["es_combo"]),
             "pick_probabilidad": float(fila["pick_probabilidad"]),
@@ -1975,6 +2030,8 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             "fecha": fecha_partido, "local": local, "visitante": visitante,
             "escudo_local": p["homeTeam"].get("crest"), "escudo_visitante": p["awayTeam"].get("crest"),
             "goles_esperados_local": round(lam, 2), "goles_esperados_visitante": round(mu, 2),
+            "marcadores_probables": _marcadores_mas_probables(matriz),
+            "explicacion_ia": _explicacion_ia(local, visitante, lam, mu, fuerzas),
             "pick_recomendado": " + ".join(nombres_pick),
             "es_combo": es_combo,
             "pick_probabilidad": round(pick_prob*100, 1),
