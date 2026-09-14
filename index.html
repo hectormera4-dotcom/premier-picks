@@ -715,7 +715,22 @@
     display: flex; width: 100%; height: 8px; border-radius: 5px; overflow: hidden;
     background: var(--linea);
   }
-  .prob-bar-seg { height: 100%; }
+  /* La barra 1X2 es ahora lo primero que se ve de cada tarjeta (antes
+     vivia escondida en el desplegable) -- el llenado animado + el brillo
+     pulsante del favorito son a proposito, para que "llame la atencion"
+     en vez de sentirse un dato estatico mas (pedido explicito del usuario). */
+  .prob-bar-1x2 { width: 100%; }
+  .prob-bar-1x2-track {
+    animation: barraApareceEntrada 0.4s ease;
+  }
+  @keyframes barraApareceEntrada {
+    from { opacity: 0; transform: scaleY(0.3); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+  .prob-bar-seg {
+    height: 100%;
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
   .prob-bar-local { background: var(--verde); }
   .prob-bar-empate { background: var(--ambar); }
   .prob-bar-visitante { background: var(--rojo); }
@@ -726,8 +741,23 @@
   .prob-bar-1x2-etiquetas span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .prob-bar-1x2-etiquetas span:last-child { text-align: right; }
   .prob-bar-1x2-etiquetas b { font-family: 'IBM Plex Mono', monospace; color: var(--tinta); }
-  .prob-bar-1x2-etiquetas .prob-bar-fav { color: var(--verde); font-weight: 700; }
+  .prob-bar-1x2-etiquetas .prob-bar-fav {
+    color: var(--verde); font-weight: 700;
+    animation: pulsoFavorito 2.2s ease-in-out infinite;
+  }
   .prob-bar-1x2-etiquetas .prob-bar-fav b { color: var(--verde); }
+  @keyframes pulsoFavorito {
+    0%, 100% { text-shadow: 0 0 0 rgba(47,110,69,0); }
+    50% { text-shadow: 0 0 8px rgba(47,110,69,0.55); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .prob-bar-seg { transition: none; }
+    .prob-bar-1x2-track { animation: none; }
+    .prob-bar-1x2-etiquetas .prob-bar-fav { animation: none; }
+  }
+
+  /* --- Pick recomendado, ahora dentro del panel "Ver análisis completo" --- */
+  .analisis-pick { display: flex; gap: 16px; align-items: center; }
 
   /* --- Marcadores mas probables (chips) y Explicacion IA --- */
   .marcadores-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -2153,10 +2183,11 @@ function crearTarjeta(p, i) {
     <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
   `).join("");
 
-  // Panel de analisis: todo lo que antes iba amontonado en la tarjeta
-  // (explicacion, marcadores probables, mercados) ahora vive en secciones
-  // separadas y con encabezado, dentro del desplegable -- la tarjeta
-  // colapsada solo muestra un resumen (barra 1X2 + pick) para no saturar.
+  // Panel de analisis (detras del boton "Ver análisis completo"): el pick
+  // recomendado, la explicacion, los marcadores probables y todos los
+  // mercados -- todo lo "denso" queda aqui. La tarjeta colapsada solo
+  // muestra la barra 1X2 animada, para dar un primer vistazo llamativo
+  // sin saturar (pedido explicito del usuario).
   const seccionExplicacion = p.explicacionIA.length ? `
     <div class="analisis-seccion">
       <div class="analisis-seccion-titulo">🧠 Lectura del modelo</div>
@@ -2182,11 +2213,10 @@ function crearTarjeta(p, i) {
     </div>
   `;
 
-  const panelAnalisis = `${crearBarraProb1X2(p)}${seccionExplicacion}${seccionMarcadores}${seccionMercados}`;
-
   // Caso 2: es gratis, pero el partido no tiene ningun mercado que llegue
   // al umbral. No inventamos una recomendacion, lo mostramos como "parejo".
   if (!p.seguro) {
+    const panelAnalisis = `${seccionExplicacion}${seccionMarcadores}${seccionMercados}`;
     return `
       <div class="card sin-pick">
         <div class="card-top">
@@ -2200,6 +2230,7 @@ function crearTarjeta(p, i) {
         <div class="card-body">
           <div class="card-info">
             <div class="sin-pick-texto">Partido parejo — ningún mercado alcanza nuestro estándar de seguridad esta fecha.</div>
+            ${crearBarraProb1X2(p)}
           </div>
         </div>
         <button class="card-toggle card-toggle-boton" onclick="toggleDetalle(${i})">📊 Ver análisis completo</button>
@@ -2213,6 +2244,21 @@ function crearTarjeta(p, i) {
   const badgeTexto = p.nivel === "seguro" ? "Muy seguro" : "Moderado";
   const comboBadge = p.combo ? `<span class="badge badge-combo">Combo x2</span>` : "";
 
+  const seccionPick = `
+    <div class="analisis-seccion analisis-pick">
+      <div class="gauge-wrap">${crearGauge(p.prob, p.nivel)}</div>
+      <div class="card-info">
+        <div class="pick-nombre">${p.pick}</div>
+        <div class="pick-meta">
+          <span class="badge ${badgeClase}">${badgeTexto}</span>
+          ${comboBadge}
+          <span class="cuota">cuota ~${p.cuota}</span>
+        </div>
+      </div>
+    </div>
+  `;
+  const panelAnalisis = `${seccionPick}${seccionExplicacion}${seccionMarcadores}${seccionMercados}`;
+
   return `
     <div class="card">
       <div class="card-top">
@@ -2224,15 +2270,7 @@ function crearTarjeta(p, i) {
         </div>
       </div>
       <div class="card-body">
-        <div class="gauge-wrap">${crearGauge(p.prob, p.nivel)}</div>
-        <div class="card-info">
-          <div class="pick-nombre">${p.pick}</div>
-          <div class="pick-meta">
-            <span class="badge ${badgeClase}">${badgeTexto}</span>
-            ${comboBadge}
-            <span class="cuota">cuota ~${p.cuota}</span>
-          </div>
-        </div>
+        ${crearBarraProb1X2(p)}
       </div>
       <button class="card-toggle card-toggle-boton" onclick="toggleDetalle(${i})">📊 Ver análisis completo</button>
       <div class="card-detalle" id="detalle-${i}">${panelAnalisis}</div>
@@ -2240,20 +2278,21 @@ function crearTarjeta(p, i) {
   `;
 }
 
-// Barra de 1X2 (Local/Empate/Visitante) que resume el partido de un
-// vistazo dentro del panel de analisis -- mismos numeros que ya vivian
-// sueltos en la lista de "todos los mercados", solo que aqui se ven de
-// forma visual e inmediata en vez de tener que leer una tabla.
+// Barra de 1X2 (Local/Empate/Visitante), pieza central de la tarjeta
+// colapsada -- mismos numeros que ya calculabamos (prob_local/prob_empate/
+// prob_visitante), pero ahora se "llenan" animadas al aparecer en pantalla
+// (ver animarBarrasProb1X2) y el favorito tiene un resplandor pulsante,
+// para que llame la atencion en vez de verse estatica.
 function crearBarraProb1X2(p) {
   const { probLocal: pL, probEmpate: pE, probVisitante: pV } = p;
   if (pL == null || pE == null || pV == null) return "";
   const max = Math.max(pL, pE, pV);
   return `
-    <div class="analisis-seccion prob-bar-1x2">
+    <div class="prob-bar-1x2">
       <div class="prob-bar-1x2-track">
-        <div class="prob-bar-seg prob-bar-local" style="width:${pL}%"></div>
-        <div class="prob-bar-seg prob-bar-empate" style="width:${pE}%"></div>
-        <div class="prob-bar-seg prob-bar-visitante" style="width:${pV}%"></div>
+        <div class="prob-bar-seg prob-bar-local" data-w="${pL}" style="width:0%"></div>
+        <div class="prob-bar-seg prob-bar-empate" data-w="${pE}" style="width:0%"></div>
+        <div class="prob-bar-seg prob-bar-visitante" data-w="${pV}" style="width:0%"></div>
       </div>
       <div class="prob-bar-1x2-etiquetas">
         <span class="${pL === max ? "prob-bar-fav" : ""}">${p.local} <b>${pL}%</b></span>
@@ -2262,6 +2301,19 @@ function crearBarraProb1X2(p) {
       </div>
     </div>
   `;
+}
+
+// Anima el "llenado" de las barras 1X2 recien insertadas en el DOM --
+// arrancan en width:0 (puesto arriba en crearBarraProb1X2) y aqui se les
+// asigna su ancho real, dentro de un doble requestAnimationFrame para que
+// el navegador pinte el 0% primero y la transicion CSS (ver .prob-bar-seg)
+// se note. Sin este truco el navegador podria saltar directo al valor
+// final sin animar.
+function animarBarrasProb1X2() {
+  const segmentos = document.querySelectorAll(".prob-bar-seg[data-w]");
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    segmentos.forEach(seg => { seg.style.width = `${seg.dataset.w}%`; });
+  }));
 }
 
 function render(picks, combinadas) {
@@ -2293,6 +2345,7 @@ function render(picks, combinadas) {
   }
 
   document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picks.map(crearTarjeta).join("");
+  animarBarrasProb1X2();
 }
 
 function toggleDetalle(i) {
