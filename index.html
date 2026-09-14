@@ -673,9 +673,23 @@
     cursor: pointer;
     text-transform: uppercase;
   }
+  /* Boton "Ver analisis completo" -- antes era un simple texto subrayado,
+     ahora se ve como una accion clara (pedido del usuario: la tarjeta
+     colapsada se sentia amontonada, con todo el analisis junto). */
+  .card-toggle-boton {
+    background: var(--verde);
+    color: var(--papel);
+    font-weight: 700;
+    font-size: 12.5px;
+    text-transform: none;
+    letter-spacing: normal;
+    padding: 11px;
+    border-top: none;
+  }
+  .card-toggle-boton:hover { background: var(--verde-claro); }
   .card-detalle {
     display: none;
-    padding: 14px 18px 16px;
+    padding: 16px 18px 18px;
     background: var(--papel-alt);
     font-size: 12.5px;
   }
@@ -690,16 +704,39 @@
   .mercado-fila span:first-child { color: var(--tinta-suave); }
   .mercado-fila span:last-child { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
 
+  /* --- Panel de analisis desplegable: secciones separadas con encabezado,
+     en vez de todo junto sin jerarquia visual --- */
+  .analisis-seccion { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--linea); }
+  .analisis-seccion:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .analisis-seccion-titulo { font-size: 12.5px; font-weight: 700; color: var(--tinta); margin-bottom: 8px; }
+
+  /* --- Barra 1X2 (Local/Empate/Visitante), resumen visual al abrir el panel --- */
+  .prob-bar-1x2-track {
+    display: flex; width: 100%; height: 8px; border-radius: 5px; overflow: hidden;
+    background: var(--linea);
+  }
+  .prob-bar-seg { height: 100%; }
+  .prob-bar-local { background: var(--verde); }
+  .prob-bar-empate { background: var(--ambar); }
+  .prob-bar-visitante { background: var(--rojo); }
+  .prob-bar-1x2-etiquetas {
+    display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
+    font-size: 11px; color: var(--tinta-suave);
+  }
+  .prob-bar-1x2-etiquetas span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .prob-bar-1x2-etiquetas span:last-child { text-align: right; }
+  .prob-bar-1x2-etiquetas b { font-family: 'IBM Plex Mono', monospace; color: var(--tinta); }
+  .prob-bar-1x2-etiquetas .prob-bar-fav { color: var(--verde); font-weight: 700; }
+  .prob-bar-1x2-etiquetas .prob-bar-fav b { color: var(--verde); }
+
   /* --- Marcadores mas probables (chips) y Explicacion IA --- */
-  .marcadores-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .marcadores-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
   .marcador-chip {
     font-size: 11.5px; padding: 3px 8px; border-radius: 20px;
-    background: var(--papel-alt); border: 1px solid var(--linea);
+    background: var(--papel); border: 1px solid var(--linea);
     color: var(--tinta-suave); white-space: nowrap;
   }
   .marcador-chip b { color: var(--tinta); font-family: 'IBM Plex Mono', monospace; }
-  .explicacion-ia { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--linea); }
-  .explicacion-ia-titulo { font-size: 12.5px; font-weight: 700; color: var(--tinta); margin-bottom: 6px; }
   .explicacion-ia-fila { font-size: 12.5px; color: var(--tinta-suave); padding: 3px 0; line-height: 1.4; }
 
   /* --- Champions League: escudos, barras de confianza, mercado destacado --- */
@@ -1162,6 +1199,7 @@ function transformarPick(fila) {
     fecha: formatearFecha(fila.fecha),
     local: fila.local, visitante: fila.visitante,
     escudoLocal: fila.escudo_local, escudoVisitante: fila.escudo_visitante,
+    probLocal: mercadosObj.prob_local, probEmpate: mercadosObj.prob_empate, probVisitante: mercadosObj.prob_visitante,
     marcadoresProbables: fila.marcadores_probables || [],
     explicacionIA: fila.explicacion_ia || [],
     esGratis, tieneDatos, seguro,
@@ -2115,20 +2153,36 @@ function crearTarjeta(p, i) {
     <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
   `).join("");
 
-  const explicacionHtml = p.explicacionIA.length ? `
-    <div class="explicacion-ia">
-      <div class="explicacion-ia-titulo">🧠 Por qué lo dice el modelo</div>
+  // Panel de analisis: todo lo que antes iba amontonado en la tarjeta
+  // (explicacion, marcadores probables, mercados) ahora vive en secciones
+  // separadas y con encabezado, dentro del desplegable -- la tarjeta
+  // colapsada solo muestra un resumen (barra 1X2 + pick) para no saturar.
+  const seccionExplicacion = p.explicacionIA.length ? `
+    <div class="analisis-seccion">
+      <div class="analisis-seccion-titulo">🧠 Lectura del modelo</div>
       ${p.explicacionIA.map(frase => `<div class="explicacion-ia-fila">${frase}</div>`).join("")}
     </div>
   ` : "";
 
-  const marcadoresHtml = p.marcadoresProbables.length ? `
-    <div class="marcadores-chip-row">
-      ${p.marcadoresProbables.slice(0, 3).map(m => `
-        <span class="marcador-chip">${m.marcador} <b>${m.probabilidad}%</b></span>
-      `).join("")}
+  const seccionMarcadores = p.marcadoresProbables.length ? `
+    <div class="analisis-seccion">
+      <div class="analisis-seccion-titulo">🎲 Marcadores más probables</div>
+      <div class="marcadores-chip-row">
+        ${p.marcadoresProbables.slice(0, 5).map(m => `
+          <span class="marcador-chip">${m.marcador} <b>${m.probabilidad}%</b></span>
+        `).join("")}
+      </div>
     </div>
   ` : "";
+
+  const seccionMercados = `
+    <div class="analisis-seccion">
+      <div class="analisis-seccion-titulo">📊 Todos los mercados</div>
+      ${detalleFilas}
+    </div>
+  `;
+
+  const panelAnalisis = `${crearBarraProb1X2(p)}${seccionExplicacion}${seccionMarcadores}${seccionMercados}`;
 
   // Caso 2: es gratis, pero el partido no tiene ningun mercado que llegue
   // al umbral. No inventamos una recomendacion, lo mostramos como "parejo".
@@ -2146,11 +2200,10 @@ function crearTarjeta(p, i) {
         <div class="card-body">
           <div class="card-info">
             <div class="sin-pick-texto">Partido parejo — ningún mercado alcanza nuestro estándar de seguridad esta fecha.</div>
-            ${marcadoresHtml}
           </div>
         </div>
-        <button class="card-toggle" onclick="toggleDetalle(${i})">Ver probabilidades de todas formas ▾</button>
-        <div class="card-detalle" id="detalle-${i}">${explicacionHtml}${detalleFilas}</div>
+        <button class="card-toggle card-toggle-boton" onclick="toggleDetalle(${i})">📊 Ver análisis completo</button>
+        <div class="card-detalle" id="detalle-${i}">${panelAnalisis}</div>
       </div>
     `;
   }
@@ -2179,11 +2232,34 @@ function crearTarjeta(p, i) {
             ${comboBadge}
             <span class="cuota">cuota ~${p.cuota}</span>
           </div>
-          ${marcadoresHtml}
         </div>
       </div>
-      <button class="card-toggle" onclick="toggleDetalle(${i})">Ver análisis y todos los mercados ▾</button>
-      <div class="card-detalle" id="detalle-${i}">${explicacionHtml}${detalleFilas}</div>
+      <button class="card-toggle card-toggle-boton" onclick="toggleDetalle(${i})">📊 Ver análisis completo</button>
+      <div class="card-detalle" id="detalle-${i}">${panelAnalisis}</div>
+    </div>
+  `;
+}
+
+// Barra de 1X2 (Local/Empate/Visitante) que resume el partido de un
+// vistazo dentro del panel de analisis -- mismos numeros que ya vivian
+// sueltos en la lista de "todos los mercados", solo que aqui se ven de
+// forma visual e inmediata en vez de tener que leer una tabla.
+function crearBarraProb1X2(p) {
+  const { probLocal: pL, probEmpate: pE, probVisitante: pV } = p;
+  if (pL == null || pE == null || pV == null) return "";
+  const max = Math.max(pL, pE, pV);
+  return `
+    <div class="analisis-seccion prob-bar-1x2">
+      <div class="prob-bar-1x2-track">
+        <div class="prob-bar-seg prob-bar-local" style="width:${pL}%"></div>
+        <div class="prob-bar-seg prob-bar-empate" style="width:${pE}%"></div>
+        <div class="prob-bar-seg prob-bar-visitante" style="width:${pV}%"></div>
+      </div>
+      <div class="prob-bar-1x2-etiquetas">
+        <span class="${pL === max ? "prob-bar-fav" : ""}">${p.local} <b>${pL}%</b></span>
+        <span class="${pE === max ? "prob-bar-fav" : ""}">Empate <b>${pE}%</b></span>
+        <span class="${pV === max ? "prob-bar-fav" : ""}">${p.visitante} <b>${pV}%</b></span>
+      </div>
     </div>
   `;
 }
