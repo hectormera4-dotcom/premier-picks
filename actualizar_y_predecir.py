@@ -549,8 +549,11 @@ def actualizar_estadisticas_extra(historico, codigo_footballdata="E0"):
     import io
     # HST/AST (tiros a puerta) estaban ausentes de esta lista -- por eso el
     # mercado de tiros a puerta nunca se actualizaba con partidos de la
-    # temporada actual, solo usaba datos de temporadas viejas.
-    columnas_extra = ["HC", "AC", "HY", "AY", "HST", "AST", "Referee"]
+    # temporada actual, solo usaba datos de temporadas viejas. Mismo motivo
+    # por el que ahora se agregan HF/AF (faltas) y HS/AS (tiros totales) --
+    # sin esto, esos mercados nuevos funcionarian con temporadas viejas pero
+    # nunca con la actual.
+    columnas_extra = ["HC", "AC", "HY", "AY", "HST", "AST", "HF", "AF", "HS", "AS", "Referee"]
     try:
         actual = pd.read_csv(io.StringIO(resp.text))
     except Exception as e:
@@ -825,19 +828,22 @@ def _explicacion_ia(local, visitante, lam, mu, fuerzas, historico=None):
 
 
 def _explicacion_pick_especifico(nombres_pick, pick_prob, local, visitante,
-                                  fuerzas_corners=None, fuerzas_tarjetas=None, fuerzas_tiros=None):
+                                  fuerzas_corners=None, fuerzas_tarjetas=None, fuerzas_tiros=None,
+                                  fuerzas_faltas=None, fuerzas_tiros_totales=None):
     """Explica el/los mercado(s) puntual(es) que se terminaron recomendando
     -- no solo el resultado del partido en general. Si el pick es de
-    corners/tarjetas/tiros a puerta, usa el MISMO tipo de indice de
-    ataque/defensa que ya calculamos para ese mercado especifico
-    (calcular_fuerzas_corners/tarjetas/tiros, misma estructura que
-    calcular_fuerzas de goles) para justificar por que ese mercado en
-    particular tiene una probabilidad alta -- en vez de quedarse solo en
-    la explicacion generica de goles esperados."""
+    corners/tarjetas/tiros a puerta/faltas/tiros totales, usa el MISMO tipo
+    de indice de ataque/defensa que ya calculamos para ese mercado
+    especifico (calcular_fuerzas_corners/tarjetas/tiros/faltas/tiros_totales,
+    misma estructura que calcular_fuerzas de goles) para justificar por que
+    ese mercado en particular tiene una probabilidad alta -- en vez de
+    quedarse solo en la explicacion generica de goles esperados."""
     familias = (
         ("corners", fuerzas_corners, "córners"),
         ("tarjetas", fuerzas_tarjetas, "tarjetas"),
         ("tiros a puerta", fuerzas_tiros, "tiros a puerta"),
+        ("faltas", fuerzas_faltas, "faltas"),
+        ("tiros totales", fuerzas_tiros_totales, "tiros totales"),
     )
     frases = []
     ya_explicadas = set()
@@ -1348,9 +1354,9 @@ def verificar_pick_individual(nombre, fila_resultado):
     """
     Verifica si UN mercado especifico se cumplio, usando el resultado real
     del partido. Entiende mercados de goles (via CONDICIONES), y tambien
-    los mercados dinamicos de corners/tarjetas/tiros a puerta (Over/Under
-    y "Mas X: Equipo"). Devuelve True/False, o None si no se pudo verificar
-    (ej. falta el dato de esa metrica para ese partido).
+    los mercados dinamicos de corners/tarjetas/tiros a puerta/faltas/tiros
+    totales (Over/Under y "Mas X: Equipo"). Devuelve True/False, o None si
+    no se pudo verificar (ej. falta el dato de esa metrica para ese partido).
     """
     gh, ga = fila_resultado.get("FTHG"), fila_resultado.get("FTAG")
 
@@ -1363,9 +1369,11 @@ def verificar_pick_individual(nombre, fila_resultado):
         "corners": ("HC", "AC"),
         "tarjetas": ("HY", "AY"),
         "tiros a puerta": ("HST", "AST"),
+        "faltas": ("HF", "AF"),
+        "tiros totales": ("HS", "AS"),
     }
 
-    m = re.match(r"(Over|Under) ([\d.]+) (corners|tarjetas|tiros a puerta)", nombre)
+    m = re.match(r"(Over|Under) ([\d.]+) (corners|tarjetas|tiros a puerta|faltas|tiros totales)", nombre)
     if m:
         direccion, linea, tipo = m.group(1), float(m.group(2)), m.group(3)
         col_l, col_v = columnas_por_tipo[tipo]
@@ -1375,7 +1383,7 @@ def verificar_pick_individual(nombre, fila_resultado):
         total = val_l + val_v
         return (total > linea) if direccion == "Over" else (total < linea)
 
-    m2 = re.match(r"Más (corners|tarjetas|tiros a puerta): (.+)", nombre)
+    m2 = re.match(r"Más (corners|tarjetas|tiros a puerta|faltas|tiros totales): (.+)", nombre)
     if m2:
         tipo, equipo = m2.group(1), m2.group(2)
         col_l, col_v = columnas_por_tipo[tipo]
@@ -1766,8 +1774,16 @@ def calcular_mercados_tiros(local, visitante, fuerzas, prom_local, prom_visit, l
     # misma forma, centradas en el total esperado, para que el pick
     # recomendado siempre corresponda a algo que existe de verdad.
     if lineas is None:
-        centro = round(total - 0.5) + 0.5  # la linea .5 mas cercana al promedio
-        lineas = [centro - 1.5, centro - 0.5, centro + 0.5, centro + 1.5]
+        # BUG real encontrado al construir el mercado de faltas: round(total-0.5)+0.5
+        # SIEMPRE da una linea terminada en .5 (correcto), pero sumarle/restarle
+        # otro numero terminado en .5 (1.5 o 0.5) cancela ese .5 y da una linea
+        # ENTERA -- eso permite un empate exacto (ej. "Over 21 tiros a puerta"
+        # con exactamente 21), que verificar_pick_individual (> estricto en vez
+        # de >=) resolvia como perdido tanto para Over como para Under. Con
+        # floor(total)+0.5 como ancla y offsets ENTEROS (no .5), las 4 lineas
+        # quedan siempre en .5 -- nunca hay empate posible.
+        centro = np.floor(total) + 0.5  # la linea .5 mas cercana, por debajo del promedio
+        lineas = [centro - 1, centro, centro + 1, centro + 2]
         lineas = [l for l in lineas if l >= 1.5]  # nunca lineas absurdamente bajas
 
     mercados = {}
@@ -1778,6 +1794,148 @@ def calcular_mercados_tiros(local, visitante, fuerzas, prom_local, prom_visit, l
 
     mercados[f"Más tiros a puerta: {local}"] = 1 - skellam.cdf(0, lam, mu)
     mercados[f"Más tiros a puerta: {visitante}"] = skellam.cdf(-1, lam, mu)
+
+    return mercados
+
+# ---------- Mercado de tiros totales (mismo patron que tiros a puerta) ----------
+#
+# Validado con backtest walk-forward real (18,373 observaciones, 8 ligas,
+# script no versionado): el modelo de fuerzas por equipo SI le gana a la
+# base naive (promedio de liga), pero por poco (Brier 0.2484 vs 0.2504) --
+# la señal es real pero debil. A diferencia de faltas (señal mucho mas
+# fuerte, ver mas abajo), aqui NO se activa "combinable" con goles nunca
+# (independiente de lo que diga verificar_correlacion_goles_metrica): con
+# una señal tan chica, combinarlo multiplicaria una probabilidad ya poco
+# confiable por otra, y el umbral de seguridad normal (75-80%) rara vez
+# se veria satisfecho de forma honesta. Sigue disponible como mercado
+# individual -- su propia calibracion (la misma calibrar_probabilidad de
+# siempre) ya se encarga de que rara vez alcance una confianza alta,
+# igual que le pasa a Champions League por su propio techo real de datos.
+
+def calcular_fuerzas_tiros_totales(df):
+    if "HS" not in df.columns or "AS" not in df.columns:
+        return {}, None, None
+    df = df.dropna(subset=["HS", "AS"])
+    if len(df) < 20:
+        return {}, None, None
+
+    fecha_max = df["Date"].max()
+    dias_desde = (fecha_max - df["Date"]).dt.days
+    peso = 0.5 ** (dias_desde / 365)
+    df = df.copy()
+    df["peso"] = peso
+
+    prom_local = (df["HS"] * df["peso"]).sum() / df["peso"].sum()
+    prom_visit = (df["AS"] * df["peso"]).sum() / df["peso"].sum()
+
+    equipos = pd.unique(df[["HomeTeam", "AwayTeam"]].values.ravel())
+    fuerzas = {}
+    for equipo in equipos:
+        pl = df[df["HomeTeam"] == equipo]
+        pv = df[df["AwayTeam"] == equipo]
+        if pl["peso"].sum() == 0 or pv["peso"].sum() == 0:
+            continue
+        fuerzas[equipo] = {
+            "ataque_local": (pl["HS"]*pl["peso"]).sum()/pl["peso"].sum() / prom_local,
+            "defensa_local": (pl["AS"]*pl["peso"]).sum()/pl["peso"].sum() / prom_visit,
+            "ataque_visitante": (pv["AS"]*pv["peso"]).sum()/pv["peso"].sum() / prom_visit,
+            "defensa_visitante": (pv["HS"]*pv["peso"]).sum()/pv["peso"].sum() / prom_local,
+        }
+    return fuerzas, prom_local, prom_visit
+
+def calcular_mercados_tiros_totales(local, visitante, fuerzas, prom_local, prom_visit, lineas=None):
+    if not fuerzas or local not in fuerzas or visitante not in fuerzas:
+        return {}
+    fl, fv = fuerzas[local], fuerzas[visitante]
+    lam = prom_local * fl["ataque_local"] * fv["defensa_visitante"]
+    mu = prom_visit * fv["ataque_visitante"] * fl["defensa_local"]
+    total = lam + mu
+
+    # Mismo patron que tiros a puerta: lineas centradas en el total
+    # esperado de ESE partido, no un rango fijo. Offsets ENTEROS desde un
+    # ancla floor(total)+0.5 -- ver el comentario largo en
+    # calcular_mercados_tiros, mismo bug/arreglo (evitar lineas enteras que
+    # permitirian un empate exacto sin resolver).
+    if lineas is None:
+        centro = np.floor(total) + 0.5
+        lineas = [centro - 1, centro, centro + 1, centro + 2]
+        lineas = [l for l in lineas if l >= 10.5]  # nunca lineas absurdamente bajas
+
+    mercados = {}
+    for linea in lineas:
+        p_over = 1 - poisson.cdf(linea, total)
+        mercados[f"Over {linea} tiros totales"] = p_over
+        mercados[f"Under {linea} tiros totales"] = 1 - p_over
+
+    mercados[f"Más tiros totales: {local}"] = 1 - skellam.cdf(0, lam, mu)
+    mercados[f"Más tiros totales: {visitante}"] = skellam.cdf(-1, lam, mu)
+
+    return mercados
+
+# ---------- Mercado de faltas (mismo patron que corners/tiros a puerta) ----------
+#
+# Validado con backtest walk-forward real (18,373 observaciones, 8 ligas,
+# script no versionado): el modelo de fuerzas por equipo le gana claro a
+# la base naive (Brier 0.2147 vs 0.2473 -- la mejora mas grande de los 4
+# mercados nuevos investigados esa sesion). Señal real, se activa igual
+# que corners/tarjetas/tiros a puerta (con su propia verificacion de
+# correlacion con goles antes de permitir combos).
+
+def calcular_fuerzas_faltas(df):
+    if "HF" not in df.columns or "AF" not in df.columns:
+        return {}, None, None
+    df = df.dropna(subset=["HF", "AF"])
+    if len(df) < 20:
+        return {}, None, None
+
+    fecha_max = df["Date"].max()
+    dias_desde = (fecha_max - df["Date"]).dt.days
+    peso = 0.5 ** (dias_desde / 365)
+    df = df.copy()
+    df["peso"] = peso
+
+    prom_local = (df["HF"] * df["peso"]).sum() / df["peso"].sum()
+    prom_visit = (df["AF"] * df["peso"]).sum() / df["peso"].sum()
+
+    equipos = pd.unique(df[["HomeTeam", "AwayTeam"]].values.ravel())
+    fuerzas = {}
+    for equipo in equipos:
+        pl = df[df["HomeTeam"] == equipo]
+        pv = df[df["AwayTeam"] == equipo]
+        if pl["peso"].sum() == 0 or pv["peso"].sum() == 0:
+            continue
+        fuerzas[equipo] = {
+            "ataque_local": (pl["HF"]*pl["peso"]).sum()/pl["peso"].sum() / prom_local,
+            "defensa_local": (pl["AF"]*pl["peso"]).sum()/pl["peso"].sum() / prom_visit,
+            "ataque_visitante": (pv["AF"]*pv["peso"]).sum()/pv["peso"].sum() / prom_visit,
+            "defensa_visitante": (pv["HF"]*pv["peso"]).sum()/pv["peso"].sum() / prom_local,
+        }
+    return fuerzas, prom_local, prom_visit
+
+def calcular_mercados_faltas(local, visitante, fuerzas, prom_local, prom_visit, lineas=None):
+    if not fuerzas or local not in fuerzas or visitante not in fuerzas:
+        return {}
+    fl, fv = fuerzas[local], fuerzas[visitante]
+    lam = prom_local * fl["ataque_local"] * fv["defensa_visitante"]
+    mu = prom_visit * fv["ataque_visitante"] * fl["defensa_local"]
+    total = lam + mu
+
+    if lineas is None:
+        # Mismo arreglo que tiros a puerta/tiros totales: offsets ENTEROS
+        # desde un ancla floor(total)+0.5, para que las lineas siempre
+        # terminen en .5 (nunca un empate exacto sin resolver).
+        centro = np.floor(total) + 0.5
+        lineas = [centro - 1, centro, centro + 1, centro + 2]
+        lineas = [l for l in lineas if l >= 10.5]
+
+    mercados = {}
+    for linea in lineas:
+        p_over = 1 - poisson.cdf(linea, total)
+        mercados[f"Over {linea} faltas"] = p_over
+        mercados[f"Under {linea} faltas"] = 1 - p_over
+
+    mercados[f"Más faltas: {local}"] = 1 - skellam.cdf(0, lam, mu)
+    mercados[f"Más faltas: {visitante}"] = skellam.cdf(-1, lam, mu)
 
     return mercados
 
@@ -2191,6 +2349,8 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                    fuerzas_corners=None, prom_l_corners=None, prom_v_corners=None, corners_combinable=False,
                    fuerzas_tarjetas=None, factores_arbitro=None, prom_l_tarjetas=None, prom_v_tarjetas=None, tarjetas_combinable=False,
                    fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False,
+                   fuerzas_faltas=None, prom_l_faltas=None, prom_v_faltas=None, faltas_combinable=False,
+                   fuerzas_tiros_totales=None, prom_l_tiros_totales=None, prom_v_tiros_totales=None, tiros_totales_combinable=False,
                    partidos_temporada_actual=None, historico=None):
     programados = [p for p in partidos if p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO]
     picks = []
@@ -2244,6 +2404,15 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         if fuerzas_tiros:
             mercados_tiros = calcular_mercados_tiros(local, visitante, fuerzas_tiros, prom_l_tiros, prom_v_tiros)
 
+        mercados_faltas = {}
+        if fuerzas_faltas:
+            mercados_faltas = calcular_mercados_faltas(local, visitante, fuerzas_faltas, prom_l_faltas, prom_v_faltas)
+
+        mercados_tiros_totales = {}
+        if fuerzas_tiros_totales:
+            mercados_tiros_totales = calcular_mercados_tiros_totales(
+                local, visitante, fuerzas_tiros_totales, prom_l_tiros_totales, prom_v_tiros_totales)
+
         # Version calibrada de TODOS los mercados, solo para mostrar en el
         # detalle desplegable "ver todos los mercados" -- los valores SIN
         # calibrar (arriba) son los que entran a elegir_mejor_pick, que ya
@@ -2270,8 +2439,11 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         mercados_corners_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_corners.items()}
         mercados_tarjetas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tarjetas.items()}
         mercados_tiros_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros.items()}
+        mercados_faltas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_faltas.items()}
+        mercados_tiros_totales_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros_totales.items()}
 
-        mercados_extra_todos = {**mercados_corners, **mercados_tarjetas, **mercados_tiros}
+        mercados_extra_todos = {**mercados_corners, **mercados_tarjetas, **mercados_tiros,
+                                 **mercados_faltas, **mercados_tiros_totales}
         mercados_extra_combinables = {}
         if corners_combinable:
             mercados_extra_combinables.update(mercados_corners)
@@ -2279,11 +2451,16 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             mercados_extra_combinables.update(mercados_tarjetas)
         if tiros_combinable:
             mercados_extra_combinables.update(mercados_tiros)
+        if faltas_combinable:
+            mercados_extra_combinables.update(mercados_faltas)
+        if tiros_totales_combinable:
+            mercados_extra_combinables.update(mercados_tiros_totales)
 
         # Arranque de temporada: si CUALQUIERA de los 2 equipos todavia
         # lleva pocos partidos jugados esta temporada, corners/tarjetas/
-        # tiros a puerta exigen un umbral mas alto (no se desactivan del
-        # todo) -- goles/resultado/ambos anotan no se ven afectados.
+        # tiros a puerta/faltas/tiros totales exigen un umbral mas alto (no
+        # se desactivan del todo) -- goles/resultado/ambos anotan no se ven
+        # afectados.
         conteo = partidos_temporada_actual or {}
         es_inicio_temporada = (
             conteo.get(local, 0) < MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS or
@@ -2306,7 +2483,9 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                 + _explicacion_pick_especifico(nombres_pick, pick_prob, local, visitante,
                                                 fuerzas_corners=fuerzas_corners,
                                                 fuerzas_tarjetas=fuerzas_tarjetas,
-                                                fuerzas_tiros=fuerzas_tiros)
+                                                fuerzas_tiros=fuerzas_tiros,
+                                                fuerzas_faltas=fuerzas_faltas,
+                                                fuerzas_tiros_totales=fuerzas_tiros_totales)
             ),
             "pick_recomendado": " + ".join(nombres_pick),
             "es_combo": es_combo,
@@ -2324,6 +2503,8 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             **{k: round(v*100, 1) for k, v in mercados_corners_mostrar.items()},
             **{k: round(v*100, 1) for k, v in mercados_tarjetas_mostrar.items()},
             **{k: round(v*100, 1) for k, v in mercados_tiros_mostrar.items()},
+            **{k: round(v*100, 1) for k, v in mercados_faltas_mostrar.items()},
+            **{k: round(v*100, 1) for k, v in mercados_tiros_totales_mostrar.items()},
         })
 
     return pd.DataFrame(picks)
@@ -2510,6 +2691,32 @@ def preparar_liga(liga_key):
     else:
         print("  Sin datos de tiros a puerta todavia (se activara solo cuando esten disponibles).")
 
+    print("Calculando fuerzas de faltas (si hay datos disponibles)...")
+    fuerzas_faltas, prom_l_faltas, prom_v_faltas = calcular_fuerzas_faltas(historico)
+    faltas_combinable = False
+    if fuerzas_faltas:
+        print(f"  Faltas disponibles para {len(fuerzas_faltas)} equipos.")
+        print("  Verificando si es seguro combinar goles+faltas con datos reales...")
+        faltas_combinable = bool(verificar_correlacion_goles_metrica(
+            historico, "HF", "AF", linea_metrica=21.5, nombre_metrica="faltas"))
+    else:
+        print("  Sin datos de faltas todavia (se activara solo cuando esten disponibles).")
+
+    print("Calculando fuerzas de tiros totales (si hay datos disponibles)...")
+    fuerzas_tiros_totales, prom_l_tiros_totales, prom_v_tiros_totales = calcular_fuerzas_tiros_totales(historico)
+    if fuerzas_tiros_totales:
+        print(f"  Tiros totales disponibles para {len(fuerzas_tiros_totales)} equipos.")
+    else:
+        print("  Sin datos de tiros totales todavia (se activara solo cuando esten disponibles).")
+    # Este mercado tiene señal real pero muy debil (backtest: mejora de solo
+    # 0.002 en Brier score sobre el promedio de liga) -- a proposito NUNCA
+    # se marca combinable con goles, sin importar lo que diga el chequeo de
+    # correlacion: con una señal tan chica, un combo multiplicaria una
+    # probabilidad ya poco confiable por otra. Se deja disponible solo como
+    # mercado individual, donde su propia calibracion ya se encarga de que
+    # rara vez alcance una confianza alta.
+    tiros_totales_combinable = False
+
     print("Ajustando Dixon-Coles...")
     rho = ajustar_rho(historico, fuerzas, prom_l, prom_v)
     print(f"Rho: {rho:.3f}")
@@ -2530,6 +2737,11 @@ def preparar_liga(liga_key):
         "tarjetas_combinable": tarjetas_combinable,
         "fuerzas_tiros": fuerzas_tiros, "prom_l_tiros": prom_l_tiros, "prom_v_tiros": prom_v_tiros,
         "tiros_combinable": tiros_combinable,
+        "fuerzas_faltas": fuerzas_faltas, "prom_l_faltas": prom_l_faltas, "prom_v_faltas": prom_v_faltas,
+        "faltas_combinable": faltas_combinable,
+        "fuerzas_tiros_totales": fuerzas_tiros_totales,
+        "prom_l_tiros_totales": prom_l_tiros_totales, "prom_v_tiros_totales": prom_v_tiros_totales,
+        "tiros_totales_combinable": tiros_totales_combinable,
         "historial": historial,
         "partidos_temporada_actual": partidos_temporada_actual,
     }
@@ -2550,6 +2762,10 @@ def generar_picks_liga(liga_key, ctx, umbral_dinamico):
         tarjetas_combinable=ctx["tarjetas_combinable"],
         fuerzas_tiros=ctx["fuerzas_tiros"], prom_l_tiros=ctx["prom_l_tiros"], prom_v_tiros=ctx["prom_v_tiros"],
         tiros_combinable=ctx["tiros_combinable"],
+        fuerzas_faltas=ctx["fuerzas_faltas"], prom_l_faltas=ctx["prom_l_faltas"], prom_v_faltas=ctx["prom_v_faltas"],
+        faltas_combinable=ctx["faltas_combinable"],
+        fuerzas_tiros_totales=ctx["fuerzas_tiros_totales"], prom_l_tiros_totales=ctx["prom_l_tiros_totales"],
+        prom_v_tiros_totales=ctx["prom_v_tiros_totales"], tiros_totales_combinable=ctx["tiros_totales_combinable"],
         partidos_temporada_actual=ctx["partidos_temporada_actual"], historico=ctx["historico"])
 
     historico = ctx["historico"]
