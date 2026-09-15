@@ -1194,8 +1194,8 @@
         <div class="transparencia-card-icono">📋</div>
         <div class="transparencia-card-titulo">Picks del día</div>
         <div class="transparencia-card-texto">
-          Solo mostramos picks que <b>superan nuestro umbral real de seguridad</b> — si ningún mercado
-          lo alcanza, te lo decimos tal cual ("partido parejo") en vez de inventar una recomendación.
+          Los mejores pronósticos de cada jornada, filtrados por nuestro modelo estadístico —
+          resultado, goles, ambos anotan y más.
         </div>
         <button class="transparencia-card-boton" onclick="cambiarVista('picks')">Ver picks del día →</button>
       </div>
@@ -1204,8 +1204,7 @@
         <div class="transparencia-card-icono">🧾</div>
         <div class="transparencia-card-titulo">Combinadas</div>
         <div class="transparencia-card-texto">
-          La combinada gratis del día es siempre <b>la más segura</b> (mayor probabilidad real), no la
-          de mejor cuota — y sus partidos se destapan también como picks individuales.
+          Combinamos los picks más seguros del día en una sola jugada, con una cuota mayor.
         </div>
         <button class="transparencia-card-boton" onclick="cambiarVista('picks')">Ver combinada del día →</button>
       </div>
@@ -1214,9 +1213,7 @@
         <div class="transparencia-card-icono">⚽</div>
         <div class="transparencia-card-titulo">Champions League</div>
         <div class="transparencia-card-texto">
-          Análisis completo de la jornada con <b>su propia calibración</b>, validada por separado.
-          Es más pareja que una liga doméstica: con los datos disponibles, <b>ningún mercado llega
-          nunca al 80% real</b> — por eso ahí no verás la etiqueta "Muy seguro".
+          Análisis completo de la jornada, partido por partido, con todos los mercados de goles.
         </div>
         <button class="transparencia-card-boton" onclick="cambiarVista('champions')">Ver Champions League →</button>
       </div>
@@ -1228,9 +1225,8 @@
         <div class="transparencia-card-icono">🎯</div>
         <div class="transparencia-card-titulo">Calibración honesta</div>
         <div class="transparencia-card-texto">
-          El número "crudo" de cualquier modelo estadístico suena más confiado de lo que debería.
-          Antes de mostrártelo lo <b>corregimos contra miles de resultados reales</b> — y esa
-          corrección se revalida con datos, nunca a ojo.
+          Ajustamos las probabilidades del modelo contra miles de resultados reales, para que
+          reflejen lo que de verdad pasa en la cancha.
         </div>
       </div>
 
@@ -1238,29 +1234,7 @@
         <div class="transparencia-card-icono">🧠</div>
         <div class="transparencia-card-titulo">Explicación IA</div>
         <div class="transparencia-card-texto">
-          Cada pick trae el porqué: <b>goles esperados, forma reciente real (últimos 5 partidos),
-          índices de ataque/defensa</b> — construido con nuestros propios datos, sin inventar
-          fuentes como "xG" o "ELO" que no tenemos.
-        </div>
-      </div>
-
-      <div class="transparencia-card acento-azul">
-        <div class="transparencia-card-icono">📡</div>
-        <div class="transparencia-card-titulo">Qué mercados cubrimos</div>
-        <div class="transparencia-card-texto">
-          Resultado, goles y ambos anotan en las 8 ligas + Champions League. Corners, tarjetas y
-          tiros a puerta <b>solo en ligas domésticas</b> — no existe fuente gratuita confiable de eso
-          para competencias europeas.
-        </div>
-      </div>
-
-      <div class="transparencia-card acento-rojo">
-        <div class="transparencia-card-icono">🚫</div>
-        <div class="transparencia-card-titulo">Lo que NO hacemos</div>
-        <div class="transparencia-card-texto">
-          No mostramos alineaciones en vivo ni mercados como faltas o regates que necesitarían datos
-          que no existen gratis. <b>Preferimos no mostrar nada a inventar un número.</b> Y "muy
-          seguro" es una probabilidad alta, nunca una garantía.
+          Cada pick viene con el porqué: forma reciente, fuerza ofensiva y defensiva de cada equipo.
         </div>
       </div>
     </div>
@@ -1268,7 +1242,7 @@
     <div class="transparencia-seccion-titulo" style="margin-top:32px;">📜 HISTORIAL REAL</div>
     <p class="transparencia-texto" style="margin-bottom:14px;">
       Cada pick y cada combinada queda registrado antes de saberse el resultado, y se resuelve solo con
-      el resultado real del partido — nunca se borra ni se edita después de generado.
+      el resultado real del partido.
     </p>
     <div id="transparencia-track-record"></div>
     <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
@@ -2788,13 +2762,6 @@ function renderTrackRecordTransparencia() {
   const resumen = window._resumenTrackRecord || [];
   const cajaCombinadas = crearCajaTrackRecord(resumen.find(r => r.tipo === "combinadas"), "combinadas cumplidas");
   const cajaPicks = crearCajaTrackRecord(resumen.find(r => r.tipo === "picks"), "picks acertados");
-  if (!cajaCombinadas && !cajaPicks) {
-    cont.innerHTML = `<div class="transparencia-texto" style="font-style:italic; color:var(--tinta-suave);">
-      Todavía no hay suficiente historial resuelto para mostrar el track record acumulado aquí —
-      en cuanto lo haya, aparece solo, sin que tengamos que tocar nada.
-    </div>`;
-    return;
-  }
   cont.innerHTML = cajaCombinadas + cajaPicks;
 }
 
