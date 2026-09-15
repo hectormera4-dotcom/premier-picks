@@ -1144,6 +1144,74 @@
 <main id="grid">
   <!-- La combinada del dia y las tarjetas se generan con JS mas abajo -->
 </main>
+
+<!-- Mismo contenido que la vista "Como funciona" del menu, repetido aqui
+     abajo -- muchos usuarios nunca abren el menu lateral, pero si
+     deslizan hasta el final de la pantalla principal (pedido explicito
+     del usuario). -->
+<main style="max-width:720px; margin:32px auto 0; padding:0 20px 60px;">
+  <h2 style="margin-bottom:4px;">🔍 Cómo funciona Picks FC</h2>
+  <div style="font-size:13px; color:var(--tinta-suave); margin-bottom:24px;">
+    Sin trucos ni cajas negras — así es exactamente cómo se calcula cada pronóstico.
+  </div>
+
+  <div class="transparencia-seccion-titulo">🧭 EXPLORA PICKS FC</div>
+  <div class="transparencia-grid">
+    <div class="transparencia-card acento-verde">
+      <div class="transparencia-card-icono">📋</div>
+      <div class="transparencia-card-titulo">Picks del día</div>
+      <div class="transparencia-card-texto">
+        Los mejores pronósticos de cada jornada, filtrados por nuestro modelo estadístico —
+        resultado, goles, ambos anotan y más.
+      </div>
+    </div>
+
+    <div class="transparencia-card acento-ambar">
+      <div class="transparencia-card-icono">🧾</div>
+      <div class="transparencia-card-titulo">Combinadas</div>
+      <div class="transparencia-card-texto">
+        Combinamos los picks más seguros del día en una sola jugada, con una cuota mayor.
+      </div>
+    </div>
+
+    <div class="transparencia-card acento-azul">
+      <div class="transparencia-card-icono">⚽</div>
+      <div class="transparencia-card-titulo">Champions League</div>
+      <div class="transparencia-card-texto">
+        Análisis completo de la jornada, partido por partido, con todos los mercados de goles.
+      </div>
+      <button class="transparencia-card-boton" onclick="cambiarVista('champions')">Ver Champions League →</button>
+    </div>
+  </div>
+
+  <div class="transparencia-seccion-titulo" style="margin-top:32px;">🤖 CÓMO ANALIZA EL MODELO</div>
+  <div class="transparencia-grid">
+    <div class="transparencia-card acento-verde">
+      <div class="transparencia-card-icono">🎯</div>
+      <div class="transparencia-card-titulo">Calibración honesta</div>
+      <div class="transparencia-card-texto">
+        Ajustamos las probabilidades del modelo contra miles de resultados reales, para que
+        reflejen lo que de verdad pasa en la cancha.
+      </div>
+    </div>
+
+    <div class="transparencia-card acento-ambar">
+      <div class="transparencia-card-icono">🧠</div>
+      <div class="transparencia-card-titulo">Explicación IA</div>
+      <div class="transparencia-card-texto">
+        Cada pick viene con el porqué: forma reciente, fuerza ofensiva y defensiva de cada equipo.
+      </div>
+    </div>
+  </div>
+
+  <div class="transparencia-seccion-titulo" style="margin-top:32px;">📜 HISTORIAL REAL</div>
+  <p class="transparencia-texto" style="margin-bottom:14px;">
+    Cada pick y cada combinada queda registrado antes de saberse el resultado, y se resuelve solo con
+    el resultado real del partido.
+  </p>
+  <div id="inicio-track-record"></div>
+  <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
+</main>
 </div>
 
 <div id="vista-historial" style="display:none;">
@@ -2000,6 +2068,7 @@ async function cargarTodo() {
     render(picks, combinadas);
     window._historialCombinadasCache = historialRaw || [];
     window._resumenTrackRecord = resumenRaw || [];
+    renderTrackRecordTransparencia();
   } catch (err) {
     document.getElementById("grid").innerHTML = `
       <div class="combinada" style="grid-column:1/-1; text-align:center; opacity:0.7;">
@@ -2756,13 +2825,18 @@ function cambiarVista(vista) {
 // cargado en cargarTodo) -- ver crearCajaTrackRecord. Si todavia no llego a superar
 // el umbral de confianza (UMBRAL_TRACK_RECORD_VISIBLE) para ninguno de los 2 tipos,
 // se explica eso en vez de dejar el espacio vacio sin decir nada.
+// El bloque "Como funciona" vive en 2 lugares (el menu lateral y repetido
+// al final de la pantalla principal, para los usuarios que nunca abren el
+// menu) -- esto rellena el historial en vivo de AMBOS a la vez, sean cual
+// sean los que existan en el DOM en ese momento.
 function renderTrackRecordTransparencia() {
-  const cont = document.getElementById("transparencia-track-record");
-  if (!cont) return;
   const resumen = window._resumenTrackRecord || [];
   const cajaCombinadas = crearCajaTrackRecord(resumen.find(r => r.tipo === "combinadas"), "combinadas cumplidas");
   const cajaPicks = crearCajaTrackRecord(resumen.find(r => r.tipo === "picks"), "picks acertados");
-  cont.innerHTML = cajaCombinadas + cajaPicks;
+  for (const id of ["transparencia-track-record", "inicio-track-record"]) {
+    const cont = document.getElementById(id);
+    if (cont) cont.innerHTML = cajaCombinadas + cajaPicks;
+  }
 }
 
 function crearTarjetaCombinadaHistorial(c) {
