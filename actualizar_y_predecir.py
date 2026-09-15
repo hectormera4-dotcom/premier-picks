@@ -2687,8 +2687,37 @@ def correr_combinadas_multiliga(pool_picks, pool_historico):
         # El historial de combinadas ya trae la columna "liga" (o "mixta")
         # asignada directamente al registrarse, asi que subimos tal cual
         subir_historial_combinadas_liga_ya_incluida(historial_combinadas)
+
+        # Decision del usuario: si un partido es pierna de la combinada
+        # GRATIS, su pick individual tambien tiene que verse gratis en
+        # "Picks del dia" -- de lo contrario un usuario sin VIP ve la
+        # combinada gratis, pero al entrar a revisar el partido por
+        # separado lo encuentra bloqueado, lo cual no tiene sentido.
+        combinada_gratis = next((c for c in combinadas if c["es_gratis"]), None)
+        if combinada_gratis:
+            marcar_picks_de_combinada_gratis(combinada_gratis)
     else:
         print("Supabase no configurado -- se omite la subida de combinadas.")
+
+
+def marcar_picks_de_combinada_gratis(combinada_gratis):
+    """Pone es_gratis=true en la tabla 'picks' para cada partido que sea
+    pierna de la combinada gratis del dia -- ver el comentario en el
+    llamador. Si un partido de la combinada NO aparece en 'picks' (quedo
+    fuera del top curado de individuales), simplemente no hay nada que
+    desbloquear para ese partido en particular (no se puede "agregar" como
+    pick individual visible desde aqui, solo destapar uno que ya existe)."""
+    for partido in combinada_gratis["partidos"]:
+        params = {
+            "fecha": f"eq.{partido['fecha']}",
+            "local": f"eq.{partido['local']}",
+            "visitante": f"eq.{partido['visitante']}",
+        }
+        resp = requests.patch(f"{SUPABASE_URL}/rest/v1/picks", headers=supabase_headers(),
+                               params=params, json={"es_gratis": True})
+        if resp.status_code not in (200, 204):
+            print(f"Aviso: no se pudo marcar como gratis el pick de {partido['local']} vs "
+                  f"{partido['visitante']} ({resp.status_code}): {resp.text[:200]}")
 
 
 # CL (nombre normalizado por normalizar_nombre_equipo/ALIAS_EQUIPOS_EUROPA)
