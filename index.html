@@ -1202,8 +1202,8 @@ const ETIQUETAS_MERCADOS = {
   "doble_op_X2": "Doble oportunidad X2",
   btts_si: "Ambos anotan - Sí",
   btts_no: "Ambos anotan - No",
-  over_25: "Over 2.5 goles",
-  under_25: "Under 2.5 goles",
+  over_25: "Más de 2.5 goles",
+  under_25: "Menos de 2.5 goles",
 };
 
 const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
@@ -1248,7 +1248,7 @@ function transformarPick(fila) {
     marcadoresProbables: fila.marcadores_probables || [],
     explicacionIA: fila.explicacion_ia || [],
     esGratis, tieneDatos, seguro,
-    pick: tieneDatos ? fila.pick_recomendado : null,
+    pick: tieneDatos ? traducirMercado(fila.pick_recomendado) : null,
     prob: tieneDatos ? Math.round(fila.pick_probabilidad) : null,
     cuota: tieneDatos ? fila.pick_cuota_aprox : null,
     nivel: tieneDatos && seguro ? "seguro" : null,
@@ -1267,6 +1267,20 @@ function escaparHtml(texto) {
   const div = document.createElement("div");
   div.textContent = String(texto ?? "");
   return div.innerHTML;
+}
+
+// El backend guarda los nombres de mercado en ingles ("Over 8.5 corners")
+// a proposito -- ese mismo texto se usa para verificar despues si el pick
+// se cumplio o no (verificar_pick_individual en el pipeline), asi que
+// traducirlo ahi arriesgaria romper esa verificacion para picks ya
+// guardados. En vez de eso, se traduce SOLO aqui, en la capa visual, justo
+// antes de mostrarlo -- la base de datos y la logica de verificacion
+// nunca se enteran del cambio.
+function traducirMercado(texto) {
+  if (!texto) return texto;
+  return texto
+    .replace(/\bOver\b/g, "Más de")
+    .replace(/\bUnder\b/g, "Menos de");
 }
 
 function nombreLiga(clave) {
@@ -2107,7 +2121,7 @@ function crearCombinada(c) {
       </div>
       ${desbloqueada ? `
         <div class="combinada-fila-pick">
-          ${p.pick_recomendado}
+          ${traducirMercado(p.pick_recomendado)}
           <span class="card-liga-badge combinada-liga-badge">${nombreLiga(p.liga)}</span>
         </div>` : ""}
     </div>
@@ -2206,7 +2220,7 @@ function crearTarjeta(p, i) {
   const seccionExplicacion = p.explicacionIA.length ? `
     <div class="analisis-seccion">
       <div class="analisis-seccion-titulo">🧠 Lectura del modelo</div>
-      ${p.explicacionIA.map(frase => `<div class="explicacion-ia-fila">${frase}</div>`).join("")}
+      ${p.explicacionIA.map(frase => `<div class="explicacion-ia-fila">${traducirMercado(frase)}</div>`).join("")}
     </div>
   ` : "";
 
@@ -2570,7 +2584,7 @@ function crearTarjetaCombinadaHistorial(c) {
   else if (c.resultado === "Fallada") { clase = ""; icono = "✕"; claseIcono = "icono-fallada"; }
 
   const partidos = Array.isArray(c.partidos_json) ? c.partidos_json : [];
-  const filasPartidos = partidos.map(p => `<b>${p.local} vs ${p.visitante}</b> — ${p.pick_recomendado}`).join(" · ");
+  const filasPartidos = partidos.map(p => `<b>${p.local} vs ${p.visitante}</b> — ${traducirMercado(p.pick_recomendado)}`).join(" · ");
   const tipo = c.es_gratis ? "Gratis" : "VIP";
 
   return `
@@ -2647,7 +2661,7 @@ async function cargarEstadisticasAdmin() {
 const ETIQUETAS_MERCADOS_CHAMPIONS = {
   prob_local: "Local gana", prob_empate: "Empate", prob_visitante: "Visitante gana",
   doble_op_1x: "Doble oportunidad 1X", doble_op_x2: "Doble oportunidad X2",
-  over_25: "Over 2.5 goles", under_25: "Under 2.5 goles",
+  over_25: "Más de 2.5 goles", under_25: "Menos de 2.5 goles",
   btts_si: "Ambos anotan - Sí", btts_no: "Ambos anotan - No",
 };
 
