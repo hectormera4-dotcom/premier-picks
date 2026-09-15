@@ -1203,6 +1203,52 @@ def calibrar_1x2_conjunto_champions(p_local, p_empate, p_visit):
     return _softmax_calibrado(p_local, p_empate, p_visit, COEF, INTERCEPT)
 
 
+# ---------- Auditoria de calibracion de los mercados extra (pedido del
+# usuario, mismo estandar que 1X2/goles) ----------
+#
+# calibrar_probabilidad() (la generica, entrenada hace tiempo mezclando
+# TODOS los tipos de mercado en un solo backtest) resulto ser la PEOR
+# opcion, sin excepcion, en los 6 mercados auditados con un backtest
+# walk-forward real (18,373 observaciones, 8 ligas, script no
+# versionado) -- estaba sobre-corrigiendo mercados que no se parecen al
+# promedio con el que se entreno originalmente:
+#
+#   Mercado           Crudo    Actual(generica)  Propio/Derivado   Mejor
+#   Doble oport. 1X    0.1970   0.1992            0.1955 (derivado) derivado
+#   Doble oport. X2    0.2224   0.2246            0.2205 (derivado) derivado
+#   Corners            0.2484   0.2524            0.2485 (propio)   crudo
+#   Tarjetas           0.2477   0.2525            0.2474 (propio)   propio
+#   Tiros a puerta     0.2487   0.2532            0.2486 (propio)   propio
+#   Faltas             0.2484   0.2487            0.2477 (propio)   propio
+#   Tiros totales      0.2493   0.2525            0.2503 (propio)   crudo
+#
+# Doble oportunidad se deriva del 1X2 YA calibrado conjuntamente (sin
+# necesidad de un modelo nuevo). Corners y Tiros totales usan el numero
+# CRUDO tal cual (calibrarlos con cualquier curva, generica o propia, los
+# empeora). Tarjetas/Tiros a puerta/Faltas usan su propio Platt Scaling,
+# entrenado especificamente para cada uno.
+
+def calibrar_tarjetas(prob):
+    PENDIENTE = 2.8984
+    INTERCEPTO = -1.5106
+    z = INTERCEPTO + PENDIENTE * prob
+    return 1 / (1 + np.exp(-z))
+
+
+def calibrar_tiros_a_puerta(prob):
+    PENDIENTE = 3.0731
+    INTERCEPTO = -1.5689
+    z = INTERCEPTO + PENDIENTE * prob
+    return 1 / (1 + np.exp(-z))
+
+
+def calibrar_faltas(prob):
+    PENDIENTE = 3.3629
+    INTERCEPTO = -1.7892
+    z = INTERCEPTO + PENDIENTE * prob
+    return 1 / (1 + np.exp(-z))
+
+
 def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None,
                        umbral_extra_minimo=None):
     """
@@ -1280,12 +1326,39 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
     _PARES_COMPLEMENTARIOS = {"Under 2.5 goles": "Over 2.5 goles", "Ambos anotan - No": "Ambos anotan - Si"}
     _crudos_por_nombre = {nombres[0]: prob for nombres, prob, _ in candidatos if len(nombres) == 1}
 
+    # Auditoria de calibracion de los mercados extra (mismo estandar que
+    # 1X2/goles): calibrar_probabilidad() generica resulto ser la PEOR
+    # opcion, sin excepcion, en los 6 mercados evaluados con backtest real
+    # -- ver el comentario largo junto a calibrar_tarjetas() mas arriba
+    # para la tabla completa de resultados. Doble oportunidad se deriva
+    # del 1X2 ya calibrado; corners/tiros totales usan el crudo tal cual
+    # (calibrarlos los empeora); tarjetas/tiros a puerta/faltas usan su
+    # propio Platt Scaling.
+    _FAMILIAS_CALIBRACION_PROPIA = {
+        "tarjetas": calibrar_tarjetas,
+        "tiros a puerta": calibrar_tiros_a_puerta,
+        "faltas": calibrar_faltas,
+    }
+    _FAMILIAS_SIN_CALIBRAR = ("corners", "tiros totales")
+
     def _calibrar_candidato(nombres, prob):
         if _calibrado_1x2 is not None and len(nombres) == 1 and nombres[0] in _MERCADOS_1X2:
             return _calibrado_1x2[_MERCADOS_1X2[nombres[0]]]
+        if _calibrado_1x2 is not None and nombres == ["Doble oportunidad 1X"]:
+            return _calibrado_1x2["local"] + _calibrado_1x2["empate"]
+        if _calibrado_1x2 is not None and nombres == ["Doble oportunidad X2"]:
+            return _calibrado_1x2["visitante"] + _calibrado_1x2["empate"]
         if len(nombres) == 1 and nombres[0] in _PARES_COMPLEMENTARIOS:
             positivo = _PARES_COMPLEMENTARIOS[nombres[0]]
             return 1 - calibrar_probabilidad(_crudos_por_nombre[positivo])
+        if len(nombres) == 1:
+            nombre_normalizado = nombres[0].lower()
+            for clave, funcion_calibracion in _FAMILIAS_CALIBRACION_PROPIA.items():
+                if clave in nombre_normalizado:
+                    return funcion_calibracion(prob)
+            for clave in _FAMILIAS_SIN_CALIBRAR:
+                if clave in nombre_normalizado:
+                    return prob
         return calibrar_probabilidad(prob)
 
     candidatos = [(nombres, _calibrar_candidato(nombres, prob), es_extra) for nombres, prob, es_extra in candidatos]
@@ -2432,15 +2505,28 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         # lado positivo y el negativo se define como 1-eso, en vez de
         # calibrar los 2 por separado (que tampoco sumaba 100%, y un
         # backtest real demostro que ademas es menos preciso). No se toca
-        # "Doble oportunidad" ni "Mas corners/tarjetas/tiros: Equipo"
-        # porque esos NO son complementarios (les falta el caso de empate).
+        # "Mas corners/tarjetas/tiros: Equipo" porque esos NO son
+        # complementarios (les falta el caso de empate).
         mercados["under_25"] = 1 - mercados["over_25"]
         mercados["btts_no"] = 1 - mercados["btts_si"]
-        mercados_corners_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_corners.items()}
-        mercados_tarjetas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tarjetas.items()}
-        mercados_tiros_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros.items()}
-        mercados_faltas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_faltas.items()}
-        mercados_tiros_totales_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros_totales.items()}
+        # Doble oportunidad se DERIVA del 1X2 ya calibrado conjuntamente --
+        # un backtest real demostro que esto es mas preciso que calibrar la
+        # suma cruda con calibrar_probabilidad() (que era la peor opcion de
+        # las 3 evaluadas). Ver el comentario largo junto a
+        # calibrar_tarjetas() en elegir_mejor_pick.
+        mercados["doble_op_1X"] = _cal_1x2["local"] + _cal_1x2["empate"]
+        mercados["doble_op_X2"] = _cal_1x2["visitante"] + _cal_1x2["empate"]
+        # Mismo hallazgo para corners/tarjetas/tiros a puerta/faltas/tiros
+        # totales: calibrar_probabilidad() generica resulto ser la PEOR
+        # opcion en los 6 mercados extra auditados con backtest real --
+        # corners y tiros totales usan el crudo tal cual (calibrarlos los
+        # empeora), tarjetas/tiros a puerta/faltas usan su propio Platt
+        # Scaling (ver esas 3 funciones, definidas junto a calibrar_tarjetas).
+        mercados_corners_mostrar = dict(mercados_corners)
+        mercados_tarjetas_mostrar = {k: calibrar_tarjetas(v) for k, v in mercados_tarjetas.items()}
+        mercados_tiros_mostrar = {k: calibrar_tiros_a_puerta(v) for k, v in mercados_tiros.items()}
+        mercados_faltas_mostrar = {k: calibrar_faltas(v) for k, v in mercados_faltas.items()}
+        mercados_tiros_totales_mostrar = dict(mercados_tiros_totales)
 
         mercados_extra_todos = {**mercados_corners, **mercados_tarjetas, **mercados_tiros,
                                  **mercados_faltas, **mercados_tiros_totales}

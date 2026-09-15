@@ -244,7 +244,7 @@ def test_umbral_extra_bloquea_mercado_extra_pero_no_afecta_a_otros():
     # aunque ninguno pase el umbral) -- el 4to valor (cumple_umbral) es lo
     # que de verdad indica si califica como "seguro" o no.
     matriz = _matriz_pareja()
-    mercados_extra = {"Over 5.5 corners": 0.80}  # calibrado ~0.77: pasa el umbral normal (0.70) pero NO el extra (0.85)
+    mercados_extra = {"Over 5.5 corners": 0.80}  # corners usa el crudo tal cual (sin calibrar): pasa el umbral normal (0.70) pero NO el extra (0.85)
 
     _, _, _, cumple_normal = core.elegir_mejor_pick(matriz, umbral_minimo=0.70, mercados_extra=mercados_extra)
     _, _, _, cumple_con_gate = core.elegir_mejor_pick(
@@ -258,7 +258,7 @@ def test_umbral_extra_bloquea_mercado_extra_pero_no_afecta_a_otros():
 
 def test_umbral_extra_no_bloquea_si_el_mercado_extra_si_lo_supera():
     matriz = _matriz_pareja()
-    mercados_extra = {"Over 5.5 corners": 0.95}  # calibrado ~0.87: supera incluso el umbral alto de temporada
+    mercados_extra = {"Over 5.5 corners": 0.95}  # corners usa el crudo tal cual (sin calibrar): supera incluso el umbral alto de temporada
 
     nombres, _, _, cumple_con_gate = core.elegir_mejor_pick(
         matriz, umbral_minimo=0.70, mercados_extra=mercados_extra, umbral_extra_minimo=0.85)
