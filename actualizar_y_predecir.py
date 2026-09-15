@@ -1544,19 +1544,20 @@ def calcular_combinadas_multiples(picks_df, cuota_objetivo=1.70, cuota_minima=1.
         # Quitamos esos partidos del pool para que la siguiente combinada use otros
         disponibles = disponibles.drop(indices_usados)
 
-    # Todas las combinadas ya cumplen el mismo estandar de seguridad (el
-    # mismo umbral_seguro), asi que no hay razon para regalar la menos
-    # atractiva -- marcamos como gratis la de MEJOR cuota, para enganchar
-    # mejor a los usuarios nuevos sin sacrificar nada de seguridad real.
+    # Decision del usuario: la combinada gratis es la MAS SEGURA (mayor
+    # probabilidad_combinada, o sea menor cuota), no la de mejor cuota --
+    # antes se regalaba la de mejor cuota para enganchar mas, pero se
+    # decidio priorizar que el primer contacto gratis de un usuario nuevo
+    # sea la apuesta mas confiable posible, aunque pague menos.
     if combinadas:
-        indice_mejor_cuota = max(range(len(combinadas)), key=lambda i: combinadas[i]["cuota_combinada"])
-        combinadas[indice_mejor_cuota]["es_gratis"] = True
+        indice_mas_segura = max(range(len(combinadas)), key=lambda i: combinadas[i]["probabilidad_combinada"])
+        combinadas[indice_mas_segura]["es_gratis"] = True
 
         # Reordenamos para que la gratis siempre aparezca primero, y
         # renombramos "Combinada #1, #2, #3..." segun ese nuevo orden --
         # asi la gratis SIEMPRE se llama "Combinada #1" para el usuario,
-        # sin importar cual fue la mejor cuota ese dia.
-        combinadas.insert(0, combinadas.pop(indice_mejor_cuota))
+        # sin importar cual fue la mas segura ese dia.
+        combinadas.insert(0, combinadas.pop(indice_mas_segura))
         for i, c in enumerate(combinadas):
             c["nombre"] = f"Combinada #{i+1}"
 
