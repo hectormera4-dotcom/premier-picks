@@ -215,12 +215,22 @@ def test_calibrar_probabilidad_es_monotona_y_esta_acotada():
 def _matriz_pareja():
     """Matriz de marcadores realista (Poisson independiente, ambos equipos
     con la misma fuerza) donde NINGUN mercado de goles/resultado/ambos
-    anotan supera el 65% de probabilidad calibrada (el maximo real es
-    ~61%) -- asi el candidato ganador en las pruebas de umbral_extra
-    siempre sale limpiamente de mercados_extra, sin que un mercado de
-    goles se cuele por casualidad."""
+    anotan supera el 66% de probabilidad calibrada -- asi el candidato
+    ganador en las pruebas de umbral_extra siempre sale limpiamente de
+    mercados_extra, sin que un mercado de goles se cuele por casualidad.
+
+    IMPORTANTE: desde que Under 2.5 goles/Ambos anotan-No se calibran como
+    el complemento del lado contrario ya calibrado (ver calibrar_1x2_conjunto
+    y el backtest de pares complementarios en actualizar_y_predecir.py), ya
+    NO existe un lam donde TODOS los mercados de goles queden por debajo de
+    0.65 -- "Over 1.5 goles" sube con lam mientras "Under 2.5 goles" (ahora
+    mas preciso) baja, y sus curvas se cruzan justo alrededor de 0.65-0.66
+    (es matematicamente inevitable: uno necesita pocos goles esperados para
+    estar bajo, el otro necesita muchos). Por eso estas pruebas usan
+    umbral_minimo=0.70 en vez de 0.65 -- el maximo real de esta matriz
+    (~0.656) sigue quedando comodamente por debajo."""
     n = 8
-    lam = 1.1
+    lam = 1.18
 
     def poisson_pmf(k, lam):
         return np.exp(-lam) * lam ** k / math.factorial(k)
@@ -234,11 +244,11 @@ def test_umbral_extra_bloquea_mercado_extra_pero_no_afecta_a_otros():
     # aunque ninguno pase el umbral) -- el 4to valor (cumple_umbral) es lo
     # que de verdad indica si califica como "seguro" o no.
     matriz = _matriz_pareja()
-    mercados_extra = {"Over 5.5 corners": 0.80}  # calibrado ~0.77: pasa el umbral normal (0.65) pero NO el extra (0.85)
+    mercados_extra = {"Over 5.5 corners": 0.80}  # calibrado ~0.77: pasa el umbral normal (0.70) pero NO el extra (0.85)
 
-    _, _, _, cumple_normal = core.elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=mercados_extra)
+    _, _, _, cumple_normal = core.elegir_mejor_pick(matriz, umbral_minimo=0.70, mercados_extra=mercados_extra)
     _, _, _, cumple_con_gate = core.elegir_mejor_pick(
-        matriz, umbral_minimo=0.65, mercados_extra=mercados_extra, umbral_extra_minimo=0.85)
+        matriz, umbral_minimo=0.70, mercados_extra=mercados_extra, umbral_extra_minimo=0.85)
 
     # Sin el gate de temporada, el mercado extra al 80% si califica como seguro.
     assert cumple_normal is True
@@ -251,7 +261,7 @@ def test_umbral_extra_no_bloquea_si_el_mercado_extra_si_lo_supera():
     mercados_extra = {"Over 5.5 corners": 0.95}  # calibrado ~0.87: supera incluso el umbral alto de temporada
 
     nombres, _, _, cumple_con_gate = core.elegir_mejor_pick(
-        matriz, umbral_minimo=0.65, mercados_extra=mercados_extra, umbral_extra_minimo=0.85)
+        matriz, umbral_minimo=0.70, mercados_extra=mercados_extra, umbral_extra_minimo=0.85)
 
     assert cumple_con_gate is True
     assert nombres == ["Over 5.5 corners"]
