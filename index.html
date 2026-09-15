@@ -2313,6 +2313,12 @@ function crearTarjeta(p, i) {
 function crearBarraProb1X2(p) {
   const { probLocal: pL, probEmpate: pE, probVisitante: pV } = p;
   if (pL == null || pE == null || pV == null) return "";
+  // Desde que el backend calibra los 3 valores CONJUNTAMENTE (softmax,
+  // calibrar_1x2_conjunto en el pipeline) ya suman 100% de verdad -- esta
+  // normalizacion queda solo como red de seguridad ante redondeo de
+  // decimales (cada valor se redondea a 1 decimal por separado en el
+  // backend, asi que la suma puede quedar en 99.9%/100.1% en vez de 100.0%
+  // exacto), no para tapar un desfase real como antes.
   const suma = pL + pE + pV || 1;
   const wL = (pL / suma) * 100, wE = (pE / suma) * 100, wV = (pV / suma) * 100;
   const max = Math.max(pL, pE, pV);

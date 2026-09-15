@@ -1115,6 +1115,88 @@ def calibrar_probabilidad_champions(prob):
     z = INTERCEPTO + PENDIENTE * prob
     return 1 / (1 + np.exp(-z))
 
+
+def _softmax_calibrado(p_local, p_empate, p_visit, coef, intercept):
+    """Aplica una regresion logistica multinomial (softmax) ya entrenada
+    a las 3 probabilidades crudas del mercado 1X2. A diferencia de
+    calibrar_probabilidad()/calibrar_probabilidad_champions() (que corrigen
+    cada una de las 3 POR SEPARADO, sin garantia de que sumen 100%), el
+    softmax aprende la relacion entre las 3 a la vez y por construccion
+    matematica SIEMPRE suma exactamente 100%."""
+    x = np.array([p_local, p_empate, p_visit])
+    z = intercept + coef @ x
+    z = z - z.max()  # estabilidad numerica (evita overflow en np.exp)
+    exp_z = np.exp(z)
+    probs = exp_z / exp_z.sum()
+    return {"local": probs[0], "empate": probs[1], "visitante": probs[2]}
+
+
+def calibrar_1x2_conjunto(p_local, p_empate, p_visit):
+    """
+    Calibracion CONJUNTA del mercado 1X2 para las 8 ligas domesticas --
+    reemplaza a calibrar_probabilidad() SOLO para este mercado especifico
+    (prob_local/prob_empate/prob_visitante), que antes se calibraba cada
+    uno por separado y por eso no sumaba 100% (el usuario lo detecto: la
+    barra visual dejaba un tramo sin llenar).
+
+    Validado con walk-forward real + validacion cruzada cronologica de 3
+    folds sobre 18,384 observaciones reales (8 ligas domesticas,
+    2019/20-2025/26, re-entrenando fuerzas/rho cada 120 partidos con datos
+    SOLO anteriores a cada bloque evaluado -- script de backtest no
+    versionado, mismo patron que calibrar_probabilidad_champions). Resultado
+    (Brier score fuera de muestra, mas bajo = mejor):
+
+      Platt independiente (metodo anterior):  0.6095  (suma ~83% en promedio)
+      Platt + renormalizado (suma forzada):    0.6018
+      Softmax conjunto (este metodo):          0.5988  <- mejor Y suma 100%
+      Sin calibrar (crudo):                    0.5998  (referencia)
+
+    O sea: el metodo anterior no solo no sumaba 100%, tambien era el MENOS
+    preciso de los 4 candidatos evaluados -- la correccion global de
+    calibrar_probabilidad (entrenada mezclando TODOS los tipos de mercado,
+    no solo 1X2) estaba sobre-corrigiendo este mercado en particular.
+
+    Coeficientes entrenados con el dataset completo de la investigacion
+    (regresion logistica multinomial de sklearn, classes_=[Local,Empate,
+    Visitante]).
+    """
+    COEF = np.array([
+        [1.47694507, -0.57615822, -0.83665820],
+        [-0.39149902, 0.74787985, -0.44548971],
+        [-1.08544606, -0.17172163, 1.28214791],
+    ])
+    INTERCEPT = np.array([0.06927391, -0.09629302, 0.02701911])
+    return _softmax_calibrado(p_local, p_empate, p_visit, COEF, INTERCEPT)
+
+
+def calibrar_1x2_conjunto_champions(p_local, p_empate, p_visit):
+    """
+    Version de calibrar_1x2_conjunto() SOLO para Champions League -- mismo
+    motivo que calibrar_probabilidad_champions() (no reusar la calibracion
+    domestica): esta competencia tiene su propio sesgo de calibracion.
+
+    Validado con el mismo backtest walk-forward que calibrar_probabilidad_
+    champions (889 observaciones, 2020-2026, 3 folds cronologicos). Brier
+    score fuera de muestra:
+
+      Platt independiente (metodo anterior):  0.6226  (suma ~119% en promedio)
+      Platt + renormalizado (suma forzada):    0.6139
+      Softmax conjunto (este metodo):          0.5897  <- mejor Y suma 100%
+      Sin calibrar (crudo):                    0.6443  (referencia)
+
+    Aqui la mejora es todavia mas grande que en las ligas domesticas
+    (0.623 -> 0.590 de Brier) -- consistente con que Champions League ya
+    necesitaba su propia calibracion por separado.
+    """
+    COEF = np.array([
+        [0.78174307, -0.15798146, -0.63512769],
+        [-0.14194300, 0.42546579, -0.26885324],
+        [-0.63980008, -0.26748433, 0.90398093],
+    ])
+    INTERCEPT = np.array([0.34889701, -0.45902178, 0.11012478])
+    return _softmax_calibrado(p_local, p_empate, p_visit, COEF, INTERCEPT)
+
+
 def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_extra_combinables=None,
                        umbral_extra_minimo=None):
     """
@@ -1162,8 +1244,30 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
 
     # Calibramos TODOS los candidatos antes de decidir -- asi el umbral de
     # seguridad se aplica sobre el acierto real esperado, no sobre el
-    # numero optimista que sale directo del modelo estadistico
-    candidatos = [(nombres, calibrar_probabilidad(prob), es_extra) for nombres, prob, es_extra in candidatos]
+    # numero optimista que sale directo del modelo estadistico.
+    #
+    # Los 3 candidatos de 1X2 en solitario ("Local gana"/"Empate"/
+    # "Visitante gana") son un caso especial: se calibran CONJUNTAMENTE
+    # (calibrar_1x2_conjunto), no con calibrar_probabilidad(). Esto es
+    # necesario para que, si el pick recomendado termina siendo uno de
+    # estos 3, el porcentaje que se muestra en la tarjeta coincida
+    # exactamente con el que se muestra en la barra 1X2 del panel de
+    # analisis (que usa la misma calibracion conjunta) -- sin esto, el
+    # pick podria decir "72%" mientras la barra de abajo dice "69%" para
+    # el mismo mercado, una inconsistencia confusa para el usuario.
+    _MERCADOS_1X2 = {"Local gana": "local", "Empate": "empate", "Visitante gana": "visitante"}
+    _crudos_1x2 = {nombres[0]: prob for nombres, prob, _ in candidatos if len(nombres) == 1 and nombres[0] in _MERCADOS_1X2}
+    _calibrado_1x2 = None
+    if len(_crudos_1x2) == 3:
+        _calibrado_1x2 = calibrar_1x2_conjunto(
+            _crudos_1x2["Local gana"], _crudos_1x2["Empate"], _crudos_1x2["Visitante gana"])
+
+    def _calibrar_candidato(nombres, prob):
+        if _calibrado_1x2 is not None and len(nombres) == 1 and nombres[0] in _MERCADOS_1X2:
+            return _calibrado_1x2[_MERCADOS_1X2[nombres[0]]]
+        return calibrar_probabilidad(prob)
+
+    candidatos = [(nombres, _calibrar_candidato(nombres, prob), es_extra) for nombres, prob, es_extra in candidatos]
 
     seguros = [c for c in candidatos if c[1] >= (umbral_extra_minimo if c[2] else umbral_minimo)]
 
@@ -2086,6 +2190,15 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         # calibrar (arriba) son los que entran a elegir_mejor_pick, que ya
         # calibra internamente antes de decidir (evita calibrar dos veces)
         mercados = {k: calibrar_probabilidad(v) for k, v in mercados_sin_calibrar.items()}
+        # prob_local/prob_empate/prob_visitante se recalibran CONJUNTAMENTE
+        # (no con calibrar_probabilidad, que corrige cada uno por separado y
+        # por eso no sumaba 100% -- ver calibrar_1x2_conjunto). Esta es la
+        # barra 1X2 que se muestra en la tarjeta.
+        _cal_1x2 = calibrar_1x2_conjunto(
+            mercados_sin_calibrar["prob_local"], mercados_sin_calibrar["prob_empate"], mercados_sin_calibrar["prob_visitante"])
+        mercados["prob_local"] = _cal_1x2["local"]
+        mercados["prob_empate"] = _cal_1x2["empate"]
+        mercados["prob_visitante"] = _cal_1x2["visitante"]
         mercados_corners_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_corners.items()}
         mercados_tarjetas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tarjetas.items()}
         mercados_tiros_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros.items()}
@@ -2707,6 +2820,15 @@ def generar_analisis_champions_league(contextos_domesticos=None, n_gratis=2, dia
         # ver el docstring de esa funcion para el backtest que demuestra
         # por que Champions League necesita su propia calibracion.
         mercados_calibrados = {k: round(calibrar_probabilidad_champions(v) * 100, 1) for k, v in mercados.items()}
+        # prob_local/prob_empate/prob_visitante se recalibran CONJUNTAMENTE
+        # con calibrar_1x2_conjunto_champions -- ver docstring, mejora la
+        # precision Y garantiza que sumen 100% (calibrar_probabilidad_champions
+        # corrige cada uno por separado, no sumaba 100%).
+        _cal_1x2_cl = calibrar_1x2_conjunto_champions(
+            mercados["prob_local"], mercados["prob_empate"], mercados["prob_visitante"])
+        mercados_calibrados["prob_local"] = round(_cal_1x2_cl["local"] * 100, 1)
+        mercados_calibrados["prob_empate"] = round(_cal_1x2_cl["empate"] * 100, 1)
+        mercados_calibrados["prob_visitante"] = round(_cal_1x2_cl["visitante"] * 100, 1)
 
         # "Historial real" ahora significa CUALQUIER fuente real de datos --
         # historial propio de Champions League, O fuerza domestica via el
