@@ -362,6 +362,45 @@
     font-size: 14px; line-height: 1.6; color: rgba(239,235,226,0.82); margin: 0;
   }
   .transparencia-texto b { color: var(--papel); }
+
+  /* --- Tarjetas de "Como funciona" (icono + titulo + texto + boton),
+     mismo patron visual que el usuario mostro como referencia -- pero con
+     contenido 100% real de la app, nada de funciones que no tenemos. --- */
+  .transparencia-seccion-titulo {
+    font-family: 'Oswald', sans-serif; font-size: 12.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ambar); margin-bottom: 14px;
+  }
+  .transparencia-grid { display: flex; flex-direction: column; gap: 14px; }
+  .transparencia-card {
+    border: 1px solid rgba(239,235,226,0.18);
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    background: rgba(255,255,255,0.03);
+  }
+  .transparencia-card.acento-verde { border-color: rgba(78,152,104,0.45); }
+  .transparencia-card.acento-ambar { border-color: rgba(201,138,43,0.45); }
+  .transparencia-card.acento-azul { border-color: rgba(90,140,200,0.45); }
+  .transparencia-card.acento-rojo { border-color: rgba(163,75,62,0.45); }
+  .transparencia-card-icono { font-size: 30px; margin-bottom: 10px; }
+  .transparencia-card-titulo {
+    font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 600;
+    color: var(--papel); margin-bottom: 8px;
+  }
+  .acento-verde .transparencia-card-titulo { color: var(--verde-claro); }
+  .acento-ambar .transparencia-card-titulo { color: var(--ambar); }
+  .acento-azul .transparencia-card-titulo { color: #7fa8e0; }
+  .acento-rojo .transparencia-card-titulo { color: #c97d6e; }
+  .transparencia-card-texto {
+    font-size: 13.5px; line-height: 1.55; color: rgba(239,235,226,0.75); margin-bottom: 16px;
+  }
+  .transparencia-card-texto b { color: var(--papel); }
+  .transparencia-card-boton {
+    background: transparent; border: 1px solid rgba(239,235,226,0.35); border-radius: 999px;
+    color: var(--papel); font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 600;
+    padding: 9px 18px; cursor: pointer;
+  }
+  .transparencia-card-boton:hover { background: rgba(255,255,255,0.08); }
   .cargando-liga {
     color: rgba(239,235,226,0.5); font-size: 13px;
     padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;
@@ -1149,71 +1188,90 @@
       Sin trucos ni cajas negras — así es exactamente cómo se calcula cada pronóstico.
     </div>
 
-    <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">El modelo</h3>
-      <p class="transparencia-texto">
-        Cada pronóstico sale de un modelo estadístico (Dixon-Coles, una variante del modelo de Poisson
-        que se usa hace décadas para fútbol) — no de una opinión, ni de "lo que dice la gente".
-        Para cada equipo calculamos un índice de ataque y otro de defensa a partir de sus resultados
-        reales recientes (más peso a los partidos más nuevos, menos a los viejos), y con eso el modelo
-        simula la probabilidad de cada marcador posible del partido.
-      </p>
-    </section>
+    <div class="transparencia-seccion-titulo">🧭 EXPLORA PICKS FC</div>
+    <div class="transparencia-grid">
+      <div class="transparencia-card acento-verde">
+        <div class="transparencia-card-icono">📋</div>
+        <div class="transparencia-card-titulo">Picks del día</div>
+        <div class="transparencia-card-texto">
+          Solo mostramos picks que <b>superan nuestro umbral real de seguridad</b> — si ningún mercado
+          lo alcanza, te lo decimos tal cual ("partido parejo") en vez de inventar una recomendación.
+        </div>
+        <button class="transparencia-card-boton" onclick="cambiarVista('picks')">Ver picks del día →</button>
+      </div>
 
-    <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">La calibración honesta</h3>
-      <p class="transparencia-texto">
-        El número "crudo" que sale del modelo tiende a sonar más confiado de lo que debería —
-        le pasa a cualquier modelo estadístico. Antes de mostrarte cualquier porcentaje, lo corregimos
-        con una calibración entrenada contra resultados reales ya conocidos (miles de partidos), para
-        que el número que ves refleje lo que de verdad pasa en la cancha, no lo que el modelo
-        "cree" que pasa. Esta calibración se revalida con datos reales cada vez que cambiamos algo
-        que pueda afectarla — nunca a ojo.
-      </p>
-    </section>
+      <div class="transparencia-card acento-ambar">
+        <div class="transparencia-card-icono">🧾</div>
+        <div class="transparencia-card-titulo">Combinadas</div>
+        <div class="transparencia-card-texto">
+          La combinada gratis del día es siempre <b>la más segura</b> (mayor probabilidad real), no la
+          de mejor cuota — y sus partidos se destapan también como picks individuales.
+        </div>
+        <button class="transparencia-card-boton" onclick="cambiarVista('picks')">Ver combinada del día →</button>
+      </div>
 
-    <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">Qué mercados cubrimos (y por qué esos)</h3>
-      <p class="transparencia-texto">
-        Resultado, doble oportunidad, más/menos goles y ambos anotan están disponibles en las 8 ligas
-        domésticas y en Champions League. Corners, tarjetas y tiros a puerta <b>solo en ligas
-        domésticas</b> — no existe una fuente de datos gratuita y confiable de esos mercados para
-        competencias europeas, así que preferimos no mostrarlos ahí a inventar un número sin
-        respaldo real.
-      </p>
-    </section>
+      <div class="transparencia-card acento-azul">
+        <div class="transparencia-card-icono">⚽</div>
+        <div class="transparencia-card-titulo">Champions League</div>
+        <div class="transparencia-card-texto">
+          Análisis completo de la jornada con <b>su propia calibración</b>, validada por separado.
+          Es más pareja que una liga doméstica: con los datos disponibles, <b>ningún mercado llega
+          nunca al 80% real</b> — por eso ahí no verás la etiqueta "Muy seguro".
+        </div>
+        <button class="transparencia-card-boton" onclick="cambiarVista('champions')">Ver Champions League →</button>
+      </div>
+    </div>
 
-    <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">Champions League es distinto</h3>
-      <p class="transparencia-texto">
-        Validamos la calibración de Champions League por separado de las ligas domésticas — y el
-        resultado real es que, con la información disponible, <b>ningún mercado de esa competencia
-        llega nunca al 80% de confianza real</b>. No es un defecto: Champions League es más pareja e
-        impredecible que una liga doméstica de toda la vida. Por eso ahí no vas a ver la misma etiqueta
-        de "Muy seguro" que en las demás ligas — sería inflar un número que los datos no respaldan.
-      </p>
-    </section>
+    <div class="transparencia-seccion-titulo" style="margin-top:32px;">🤖 CÓMO ANALIZA EL MODELO</div>
+    <div class="transparencia-grid">
+      <div class="transparencia-card acento-verde">
+        <div class="transparencia-card-icono">🎯</div>
+        <div class="transparencia-card-titulo">Calibración honesta</div>
+        <div class="transparencia-card-texto">
+          El número "crudo" de cualquier modelo estadístico suena más confiado de lo que debería.
+          Antes de mostrártelo lo <b>corregimos contra miles de resultados reales</b> — y esa
+          corrección se revalida con datos, nunca a ojo.
+        </div>
+      </div>
 
-    <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">Lo que NO hacemos</h3>
-      <p class="transparencia-texto">
-        No mostramos alineaciones en vivo (no tenemos una fuente confiable y gratuita para eso), ni
-        mercados como faltas, tiros bloqueados o regates que necesitarían datos que no existen
-        gratis — antes que inventar un número para rellenar la pantalla, preferimos no mostrar nada.
-        Tampoco prometemos que un pick "muy seguro" sea garantía de nada: es una probabilidad alta,
-        no una certeza.
-      </p>
-    </section>
+      <div class="transparencia-card acento-ambar">
+        <div class="transparencia-card-icono">🧠</div>
+        <div class="transparencia-card-titulo">Explicación IA</div>
+        <div class="transparencia-card-texto">
+          Cada pick trae el porqué: <b>goles esperados, forma reciente real (últimos 5 partidos),
+          índices de ataque/defensa</b> — construido con nuestros propios datos, sin inventar
+          fuentes como "xG" o "ELO" que no tenemos.
+        </div>
+      </div>
 
-    <section class="seccion-liga">
-      <h3 class="seccion-liga-titulo">Nuestro historial real</h3>
-      <p class="transparencia-texto" style="margin-bottom:14px;">
-        Cada pick y cada combinada que mostramos queda registrado, y se resuelve solo con el
-        resultado real del partido — nunca se borra ni se edita un pick después de generado.
-      </p>
-      <div id="transparencia-track-record"></div>
-      <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
-    </section>
+      <div class="transparencia-card acento-azul">
+        <div class="transparencia-card-icono">📡</div>
+        <div class="transparencia-card-titulo">Qué mercados cubrimos</div>
+        <div class="transparencia-card-texto">
+          Resultado, goles y ambos anotan en las 8 ligas + Champions League. Corners, tarjetas y
+          tiros a puerta <b>solo en ligas domésticas</b> — no existe fuente gratuita confiable de eso
+          para competencias europeas.
+        </div>
+      </div>
+
+      <div class="transparencia-card acento-rojo">
+        <div class="transparencia-card-icono">🚫</div>
+        <div class="transparencia-card-titulo">Lo que NO hacemos</div>
+        <div class="transparencia-card-texto">
+          No mostramos alineaciones en vivo ni mercados como faltas o regates que necesitarían datos
+          que no existen gratis. <b>Preferimos no mostrar nada a inventar un número.</b> Y "muy
+          seguro" es una probabilidad alta, nunca una garantía.
+        </div>
+      </div>
+    </div>
+
+    <div class="transparencia-seccion-titulo" style="margin-top:32px;">📜 HISTORIAL REAL</div>
+    <p class="transparencia-texto" style="margin-bottom:14px;">
+      Cada pick y cada combinada queda registrado antes de saberse el resultado, y se resuelve solo con
+      el resultado real del partido — nunca se borra ni se edita después de generado.
+    </p>
+    <div id="transparencia-track-record"></div>
+    <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
   </main>
 </div>
 
