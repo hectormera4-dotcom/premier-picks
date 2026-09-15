@@ -19,13 +19,13 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-06 18:45:00,Juventus,Milan,Under 13.5 corners,False,85.0,1.08,2026-09-06,1-1,True
 2026-09-07 16:30:00,Cagliari,Lecce,Over 6.5 corners,False,86.1,1.06,2026-09-07,1-0,True
 2026-09-07 18:45:00,Udinese,Lazio,Over 5.5 corners,False,86.3,1.06,2026-09-07,1-2,True
-2026-09-11 18:45:00,Venezia,Fiorentina,Over 5.5 corners,False,81.0,1.14,2026-09-11,,
-2026-09-12 13:00:00,Genoa,Frosinone,Over 6.5 corners,False,81.5,1.13,2026-09-12,,
-2026-09-12 16:00:00,Lazio,Milan,Under 11.5 corners,False,82.2,1.12,2026-09-12,,
-2026-09-12 18:45:00,Atalanta,Cagliari,Under 12.5 corners,False,81.9,1.12,2026-09-12,,
-2026-09-13 13:00:00,Lecce,Monza,Over 5.5 corners,False,82.3,1.12,2026-09-13,,
-2026-09-13 16:00:00,Napoli,Bologna,Under 11.5 corners,False,83.8,1.09,2026-09-13,,
-2026-09-13 18:45:00,Sassuolo,Juventus,Over 6.5 corners,False,80.1,1.15,2026-09-13,,
-2026-09-14 16:30:00,Como,Parma,Over 5.5 corners,False,82.2,1.12,2026-09-14,,
-2026-09-14 16:30:00,Torino,Roma,Over 5.5 corners,False,80.7,1.14,2026-09-14,,
-2026-09-14 18:45:00,Inter,Udinese,Over 1.5 goles + Over 5.5 corners,True,81.3,1.13,2026-09-14,,
+2026-09-11 18:45:00,Venezia,Fiorentina,Over 5.5 corners,False,81.0,1.14,2026-09-11,2-4,True
+2026-09-12 13:00:00,Genoa,Frosinone,Over 6.5 corners,False,81.5,1.13,2026-09-12,1-1,True
+2026-09-12 16:00:00,Lazio,Milan,Under 11.5 corners,False,82.2,1.12,2026-09-12,2-2,True
+2026-09-12 18:45:00,Atalanta,Cagliari,Under 12.5 corners,False,81.9,1.12,2026-09-12,1-2,True
+2026-09-13 13:00:00,Lecce,Monza,Over 5.5 corners,False,82.3,1.12,2026-09-13,3-2,True
+2026-09-13 16:00:00,Napoli,Bologna,Under 11.5 corners,False,83.8,1.09,2026-09-13,1-0,True
+2026-09-13 18:45:00,Sassuolo,Juventus,Over 6.5 corners,False,80.1,1.15,2026-09-13,3-2,True
+2026-09-14 16:30:00,Como,Parma,Over 5.5 corners,False,82.2,1.12,2026-09-14,2-1,True
+2026-09-14 16:30:00,Torino,Roma,Over 5.5 corners,False,80.7,1.14,2026-09-14,0-2,True
+2026-09-14 18:45:00,Inter,Udinese,Over 1.5 goles + Over 5.5 corners,True,81.3,1.13,2026-09-14,5-3,True

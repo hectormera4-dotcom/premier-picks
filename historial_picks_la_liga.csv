@@ -23,16 +23,16 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-06 19:00:00,Espanyol,Sevilla,Under 13.5 corners,False,81.0,1.14,2026-09-06,,
 2026-09-07 17:00:00,Getafe,Celta,Under 10.5 corners,False,84.7,1.08,2026-09-07,1-1,True
 2026-09-07 19:30:00,Elche,Sociedad,Over 5.5 corners,False,80.9,1.14,2026-09-07,2-3,True
-2026-09-11 19:00:00,Sevilla,Valencia,Under 11.5 corners,False,82.2,1.12,2026-09-11,,
-2026-09-12 12:00:00,Santander,Alaves,Over 2.5 goles + Over 6.5 corners,True,80.0,1.15,2026-09-12,,
+2026-09-11 19:00:00,Sevilla,Valencia,Under 11.5 corners,False,82.2,1.12,2026-09-11,1-0,True
+2026-09-12 12:00:00,Santander,Alaves,Over 2.5 goles + Over 6.5 corners,True,80.0,1.15,2026-09-12,2-1,True
 2026-09-12 14:15:00,Osasuna,Espanyol,Over 5.5 corners,False,82.1,1.12,2026-09-12,,
 2026-09-12 16:30:00,Ath Bilbao,Elche,Doble oportunidad 1X,False,80.5,1.14,2026-09-12,1-1,True
-2026-09-12 19:00:00,Real Madrid,Vallecano,Over 7.5 corners,False,81.2,1.13,2026-09-12,,
-2026-09-13 12:00:00,Celta,Malaga,Over 6.5 corners,False,80.9,1.14,2026-09-13,,
-2026-09-13 14:15:00,Levante,Barcelona,Doble oportunidad X2 + Over 5.5 corners,True,80.1,1.15,2026-09-13,,
-2026-09-13 16:30:00,Getafe,La Coruna,Under 10.5 corners,False,82.0,1.12,2026-09-13,,
-2026-09-13 19:00:00,Sociedad,Ath Madrid,Under 13.5 corners,False,82.2,1.12,2026-09-13,,
-2026-09-14 19:00:00,Villarreal,Betis,Over 1.5 goles + Over 5.5 corners,True,82.5,1.11,2026-09-14,,
+2026-09-12 19:00:00,Real Madrid,Vallecano,Over 7.5 corners,False,81.2,1.13,2026-09-12,4-1,True
+2026-09-13 12:00:00,Celta,Malaga,Over 6.5 corners,False,80.9,1.14,2026-09-13,1-1,False
+2026-09-13 14:15:00,Levante,Barcelona,Doble oportunidad X2 + Over 5.5 corners,True,80.1,1.15,2026-09-13,2-4,True
+2026-09-13 16:30:00,Getafe,La Coruna,Under 10.5 corners,False,82.0,1.12,2026-09-13,1-1,True
+2026-09-13 19:00:00,Sociedad,Ath Madrid,Under 13.5 corners,False,82.2,1.12,2026-09-13,0-3,True
+2026-09-14 19:00:00,Villarreal,Betis,Over 1.5 goles + Over 5.5 corners,True,82.5,1.11,2026-09-14,1-2,True
 2026-09-15 17:00:00,Vallecano,Espanyol,Más tiros a puerta: Vallecano,False,81.3,1.13,2026-09-14,,
 2026-09-15 18:00:00,Alaves,Valencia,Under 13.5 corners,False,81.4,1.13,2026-09-14,,
 2026-09-15 19:30:00,Elche,Real Madrid,Under 12.5 corners,False,81.0,1.13,2026-09-14,,
