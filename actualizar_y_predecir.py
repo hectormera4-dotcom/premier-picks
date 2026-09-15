@@ -1944,7 +1944,7 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
     # sobre una lista no funciona) -- se suben como campos propios, igual que
     # escudo_local/escudo_visitante.
     columnas_base = {"fecha", "local", "visitante", "escudo_local", "escudo_visitante",
-                      "marcadores_probables", "explicacion_ia", "pick_recomendado", "es_combo",
+                      "marcadores_probables", "explicacion_ia", "calidad_datos", "pick_recomendado", "es_combo",
                       "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis", "liga"}
 
     registros = []
@@ -1958,6 +1958,7 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
             "escudo_visitante": fila.get("escudo_visitante") if pd.notna(fila.get("escudo_visitante")) else None,
             "marcadores_probables": fila.get("marcadores_probables") or [],
             "explicacion_ia": fila.get("explicacion_ia") or [],
+            "calidad_datos": fila.get("calidad_datos") if pd.notna(fila.get("calidad_datos")) else "completo",
             "pick_recomendado": fila["pick_recomendado"],
             "es_combo": bool(fila["es_combo"]),
             "pick_probabilidad": float(fila["pick_probabilidad"]),
@@ -2312,6 +2313,13 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             "pick_probabilidad": round(pick_prob*100, 1),
             "pick_cuota_aprox": round(pick_cuota, 2) if pick_cuota else None,
             "pick_es_seguro": cumple_umbral,
+            # 'completo' = ambos equipos ya llevan partidos suficientes esta
+            # temporada (MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS); 'limitado' =
+            # alguno de los 2 todavia esta en arranque de temporada -- mismo
+            # concepto que calidad_datos en Champions League, honesto sobre
+            # que tan solido es el historial detras del pick (no un puntaje
+            # inventado tipo "81/100", solo la señal real que ya calculamos).
+            "calidad_datos": "limitado" if es_inicio_temporada else "completo",
             **{k: round(v*100, 1) for k, v in mercados.items()},
             **{k: round(v*100, 1) for k, v in mercados_corners_mostrar.items()},
             **{k: round(v*100, 1) for k, v in mercados_tarjetas_mostrar.items()},
