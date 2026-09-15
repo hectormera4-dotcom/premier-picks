@@ -1262,9 +1262,24 @@ def elegir_mejor_pick(matriz, umbral_minimo=0.65, mercados_extra=None, mercados_
         _calibrado_1x2 = calibrar_1x2_conjunto(
             _crudos_1x2["Local gana"], _crudos_1x2["Empate"], _crudos_1x2["Visitante gana"])
 
+    # Los otros mercados de PAR COMPLEMENTARIO (Over/Under 2.5 goles, Ambos
+    # anotan Si/No -- solo 2 resultados que se excluyen y cubren todo, a
+    # diferencia de "Doble oportunidad" o "Mas corners: Equipo" que se
+    # dejan tal cual porque NO son complementarios) se resuelven distinto
+    # al 1X2: no hace falta un modelo conjunto, solo definir el lado
+    # "negativo" como 1 menos el lado "positivo" ya calibrado -- un
+    # backtest real (18,384 observaciones) demostro que esto es ademas MAS
+    # preciso que calibrar los 2 lados por separado (que es lo que hacia
+    # antes, y por eso mismo tampoco sumaba 100%).
+    _PARES_COMPLEMENTARIOS = {"Under 2.5 goles": "Over 2.5 goles", "Ambos anotan - No": "Ambos anotan - Si"}
+    _crudos_por_nombre = {nombres[0]: prob for nombres, prob, _ in candidatos if len(nombres) == 1}
+
     def _calibrar_candidato(nombres, prob):
         if _calibrado_1x2 is not None and len(nombres) == 1 and nombres[0] in _MERCADOS_1X2:
             return _calibrado_1x2[_MERCADOS_1X2[nombres[0]]]
+        if len(nombres) == 1 and nombres[0] in _PARES_COMPLEMENTARIOS:
+            positivo = _PARES_COMPLEMENTARIOS[nombres[0]]
+            return 1 - calibrar_probabilidad(_crudos_por_nombre[positivo])
         return calibrar_probabilidad(prob)
 
     candidatos = [(nombres, _calibrar_candidato(nombres, prob), es_extra) for nombres, prob, es_extra in candidatos]
@@ -2199,6 +2214,15 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
         mercados["prob_local"] = _cal_1x2["local"]
         mercados["prob_empate"] = _cal_1x2["empate"]
         mercados["prob_visitante"] = _cal_1x2["visitante"]
+        # Over/Under 2.5 goles y Ambos anotan Si/No son PARES COMPLEMENTARIOS
+        # (solo 2 resultados, se excluyen y cubren todo) -- se calibra el
+        # lado positivo y el negativo se define como 1-eso, en vez de
+        # calibrar los 2 por separado (que tampoco sumaba 100%, y un
+        # backtest real demostro que ademas es menos preciso). No se toca
+        # "Doble oportunidad" ni "Mas corners/tarjetas/tiros: Equipo"
+        # porque esos NO son complementarios (les falta el caso de empate).
+        mercados["under_25"] = 1 - mercados["over_25"]
+        mercados["btts_no"] = 1 - mercados["btts_si"]
         mercados_corners_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_corners.items()}
         mercados_tarjetas_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tarjetas.items()}
         mercados_tiros_mostrar = {k: calibrar_probabilidad(v) for k, v in mercados_tiros.items()}
@@ -2829,6 +2853,14 @@ def generar_analisis_champions_league(contextos_domesticos=None, n_gratis=2, dia
         mercados_calibrados["prob_local"] = round(_cal_1x2_cl["local"] * 100, 1)
         mercados_calibrados["prob_empate"] = round(_cal_1x2_cl["empate"] * 100, 1)
         mercados_calibrados["prob_visitante"] = round(_cal_1x2_cl["visitante"] * 100, 1)
+        # Mismo arreglo que en las ligas domesticas para los pares
+        # complementarios (Over/Under 2.5, BTTS Si/No) -- el lado negativo
+        # se define como 100 menos el lado positivo ya calibrado, en vez de
+        # calibrar los 2 por separado. La garantia de que sume 100% es
+        # puramente matematica (no depende de la competencia), pero la
+        # ganancia de precision viene del backtest de ligas domesticas.
+        mercados_calibrados["under_25"] = round(100 - mercados_calibrados["over_25"], 1)
+        mercados_calibrados["btts_no"] = round(100 - mercados_calibrados["btts_si"], 1)
 
         # "Historial real" ahora significa CUALQUIER fuente real de datos --
         # historial propio de Champions League, O fuerza domestica via el
