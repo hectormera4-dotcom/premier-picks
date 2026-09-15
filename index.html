@@ -711,18 +711,14 @@
   .analisis-seccion-titulo { font-size: 12.5px; font-weight: 700; color: var(--tinta); margin-bottom: 8px; }
 
   /* --- Barra 1X2 (Local/Empate/Visitante), resumen visual al abrir el panel --- */
-  .prob-bar-1x2-track {
-    display: flex; width: 100%; height: 8px; border-radius: 5px; overflow: hidden;
-    background: var(--linea);
-  }
   /* La barra 1X2 es ahora lo primero que se ve de cada tarjeta (antes
      vivia escondida en el desplegable) -- el llenado animado + el brillo
      pulsante del favorito son a proposito, para que "llame la atencion"
      en vez de sentirse un dato estatico mas (pedido explicito del usuario). */
   .prob-bar-1x2 { width: 100%; }
   .prob-bar-1x2-track {
-    position: relative;
-    overflow: hidden;
+    display: flex; width: 100%; height: 26px; border-radius: 6px; overflow: hidden;
+    background: var(--linea); position: relative;
   }
   /* Barrido de brillo que cruza la barra una vez que termina de llenarse
      (el fill dura 0.9s, el brillo arranca justo despues) -- es lo que hace
@@ -741,6 +737,7 @@
     height: 100%;
     width: var(--w, 0%);
     animation: llenarBarra1X2 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    display: flex; align-items: center; justify-content: center;
   }
   @keyframes llenarBarra1X2 {
     from { width: 0%; }
@@ -749,18 +746,26 @@
   .prob-bar-local { background: var(--verde); }
   .prob-bar-empate { background: var(--ambar); }
   .prob-bar-visitante { background: var(--rojo); }
+  /* El porcentaje va DENTRO del segmento (no junto al nombre del equipo
+     debajo) -- asi siempre se ve completo, sin importar el ancho de
+     pantalla ni que tan largo sea el nombre del equipo. overflow visible
+     para que, en un segmento muy angosto, el numero pueda asomarse un
+     poco sobre el segmento vecino en vez de cortarse. */
+  .prob-bar-seg-valor {
+    font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.35); overflow: visible;
+    font-family: 'IBM Plex Mono', monospace;
+  }
   .prob-bar-1x2-etiquetas {
     display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
     font-size: 11px; color: var(--tinta-suave);
   }
   .prob-bar-1x2-etiquetas span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .prob-bar-1x2-etiquetas span:last-child { text-align: right; }
-  .prob-bar-1x2-etiquetas b { font-family: 'IBM Plex Mono', monospace; color: var(--tinta); }
   .prob-bar-1x2-etiquetas .prob-bar-fav {
     color: var(--verde); font-weight: 700;
     animation: pulsoFavorito 2.2s ease-in-out infinite;
   }
-  .prob-bar-1x2-etiquetas .prob-bar-fav b { color: var(--verde); }
   @keyframes pulsoFavorito {
     0%, 100% { text-shadow: 0 0 0 rgba(47,110,69,0); }
     50% { text-shadow: 0 0 8px rgba(47,110,69,0.55); }
@@ -2336,17 +2341,23 @@ function crearBarraProb1X2(p) {
   const suma = pL + pE + pV || 1;
   const wL = (pL / suma) * 100, wE = (pE / suma) * 100, wV = (pV / suma) * 100;
   const max = Math.max(pL, pE, pV);
+  // El porcentaje va DENTRO de cada segmento de la barra (no junto al
+  // nombre del equipo debajo) -- en pantallas angostas, "Bristol City" +
+  // "27.4%" en el mismo texto no cabia y el navegador cortaba TODO el
+  // texto con "...", perdiendo el porcentaje por completo. Separados, el
+  // porcentaje siempre se ve completo sin importar que tan largo sea el
+  // nombre del equipo (que sigue truncandose el solo, si hace falta).
   return `
     <div class="prob-bar-1x2">
       <div class="prob-bar-1x2-track">
-        <div class="prob-bar-seg prob-bar-local" style="--w:${wL}%"></div>
-        <div class="prob-bar-seg prob-bar-empate" style="--w:${wE}%"></div>
-        <div class="prob-bar-seg prob-bar-visitante" style="--w:${wV}%"></div>
+        <div class="prob-bar-seg prob-bar-local" style="--w:${wL}%"><span class="prob-bar-seg-valor">${pL}%</span></div>
+        <div class="prob-bar-seg prob-bar-empate" style="--w:${wE}%"><span class="prob-bar-seg-valor">${pE}%</span></div>
+        <div class="prob-bar-seg prob-bar-visitante" style="--w:${wV}%"><span class="prob-bar-seg-valor">${pV}%</span></div>
       </div>
       <div class="prob-bar-1x2-etiquetas">
-        <span class="${pL === max ? "prob-bar-fav" : ""}">${p.local} <b>${pL}%</b></span>
-        <span class="${pE === max ? "prob-bar-fav" : ""}">Empate <b>${pE}%</b></span>
-        <span class="${pV === max ? "prob-bar-fav" : ""}">${p.visitante} <b>${pV}%</b></span>
+        <span class="${pL === max ? "prob-bar-fav" : ""}">${p.local}</span>
+        <span class="${pE === max ? "prob-bar-fav" : ""}">Empate</span>
+        <span class="${pV === max ? "prob-bar-fav" : ""}">${p.visitante}</span>
       </div>
     </div>
   `;
