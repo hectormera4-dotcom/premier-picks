@@ -1858,10 +1858,11 @@ async function cerrarSesion() {
 
 async function cargarTodo() {
   try {
-    const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }] = await Promise.all([
+    const [{ data: picksRaw }, { data: combinadasRaw }, { data: historialRaw }, { data: resumenRaw }] = await Promise.all([
       sb.from("picks_publicos").select("*"),
       sb.from("combinadas_publicas").select("*"),
       sb.from("historial_combinadas_publico").select("*").not("resultado", "is", null),
+      sb.from("resumen_track_record").select("*"),
     ]);
 
     const picks = (picksRaw || []).map(transformarPick);
@@ -1882,6 +1883,7 @@ async function cargarTodo() {
     actualizarEtiquetaFecha(picksRaw || [], combinadasRaw || []);
     render(picks, combinadas);
     window._historialCombinadasCache = historialRaw || [];
+    window._resumenTrackRecord = resumenRaw || [];
   } catch (err) {
     document.getElementById("grid").innerHTML = `
       <div class="combinada" style="grid-column:1/-1; text-align:center; opacity:0.7;">
@@ -1941,6 +1943,24 @@ function actualizarEtiquetaFecha(picksRaw, combinadasRaw) {
 // En cuanto el acierto real suba de este umbral, la seccion vuelve a
 // aparecer automaticamente, sin que haya que tocar codigo de nuevo.
 const UMBRAL_TRACK_RECORD_VISIBLE = 70;
+
+// Caja de resumen para la seccion de Historial ("100 de 150 picks
+// acertados", "45 de 72 combinadas cumplidas") -- una por combinadas y
+// otra por picks individuales, cada una oculta si no hay datos todavia o
+// si el acierto real esta por debajo de UMBRAL_TRACK_RECORD_VISIBLE
+// (mismo criterio que el marcador de la portada, por consistencia).
+function crearCajaTrackRecord(fila, etiqueta) {
+  if (!fila || fila.total_resueltos === 0) return "";
+  const porcentaje = Math.round((fila.total_acertados / fila.total_resueltos) * 100);
+  if (porcentaje < UMBRAL_TRACK_RECORD_VISIBLE) return "";
+  return `
+    <div class="marcador-global" style="margin-top:0; margin-bottom:10px;">
+      <div class="marcador-box">
+        <span class="marcador-numero">${porcentaje}<span style="font-size:20px;">%</span></span>
+        <span class="marcador-texto"><strong>${fila.total_acertados} de ${fila.total_resueltos}</strong> ${etiqueta} — historial 100% real y verificable.</span>
+      </div>
+    </div>`;
+}
 
 function renderMarcadorGlobal(porcentaje, totalResueltos) {
   const cont = document.getElementById("marcador-global-contenedor");
@@ -2907,27 +2927,14 @@ async function cargarHistorialCombinadas() {
       return;
     }
 
-    const resueltas = datos.filter(d => d.resultado === "Cumplida" || d.resultado === "Fallada");
-    if (resueltas.length > 0) {
-      const cumplidas = resueltas.filter(d => d.resultado === "Cumplida").length;
-      const porcentaje = Math.round((cumplidas / resueltas.length) * 100);
-      // Igual que el marcador de la portada: por debajo del umbral, esta
-      // seccion se queda oculta -- se muestra sola en cuanto el acierto
-      // real suba lo suficiente.
-      if (porcentaje >= UMBRAL_TRACK_RECORD_VISIBLE) {
-        resumenCont.innerHTML = `
-          <div class="marcador-global" style="margin-top:0;">
-            <div class="marcador-box">
-              <span class="marcador-numero">${porcentaje}<span style="font-size:20px;">%</span></span>
-              <span class="marcador-texto"><strong>${cumplidas} de ${resueltas.length}</strong> combinadas cumplidas — historial 100% real y verificable.</span>
-            </div>
-          </div>`;
-      } else {
-        resumenCont.innerHTML = "";
-      }
-    } else {
-      resumenCont.innerHTML = "";
-    }
+    // Resumen agregado de TODO el historial (combinadas Y picks
+    // individuales, cada mercado se resuelve por separado en cada liga
+    // pero aqui se suman todas) -- viene ya calculado del pipeline
+    // (resumen_track_record), no se recalcula aqui.
+    const resumen = window._resumenTrackRecord || [];
+    const cajaCombinadas = crearCajaTrackRecord(resumen.find(r => r.tipo === "combinadas"), "combinadas cumplidas");
+    const cajaPicks = crearCajaTrackRecord(resumen.find(r => r.tipo === "picks"), "picks acertados");
+    resumenCont.innerHTML = cajaCombinadas + cajaPicks;
 
     const grupos = {};
     for (const fila of datos) {
