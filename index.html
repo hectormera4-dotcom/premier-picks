@@ -2391,7 +2391,20 @@ function render(picks, combinadas) {
       </div>`;
   }
 
-  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picks.map(crearTarjeta).join("");
+  // Las tarjetas gratis van primero y las VIP bloqueadas al final -- antes
+  // salian intercaladas (el orden natural es por probabilidad, sin
+  // importar si el pick es gratis o VIP), lo que se sentia desordenado
+  // para un usuario no-VIP viendo la lista. El sort es estable, asi que
+  // dentro de cada grupo se conserva el orden original (por probabilidad).
+  const prioridadOrden = p => {
+    if (p.tieneDatos && p.esGratis) return 0;   // gratis, visible
+    if (p.tieneDatos && !p.esGratis) return 1;  // VIP viendo su propio contenido VIP
+    if (!p.tieneDatos && p.esGratis) return 2;  // gratis pero exige iniciar sesion
+    return 3;                                   // bloqueado, solo VIP
+  };
+  const picksOrdenados = [...picks].sort((a, b) => prioridadOrden(a) - prioridadOrden(b));
+
+  document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picksOrdenados.map(crearTarjeta).join("");
 }
 
 function toggleDetalle(i) {
