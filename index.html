@@ -653,6 +653,7 @@
     font-style: italic;
   }
   .badge-combo { background: rgba(23,32,26,0.08); color: var(--tinta-suave); }
+  .badge-lento { background: rgba(201,138,43,0.14); color: #97661d; cursor: help; }
   .cuota {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
@@ -1286,6 +1287,16 @@ function traducirMercado(texto) {
   return texto
     .replace(/\bOver\b/g, "Más de")
     .replace(/\bUnder\b/g, "Menos de");
+}
+
+// Corners, tarjetas y tiros a puerta dependen de football-data.co.uk, que
+// solo actualiza esos datos un par de veces por semana (a diferencia de
+// los resultados de goles, que se saben al instante apenas termina el
+// partido) -- el pick SI se verifica igual, solo puede tardar mas en
+// aparecer resuelto en el historial.
+function esMercadoDeVerificacionLenta(pick) {
+  if (!pick) return false;
+  return /corners|tarjetas|tiros a puerta/i.test(pick);
 }
 
 function nombreLiga(clave) {
@@ -2297,6 +2308,9 @@ function crearTarjeta(p, i) {
   const badgeClase = p.nivel === "seguro" ? "badge-seguro" : "badge-moderado";
   const badgeTexto = p.nivel === "seguro" ? "Muy seguro" : "Moderado";
   const comboBadge = p.combo ? `<span class="badge badge-combo">Combo x2</span>` : "";
+  const verificacionLentaBadge = esMercadoDeVerificacionLenta(p.pick)
+    ? `<span class="badge badge-lento" title="Corners/tarjetas dependen de una fuente que solo actualiza un par de veces por semana -- el pick SI se verifica, solo puede tardar mas en aparecer resuelto en el historial.">⏳ Verificación más lenta</span>`
+    : "";
 
   const seccionPick = `
     <div class="analisis-seccion analisis-pick">
@@ -2306,6 +2320,7 @@ function crearTarjeta(p, i) {
         <div class="pick-meta">
           <span class="badge ${badgeClase}">${badgeTexto}</span>
           ${comboBadge}
+          ${verificacionLentaBadge}
           <span class="cuota">cuota ~${p.cuota}</span>
         </div>
       </div>
