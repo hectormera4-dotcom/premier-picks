@@ -2001,6 +2001,44 @@ def subir_combinadas_supabase(combinadas, liga):
     else:
         print(f"Aviso: fallo al subir combinadas a Supabase ({resp.status_code}): {resp.text[:300]}")
 
+def subir_resumen_track_record(tipo, total_resueltos, total_acertados):
+    """Sube (upsert) un resumen de 2 numeros nada mas -- cuantos picks o
+    combinadas se han resuelto en total y cuantos de esos acertaron -- a
+    una tabla publica chiquita (resumen_track_record), para mostrar algo
+    como "100 de 150 picks acertados" en la app SIN exponer el detalle
+    partido por partido (que no hace falta para ese numero)."""
+    if not supabase_configurado():
+        return
+    registro = {
+        "tipo": tipo,
+        "total_resueltos": total_resueltos,
+        "total_acertados": total_acertados,
+        "actualizado_en": datetime.utcnow().isoformat(),
+    }
+    resp = requests.post(
+        f"{SUPABASE_URL}/rest/v1/resumen_track_record?on_conflict=tipo",
+        headers=supabase_headers(upsert=True), json=registro)
+    if resp.status_code in (200, 201, 204):
+        print(f"Resumen de track record de '{tipo}' sincronizado: {total_acertados}/{total_resueltos} acertados.")
+    else:
+        print(f"Aviso: fallo al subir el resumen de track record de '{tipo}' ({resp.status_code}): {resp.text[:300]}")
+
+
+def subir_resumen_track_record_picks(historiales_por_liga):
+    """Cada liga trackea su propio historial de picks individuales por
+    separado (ARCHIVO_HISTORIAL_PICKS se reasigna por liga en
+    _fijar_globales_liga) -- nunca se habian sumado los 8 juntos. Esto
+    suma cuantos picks se han resuelto en total y cuantos de esos
+    acertaron, en todas las ligas juntas."""
+    total_resueltos = 0
+    total_acertados = 0
+    for historial in historiales_por_liga.values():
+        resueltos = historial[historial["acierto"].notna()]
+        total_resueltos += len(resueltos)
+        total_acertados += int(resueltos["acierto"].sum())
+    subir_resumen_track_record("picks", total_resueltos, total_acertados)
+
+
 def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
     """Igual que subir_historial_combinadas_supabase, pero usa la columna
     'liga' que ya viene incluida en cada fila (puede haber una mezcla de
@@ -2030,6 +2068,10 @@ def subir_historial_combinadas_liga_ya_incluida(historial_combinadas):
         print(f"Historial de combinadas sincronizado con Supabase ({len(registros)} registros).")
     else:
         print(f"Aviso: fallo al sincronizar historial en Supabase ({resp.status_code}): {resp.text[:300]}")
+
+    resueltas = historial_combinadas[historial_combinadas["resultado"].notna()]
+    cumplidas = int((resueltas["resultado"] == "Cumplida").sum())
+    subir_resumen_track_record("combinadas", len(resueltas), cumplidas)
 
 
 def enviar_notificacion_push(titulo, cuerpo):
@@ -2995,6 +3037,7 @@ if __name__ == "__main__":
     # en mala racha, sube el umbral para las 3 (ver calcular_umbral_dinamico_multiliga).
     historiales_por_liga = {k: ctx["historial"] for k, ctx in contextos.items()}
     umbral_dinamico = calcular_umbral_dinamico_multiliga(historiales_por_liga, umbral_base=0.80, umbral_alto=0.85)
+    subir_resumen_track_record_picks(historiales_por_liga)
 
     # FASE 2: generar los picks de hoy de cada liga con ese umbral compartido.
     pools_picks = []
