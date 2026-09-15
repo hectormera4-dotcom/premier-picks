@@ -358,6 +358,10 @@
     font-family: 'Oswald', sans-serif; font-size: 15px; letter-spacing: 0.03em;
     color: var(--verde-claro); margin: 0 0 12px;
   }
+  .transparencia-texto {
+    font-size: 14px; line-height: 1.6; color: rgba(239,235,226,0.82); margin: 0;
+  }
+  .transparencia-texto b { color: var(--papel); }
   .cargando-liga {
     color: rgba(239,235,226,0.5); font-size: 13px;
     padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;
@@ -1055,6 +1059,9 @@
     <button class="menu-item" id="menu-historial" onclick="cambiarVista('historial'); cerrarMenuLateral();">
       📊 Historial
     </button>
+    <button class="menu-item" id="menu-transparencia" onclick="cambiarVista('transparencia'); cerrarMenuLateral();">
+      🔍 Cómo funciona
+    </button>
     <button class="menu-item" id="menu-champions" onclick="cambiarVista('champions'); cerrarMenuLateral();">
       <span class="menu-item-escudo-fondo"><img src="https://images.fotmob.com/image_resources/logo/leaguelogo/42.png" alt="" onerror="this.parentElement.remove();"></span> Champions League
     </button>
@@ -1131,6 +1138,81 @@
     <section class="seccion-liga">
       <h3 class="seccion-liga-titulo">Próximos partidos</h3>
       <div id="liga-proximos"><div class="cargando-liga">Cargando próximos partidos...</div></div>
+    </section>
+  </main>
+</div>
+
+<div id="vista-transparencia" style="display:none;">
+  <main style="max-width:720px; margin:0 auto; padding:20px 20px 60px;">
+    <h2 style="margin-bottom:4px;">🔍 Cómo funciona Picks FC</h2>
+    <div style="font-size:13px; color:var(--tinta-suave); margin-bottom:24px;">
+      Sin trucos ni cajas negras — así es exactamente cómo se calcula cada pronóstico.
+    </div>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">El modelo</h3>
+      <p class="transparencia-texto">
+        Cada pronóstico sale de un modelo estadístico (Dixon-Coles, una variante del modelo de Poisson
+        que se usa hace décadas para fútbol) — no de una opinión, ni de "lo que dice la gente".
+        Para cada equipo calculamos un índice de ataque y otro de defensa a partir de sus resultados
+        reales recientes (más peso a los partidos más nuevos, menos a los viejos), y con eso el modelo
+        simula la probabilidad de cada marcador posible del partido.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">La calibración honesta</h3>
+      <p class="transparencia-texto">
+        El número "crudo" que sale del modelo tiende a sonar más confiado de lo que debería —
+        le pasa a cualquier modelo estadístico. Antes de mostrarte cualquier porcentaje, lo corregimos
+        con una calibración entrenada contra resultados reales ya conocidos (miles de partidos), para
+        que el número que ves refleje lo que de verdad pasa en la cancha, no lo que el modelo
+        "cree" que pasa. Esta calibración se revalida con datos reales cada vez que cambiamos algo
+        que pueda afectarla — nunca a ojo.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Qué mercados cubrimos (y por qué esos)</h3>
+      <p class="transparencia-texto">
+        Resultado, doble oportunidad, más/menos goles y ambos anotan están disponibles en las 8 ligas
+        domésticas y en Champions League. Corners, tarjetas y tiros a puerta <b>solo en ligas
+        domésticas</b> — no existe una fuente de datos gratuita y confiable de esos mercados para
+        competencias europeas, así que preferimos no mostrarlos ahí a inventar un número sin
+        respaldo real.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Champions League es distinto</h3>
+      <p class="transparencia-texto">
+        Validamos la calibración de Champions League por separado de las ligas domésticas — y el
+        resultado real es que, con la información disponible, <b>ningún mercado de esa competencia
+        llega nunca al 80% de confianza real</b>. No es un defecto: Champions League es más pareja e
+        impredecible que una liga doméstica de toda la vida. Por eso ahí no vas a ver la misma etiqueta
+        de "Muy seguro" que en las demás ligas — sería inflar un número que los datos no respaldan.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Lo que NO hacemos</h3>
+      <p class="transparencia-texto">
+        No mostramos alineaciones en vivo (no tenemos una fuente confiable y gratuita para eso), ni
+        mercados como faltas, tiros bloqueados o regates que necesitarían datos que no existen
+        gratis — antes que inventar un número para rellenar la pantalla, preferimos no mostrar nada.
+        Tampoco prometemos que un pick "muy seguro" sea garantía de nada: es una probabilidad alta,
+        no una certeza.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">Nuestro historial real</h3>
+      <p class="transparencia-texto" style="margin-bottom:14px;">
+        Cada pick y cada combinada que mostramos queda registrado, y se resuelve solo con el
+        resultado real del partido — nunca se borra ni se edita un pick después de generado.
+      </p>
+      <div id="transparencia-track-record"></div>
+      <a class="marcador-link" href="javascript:void(0)" onclick="cambiarVista('historial')">Ver historial completo →</a>
     </section>
   </main>
 </div>
@@ -2614,11 +2696,13 @@ function cambiarVista(vista) {
   document.getElementById("menu-picks").classList.toggle("activo", vista === "picks");
   document.getElementById("menu-historial").classList.toggle("activo", vista === "historial");
   document.getElementById("menu-champions").classList.toggle("activo", vista === "champions");
+  document.getElementById("menu-transparencia").classList.toggle("activo", vista === "transparencia");
   document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
   document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
   document.getElementById("vista-liga").style.display = vista === "liga" ? "block" : "none";
   document.getElementById("vista-champions").style.display = vista === "champions" ? "block" : "none";
   document.getElementById("vista-admin-stats").style.display = vista === "admin-stats" ? "block" : "none";
+  document.getElementById("vista-transparencia").style.display = vista === "transparencia" ? "block" : "none";
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
@@ -2631,6 +2715,29 @@ function cambiarVista(vista) {
   if (vista === "admin-stats") {
     cargarEstadisticasAdmin();
   }
+  if (vista === "transparencia") {
+    renderTrackRecordTransparencia();
+  }
+}
+
+// Reusa las mismas cajas ya calculadas por el pipeline (window._resumenTrackRecord,
+// cargado en cargarTodo) -- ver crearCajaTrackRecord. Si todavia no llego a superar
+// el umbral de confianza (UMBRAL_TRACK_RECORD_VISIBLE) para ninguno de los 2 tipos,
+// se explica eso en vez de dejar el espacio vacio sin decir nada.
+function renderTrackRecordTransparencia() {
+  const cont = document.getElementById("transparencia-track-record");
+  if (!cont) return;
+  const resumen = window._resumenTrackRecord || [];
+  const cajaCombinadas = crearCajaTrackRecord(resumen.find(r => r.tipo === "combinadas"), "combinadas cumplidas");
+  const cajaPicks = crearCajaTrackRecord(resumen.find(r => r.tipo === "picks"), "picks acertados");
+  if (!cajaCombinadas && !cajaPicks) {
+    cont.innerHTML = `<div class="transparencia-texto" style="font-style:italic; color:var(--tinta-suave);">
+      Todavía no hay suficiente historial resuelto para mostrar el track record acumulado aquí —
+      en cuanto lo haya, aparece solo, sin que tengamos que tocar nada.
+    </div>`;
+    return;
+  }
+  cont.innerHTML = cajaCombinadas + cajaPicks;
 }
 
 function crearTarjetaCombinadaHistorial(c) {
