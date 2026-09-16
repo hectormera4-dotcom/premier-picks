@@ -4,38 +4,28 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-09-16 19:30:00",
-        "local": "Levante",
-        "visitante": "Ath Bilbao",
-        "escudo_local": "https://crests.football-data.org/88.png",
-        "escudo_visitante": "https://crests.football-data.org/77.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 85.7,
+        "fecha": "2026-09-17 19:30:00",
+        "local": "Malaga",
+        "visitante": "Villarreal",
+        "escudo_local": "https://crests.football-data.org/84.png",
+        "escudo_visitante": "https://crests.football-data.org/94.png",
+        "pick_recomendado": "Under 2.5 goles",
+        "pick_probabilidad": 84.7,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-09-16 17:00:00",
-        "local": "La Coruna",
-        "visitante": "Sevilla",
-        "escudo_local": "https://crests.football-data.org/560.png",
-        "escudo_visitante": "https://crests.football-data.org/559.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.4,
-        "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-09-16 17:00:00",
-        "local": "Ath Madrid",
-        "visitante": "Osasuna",
-        "escudo_local": "https://crests.football-data.org/78.png",
-        "escudo_visitante": "https://crests.football-data.org/79.png",
-        "pick_recomendado": "Más corners: Ath Madrid",
-        "pick_probabilidad": 82.0,
+        "fecha": "2026-09-17 17:00:00",
+        "local": "Betis",
+        "visitante": "Getafe",
+        "escudo_local": "https://crests.football-data.org/90.png",
+        "escudo_visitante": "https://crests.football-data.org/82.png",
+        "pick_recomendado": "Hándicap asiático +0.5: Betis",
+        "pick_probabilidad": 81.6,
         "liga": "la_liga"
       }
     ],
-    "probabilidad_combinada": 57.9,
-    "cuota_combinada": 1.63,
+    "probabilidad_combinada": 69.1,
+    "cuota_combinada": 1.35,
     "liga": "la_liga"
   }
 ]
