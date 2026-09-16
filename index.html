@@ -1987,7 +1987,7 @@ function transformarPick(fila) {
 
   return {
     fecha: formatearFecha(fila.fecha),
-    local: fila.local, visitante: fila.visitante,
+    local: escaparHtml(fila.local), visitante: escaparHtml(fila.visitante),
     escudoLocal: fila.escudo_local, escudoVisitante: fila.escudo_visitante,
     probLocal: mercadosObj.prob_local, probEmpate: mercadosObj.prob_empate, probVisitante: mercadosObj.prob_visitante,
     marcadoresProbables: fila.marcadores_probables || [],
@@ -2882,9 +2882,9 @@ function crearCombinada(c) {
     <div class="combinada-fila-conescudo">
       <div class="combinada-fila-top">
         <span class="combinada-fila-equipos">
-          ${escudoImg(p.escudo_local)}<b>${p.local}</b>
+          ${escudoImg(p.escudo_local)}<b>${escaparHtml(p.local)}</b>
           <span class="vs">vs</span>
-          ${escudoImg(p.escudo_visitante)}<b>${p.visitante}</b>
+          ${escudoImg(p.escudo_visitante)}<b>${escaparHtml(p.visitante)}</b>
         </span>
         ${desbloqueada ? `<span class="prob-mini">${Math.round(p.pick_probabilidad)}%</span>` : ""}
       </div>
@@ -3297,9 +3297,9 @@ function renderResultados(filas) {
     <div class="partido-item">
       <span class="partido-fecha">${formatearFecha(p.fecha)}</span>
       <div class="partido-equipos">
-        <span>${p.escudo_local ? `<img src="${p.escudo_local}" class="partido-escudo" alt="">` : ""}${p.local}</span>
+        <span>${p.escudo_local ? `<img src="${p.escudo_local}" class="partido-escudo" alt="">` : ""}${escaparHtml(p.local)}</span>
         <span class="partido-marcador">${p.goles_local} - ${p.goles_visitante}</span>
-        <span>${p.visitante}${p.escudo_visitante ? `<img src="${p.escudo_visitante}" class="partido-escudo" alt="">` : ""}</span>
+        <span>${escaparHtml(p.visitante)}${p.escudo_visitante ? `<img src="${p.escudo_visitante}" class="partido-escudo" alt="">` : ""}</span>
       </div>
     </div>
   `).join("")}</div>`;
@@ -3311,9 +3311,9 @@ function renderProximos(filas) {
     <div class="partido-item">
       <span class="partido-fecha">${formatearFecha(p.fecha)}</span>
       <div class="partido-equipos">
-        <span>${p.escudo_local ? `<img src="${p.escudo_local}" class="partido-escudo" alt="">` : ""}${p.local}</span>
+        <span>${p.escudo_local ? `<img src="${p.escudo_local}" class="partido-escudo" alt="">` : ""}${escaparHtml(p.local)}</span>
         <span class="partido-vs-mini">vs</span>
-        <span>${p.visitante}${p.escudo_visitante ? `<img src="${p.escudo_visitante}" class="partido-escudo" alt="">` : ""}</span>
+        <span>${escaparHtml(p.visitante)}${p.escudo_visitante ? `<img src="${p.escudo_visitante}" class="partido-escudo" alt="">` : ""}</span>
       </div>
     </div>
   `).join("")}</div>`;
@@ -3328,7 +3328,7 @@ function renderTablaPosiciones(filas) {
         ${filas.map(f => `
           <tr>
             <td>${f.posicion}</td>
-            <td class="celda-equipo">${f.escudo_url ? `<img src="${f.escudo_url}" alt="">` : ""}${f.equipo}</td>
+            <td class="celda-equipo">${f.escudo_url ? `<img src="${f.escudo_url}" alt="">` : ""}${escaparHtml(f.equipo)}</td>
             <td>${f.jugados}</td><td>${f.ganados}</td><td>${f.empatados}</td><td>${f.perdidos}</td>
             <td>${f.diferencia > 0 ? "+" : ""}${f.diferencia}</td>
             <td><b>${f.puntos}</b></td>
@@ -3346,8 +3346,8 @@ function renderTablaGoleadores(filas) {
         ${filas.map(f => `
           <tr>
             <td>${f.posicion}</td>
-            <td>${f.jugador}</td>
-            <td class="celda-equipo">${f.escudo_url ? `<img src="${f.escudo_url}" alt="">` : ""}${f.equipo}</td>
+            <td>${escaparHtml(f.jugador)}</td>
+            <td class="celda-equipo">${f.escudo_url ? `<img src="${f.escudo_url}" alt="">` : ""}${escaparHtml(f.equipo)}</td>
             <td><b>${f.goles}</b></td>
           </tr>`).join("")}
       </tbody>
@@ -3429,7 +3429,7 @@ function crearTarjetaCombinadaHistorial(c) {
   else if (c.resultado === "Fallada") { clase = ""; icono = "✕"; claseIcono = "icono-fallada"; }
 
   const partidos = Array.isArray(c.partidos_json) ? c.partidos_json : [];
-  const filasPartidos = partidos.map(p => `<b>${p.local} vs ${p.visitante}</b> — ${traducirMercado(p.pick_recomendado)}`).join(" · ");
+  const filasPartidos = partidos.map(p => `<b>${escaparHtml(p.local)} vs ${escaparHtml(p.visitante)}</b> — ${traducirMercado(p.pick_recomendado)}`).join(" · ");
   const tipo = c.es_gratis ? "Gratis" : "VIP";
 
   return `
@@ -3530,9 +3530,9 @@ function crearTarjetaChampions(fila, i) {
         <div class="card-top">
           <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
           <div class="card-equipos">
-            <span class="equipo-conescudo">${escudoImg(fila.escudo_local)}<span>${fila.local}</span></span>
+            <span class="equipo-conescudo">${escudoImg(fila.escudo_local)}<span>${escaparHtml(fila.local)}</span></span>
             <span class="vs">vs</span>
-            <span class="equipo-conescudo">${escudoImg(fila.escudo_visitante)}<span>${fila.visitante}</span></span>
+            <span class="equipo-conescudo">${escudoImg(fila.escudo_visitante)}<span>${escaparHtml(fila.visitante)}</span></span>
           </div>
         </div>
         <div class="card-body" style="justify-content:center;">
@@ -3570,9 +3570,9 @@ function crearTarjetaChampions(fila, i) {
       <div class="card-top">
         <div class="card-fecha">${formatearFecha(fila.fecha)}</div>
         <div class="card-equipos">
-          <span class="equipo-conescudo">${escudoImg(fila.escudo_local)}<span>${fila.local}</span></span>
+          <span class="equipo-conescudo">${escudoImg(fila.escudo_local)}<span>${escaparHtml(fila.local)}</span></span>
           <span class="vs">vs</span>
-          <span class="equipo-conescudo">${escudoImg(fila.escudo_visitante)}<span>${fila.visitante}</span></span>
+          <span class="equipo-conescudo">${escudoImg(fila.escudo_visitante)}<span>${escaparHtml(fila.visitante)}</span></span>
         </div>
       </div>
       <div class="card-body" style="flex-direction:column; align-items:stretch; gap:6px;">
