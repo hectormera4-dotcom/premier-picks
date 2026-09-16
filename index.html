@@ -2756,15 +2756,24 @@ function render(picks, combinadas) {
   // Las tarjetas gratis van primero y las VIP bloqueadas al final -- antes
   // salian intercaladas (el orden natural es por probabilidad, sin
   // importar si el pick es gratis o VIP), lo que se sentia desordenado
-  // para un usuario no-VIP viendo la lista. El sort es estable, asi que
-  // dentro de cada grupo se conserva el orden original (por probabilidad).
+  // para un usuario no-VIP viendo la lista.
   const prioridadOrden = p => {
     if (p.tieneDatos && p.esGratis) return 0;   // gratis, visible
     if (p.tieneDatos && !p.esGratis) return 1;  // VIP viendo su propio contenido VIP
     if (!p.tieneDatos && p.esGratis) return 2;  // gratis pero exige iniciar sesion
     return 3;                                   // bloqueado, solo VIP
   };
-  const picksOrdenados = [...picks].sort((a, b) => prioridadOrden(a) - prioridadOrden(b));
+  // Dentro de cada grupo, el mas confiable primero (mayor probabilidad
+  // calibrada del pick recomendado). No basta con que el sort sea estable
+  // y confiar en el orden en que Supabase devuelve las filas -- una
+  // consulta sin ORDER BY no garantiza ningun orden en particular, asi
+  // que se ordena explicitamente aqui por p.prob (null para las tarjetas
+  // bloqueadas, que quedan al final de su grupo sin importar el orden).
+  const picksOrdenados = [...picks].sort((a, b) => {
+    const difPrioridad = prioridadOrden(a) - prioridadOrden(b);
+    if (difPrioridad !== 0) return difPrioridad;
+    return (b.prob ?? -1) - (a.prob ?? -1);
+  });
 
   document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picksOrdenados.map(crearTarjeta).join("");
 }
