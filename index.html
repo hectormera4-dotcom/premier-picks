@@ -730,13 +730,20 @@
     border-top: none;
   }
   .card-toggle-boton:hover { background: var(--verde-claro); }
+  .card-toggle-boton { transition: background 0.15s ease, transform 0.1s ease; }
+  .card-toggle-boton:active { transform: scale(0.97); }
   .card-detalle {
     display: none;
     padding: 16px 18px 18px;
     background: var(--papel-alt);
     font-size: 12.5px;
   }
-  .card-detalle.abierto { display: block; }
+  /* display:none -> block hace que el navegador vuelva a "estrenar" el
+     elemento cada vez que se abre, asi que esta animacion (y el stagger
+     de .analisis-seccion mas abajo) se repite cada vez que el usuario
+     abre el panel, no solo la primera vez. */
+  .card-detalle.abierto { display: block; animation: detalle-entra 0.25s ease; }
+  @keyframes detalle-entra { from { opacity: 0; } to { opacity: 1; } }
   .mercado-fila {
     display: flex;
     justify-content: space-between;
@@ -752,6 +759,19 @@
   .analisis-seccion { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--linea); }
   .analisis-seccion:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
   .analisis-seccion-titulo { font-size: 12.5px; font-weight: 700; color: var(--tinta); margin-bottom: 8px; }
+  /* Entrada escalonada de cada seccion al abrir el panel (pick, lectura
+     del modelo, marcadores, mercados...) -- da sensacion de vida en vez
+     de que todo aparezca de golpe como un bloque estatico. */
+  .card-detalle.abierto .analisis-seccion { animation: seccion-entra 0.35s ease both; }
+  .card-detalle.abierto .analisis-seccion:nth-child(1) { animation-delay: 0s; }
+  .card-detalle.abierto .analisis-seccion:nth-child(2) { animation-delay: 0.06s; }
+  .card-detalle.abierto .analisis-seccion:nth-child(3) { animation-delay: 0.12s; }
+  .card-detalle.abierto .analisis-seccion:nth-child(4) { animation-delay: 0.18s; }
+  .card-detalle.abierto .analisis-seccion:nth-child(n+5) { animation-delay: 0.24s; }
+  @keyframes seccion-entra {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   /* --- Barra 1X2 (Local/Empate/Visitante), resumen visual al abrir el panel --- */
   /* La barra 1X2 es ahora lo primero que se ve de cada tarjeta (antes
@@ -844,7 +864,8 @@
   .equipo-conescudo { display: flex; align-items: center; gap: 7px; min-width: 0; }
   .escudo-equipo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
 
-  .mercado-fila-champions {
+  .mercado-fila-champions,
+  .mercado-fila-barra {
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -855,23 +876,36 @@
     background: rgba(23,32,26,0.04);
     overflow: hidden;
   }
-  .mercado-fila-champions .mercado-barra {
+  .mercado-fila-champions .mercado-barra,
+  .mercado-fila-barra .mercado-barra {
     position: absolute;
     inset: 0;
     left: 0;
     border-radius: 6px;
-    transition: width 0.4s ease;
+    /* Arranca en 0% (ver filaMercadoBarra en JS) y se llena hasta su
+       valor real justo al abrir el panel -- toggleDetalle() dispara el
+       cambio de width un instante despues de mostrarse, para que esta
+       transicion tenga de donde animar. */
+    transition: width 0.6s cubic-bezier(.22,.9,.35,1);
   }
   .mercado-barra.barra-alta { background: rgba(47,110,69,0.20); }
   .mercado-barra.barra-media { background: rgba(201,138,43,0.20); }
   .mercado-barra.barra-baja { background: rgba(23,32,26,0.07); }
   .mercado-fila-champions .mercado-etiqueta,
-  .mercado-fila-champions .mercado-valor { position: relative; z-index: 1; }
-  .mercado-fila-champions .mercado-etiqueta { color: var(--tinta-suave); font-size: 12.5px; }
-  .mercado-fila-champions .mercado-valor { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12.5px; }
+  .mercado-fila-champions .mercado-valor,
+  .mercado-fila-barra .mercado-etiqueta,
+  .mercado-fila-barra .mercado-valor { position: relative; z-index: 1; }
+  .mercado-fila-champions .mercado-etiqueta,
+  .mercado-fila-barra .mercado-etiqueta { color: var(--tinta-suave); font-size: 12.5px; }
+  .mercado-fila-champions .mercado-valor,
+  .mercado-fila-barra .mercado-valor { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12.5px; }
   .mercado-fila-champions.destacado { background: rgba(47,110,69,0.10); }
   .mercado-fila-champions.destacado .mercado-etiqueta,
   .mercado-fila-champions.destacado .mercado-valor { color: var(--verde); font-weight: 700; }
+
+  /* Gauge de confianza: el arco se "dibuja" al abrir el panel (ver
+     toggleDetalle), en vez de aparecer ya completo de una vez. */
+  .gauge-progreso { transition: stroke-dashoffset 0.8s cubic-bezier(.22,.9,.35,1); }
 
   /* --- Tarjeta bloqueada (VIP) --- */
   .lock-overlay {
@@ -1937,12 +1971,12 @@ function extraerMercadosExtra(mercadosObj) {
     }
     const filas = [];
     if (mejorLinea !== null) {
-      filas.push([`Más de ${mejorLinea} ${sufijo}`, `${mercadosObj[`Over ${mejorLinea} ${sufijo}`]}%`]);
-      filas.push([`Menos de ${mejorLinea} ${sufijo}`, `${mercadosObj[`Under ${mejorLinea} ${sufijo}`]}%`]);
+      filas.push([`Más de ${mejorLinea} ${sufijo}`, mercadosObj[`Over ${mejorLinea} ${sufijo}`]]);
+      filas.push([`Menos de ${mejorLinea} ${sufijo}`, mercadosObj[`Under ${mejorLinea} ${sufijo}`]]);
     }
     for (const clave of Object.keys(mercadosObj)) {
       if (clave.startsWith(`Más ${sufijo}: `)) {
-        filas.push([clave, `${mercadosObj[clave]}%`]);
+        filas.push([clave, mercadosObj[clave]]);
       }
     }
     if (filas.length) grupos.push({ titulo, filas });
@@ -1982,7 +2016,7 @@ function transformarPick(fila) {
   const mercadosObj = fila.mercados_json || {};
   const mercados = Object.entries(ETIQUETAS_MERCADOS)
     .filter(([col]) => mercadosObj[col] !== undefined && mercadosObj[col] !== null)
-    .map(([col, etiqueta]) => [etiqueta, `${mercadosObj[col]}%`]);
+    .map(([col, etiqueta]) => [etiqueta, mercadosObj[col]]);
   const mercadosExtra = extraerMercadosExtra(mercadosObj);
 
   return {
@@ -2941,12 +2975,26 @@ function crearGauge(prob, nivel) {
   return `
     <svg width="84" height="52" viewBox="0 0 84 52">
       <path d="M 6 46 A ${r} ${r} 0 0 1 78 46" fill="none" stroke="rgba(23,32,26,0.1)" stroke-width="7" stroke-linecap="round"/>
-      <path d="M 6 46 A ${r} ${r} 0 0 1 78 46" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round"
-            stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+      <path class="gauge-progreso" d="M 6 46 A ${r} ${r} 0 0 1 78 46" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round"
+            stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-offset-final="${offset}"/>
     </svg>
     <span class="gauge-numero" style="color:${color}">${prob}%</span>
     <div class="gauge-label">confianza</div>
   `;
+}
+
+// Fila de mercado con barra de fondo animada (mismo lenguaje visual que
+// ya usaba Champions League) -- reemplaza las filas de texto plano que
+// se sentian estaticas. La barra arranca en 0% (ver toggleDetalle) y se
+// llena hasta su valor real justo cuando se abre el panel.
+function filaMercadoBarra(etiqueta, valor) {
+  const nivel = valor >= 60 ? "alta" : valor >= 35 ? "media" : "baja";
+  return `
+    <div class="mercado-fila-barra">
+      <div class="mercado-barra barra-${nivel}" style="width:0%;" data-ancho="${valor}"></div>
+      <span class="mercado-etiqueta">${etiqueta}</span>
+      <span class="mercado-valor">${valor}%</span>
+    </div>`;
 }
 
 function crearTarjeta(p, i) {
@@ -2977,9 +3025,7 @@ function crearTarjeta(p, i) {
     `;
   }
 
-  const detalleFilas = p.mercados.map(m => `
-    <div class="mercado-fila"><span>${m[0]}</span><span>${m[1]}</span></div>
-  `).join("");
+  const detalleFilas = p.mercados.map(m => filaMercadoBarra(m[0], m[1])).join("");
 
   // Panel de analisis (detras del boton "Ver análisis completo"): el pick
   // recomendado, la explicacion, los marcadores probables y todos los
@@ -3017,7 +3063,7 @@ function crearTarjeta(p, i) {
   const seccionMercadosExtra = (p.mercadosExtra || []).map(grupo => `
     <div class="analisis-seccion">
       <div class="analisis-seccion-titulo">${grupo.titulo}</div>
-      ${grupo.filas.map(f => `<div class="mercado-fila"><span>${f[0]}</span><span>${f[1]}</span></div>`).join("")}
+      ${grupo.filas.map(f => filaMercadoBarra(f[0], f[1])).join("")}
     </div>
   `).join("");
 
@@ -3200,7 +3246,27 @@ function render(picks, combinadas) {
 }
 
 function toggleDetalle(i) {
-  document.getElementById(`detalle-${i}`).classList.toggle("abierto");
+  const panel = document.getElementById(`detalle-${i}`);
+  const abriendo = !panel.classList.contains("abierto");
+  panel.classList.toggle("abierto");
+  if (abriendo) animarAperturaDetalle(panel);
+}
+
+// Dispara las animaciones que necesitan un cambio de valor DESPUES de
+// que el panel ya este visible (barras de mercados y el arco del gauge
+// de confianza arrancan en 0 en el HTML -- ver filaMercadoBarra y
+// crearGauge -- para que estas transiciones de CSS tengan de donde
+// animar). El requestAnimationFrame evita que el navegador colapse el
+// cambio de "arranca en 0" + "sube al valor real" en un solo frame sin
+// animacion.
+function animarAperturaDetalle(panel) {
+  requestAnimationFrame(() => {
+    panel.querySelectorAll(".mercado-barra[data-ancho]").forEach(barra => {
+      barra.style.width = `${barra.dataset.ancho}%`;
+    });
+    const gauge = panel.querySelector(".gauge-progreso");
+    if (gauge) gauge.style.strokeDashoffset = gauge.dataset.offsetFinal;
+  });
 }
 
 // ---------- Pestaña de Historial ----------
