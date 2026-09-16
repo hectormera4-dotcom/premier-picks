@@ -3402,14 +3402,14 @@ if __name__ == "__main__":
               f"los usuarios que ya los vieron). Solo se verifican pendientes de dias anteriores.")
         verificar_combinadas_pendientes(pool_historico_completo)
     else:
-        picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=15, n_gratis=3)
+        picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=25, n_gratis=3)
         # A las combinadas les pasamos el pool COMPLETO de picks seguros (no
-        # solo los 15 curados que se muestran como picks individuales) --
+        # solo los 25 curados que se muestran como picks individuales) --
         # calcular_combinadas_multiples ya ordena por probabilidad y solo usa
         # los que necesita. Sin esto, una combinada que se quedaba corta de
         # partidos (ej. la ultima, despues de que las demas ya usaron los
         # picks mas seguros) no podia completar su cuota objetivo aunque
-        # existiera un pick 16, 17, etc. igual de seguro disponible -- se
+        # existiera un pick 26, 27, etc. igual de seguro disponible -- se
         # quedaba con menos piernas y una cuota mas baja sin necesidad.
         correr_combinadas_multiliga(pool_picks, pool_historico_completo)
         marcar_dia_generado(dia_objetivo_hoy)
