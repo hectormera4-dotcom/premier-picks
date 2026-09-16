@@ -1486,6 +1486,49 @@ const ETIQUETAS_MERCADOS = {
   under_25: "Menos de 2.5 goles",
 };
 
+// Los mercados extra (corners, tarjetas, tiros a puerta, faltas, tiros
+// totales) NO tienen columnas fijas como prob_local/btts_si -- el backend
+// genera varias lineas por partido con nombres dinamicos (ej. "Over 8.5
+// corners", "Más corners: Ath Madrid"), centradas en el total esperado de
+// ESE partido especifico. Por eso no pueden vivir en ETIQUETAS_MERCADOS
+// (claves fijas). Aqui se recorre mercados_json buscando esas claves por
+// patron, y de cada familia de lineas Over/Under se elige solo la mas
+// cercana a 50/50 (la "linea central", igual que hace una casa de
+// apuestas real) para no saturar la tarjeta con 9 lineas de corners.
+const FAMILIAS_MERCADOS_EXTRA = [
+  { sufijo: "corners", titulo: "🚩 Corners" },
+  { sufijo: "tarjetas", titulo: "🟨 Tarjetas" },
+  { sufijo: "tiros a puerta", titulo: "🎯 Tiros a puerta" },
+  { sufijo: "faltas", titulo: "🟥 Faltas" },
+  { sufijo: "tiros totales", titulo: "⚽ Tiros totales" },
+];
+
+function extraerMercadosExtra(mercadosObj) {
+  const grupos = [];
+  for (const { sufijo, titulo } of FAMILIAS_MERCADOS_EXTRA) {
+    const regexOver = new RegExp(`^Over ([\\d.]+) ${sufijo}$`);
+    let mejorLinea = null, mejorDist = Infinity;
+    for (const clave of Object.keys(mercadosObj)) {
+      const m = clave.match(regexOver);
+      if (!m) continue;
+      const dist = Math.abs(mercadosObj[clave] - 50);
+      if (dist < mejorDist) { mejorDist = dist; mejorLinea = m[1]; }
+    }
+    const filas = [];
+    if (mejorLinea !== null) {
+      filas.push([`Más de ${mejorLinea} ${sufijo}`, `${mercadosObj[`Over ${mejorLinea} ${sufijo}`]}%`]);
+      filas.push([`Menos de ${mejorLinea} ${sufijo}`, `${mercadosObj[`Under ${mejorLinea} ${sufijo}`]}%`]);
+    }
+    for (const clave of Object.keys(mercadosObj)) {
+      if (clave.startsWith(`Más ${sufijo}: `)) {
+        filas.push([clave, `${mercadosObj[clave]}%`]);
+      }
+    }
+    if (filas.length) grupos.push({ titulo, filas });
+  }
+  return grupos;
+}
+
 const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
@@ -1519,6 +1562,7 @@ function transformarPick(fila) {
   const mercados = Object.entries(ETIQUETAS_MERCADOS)
     .filter(([col]) => mercadosObj[col] !== undefined && mercadosObj[col] !== null)
     .map(([col, etiqueta]) => [etiqueta, `${mercadosObj[col]}%`]);
+  const mercadosExtra = extraerMercadosExtra(mercadosObj);
 
   return {
     fecha: formatearFecha(fila.fecha),
@@ -1537,6 +1581,7 @@ function transformarPick(fila) {
     liga: fila.liga,
     ligaMostrar: nombreLiga(fila.liga),
     mercados,
+    mercadosExtra,
   };
 }
 
@@ -2545,10 +2590,20 @@ function crearTarjeta(p, i) {
     </div>
   `;
 
+  // Mercados extra (corners, tarjetas, tiros a puerta, faltas, tiros
+  // totales) -- cada familia en su propia seccion, con la linea central
+  // ya elegida en extraerMercadosExtra (ver esa funcion para el por que).
+  const seccionMercadosExtra = (p.mercadosExtra || []).map(grupo => `
+    <div class="analisis-seccion">
+      <div class="analisis-seccion-titulo">${grupo.titulo}</div>
+      ${grupo.filas.map(f => `<div class="mercado-fila"><span>${f[0]}</span><span>${f[1]}</span></div>`).join("")}
+    </div>
+  `).join("");
+
   // Caso 2: es gratis, pero el partido no tiene ningun mercado que llegue
   // al umbral. No inventamos una recomendacion, lo mostramos como "parejo".
   if (!p.seguro) {
-    const panelAnalisis = `${seccionExplicacion}${seccionMarcadores}${seccionMercados}`;
+    const panelAnalisis = `${seccionExplicacion}${seccionMarcadores}${seccionMercados}${seccionMercadosExtra}`;
     return `
       <div class="card sin-pick">
         <div class="card-top">
@@ -2598,7 +2653,7 @@ function crearTarjeta(p, i) {
       </div>
     </div>
   `;
-  const panelAnalisis = `${seccionPick}${seccionExplicacion}${seccionMarcadores}${seccionMercados}`;
+  const panelAnalisis = `${seccionPick}${seccionExplicacion}${seccionMarcadores}${seccionMercados}${seccionMercadosExtra}`;
 
   return `
     <div class="card">
