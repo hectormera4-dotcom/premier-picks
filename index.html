@@ -1638,13 +1638,88 @@
   </main>
 </div>
 
+<div id="vista-descargo" style="display:none;">
+  <main style="max-width:720px; margin:0 auto; padding:20px 20px 60px;">
+    <button class="transparencia-card-boton" style="margin-bottom:20px;" onclick="cambiarVista('picks')">← Volver al inicio</button>
+    <h2 style="margin-bottom:4px;">Descargo de Responsabilidad</h2>
+    <div style="font-size:12px; color:var(--tinta-suave); margin-bottom:24px;">
+      Última actualización: septiembre de 2026
+    </div>
+
+    <div style="background:rgba(163,75,62,0.12); border:1px solid rgba(163,75,62,0.4); border-radius:10px; padding:16px 18px; font-size:13px; color:rgba(239,235,226,0.85); line-height:1.6; margin-bottom:24px;">
+      ⚠️ <b>Aviso importante:</b> los picks y análisis de Picks FC son el resultado de un modelo
+      estadístico propio. No constituyen consejos de apuesta, recomendaciones de inversión ni
+      garantías de resultado.
+    </div>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">1. Naturaleza de los picks</h3>
+      <p class="transparencia-texto">
+        Picks FC usa un modelo estadístico propio (basado en el método Dixon-Coles, con calibración
+        propia por mercado) para estimar probabilidades de resultados deportivos a partir del historial
+        de cada equipo. Estas estimaciones son de carácter puramente estadístico e informativo.
+      </p>
+      <p class="transparencia-texto" style="margin-top:10px;">
+        Ninguna predicción estadística puede garantizar el resultado de un partido de fútbol. El
+        deporte incluye por naturaleza factores imprevisibles (lesiones de última hora, decisiones
+        arbitrales, el estado anímico de un equipo, etc.) que ningún modelo puede anticipar con
+        certeza.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">2. No es asesoramiento financiero ni de apuestas</h3>
+      <p class="transparencia-texto">
+        Las probabilidades, cuotas aproximadas y combinadas que muestra Picks FC tienen exclusivamente
+        finalidad informativa y estadística. En ningún caso deben interpretarse como:
+      </p>
+      <ul style="margin:10px 0 0 20px; padding:0; color:rgba(239,235,226,0.85); font-size:13px; line-height:1.7;">
+        <li>Recomendaciones para apostar dinero real.</li>
+        <li>Asesoramiento financiero o de inversión.</li>
+        <li>Garantías o certezas sobre resultados futuros.</li>
+      </ul>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">3. Responsabilidad sobre las decisiones del usuario</h3>
+      <p class="transparencia-texto">
+        Picks FC no asume ninguna responsabilidad por las decisiones que el usuario tome basándose en
+        la información de la App, incluyendo pérdidas económicas derivadas de apuestas realizadas en
+        plataformas de terceros. El usuario actúa bajo su propio criterio y responsabilidad.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">4. Exactitud de los datos</h3>
+      <p class="transparencia-texto">
+        Los datos que usa Picks FC (resultados, calendarios, estadísticas de equipos) provienen de
+        APIs deportivas de terceros. Picks FC no puede garantizar su exactitud, actualización en tiempo
+        real ni ausencia de errores. Siempre se contrastan las fuentes disponibles, pero pueden existir
+        discrepancias o retrasos puntuales.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">5. Juego responsable</h3>
+      <div style="background:rgba(163,75,62,0.12); border:1px solid rgba(163,75,62,0.4); border-radius:10px; padding:16px 18px; font-size:13px; color:rgba(239,235,226,0.85); line-height:1.6;">
+        Las apuestas deben ser una actividad de entretenimiento, nunca una fuente de ingresos. Fija
+        siempre un presupuesto máximo que puedas permitirte perder. Si sientes que el juego está
+        afectando tu vida, busca ayuda: en Ecuador, el Ministerio de Salud Pública ofrece atención
+        gratuita en salud mental a través de la <b>Línea 171, opción 6</b> (disponible las 24 horas).
+        <br><br>
+        <b>+18 | Las apuestas pueden crear adicción — juega con responsabilidad.</b>
+      </div>
+    </section>
+  </main>
+</div>
+
 <footer>
   Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
   <div class="footer-legal-links">
     <a href="javascript:void(0)" onclick="cambiarVista('aviso-legal')">Aviso Legal</a>
     <a href="javascript:void(0)" onclick="cambiarVista('privacidad')">Política de Privacidad</a>
     <a href="javascript:void(0)" onclick="cambiarVista('cookies')">Política de Cookies</a>
-    <span class="footer-legal-proximamente" title="Próximamente">Descargo de Responsabilidad</span>
+    <a href="javascript:void(0)" onclick="cambiarVista('descargo')">Descargo de Responsabilidad</a>
     <span class="footer-legal-proximamente" title="Próximamente">Términos de Uso</span>
   </div>
   <div style="margin-top:10px;">© 2026 Picks FC — Contacto: <a href="mailto:picksfc123@gmail.com">picksfc123@gmail.com</a></div>
@@ -3181,7 +3256,8 @@ function cambiarVista(vista) {
   document.getElementById("vista-aviso-legal").style.display = vista === "aviso-legal" ? "block" : "none";
   document.getElementById("vista-privacidad").style.display = vista === "privacidad" ? "block" : "none";
   document.getElementById("vista-cookies").style.display = vista === "cookies" ? "block" : "none";
-  if (vista === "aviso-legal" || vista === "privacidad" || vista === "cookies") window.scrollTo(0, 0);
+  document.getElementById("vista-descargo").style.display = vista === "descargo" ? "block" : "none";
+  if (vista === "aviso-legal" || vista === "privacidad" || vista === "cookies" || vista === "descargo") window.scrollTo(0, 0);
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
