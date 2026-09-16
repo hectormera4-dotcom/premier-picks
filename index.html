@@ -1984,6 +1984,51 @@ function extraerMercadosExtra(mercadosObj) {
   return grupos;
 }
 
+// Handicap asiatico/europeo: distinto formato de nombre (con el equipo Y
+// el signo de la linea, no "Over/Under") asi que necesitan su propia
+// extraccion -- no encajan en el patron generico de arriba. En ambos se
+// elige solo la linea mas pareja (mas cercana a 50/50) para no mostrar
+// las 4 (asiatico) o 3 (europeo) lineas completas de una vez.
+function extraerHandicapAsiatico(mercadosObj, local, visitante) {
+  const regex = /^Hándicap asiático ([+-][\d.]+): (.+)$/;
+  let mejorLineaNum = null, mejorDist = Infinity;
+  for (const clave of Object.keys(mercadosObj)) {
+    const m = clave.match(regex);
+    if (!m || m[2] !== local) continue;
+    const dist = Math.abs(mercadosObj[clave] - 50);
+    if (dist < mejorDist) { mejorDist = dist; mejorLineaNum = parseFloat(m[1]); }
+  }
+  if (mejorLineaNum === null) return null;
+  const fmt = n => (n > 0 ? "+" : "") + n.toFixed(1);
+  const claveLocal = `Hándicap asiático ${fmt(mejorLineaNum)}: ${local}`;
+  const claveVisit = `Hándicap asiático ${fmt(-mejorLineaNum)}: ${visitante}`;
+  const filas = [];
+  if (mercadosObj[claveLocal] !== undefined) filas.push([claveLocal, mercadosObj[claveLocal]]);
+  if (mercadosObj[claveVisit] !== undefined) filas.push([claveVisit, mercadosObj[claveVisit]]);
+  return filas.length ? filas : null;
+}
+
+function extraerHandicapEuropeo(mercadosObj, local, visitante) {
+  const regex = /^Hándicap europeo ([+-]\d+): Cubre (.+)$/;
+  let mejorLineaNum = null, mejorDist = Infinity;
+  for (const clave of Object.keys(mercadosObj)) {
+    const m = clave.match(regex);
+    if (!m || m[2] !== local) continue;
+    const dist = Math.abs(mercadosObj[clave] - 50);
+    if (dist < mejorDist) { mejorDist = dist; mejorLineaNum = parseInt(m[1], 10); }
+  }
+  if (mejorLineaNum === null) return null;
+  const fmt = n => (n > 0 ? "+" : "") + n;
+  const claveLocal = `Hándicap europeo ${fmt(mejorLineaNum)}: Cubre ${local}`;
+  const claveEmpate = `Hándicap europeo ${fmt(mejorLineaNum)}: Empate en el hándicap`;
+  const claveVisit = `Hándicap europeo ${fmt(mejorLineaNum)}: Cubre ${visitante}`;
+  const filas = [];
+  if (mercadosObj[claveLocal] !== undefined) filas.push([claveLocal, mercadosObj[claveLocal]]);
+  if (mercadosObj[claveEmpate] !== undefined) filas.push([claveEmpate, mercadosObj[claveEmpate]]);
+  if (mercadosObj[claveVisit] !== undefined) filas.push([claveVisit, mercadosObj[claveVisit]]);
+  return filas.length ? filas : null;
+}
+
 const DIAS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
 const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
@@ -2018,6 +2063,14 @@ function transformarPick(fila) {
     .filter(([col]) => mercadosObj[col] !== undefined && mercadosObj[col] !== null)
     .map(([col, etiqueta]) => [etiqueta, mercadosObj[col]]);
   const mercadosExtra = extraerMercadosExtra(mercadosObj);
+  // Usan fila.local/fila.visitante SIN escapar -- tienen que coincidir
+  // caracter por caracter con las claves que genero el backend en
+  // mercados_json (escaparHtml() solo aplica a lo que se muestra, no
+  // cambia el texto usado para buscar en el objeto).
+  const filasHandicapAsiatico = extraerHandicapAsiatico(mercadosObj, fila.local, fila.visitante);
+  if (filasHandicapAsiatico) mercadosExtra.push({ titulo: "🎯 Hándicap asiático", filas: filasHandicapAsiatico });
+  const filasHandicapEuropeo = extraerHandicapEuropeo(mercadosObj, fila.local, fila.visitante);
+  if (filasHandicapEuropeo) mercadosExtra.push({ titulo: "⚖️ Hándicap europeo", filas: filasHandicapEuropeo });
 
   return {
     fecha: formatearFecha(fila.fecha),
