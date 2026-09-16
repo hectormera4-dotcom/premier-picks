@@ -4,13 +4,13 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-09-16 17:00:00",
-        "local": "Ath Madrid",
-        "visitante": "Osasuna",
-        "escudo_local": "https://crests.football-data.org/78.png",
-        "escudo_visitante": "https://crests.football-data.org/79.png",
-        "pick_recomendado": "Más corners: Ath Madrid",
-        "pick_probabilidad": 85.1,
+        "fecha": "2026-09-16 19:30:00",
+        "local": "Levante",
+        "visitante": "Ath Bilbao",
+        "escudo_local": "https://crests.football-data.org/88.png",
+        "escudo_visitante": "https://crests.football-data.org/77.png",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 85.7,
         "liga": "la_liga"
       },
       {
@@ -19,23 +19,23 @@
         "visitante": "Sevilla",
         "escudo_local": "https://crests.football-data.org/560.png",
         "escudo_visitante": "https://crests.football-data.org/559.png",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 81.3,
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 82.4,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-09-16 19:30:00",
-        "local": "Levante",
-        "visitante": "Ath Bilbao",
-        "escudo_local": "https://crests.football-data.org/88.png",
-        "escudo_visitante": "https://crests.football-data.org/77.png",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 80.6,
+        "fecha": "2026-09-16 17:00:00",
+        "local": "Ath Madrid",
+        "visitante": "Osasuna",
+        "escudo_local": "https://crests.football-data.org/78.png",
+        "escudo_visitante": "https://crests.football-data.org/79.png",
+        "pick_recomendado": "Más corners: Ath Madrid",
+        "pick_probabilidad": 82.0,
         "liga": "la_liga"
       }
     ],
-    "probabilidad_combinada": 55.8,
-    "cuota_combinada": 1.69,
+    "probabilidad_combinada": 57.9,
+    "cuota_combinada": 1.63,
     "liga": "la_liga"
   }
 ]
