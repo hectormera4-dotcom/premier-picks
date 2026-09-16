@@ -3402,7 +3402,13 @@ if __name__ == "__main__":
               f"los usuarios que ya los vieron). Solo se verifican pendientes de dias anteriores.")
         verificar_combinadas_pendientes(pool_historico_completo)
     else:
-        picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=25, n_gratis=3)
+        # n_gratis=0: ya no se marca gratis un top-N independiente por
+        # probabilidad -- decision del usuario, el unico contenido gratis
+        # para un no-VIP es lo que compone la combinada gratis del dia (ver
+        # marcar_picks_de_combinada_gratis, mas abajo). Si ese dia no hay
+        # combinada gratis (pool sin suficientes picks seguros), no hay
+        # ningun pick individual gratis tampoco -- es intencional.
+        picks_del_dia = curar_y_subir_picks_del_dia(pool_picks, top_n=25, n_gratis=0)
         # A las combinadas les pasamos el pool COMPLETO de picks seguros (no
         # solo los 25 curados que se muestran como picks individuales) --
         # calcular_combinadas_multiples ya ordena por probabilidad y solo usa
