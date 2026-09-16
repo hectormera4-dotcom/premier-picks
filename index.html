@@ -928,6 +928,14 @@
     border-top: 1px solid var(--linea-oscura);
     text-align: center;
   }
+  .footer-legal-links {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px;
+    margin-top: 14px; font-size: 11px;
+  }
+  .footer-legal-links a { color: rgba(239,235,226,0.55); text-decoration: underline; cursor: pointer; }
+  .footer-legal-links a:hover { color: rgba(239,235,226,0.8); }
+  .footer-legal-proximamente { color: rgba(239,235,226,0.25); cursor: default; }
+  footer a { color: rgba(239,235,226,0.55); }
 
   /* ---------- Combinadas del dia (3 tarjetas) ---------- */
   .combinada {
@@ -1336,8 +1344,93 @@
   </main>
 </div>
 
+<div id="vista-aviso-legal" style="display:none;">
+  <main style="max-width:720px; margin:0 auto; padding:20px 20px 60px;">
+    <button class="transparencia-card-boton" style="margin-bottom:20px;" onclick="cambiarVista('picks')">← Volver al inicio</button>
+    <h2 style="margin-bottom:4px;">Aviso Legal</h2>
+    <div style="font-size:12px; color:var(--tinta-suave); margin-bottom:24px;">
+      Última actualización: septiembre de 2026 — conforme a la legislación ecuatoriana vigente.
+    </div>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">1. Datos identificativos del titular</h3>
+      <p class="transparencia-texto">
+        El responsable de este sitio web (Picks FC) es una persona física con residencia en Ecuador.
+        Para cualquier consulta relacionada con este Aviso Legal, puede escribir a
+        <a href="mailto:picksfc123@gmail.com" style="color:var(--verde-claro);">picksfc123@gmail.com</a>.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">2. Objeto y ámbito de aplicación</h3>
+      <p class="transparencia-texto">
+        Picks FC (en adelante, "la App") es un sitio de análisis y pronósticos estadísticos de fútbol
+        (ligas domésticas y Champions League). Los pronósticos se generan con un modelo estadístico
+        propio (ver la sección <a href="javascript:void(0)" onclick="cambiarVista('transparencia')" style="color:var(--verde-claro);">Cómo funciona</a>)
+        y se ofrecen con fines exclusivamente informativos y de entretenimiento.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">3. Propiedad intelectual</h3>
+      <p class="transparencia-texto">
+        El diseño, la marca "Picks FC", el código fuente y los textos propios de la App son propiedad
+        del titular. Queda prohibida su reproducción total o parcial sin autorización expresa y por
+        escrito.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">4. Responsabilidad</h3>
+      <p class="transparencia-texto">
+        El titular no garantiza la exactitud, integridad ni actualización permanente de los datos
+        mostrados, que provienen en parte de fuentes de terceros (APIs de datos deportivos). Los
+        pronósticos son probabilidades calculadas por un modelo estadístico, no certezas ni consejos
+        de apuesta profesionales.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">5. Contenido sobre pronósticos deportivos</h3>
+      <div style="background:rgba(163,75,62,0.12); border:1px solid rgba(163,75,62,0.4); border-radius:10px; padding:16px 18px; font-size:13px; color:rgba(239,235,226,0.85); line-height:1.6;">
+        ⚠️ Esta App ofrece análisis y probabilidades estadísticas de carácter exclusivamente informativo.
+        No constituye una casa de apuestas ni facilita el manejo de dinero para apostar. El uso que el
+        usuario le dé a esta información, incluyendo decisiones de apuesta en plataformas de terceros,
+        es de su entera responsabilidad. <b>+18 | Las apuestas pueden crear adicción — juega con
+        responsabilidad.</b>
+      </div>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">6. Suscripción VIP</h3>
+      <p class="transparencia-texto">
+        Los pagos de la suscripción VIP se procesan a través de PayPhone, un proveedor de pagos
+        externo. Picks FC no almacena datos de tarjetas ni de cuentas bancarias — esa información la
+        maneja directamente PayPhone bajo sus propias políticas.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">7. Legislación aplicable y jurisdicción</h3>
+      <p class="transparencia-texto">
+        Este Aviso Legal se rige por la legislación de la República del Ecuador. Para la resolución de
+        cualquier controversia, las partes se someten a los jueces y tribunales competentes según dicha
+        legislación.
+      </p>
+    </section>
+  </main>
+</div>
+
 <footer>
   Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
+  <div class="footer-legal-links">
+    <a href="javascript:void(0)" onclick="cambiarVista('aviso-legal')">Aviso Legal</a>
+    <span class="footer-legal-proximamente" title="Próximamente">Política de Privacidad</span>
+    <span class="footer-legal-proximamente" title="Próximamente">Política de Cookies</span>
+    <span class="footer-legal-proximamente" title="Próximamente">Descargo de Responsabilidad</span>
+    <span class="footer-legal-proximamente" title="Próximamente">Términos de Uso</span>
+  </div>
+  <div style="margin-top:10px;">© 2026 Picks FC — Contacto: <a href="mailto:picksfc123@gmail.com">picksfc123@gmail.com</a></div>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -2804,6 +2897,8 @@ function cambiarVista(vista) {
   document.getElementById("vista-champions").style.display = vista === "champions" ? "block" : "none";
   document.getElementById("vista-admin-stats").style.display = vista === "admin-stats" ? "block" : "none";
   document.getElementById("vista-transparencia").style.display = vista === "transparencia" ? "block" : "none";
+  document.getElementById("vista-aviso-legal").style.display = vista === "aviso-legal" ? "block" : "none";
+  if (vista === "aviso-legal") window.scrollTo(0, 0);
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
