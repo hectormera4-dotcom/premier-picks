@@ -25,6 +25,7 @@
 // ninguna forma de conseguir VIP gratis sin que alguien pague algo real.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { CORS_HEADERS, claveDesdeRequest, excedeLimite, respuestaLimiteExcedido } from "../_shared/seguridad.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
@@ -36,14 +37,13 @@ const MINUTOS_VENTANA_REGISTRO = 15;
 // de compartir a mano que el uuid completo.
 const REGEX_CODIGO = /^[0-9a-f]{8}$/i;
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: CORS_HEADERS });
+  }
+
+  if (excedeLimite(claveDesdeRequest(req), 5, 60_000)) {
+    return respuestaLimiteExcedido();
   }
 
   try {
