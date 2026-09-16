@@ -1532,12 +1532,118 @@
   </main>
 </div>
 
+<div id="vista-cookies" style="display:none;">
+  <main style="max-width:720px; margin:0 auto; padding:20px 20px 60px;">
+    <button class="transparencia-card-boton" style="margin-bottom:20px;" onclick="cambiarVista('picks')">← Volver al inicio</button>
+    <h2 style="margin-bottom:4px;">Política de Cookies</h2>
+    <div style="font-size:12px; color:var(--tinta-suave); margin-bottom:24px;">
+      Última actualización: septiembre de 2026 — conforme a la legislación ecuatoriana vigente.
+    </div>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">1. ¿Qué son las cookies y el almacenamiento local?</h3>
+      <p class="transparencia-texto">
+        Las cookies son pequeños archivos que un sitio web guarda en tu dispositivo para recordar
+        información entre visitas. Picks FC usa principalmente <code>localStorage</code> (almacenamiento
+        local del navegador), que cumple una función parecida: guardar datos en tu dispositivo, pero sin
+        enviarse automáticamente en cada petición al servidor como sí hacen las cookies tradicionales.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">2. Qué usa Picks FC</h3>
+      <p class="transparencia-texto">
+        Picks FC <b>no utiliza cookies ni almacenamiento publicitario</b>. Solo se usa lo estrictamente
+        necesario para que la App funcione y para entender cómo se usa:
+      </p>
+      <div style="overflow-x:auto; margin-top:10px;">
+        <table style="width:100%; border-collapse:collapse; font-size:12px; color:rgba(239,235,226,0.85);">
+          <thead>
+            <tr style="text-align:left; color:var(--tinta-suave); text-transform:uppercase; font-size:10px;">
+              <th style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.15);">Nombre</th>
+              <th style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.15);">Tipo</th>
+              <th style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.15);">Finalidad</th>
+              <th style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.15);">Duración</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);"><code>sb-*-auth-token</code></td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">localStorage (técnica, Supabase)</td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">Mantiene tu sesión iniciada</td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">Hasta cerrar sesión</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);"><code>picksfc_notificaciones_activadas</code></td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">localStorage (técnica)</td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">Recuerda si activaste las notificaciones push</td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">Hasta que las desactives</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);"><code>picksfc_ref_pendiente</code></td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">localStorage (técnica)</td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">Guarda temporalmente un código de referido mientras te registras</td>
+              <td style="padding:8px 6px; border-bottom:1px solid rgba(239,235,226,0.08);">Se borra sola al usarse</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 6px;"><code>ph_*</code></td>
+              <td style="padding:8px 6px;">Analítica (PostHog)</td>
+              <td style="padding:8px 6px;">Distingue visitas para medir el uso de la App</td>
+              <td style="padding:8px 6px;">Hasta 1 año</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">3. Cookies de terceros</h3>
+      <p class="transparencia-texto">
+        Picks FC utiliza PostHog para medir el tráfico y el uso de la App (qué páginas se visitan, qué
+        botones se pulsan) y así poder mejorarla. Esta herramienta corre como parte normal del
+        funcionamiento del servicio, sobre un interés legítimo en entender y mejorar la App — no se usa
+        con fines publicitarios ni se comparte con anunciantes.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">4. Gestión de cookies y almacenamiento local</h3>
+      <p class="transparencia-texto">
+        A diferencia de otras webs, Picks FC no muestra un banner de aceptación de cookies, porque no
+        usa cookies publicitarias ni de terceros ajenos al funcionamiento del servicio — solo
+        almacenamiento técnico imprescindible y analítica básica de uso. Si de todas formas prefieres
+        desactivar el almacenamiento local o la analítica, puedes hacerlo desde la configuración de
+        privacidad de tu propio navegador, aunque esto puede afectar funciones como mantener tu sesión
+        iniciada.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">5. Cómo eliminar los datos guardados</h3>
+      <p class="transparencia-texto">
+        Puedes borrar en cualquier momento lo que Picks FC guardó en tu navegador desde los ajustes del
+        propio navegador (Herramientas → Historial → Borrar datos de navegación → Cookies y datos de
+        sitios / Almacenamiento local). Cerrar sesión en la App también elimina el token de sesión de
+        Supabase.
+      </p>
+    </section>
+
+    <section class="seccion-liga">
+      <h3 class="seccion-liga-titulo">6. Cambios en esta política</h3>
+      <p class="transparencia-texto">
+        Si en el futuro Picks FC incorporara cookies o almacenamiento con fines publicitarios, esta
+        política se actualizará y se informará claramente a los usuarios antes de activarlos.
+      </p>
+    </section>
+  </main>
+</div>
+
 <footer>
   Los picks se basan en un modelo estadístico y no garantizan resultados. El fútbol es impredecible — juega con responsabilidad.
   <div class="footer-legal-links">
     <a href="javascript:void(0)" onclick="cambiarVista('aviso-legal')">Aviso Legal</a>
     <a href="javascript:void(0)" onclick="cambiarVista('privacidad')">Política de Privacidad</a>
-    <span class="footer-legal-proximamente" title="Próximamente">Política de Cookies</span>
+    <a href="javascript:void(0)" onclick="cambiarVista('cookies')">Política de Cookies</a>
     <span class="footer-legal-proximamente" title="Próximamente">Descargo de Responsabilidad</span>
     <span class="footer-legal-proximamente" title="Próximamente">Términos de Uso</span>
   </div>
@@ -3074,7 +3180,8 @@ function cambiarVista(vista) {
   document.getElementById("vista-transparencia").style.display = vista === "transparencia" ? "block" : "none";
   document.getElementById("vista-aviso-legal").style.display = vista === "aviso-legal" ? "block" : "none";
   document.getElementById("vista-privacidad").style.display = vista === "privacidad" ? "block" : "none";
-  if (vista === "aviso-legal" || vista === "privacidad") window.scrollTo(0, 0);
+  document.getElementById("vista-cookies").style.display = vista === "cookies" ? "block" : "none";
+  if (vista === "aviso-legal" || vista === "privacidad" || vista === "cookies") window.scrollTo(0, 0);
 
   if (vista === "historial" && !historialYaCargado) {
     historialYaCargado = true;
