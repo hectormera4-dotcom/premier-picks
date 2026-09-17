@@ -3381,6 +3381,50 @@ def generar_analisis_champions_league(contextos_domesticos=None, n_gratis=2, dia
         mercados_calibrados["under_25"] = round(100 - mercados_calibrados["over_25"], 1)
         mercados_calibrados["btts_no"] = round(100 - mercados_calibrados["btts_si"], 1)
 
+        # Handicap asiatico y europeo: a diferencia de corners/tarjetas/
+        # tiros/faltas, SI se pueden calcular para Champions League porque
+        # se derivan directo de la misma matriz de goles (no dependen de
+        # football-data.co.uk, que nunca cubrio competencias europeas).
+        # Solo se pide la linea central (offset=0) -- el panel de Champions
+        # League ya muestra TODOS los mercados de una vez en la tarjeta,
+        # sin "Ver mas", asi que no tiene sentido ofrecer 4 lineas por
+        # partido como en las ligas domesticas.
+        diff_esperada = lam - mu
+        centro_asiatico = np.floor(diff_esperada) + 0.5 if diff_esperada >= 0 else np.ceil(diff_esperada) - 0.5
+        centro_europeo = round(diff_esperada)
+        mercados_handicap = calcular_mercados_handicap_asiatico(matriz, lam, mu, local, visitante, offsets=(0,))
+        mercados_handicap_europeo = calcular_mercados_handicap_europeo(matriz, lam, mu, local, visitante, offsets=(0,))
+        p_h_asi_local_crudo = mercados_handicap[f"Hándicap asiático {centro_asiatico:+.1f}: {local}"]
+        p_h_eur_local_crudo = mercados_handicap_europeo[f"Hándicap europeo {centro_europeo:+d}: Cubre {local}"]
+        p_h_eur_empate_crudo = mercados_handicap_europeo[f"Hándicap europeo {centro_europeo:+d}: Empate en el hándicap"]
+        p_h_eur_visit_crudo = mercados_handicap_europeo[f"Hándicap europeo {centro_europeo:+d}: Cubre {visitante}"]
+
+        # Handicap asiatico: 2 resultados que se excluyen y cubren todo
+        # (igual que Over/Under 2.5 o BTTS Si/No) -- se calibra SOLO el
+        # lado local con calibrar_probabilidad_champions() (el modelo
+        # crudo de Champions League sobreestima su confianza 8-17.5 puntos,
+        # ver el docstring de esa funcion) y el lado visitante se define
+        # como 100 menos ese valor, para que la suma siga dando 100% exacto.
+        p_h_asi_local_cal = round(calibrar_probabilidad_champions(p_h_asi_local_crudo) * 100, 1)
+        p_h_asi_visit_cal = round(100 - p_h_asi_local_cal, 1)
+
+        # Handicap europeo: 3 resultados (cubre local / empate en el
+        # handicap / cubre visitante). A diferencia del asiatico, calibrar
+        # cada lado por separado NO preserva que sumen 100% (el mismo
+        # problema que tenia 1X2 antes de calibrar_1x2_conjunto_champions,
+        # que usa un modelo softmax conjunto entrenado especificamente para
+        # eso) -- y renormalizar despues de calibrar cada uno por separado
+        # ya se probo que da PEOR resultado que dejarlo crudo (ver el
+        # docstring de calibrar_1x2_conjunto: Brier 0.6018 renormalizado
+        # vs 0.5998 crudo, para 1X2 domestico). Como todavia no existe un
+        # modelo conjunto entrenado especificamente para handicap europeo,
+        # se deja el valor CRUDO (sin calibrar) por ahora -- preserva la
+        # garantia matematica de que sume 100% exacto, en vez de arriesgar
+        # empeorarlo con una correccion mal aplicada.
+        p_h_eur_local_mostrar = round(p_h_eur_local_crudo * 100, 1)
+        p_h_eur_empate_mostrar = round(p_h_eur_empate_crudo * 100, 1)
+        p_h_eur_visit_mostrar = round(p_h_eur_visit_crudo * 100, 1)
+
         # "Historial real" ahora significa CUALQUIER fuente real de datos --
         # historial propio de Champions League, O fuerza domestica via el
         # crosswalk (ver _fuerza_champions_mezclada) -- no solo lo primero.
@@ -3401,6 +3445,12 @@ def generar_analisis_champions_league(contextos_domesticos=None, n_gratis=2, dia
 
         calidad = "completo" if (_tiene_historial_real(local) and _tiene_historial_real(visitante)) else "limitado"
 
+        # confianza se calcula ANTES de agregar los campos de handicap a
+        # proposito -- el handicap suele dar el numero mas alto de todos
+        # (una linea comoda casi siempre supera 90%+), y usarlo aca
+        # sesgaria "el partido mas confiable" hacia el que tenga la linea
+        # mas facil, en vez del que de verdad tiene el mejor pronostico de
+        # goles/resultado (que es lo que este ranking siempre midio).
         confianza = max(mercados_calibrados.values())
 
         filas.append({
@@ -3413,6 +3463,13 @@ def generar_analisis_champions_league(contextos_domesticos=None, n_gratis=2, dia
             "over_25": mercados_calibrados["over_25"], "under_25": mercados_calibrados["under_25"],
             "btts_si": mercados_calibrados["btts_si"], "btts_no": mercados_calibrados["btts_no"],
             "calidad_datos": calidad,
+            "handicap_asiatico_linea": centro_asiatico,
+            "handicap_asiatico_local": p_h_asi_local_cal,
+            "handicap_asiatico_visitante": p_h_asi_visit_cal,
+            "handicap_europeo_linea": centro_europeo,
+            "handicap_europeo_local": p_h_eur_local_mostrar,
+            "handicap_europeo_empate": p_h_eur_empate_mostrar,
+            "handicap_europeo_visitante": p_h_eur_visit_mostrar,
             "confianza": confianza,
         })
 

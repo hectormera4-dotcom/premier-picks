@@ -3681,6 +3681,34 @@ function crearTarjetaChampions(fila, i) {
     ? `<span class="badge badge-moderado" title="Al menos un equipo no tiene historial suficiente en esta competencia">⚠️ Datos limitados</span>`
     : `<span class="badge badge-seguro">📊 Historial completo</span>`;
 
+  // Handicap asiatico/europeo: NO entran al calculo de colMasFuerte de
+  // arriba a proposito -- una linea comoda casi siempre da el numero mas
+  // alto de la tarjeta, y dejaria "el mercado destacado" siempre en el
+  // handicap en vez del pronostico de goles/resultado real. Se muestran
+  // aparte, con el mismo estilo de barra.
+  const filaBarra = (etiqueta, valor) => {
+    const nivel = valor >= 60 ? "alta" : valor >= 35 ? "media" : "baja";
+    return `
+      <div class="mercado-fila-champions">
+        <div class="mercado-barra barra-${nivel}" style="width:${valor}%;"></div>
+        <span class="mercado-etiqueta">${etiqueta}</span>
+        <span class="mercado-valor">${valor}%</span>
+      </div>`;
+  };
+  const fmtLinea = n => (n > 0 ? "+" : "") + n;
+  let filasHandicap = "";
+  if (fila.handicap_asiatico_linea !== null && fila.handicap_asiatico_linea !== undefined) {
+    const linea = fila.handicap_asiatico_linea;
+    filasHandicap += filaBarra(`Hándicap asiático ${fmtLinea(linea)}: ${escaparHtml(fila.local)}`, fila.handicap_asiatico_local);
+    filasHandicap += filaBarra(`Hándicap asiático ${fmtLinea(-linea)}: ${escaparHtml(fila.visitante)}`, fila.handicap_asiatico_visitante);
+  }
+  if (fila.handicap_europeo_linea !== null && fila.handicap_europeo_linea !== undefined) {
+    const linea = fila.handicap_europeo_linea;
+    filasHandicap += filaBarra(`Hándicap europeo ${fmtLinea(linea)}: Cubre ${escaparHtml(fila.local)}`, fila.handicap_europeo_local);
+    filasHandicap += filaBarra(`Hándicap europeo ${fmtLinea(linea)}: Empate en el hándicap`, fila.handicap_europeo_empate);
+    filasHandicap += filaBarra(`Hándicap europeo ${fmtLinea(linea)}: Cubre ${escaparHtml(fila.visitante)}`, fila.handicap_europeo_visitante);
+  }
+
   // Colapsado por defecto (como ya hacen los picks normales con "Ver todos
   // los mercados") -- de entrada solo se ve el partido y su badge de
   // calidad, para que la seccion no se sienta como una pared de numeros.
@@ -3697,7 +3725,7 @@ function crearTarjetaChampions(fila, i) {
       <div class="card-body" style="flex-direction:column; align-items:stretch; gap:6px;">
         ${badgeCalidad}
         <button class="card-toggle" onclick="toggleDetalleChampions(${i})">Ver análisis del partido ▾</button>
-        <div class="card-detalle" id="detalle-champions-${i}">${filasMercados}</div>
+        <div class="card-detalle" id="detalle-champions-${i}">${filasMercados}${filasHandicap}</div>
       </div>
     </div>`;
 }
