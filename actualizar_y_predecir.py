@@ -514,6 +514,15 @@ def obtener_cuotas_reales(codigo_odds_api):
             "event_id": evento["id"],
             "home_norm": _normalizar_para_cuotas(evento["home_team"]),
             "away_norm": _normalizar_para_cuotas(evento["away_team"]),
+            # SIN normalizar -- hacen falta tal cual para reconstruir el
+            # nombre de un resultado como "Brentford or Draw" en mercados
+            # como double_chance/spreads (ver _mapear_pick_a_mercado_odds_api).
+            # the-odds-api.com usa su PROPIA convencion de nombres, distinta
+            # tanto del nombre original de football-data.org como del
+            # nombre interno corto que usa nuestro modelo -- usar cualquiera
+            # de esos otros dos aqui nunca iba a coincidir.
+            "home_raw": evento["home_team"],
+            "away_raw": evento["away_team"],
             "local": mejor_local, "casa_local": casa_local,
             "empate": mejor_empate, "casa_empate": casa_empate,
             "visitante": mejor_visit, "casa_visitante": casa_visit,
@@ -622,15 +631,27 @@ def _mejor_precio_outcome(datos_evento, mercado_key, nombre_outcome, punto_busca
     return {"cuota": mejor_precio, "casa": mejor_casa}
 
 
-def _mapear_pick_a_mercado_odds_api(nombre_pick, local, visitante):
+def _mapear_pick_a_mercado_odds_api(nombre_pick, local_interno, visitante_interno, local_odds_api, visitante_odds_api):
     """Traduce el nombre de UN mercado individual (nunca combos) al
     (mercado, resultado, linea) equivalente de the-odds-api.com -- None si
     no existe un mercado real conocido para ese pick (ver el comentario
-    largo mas arriba)."""
+    largo mas arriba).
+
+    OJO con los 2 pares de nombres -- son intencionalmente distintos:
+    local_interno/visitante_interno son el nombre corto que usa nuestro
+    modelo (ej. "Brentford"), necesarios para saber a CUAL equipo se
+    refiere el pick (comparando contra lo que dice nombre_pick, ej.
+    "Hándicap asiático -0.5: Brentford"). local_odds_api/visitante_odds_api
+    son el nombre que usa the-odds-api.com para ESE MISMO equipo (puede
+    ser distinto, ej. si nuestro modelo dijera "Ath Madrid") -- hacen
+    falta para construir el nombre EXACTO del resultado que hay que
+    buscar en su respuesta (ej. "Brentford or Draw"). Bug real encontrado
+    en produccion: usar el nombre equivocado en cualquiera de los 2 casos
+    hace que nunca coincida nada, aunque el partido si tenga esa cuota."""
     if nombre_pick == "Doble oportunidad 1X":
-        return ("double_chance", f"{local} or Draw", None)
+        return ("double_chance", f"{local_odds_api} or Draw", None)
     if nombre_pick == "Doble oportunidad X2":
-        return ("double_chance", f"{visitante} or Draw", None)
+        return ("double_chance", f"{visitante_odds_api} or Draw", None)
     if nombre_pick == "Ambos anotan - Si":
         return ("btts", "Yes", None)
     if nombre_pick == "Ambos anotan - No":
@@ -650,19 +671,20 @@ def _mapear_pick_a_mercado_odds_api(nombre_pick, local, visitante):
 
     m = re.match(r"Hándicap asiático ([+-][\d.]+): (.+)", nombre_pick)
     if m:
-        linea, equipo_linea = float(m.group(1)), m.group(2)
-        nombre_outcome = local if equipo_linea == local else visitante
+        linea, equipo_pick = float(m.group(1)), m.group(2)
+        nombre_outcome = local_odds_api if equipo_pick == local_interno else visitante_odds_api
         return ("alternate_spreads", nombre_outcome, linea)
 
     return None
 
 
-def buscar_cuota_real_mercado_extra(codigo_odds_api, event_id, nombre_pick, local, visitante):
+def buscar_cuota_real_mercado_extra(codigo_odds_api, event_id, nombre_pick,
+                                     local_interno, visitante_interno, local_odds_api, visitante_odds_api):
     """Punto de entrada unico: dado el pick recomendado de un partido YA
     CURADO, intenta traer su cuota real (None si no hay equivalente
     conocido, si no hay presupuesto de creditos, o si ninguna casa cubre
     ese mercado/linea todavia para ese partido -- nunca se inventa)."""
-    mapeo = _mapear_pick_a_mercado_odds_api(nombre_pick, local, visitante)
+    mapeo = _mapear_pick_a_mercado_odds_api(nombre_pick, local_interno, visitante_interno, local_odds_api, visitante_odds_api)
     if mapeo is None:
         return None
     mercado_key, nombre_outcome, punto = mapeo
@@ -2990,9 +3012,15 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             "pick_cuota_aprox": round(cuota_real_info["cuota"], 2) if cuota_real_info else (round(pick_cuota, 2) if pick_cuota else None),
             "cuota_es_real": cuota_real_info is not None,
             "casa_apuestas": cuota_real_info["casa"] if cuota_real_info else None,
-            "_home_original": p["homeTeam"]["name"],
-            "_away_original": p["awayTeam"]["name"],
             "_event_id_odds": partido_cuotas["event_id"] if partido_cuotas else None,
+            # Nombre EXACTO que usa the-odds-api.com para cada equipo --
+            # necesario para reconstruir resultados como "Brentford or
+            # Draw" en buscar_cuota_real_mercado_extra (distinto tanto del
+            # nombre original de football-data.org como del nombre interno
+            # corto "local"/"visitante" -- ver el comentario largo junto a
+            # _mapear_pick_a_mercado_odds_api).
+            "_local_odds_api": partido_cuotas["home_raw"] if partido_cuotas else None,
+            "_visitante_odds_api": partido_cuotas["away_raw"] if partido_cuotas else None,
             "pick_es_seguro": cumple_umbral,
             # 'completo' = ambos equipos ya llevan partidos suficientes esta
             # temporada (MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS); 'limitado' =
@@ -3342,7 +3370,8 @@ def buscar_cuotas_reales_extra(picks_curados):
         if fila.get("es_combo") or fila.get("cuota_es_real"):
             continue
         event_id = fila.get("_event_id_odds")
-        if not event_id or pd.isna(event_id):
+        local_odds_api, visitante_odds_api = fila.get("_local_odds_api"), fila.get("_visitante_odds_api")
+        if not event_id or pd.isna(event_id) or not local_odds_api or not visitante_odds_api:
             continue
         if not _hay_presupuesto_de_creditos_odds():
             print("Aviso: presupuesto de creditos de the-odds-api.com casi agotado este mes "
@@ -3352,7 +3381,8 @@ def buscar_cuotas_reales_extra(picks_curados):
         if not codigo_odds_api:
             continue
         resultado = buscar_cuota_real_mercado_extra(
-            codigo_odds_api, event_id, fila["pick_recomendado"], fila["_home_original"], fila["_away_original"])
+            codigo_odds_api, event_id, fila["pick_recomendado"],
+            fila["local"], fila["visitante"], local_odds_api, visitante_odds_api)
         if resultado:
             picks_curados.at[idx, "pick_cuota_aprox"] = round(resultado["cuota"], 2)
             picks_curados.at[idx, "cuota_es_real"] = True
@@ -3393,10 +3423,13 @@ def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
     # de verdad se van a mostrar -- ver el comentario largo junto a
     # buscar_cuota_real_mercado_extra sobre por que esto no se hace antes.
     buscar_cuotas_reales_extra(picks_curados)
-    # Los campos con guion bajo son internos (nombres originales de los
-    # equipos + event_id de the-odds-api.com, solo para la busqueda de
-    # arriba) -- se descartan antes de subir, para no ensuciar mercados_json.
-    picks_curados = picks_curados.drop(columns=["_home_original", "_away_original", "_event_id_odds"])
+    n_con_cuota_real = int(picks_curados["cuota_es_real"].sum())
+    print(f"Cuotas reales encontradas para {n_con_cuota_real} de {len(picks_curados)} picks curados "
+          f"(creditos restantes de the-odds-api.com: {_creditos_odds_restantes if _creditos_odds_restantes is not None else 'sin usar todavia'}).")
+    # Los campos con guion bajo son internos (event_id + nombres de equipo
+    # de the-odds-api.com, solo para la busqueda de arriba) -- se
+    # descartan antes de subir, para no ensuciar mercados_json.
+    picks_curados = picks_curados.drop(columns=["_event_id_odds", "_local_odds_api", "_visitante_odds_api"])
 
     print("Sincronizando picks del dia con Supabase...")
     if supabase_configurado():
