@@ -20,6 +20,12 @@ import os
 API_TOKEN = os.environ.get("FOOTBALL_DATA_TOKEN", "TU_TOKEN_AQUI")
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_TOKEN}
+# Cuotas reales de casas de apuestas verificadas (the-odds-api.com, plan
+# gratis: 500 creditos/mes). Si no esta configurado, simplemente no se
+# muestran cuotas reales -- se sigue usando la cuota estimada de siempre
+# (1/probabilidad - margen), sin romper nada.
+ODDS_API_TOKEN = os.environ.get("ODDS_API_TOKEN", "")
+ODDS_API_URL = "https://api.the-odds-api.com/v4"
 TEMPORADA_ACTUAL = 2026
 MAX_GOLES = 6
 
@@ -77,6 +83,7 @@ LIGAS = {
         "nombre_mostrar": "Premier League",
         "codigo_api": "PL",              # codigo de football-data.org
         "codigo_footballdata": "E0",      # codigo de football-data.co.uk
+        "codigo_odds_api": "soccer_epl",   # codigo de the-odds-api.com
         "archivo_historico": "premier_league_combinado.csv",
         "equipos_sin_historial": ["Coventry", "Hull"],
         "mapeo_nombres": {
@@ -106,6 +113,7 @@ LIGAS = {
         "nombre_mostrar": "LaLiga",
         "codigo_api": "PD",               # Primera Division
         "codigo_footballdata": "SP1",
+        "codigo_odds_api": "soccer_spain_la_liga",
         "archivo_historico": "la_liga_combinado.csv",
         # Equipos recien ascendidos a Primera 2026/27 (verificado en vivo --
         # Levante y Elche, ascendidos el anio pasado, ya tienen una
@@ -147,6 +155,7 @@ LIGAS = {
         "nombre_mostrar": "Serie A",
         "codigo_api": "SA",
         "codigo_footballdata": "I1",
+        "codigo_odds_api": "soccer_italy_serie_a",
         "archivo_historico": "serie_a_combinado.csv",
         # Equipos recien ascendidos a Serie A 2026/27, sin historial reciente
         "equipos_sin_historial": ["Venezia", "Frosinone", "Monza"],
@@ -177,6 +186,7 @@ LIGAS = {
         "nombre_mostrar": "Ligue 1",
         "codigo_api": "FL1",
         "codigo_footballdata": "F1",
+        "codigo_odds_api": "soccer_france_ligue_one",
         "archivo_historico": "ligue_1_combinado.csv",
         # Equipos recien ascendidos a Ligue 1 2026/27. Troyes ya tiene
         # historial reciente (estuvo en Ligue 1 en 2022/23, dentro de
@@ -209,6 +219,7 @@ LIGAS = {
         "nombre_mostrar": "Bundesliga",
         "codigo_api": "BL1",
         "codigo_footballdata": "D1",
+        "codigo_odds_api": "soccer_germany_bundesliga",
         "archivo_historico": "bundesliga_combinado.csv",
         # Equipos recien ascendidos a Bundesliga 2026/27. Schalke 04 ya
         # tiene historial reciente (jugo en primera en 2022/23, dentro de
@@ -242,6 +253,7 @@ LIGAS = {
         "nombre_mostrar": "Championship",
         "codigo_api": "ELC",
         "codigo_footballdata": "E1",
+        "codigo_odds_api": "soccer_efl_champ",
         "archivo_historico": "championship_combinado.csv",
         # Bolton y Lincoln ascendieron de League One (sin historial en
         # Championship). West Ham y Wolves descendieron de Premier League
@@ -281,6 +293,7 @@ LIGAS = {
         "nombre_mostrar": "Eredivisie",
         "codigo_api": "DED",
         "codigo_footballdata": "N1",
+        "codigo_odds_api": "soccer_netherlands_eredivisie",
         "archivo_historico": "eredivisie_combinado.csv",
         # Ascendidos 2026/27 (verificado en vivo comparando el roster de la
         # temporada 2025/26 contra la actual en football-data.co.uk):
@@ -312,6 +325,7 @@ LIGAS = {
         "nombre_mostrar": "Primeira Liga",
         "codigo_api": "PPL",
         "codigo_footballdata": "P1",
+        "codigo_odds_api": "soccer_portugal_primeira_liga",
         "archivo_historico": "primeira_liga_combinado.csv",
         # Ascendidos 2026/27 (mismo metodo que arriba): Academico de Viseu
         # y Maritimo. AVS y Tondela descendieron.
@@ -414,6 +428,246 @@ def normalizar_nombre_equipo(nombre):
     n = re.sub(r"\s+", " ", n).strip()
     return ALIAS_EQUIPOS_EUROPA.get(n, n)
 
+
+# ---------- Cuotas reales de casas de apuestas (the-odds-api.com) ----------
+#
+# Decision del usuario (presupuesto en cero): en vez de la cuota estimada
+# de siempre (1/probabilidad - margen, ver elegir_mejor_pick), mostrar la
+# cuota REAL mas alta ofrecida ahora mismo por una casa de apuestas
+# verificada, cuando el pick recomendado sea 1X2 (Local gana/Empate/
+# Visitante gana) -- el unico mercado que el plan gratis (500 creditos/
+# mes) permite pagar de forma sostenible para las 8 ligas + Champions
+# League (1 llamada por liga trae TODOS sus partidos: costo = mercados x
+# regiones, asi que 8 ligas x 1 mercado x 1 region = 8 creditos por
+# corrida, ~240/mes con una corrida diaria). Goles/BTTS/corners/tarjetas/
+# handicap/etc. siguen usando la cuota estimada -- ampliar esto a mas
+# mercados costaria mas creditos de los que el plan gratis permite.
+#
+# Si ODDS_API_TOKEN no esta configurado, o la liga no tiene
+# codigo_odds_api, todo esto se salta solo y el pipeline sigue
+# funcionando exactamente igual que antes (con la cuota estimada).
+
+def _normalizar_para_cuotas(nombre):
+    """Normalizacion mas agresiva que normalizar_nombre_equipo() -- ademas
+    de quitar sufijos corporativos, quita acentos y pasa a minusculas.
+    Necesaria porque the-odds-api.com no usa la misma convencion de
+    nombres que football-data.org ni que football-data.co.uk (que es de
+    donde salen los nombres internos cortos que usamos, ej. 'Ath Madrid')
+    -- se compara siempre contra el nombre ORIGINAL que manda
+    football-data.org (p['homeTeam']['name']), no contra el nombre interno
+    corto, porque ambas APIs profesionales usan nombres mucho mas
+    parecidos entre si."""
+    import unicodedata
+    n = unicodedata.normalize("NFKD", nombre).encode("ascii", "ignore").decode("ascii")
+    n = n.lower()
+    for patron in SUFIJOS_EQUIPO_A_QUITAR:
+        n = re.sub(patron, "", n, flags=re.IGNORECASE)
+    n = re.sub(r"[^a-z0-9\s]", "", n)
+    n = re.sub(r"\s+", " ", n).strip()
+    return n
+
+
+def obtener_cuotas_reales(codigo_odds_api):
+    """Trae las cuotas 1X2 (h2h) de TODOS los partidos programados de una
+    liga en una sola llamada -- devuelve una lista de dicts con el nombre
+    original de cada equipo (tal cual los manda the-odds-api.com) y la
+    MEJOR cuota disponible (mas alta) por resultado, entre todas las casas
+    de apuestas que cubre la region 'eu' (Bet365, Unibet, Pinnacle, 1xBet,
+    Betfair, Winamax, etc. -- ver bookmakers en la respuesta real)."""
+    if not ODDS_API_TOKEN or not codigo_odds_api:
+        return []
+    try:
+        resp = requests.get(
+            f"{ODDS_API_URL}/sports/{codigo_odds_api}/odds/",
+            params={"apiKey": ODDS_API_TOKEN, "regions": "eu", "markets": "h2h", "oddsFormat": "decimal"},
+            timeout=15,
+        )
+    except requests.RequestException as e:
+        print(f"Aviso: no se pudo conectar con the-odds-api.com: {e}")
+        return []
+    if resp.status_code != 200:
+        print(f"Aviso: the-odds-api.com respondio {resp.status_code}: {resp.text[:200]}")
+        return []
+
+    partidos = []
+    for evento in resp.json():
+        mejor_local, mejor_empate, mejor_visit = None, None, None
+        casa_local, casa_empate, casa_visit = None, None, None
+        for casa in evento.get("bookmakers", []):
+            mercado_h2h = next((m for m in casa["markets"] if m["key"] == "h2h"), None)
+            if not mercado_h2h:
+                continue
+            for resultado in mercado_h2h["outcomes"]:
+                precio = resultado["price"]
+                if resultado["name"] == evento["home_team"]:
+                    if mejor_local is None or precio > mejor_local:
+                        mejor_local, casa_local = precio, casa["title"]
+                elif resultado["name"] == evento["away_team"]:
+                    if mejor_visit is None or precio > mejor_visit:
+                        mejor_visit, casa_visit = precio, casa["title"]
+                elif resultado["name"] == "Draw":
+                    if mejor_empate is None or precio > mejor_empate:
+                        mejor_empate, casa_empate = precio, casa["title"]
+        if mejor_local is None and mejor_empate is None and mejor_visit is None:
+            continue
+        partidos.append({
+            "event_id": evento["id"],
+            "home_norm": _normalizar_para_cuotas(evento["home_team"]),
+            "away_norm": _normalizar_para_cuotas(evento["away_team"]),
+            "local": mejor_local, "casa_local": casa_local,
+            "empate": mejor_empate, "casa_empate": casa_empate,
+            "visitante": mejor_visit, "casa_visitante": casa_visit,
+        })
+    return partidos
+
+
+def buscar_cuota_real(cuotas_liga, nombre_local_original, nombre_visitante_original):
+    """Busca, dentro de la lista que devuelve obtener_cuotas_reales(), el
+    partido que corresponde a este local/visitante (nombres ORIGINALES de
+    football-data.org, no los internos cortos). Devuelve None si no hay
+    cuotas configuradas para esta liga o si no se encontro una
+    coincidencia clara -- nunca se inventa ni se aproxima una cuota."""
+    if not cuotas_liga:
+        return None
+    local_norm = _normalizar_para_cuotas(nombre_local_original)
+    visit_norm = _normalizar_para_cuotas(nombre_visitante_original)
+    for partido in cuotas_liga:
+        if partido["home_norm"] == local_norm and partido["away_norm"] == visit_norm:
+            return partido
+    return None
+
+
+# ---------- Cuotas reales para mercados extra (goles/BTTS/doble oportunidad/
+# corners/tarjetas/handicap asiatico), por partido individual ----------
+#
+# A diferencia de 1X2 (una sola llamada trae TODOS los partidos de una
+# liga, ver obtener_cuotas_reales), estos mercados solo existen en el
+# endpoint POR PARTIDO de the-odds-api.com -- mucho mas caro (el costo es
+# [mercados devueltos] x [regiones], por CADA partido, no por liga). Por
+# eso esto se corre DESPUES de curar los picks del dia (top_n=25, ver
+# curar_y_subir_picks_del_dia) -- nunca durante la generacion, donde
+# todavia hay decenas de partidos candidatos que ni siquiera van a
+# mostrarse.
+#
+# Mercados SIN equivalente real conocido en the-odds-api.com para futbol
+# (no se intenta buscarles cuota real, se quedan con la estimada):
+# tiros a puerta, tiros totales, faltas, "Mas corners/tarjetas: Equipo",
+# handicap europeo (los libros de apuestas no ofrecen handicap de 3
+# resultados a la linea exacta que calculamos).
+#
+# Presupuesto: el plan gratis da 500 creditos/mes. Se corta la busqueda
+# de mas cuotas reales (se sigue usando la estimada para el resto) en
+# cuanto el credito restante que reporta la propia API cae por debajo de
+# este umbral, para no arriesgarnos a quedarnos sin creditos a mitad de
+# mes.
+UMBRAL_SEGURIDAD_CREDITOS_ODDS = 30
+_creditos_odds_restantes = None
+
+def _hay_presupuesto_de_creditos_odds():
+    return _creditos_odds_restantes is None or _creditos_odds_restantes >= UMBRAL_SEGURIDAD_CREDITOS_ODDS
+
+
+def obtener_cuota_evento(codigo_odds_api, event_id, mercado_odds_api):
+    """Trae UN mercado especifico para UN partido especifico (endpoint por
+    evento). Actualiza _creditos_odds_restantes con lo que reporte la API
+    en cada respuesta real, sin importar si tuvo exito o no."""
+    global _creditos_odds_restantes
+    if not ODDS_API_TOKEN or not codigo_odds_api or not event_id or not _hay_presupuesto_de_creditos_odds():
+        return None
+    try:
+        resp = requests.get(
+            f"{ODDS_API_URL}/sports/{codigo_odds_api}/events/{event_id}/odds",
+            params={"apiKey": ODDS_API_TOKEN, "regions": "eu", "markets": mercado_odds_api, "oddsFormat": "decimal"},
+            timeout=15,
+        )
+    except requests.RequestException as e:
+        print(f"Aviso: no se pudo conectar con the-odds-api.com (evento {event_id}): {e}")
+        return None
+    restantes = resp.headers.get("x-requests-remaining")
+    if restantes is not None:
+        try:
+            _creditos_odds_restantes = int(restantes)
+        except ValueError:
+            pass
+    if resp.status_code != 200:
+        return None
+    return resp.json()
+
+
+def _mejor_precio_outcome(datos_evento, mercado_key, nombre_outcome, punto_buscado=None, tolerancia_punto=0.01):
+    """Dentro de la respuesta de obtener_cuota_evento(), busca la MEJOR
+    cuota (mas alta, entre todas las casas) para un resultado especifico
+    de un mercado -- opcionalmente exigiendo que la linea (point) coincida
+    con la que ya elegimos nosotros mismos (Over/Under, handicap), porque
+    el mismo mercado trae varias lineas a la vez."""
+    if not datos_evento:
+        return None
+    mejor_precio, mejor_casa = None, None
+    for casa in datos_evento.get("bookmakers", []):
+        for mercado in casa.get("markets", []):
+            if mercado["key"] != mercado_key:
+                continue
+            for outcome in mercado["outcomes"]:
+                if outcome.get("name") != nombre_outcome:
+                    continue
+                if punto_buscado is not None:
+                    punto = outcome.get("point")
+                    if punto is None or abs(punto - punto_buscado) > tolerancia_punto:
+                        continue
+                precio = outcome["price"]
+                if mejor_precio is None or precio > mejor_precio:
+                    mejor_precio, mejor_casa = precio, casa["title"]
+    if mejor_precio is None:
+        return None
+    return {"cuota": mejor_precio, "casa": mejor_casa}
+
+
+def _mapear_pick_a_mercado_odds_api(nombre_pick, local, visitante):
+    """Traduce el nombre de UN mercado individual (nunca combos) al
+    (mercado, resultado, linea) equivalente de the-odds-api.com -- None si
+    no existe un mercado real conocido para ese pick (ver el comentario
+    largo mas arriba)."""
+    if nombre_pick == "Doble oportunidad 1X":
+        return ("double_chance", f"{local} or Draw", None)
+    if nombre_pick == "Doble oportunidad X2":
+        return ("double_chance", f"{visitante} or Draw", None)
+    if nombre_pick == "Ambos anotan - Si":
+        return ("btts", "Yes", None)
+    if nombre_pick == "Ambos anotan - No":
+        return ("btts", "No", None)
+
+    m = re.match(r"(Over|Under) ([\d.]+) goles", nombre_pick)
+    if m:
+        return ("totals", m.group(1), float(m.group(2)))
+
+    m = re.match(r"(Over|Under) ([\d.]+) corners", nombre_pick)
+    if m:
+        return ("alternate_totals_corners", m.group(1), float(m.group(2)))
+
+    m = re.match(r"(Over|Under) ([\d.]+) tarjetas", nombre_pick)
+    if m:
+        return ("alternate_totals_cards", m.group(1), float(m.group(2)))
+
+    m = re.match(r"Hándicap asiático ([+-][\d.]+): (.+)", nombre_pick)
+    if m:
+        linea, equipo_linea = float(m.group(1)), m.group(2)
+        nombre_outcome = local if equipo_linea == local else visitante
+        return ("alternate_spreads", nombre_outcome, linea)
+
+    return None
+
+
+def buscar_cuota_real_mercado_extra(codigo_odds_api, event_id, nombre_pick, local, visitante):
+    """Punto de entrada unico: dado el pick recomendado de un partido YA
+    CURADO, intenta traer su cuota real (None si no hay equivalente
+    conocido, si no hay presupuesto de creditos, o si ninguna casa cubre
+    ese mercado/linea todavia para ese partido -- nunca se inventa)."""
+    mapeo = _mapear_pick_a_mercado_odds_api(nombre_pick, local, visitante)
+    if mapeo is None:
+        return None
+    mercado_key, nombre_outcome, punto = mapeo
+    datos_evento = obtener_cuota_evento(codigo_odds_api, event_id, mercado_key)
+    return _mejor_precio_outcome(datos_evento, mercado_key, nombre_outcome, punto)
 
 
 # ---------- Paso 1: traer datos de football-data.org ----------
@@ -2303,7 +2557,8 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
     # escudo_local/escudo_visitante.
     columnas_base = {"fecha", "local", "visitante", "escudo_local", "escudo_visitante",
                       "marcadores_probables", "explicacion_ia", "calidad_datos", "pick_recomendado", "es_combo",
-                      "pick_probabilidad", "pick_cuota_aprox", "pick_es_seguro", "es_gratis", "liga"}
+                      "pick_probabilidad", "pick_cuota_aprox", "cuota_es_real", "casa_apuestas",
+                      "pick_es_seguro", "es_gratis", "liga"}
 
     registros = []
     for _, fila in df.iterrows():
@@ -2321,6 +2576,8 @@ def subir_picks_supabase(picks_df, liga, n_gratis=3):
             "es_combo": bool(fila["es_combo"]),
             "pick_probabilidad": float(fila["pick_probabilidad"]),
             "pick_cuota_aprox": float(fila["pick_cuota_aprox"]) if pd.notna(fila["pick_cuota_aprox"]) else None,
+            "cuota_es_real": bool(fila.get("cuota_es_real", False)) if pd.notna(fila.get("cuota_es_real")) else False,
+            "casa_apuestas": fila.get("casa_apuestas") if pd.notna(fila.get("casa_apuestas")) else None,
             "pick_es_seguro": bool(fila["pick_es_seguro"]),
             "es_gratis": bool(fila["es_gratis"]),
             "mercados_json": mercados,
@@ -2551,7 +2808,7 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
                    fuerzas_tiros=None, prom_l_tiros=None, prom_v_tiros=None, tiros_combinable=False,
                    fuerzas_faltas=None, prom_l_faltas=None, prom_v_faltas=None, faltas_combinable=False,
                    fuerzas_tiros_totales=None, prom_l_tiros_totales=None, prom_v_tiros_totales=None, tiros_totales_combinable=False,
-                   partidos_temporada_actual=None, historico=None):
+                   partidos_temporada_actual=None, historico=None, cuotas_reales=None):
     programados = [p for p in partidos if p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO]
     picks = []
 
@@ -2694,6 +2951,25 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             umbral_extra_minimo=umbral_extra)
         es_combo = len(nombres_pick) > 1
 
+        # Cuota real (the-odds-api.com): el 1X2 se resuelve aqui mismo (es
+        # casi gratis, ya trajimos las cuotas de TODA la liga en una sola
+        # llamada -- ver obtener_cuotas_reales). Mercados como goles/BTTS/
+        # doble oportunidad/corners/tarjetas/handicap asiatico SI tienen
+        # equivalente real, pero solo se pueden pedir por partido individual
+        # (mucho mas caro) -- eso se resuelve DESPUES de curar los picks del
+        # dia (ver buscar_cuotas_reales_extra en curar_y_subir_picks_del_dia),
+        # para no gastar creditos en partidos que ni siquiera van a
+        # mostrarse. Por eso guardamos aqui, aunque no se usen todavia, el
+        # nombre ORIGINAL de cada equipo y el event_id de the-odds-api.com
+        # (con guion bajo al inicio: son campos internos, se borran antes
+        # de subir a Supabase, ver subir_picks_supabase).
+        partido_cuotas = buscar_cuota_real(cuotas_reales, p["homeTeam"]["name"], p["awayTeam"]["name"])
+        cuota_real_info = None
+        if not es_combo and partido_cuotas and nombres_pick and nombres_pick[0] in ("Local gana", "Empate", "Visitante gana"):
+            clave = {"Local gana": "local", "Empate": "empate", "Visitante gana": "visitante"}[nombres_pick[0]]
+            if partido_cuotas[clave] is not None:
+                cuota_real_info = {"cuota": partido_cuotas[clave], "casa": partido_cuotas[f"casa_{clave}"]}
+
         picks.append({
             "fecha": fecha_partido, "local": local, "visitante": visitante,
             "escudo_local": p["homeTeam"].get("crest"), "escudo_visitante": p["awayTeam"].get("crest"),
@@ -2711,7 +2987,12 @@ def generar_picks(partidos, fuerzas, prom_l, prom_v, rho, umbral_seguro=0.75,
             "pick_recomendado": " + ".join(nombres_pick),
             "es_combo": es_combo,
             "pick_probabilidad": round(pick_prob*100, 1),
-            "pick_cuota_aprox": round(pick_cuota, 2) if pick_cuota else None,
+            "pick_cuota_aprox": round(cuota_real_info["cuota"], 2) if cuota_real_info else (round(pick_cuota, 2) if pick_cuota else None),
+            "cuota_es_real": cuota_real_info is not None,
+            "casa_apuestas": cuota_real_info["casa"] if cuota_real_info else None,
+            "_home_original": p["homeTeam"]["name"],
+            "_away_original": p["awayTeam"]["name"],
+            "_event_id_odds": partido_cuotas["event_id"] if partido_cuotas else None,
             "pick_es_seguro": cumple_umbral,
             # 'completo' = ambos equipos ya llevan partidos suficientes esta
             # temporada (MINIMO_PARTIDOS_TEMPORADA_PARA_EXTRAS); 'limitado' =
@@ -2976,6 +3257,21 @@ def generar_picks_liga(liga_key, ctx, umbral_dinamico):
     config = _fijar_globales_liga(liga_key)
     print(f"\n{'#'*70}\n# LIGA: {config['nombre_mostrar']} (generando picks, umbral: {umbral_dinamico*100:.0f}%)\n{'#'*70}")
 
+    # Ahorro de creditos: solo pedimos cuotas reales si esta liga tiene
+    # partidos programados para el dia objetivo -- antes se pedian las
+    # cuotas de las 9 competencias en CADA corrida, aunque una liga no
+    # jugara ese dia, desperdiciando creditos del plan gratis de
+    # the-odds-api.com sin ninguna posibilidad de usarlos.
+    dia_objetivo = calcular_dia_objetivo_picks()
+    hay_partidos_hoy = any(
+        p["status"] not in ESTADOS_PARTIDO_YA_RESUELTO
+        and pd.Timestamp(p["utcDate"]).date() == dia_objetivo
+        for p in ctx["partidos"]
+    )
+    cuotas_reales = obtener_cuotas_reales(config.get("codigo_odds_api")) if hay_partidos_hoy else []
+    if cuotas_reales:
+        print(f"Cuotas reales: {len(cuotas_reales)} partidos con al menos una casa de apuestas.")
+
     picks = generar_picks(
         ctx["partidos"], ctx["fuerzas"], ctx["prom_l"], ctx["prom_v"], ctx["rho"], umbral_seguro=umbral_dinamico,
         fuerzas_corners=ctx["fuerzas_corners"], prom_l_corners=ctx["prom_l_corners"], prom_v_corners=ctx["prom_v_corners"],
@@ -2989,7 +3285,8 @@ def generar_picks_liga(liga_key, ctx, umbral_dinamico):
         faltas_combinable=ctx["faltas_combinable"],
         fuerzas_tiros_totales=ctx["fuerzas_tiros_totales"], prom_l_tiros_totales=ctx["prom_l_tiros_totales"],
         prom_v_tiros_totales=ctx["prom_v_tiros_totales"], tiros_totales_combinable=ctx["tiros_totales_combinable"],
-        partidos_temporada_actual=ctx["partidos_temporada_actual"], historico=ctx["historico"])
+        partidos_temporada_actual=ctx["partidos_temporada_actual"], historico=ctx["historico"],
+        cuotas_reales=cuotas_reales)
 
     historico = ctx["historico"]
     historial = ctx["historial"]
@@ -3032,6 +3329,36 @@ def generar_picks_liga(liga_key, ctx, umbral_dinamico):
     return picks, historico
 
 
+def buscar_cuotas_reales_extra(picks_curados):
+    """Para los picks YA CURADOS del dia (los que de verdad se van a
+    mostrar): si no son combo y todavia no tienen cuota real (1X2 ya se
+    resolvio antes, en generar_picks), intenta traerles la cuota real de
+    su mercado especifico -- ver el comentario largo junto a
+    buscar_cuota_real_mercado_extra. Modifica picks_curados IN PLACE. No
+    hace nada si ODDS_API_TOKEN no esta configurado."""
+    if not ODDS_API_TOKEN or len(picks_curados) == 0:
+        return
+    for idx, fila in picks_curados.iterrows():
+        if fila.get("es_combo") or fila.get("cuota_es_real"):
+            continue
+        event_id = fila.get("_event_id_odds")
+        if not event_id or pd.isna(event_id):
+            continue
+        if not _hay_presupuesto_de_creditos_odds():
+            print("Aviso: presupuesto de creditos de the-odds-api.com casi agotado este mes "
+                  "-- se deja de buscar mas cuotas reales, el resto sigue con la estimada.")
+            break
+        codigo_odds_api = LIGAS.get(fila.get("liga"), {}).get("codigo_odds_api")
+        if not codigo_odds_api:
+            continue
+        resultado = buscar_cuota_real_mercado_extra(
+            codigo_odds_api, event_id, fila["pick_recomendado"], fila["_home_original"], fila["_away_original"])
+        if resultado:
+            picks_curados.at[idx, "pick_cuota_aprox"] = round(resultado["cuota"], 2)
+            picks_curados.at[idx, "cuota_es_real"] = True
+            picks_curados.at[idx, "casa_apuestas"] = resultado["casa"]
+
+
 def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
     """Junta el pool de picks de TODAS las ligas activas, descarta los que
     NO superaron el umbral de seguridad (pick_es_seguro == False -- no son
@@ -3060,6 +3387,16 @@ def curar_y_subir_picks_del_dia(pool_picks, top_n=10, n_gratis=3):
     picks_curados = seguros.sort_values("pick_probabilidad", ascending=False).head(top_n).reset_index(drop=True)
     print(f"\nCurando picks del dia: {len(picks_curados)} de {len(seguros)} picks seguros disponibles "
           f"(de {len(pool_picks)} candidatos totales, de todas las ligas activas).")
+
+    # Cuotas reales para mercados extra (goles/BTTS/doble oportunidad/
+    # corners/tarjetas/handicap asiatico): SOLO ahora, sobre los picks que
+    # de verdad se van a mostrar -- ver el comentario largo junto a
+    # buscar_cuota_real_mercado_extra sobre por que esto no se hace antes.
+    buscar_cuotas_reales_extra(picks_curados)
+    # Los campos con guion bajo son internos (nombres originales de los
+    # equipos + event_id de the-odds-api.com, solo para la busqueda de
+    # arriba) -- se descartan antes de subir, para no ensuciar mercados_json.
+    picks_curados = picks_curados.drop(columns=["_home_original", "_away_original", "_event_id_odds"])
 
     print("Sincronizando picks del dia con Supabase...")
     if supabase_configurado():
