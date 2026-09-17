@@ -702,6 +702,17 @@
     color: var(--tinta-suave);
     margin-left: auto;
   }
+  /* Cuota REAL (the-odds-api.com) se distingue visualmente de la
+     estimada -- la diferencia entre "esto es lo que de verdad ofrece una
+     casa ahora mismo" y "esto es lo que calculamos nosotros" es
+     importante para la confianza del usuario. */
+  .cuota-real {
+    color: var(--verde);
+    font-weight: 700;
+    background: rgba(47,110,69,0.10);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
 
   .card-toggle {
     width: 100%;
@@ -2084,6 +2095,8 @@ function transformarPick(fila) {
     pick: tieneDatos ? traducirMercado(fila.pick_recomendado) : null,
     prob: tieneDatos ? Math.round(fila.pick_probabilidad) : null,
     cuota: tieneDatos ? fila.pick_cuota_aprox : null,
+    cuotaEsReal: tieneDatos ? !!fila.cuota_es_real : false,
+    casaApuestas: tieneDatos ? fila.casa_apuestas : null,
     nivel: tieneDatos && seguro ? "seguro" : null,
     combo: !!fila.es_combo,
     liga: fila.liga,
@@ -3168,7 +3181,9 @@ function crearTarjeta(p, i) {
           <span class="badge ${badgeClase}">${badgeTexto}</span>
           ${comboBadge}
           ${calidadBadge}
-          <span class="cuota">cuota ~${p.cuota}</span>
+          ${p.cuotaEsReal
+            ? `<span class="cuota cuota-real" title="Cuota real ofrecida ahora mismo por ${escaparHtml(p.casaApuestas || "una casa de apuestas")}, no una estimación.">✅ cuota real ${p.cuota} (${escaparHtml(p.casaApuestas || "")})</span>`
+            : `<span class="cuota" title="Estimación propia (1/probabilidad, con margen) -- no es una cuota real de ninguna casa de apuestas.">cuota ~${p.cuota}</span>`}
         </div>
       </div>
     </div>
