@@ -1151,6 +1151,9 @@
     <button class="menu-item" id="menu-historial" onclick="cambiarVista('historial'); cerrarMenuLateral();">
       📊 Historial
     </button>
+    <button class="menu-item" id="menu-cuotas-top" onclick="cambiarVista('cuotas-top'); cerrarMenuLateral();">
+      💰 Cuotas TOP
+    </button>
     <button class="menu-item" id="menu-transparencia" onclick="cambiarVista('transparencia'); cerrarMenuLateral();">
       🔍 Cómo funciona
     </button>
@@ -1299,6 +1302,18 @@
       <h3 class="seccion-liga-titulo">Próximos partidos</h3>
       <div id="liga-proximos"><div class="cargando-liga">Cargando próximos partidos...</div></div>
     </section>
+  </main>
+</div>
+
+<div id="vista-cuotas-top" style="display:none;">
+  <main style="max-width:720px; margin:0 auto; padding:20px 20px 60px;">
+    <h2 style="margin-bottom:4px;">💰 Cuotas TOP</h2>
+    <div style="font-size:13px; color:var(--tinta-suave); margin-bottom:24px;">
+      Las mejores cuotas REALES que están ofreciendo casas de apuestas verificadas ahora mismo,
+      entre los picks que recomienda nuestro modelo — no son estimaciones. Ordenadas por qué tan
+      buena es la cuota comparada con lo confiable que creemos que es el pick.
+    </div>
+    <div id="cuotas-top-lista"><div class="cargando-liga">Cargando...</div></div>
   </main>
 </div>
 
@@ -2728,6 +2743,13 @@ async function cargarTodo() {
     window._historialCombinadasCache = historialRaw || [];
     window._resumenTrackRecord = resumenRaw || [];
     renderTrackRecordTransparencia();
+    // Si el usuario ya tenia abierta "Cuotas TOP" cuando llegan datos
+    // nuevos (login/logout, refresco periodico), se vuelve a pintar con
+    // el picksCache recien actualizado -- mismo patron que
+    // renderTrackRecordTransparencia() de arriba.
+    if (document.getElementById("vista-cuotas-top").style.display === "block") {
+      renderCuotasTop();
+    }
   } catch (err) {
     document.getElementById("grid").innerHTML = `
       <div class="combinada" style="grid-column:1/-1; text-align:center; opacity:0.7;">
@@ -3261,6 +3283,11 @@ function crearBarraProb1X2(p) {
 }
 
 function render(picks, combinadas) {
+  // Se guarda para poder armar "Cuotas TOP" sin tener que volver a pedirle
+  // nada a Supabase -- ya tenemos todo lo que necesitamos en memoria (cada
+  // pick ya trae cuotaEsReal/casaApuestas, ver transformarPick).
+  window._picksCache = picks;
+
   document.getElementById("banner-vencimiento-vip-contenedor").innerHTML = crearBannerVencimientoVip();
   document.getElementById("banner-vip-contenedor").innerHTML = crearBannerVip();
   renderBannerNotificaciones();
@@ -3311,6 +3338,52 @@ function render(picks, combinadas) {
   });
 
   document.getElementById("grid").innerHTML = combinadasHtml + avisoVip + picksOrdenados.map(crearTarjeta).join("");
+}
+
+// "Cuotas TOP": entre los picks de hoy que el usuario ya puede ver
+// (tieneDatos -- respeta el mismo candado gratis/VIP de siempre, esto no
+// abre nada nuevo) y que SI tienen cuota real de una casa de apuestas
+// verificada (cuotaEsReal -- nunca se muestra aqui una cuota estimada,
+// perderia el sentido de la seccion), se ordenan por "valor esperado"
+// (probabilidad del modelo x cuota real) en vez de por probabilidad o por
+// cuota solas -- una cuota alta con probabilidad baja no es necesariamente
+// mejor oportunidad que una cuota mas modesta con probabilidad alta.
+function renderCuotasTop() {
+  const cont = document.getElementById("cuotas-top-lista");
+  if (!cont) return;
+  const picks = window._picksCache || [];
+  const candidatos = picks.filter(p => p.tieneDatos && p.cuotaEsReal && !p.combo && p.cuota && p.prob);
+
+  if (candidatos.length === 0) {
+    cont.innerHTML = `
+      <div class="cargando-liga">
+        Todavía no hay cuotas reales disponibles para los picks de hoy. Las casas de apuestas suelen
+        publicar sus líneas completas más cerca de la hora de cada partido — vuelve a revisar más tarde.
+      </div>`;
+    return;
+  }
+
+  const ordenados = [...candidatos].sort((a, b) => (b.prob / 100 * b.cuota) - (a.prob / 100 * a.cuota));
+
+  cont.innerHTML = ordenados.map(p => `
+    <div class="card" style="margin-bottom:10px;">
+      <div class="card-top">
+        <div class="card-fecha">${p.fecha} <span class="card-liga-badge">${p.ligaMostrar}</span></div>
+        <div class="card-equipos">
+          <span class="equipo-conescudo">${escudoImg(p.escudoLocal)}<span>${p.local}</span></span>
+          <span class="vs">vs</span>
+          <span class="equipo-conescudo">${escudoImg(p.escudoVisitante)}<span>${p.visitante}</span></span>
+        </div>
+      </div>
+      <div class="card-body" style="flex-direction:column; align-items:stretch; gap:8px;">
+        <div class="pick-nombre">${p.pick}</div>
+        <div class="pick-meta">
+          <span class="badge ${p.nivel === "seguro" ? "badge-seguro" : "badge-moderado"}">${p.prob}% confianza</span>
+          <span class="cuota cuota-real">✅ ${p.cuota} (${escaparHtml(p.casaApuestas || "")})</span>
+        </div>
+      </div>
+    </div>
+  `).join("");
 }
 
 function toggleDetalle(i) {
@@ -3510,8 +3583,10 @@ function cambiarVista(vista) {
   document.getElementById("menu-historial").classList.toggle("activo", vista === "historial");
   document.getElementById("menu-champions").classList.toggle("activo", vista === "champions");
   document.getElementById("menu-transparencia").classList.toggle("activo", vista === "transparencia");
+  document.getElementById("menu-cuotas-top").classList.toggle("activo", vista === "cuotas-top");
   document.getElementById("vista-picks").style.display = vista === "picks" ? "block" : "none";
   document.getElementById("vista-historial").style.display = vista === "historial" ? "block" : "none";
+  document.getElementById("vista-cuotas-top").style.display = vista === "cuotas-top" ? "block" : "none";
   document.getElementById("vista-liga").style.display = vista === "liga" ? "block" : "none";
   document.getElementById("vista-champions").style.display = vista === "champions" ? "block" : "none";
   document.getElementById("vista-admin-stats").style.display = vista === "admin-stats" ? "block" : "none";
@@ -3533,6 +3608,9 @@ function cambiarVista(vista) {
   }
   if (vista === "admin-stats") {
     cargarEstadisticasAdmin();
+  }
+  if (vista === "cuotas-top") {
+    renderCuotasTop();
   }
   if (vista === "transparencia") {
     renderTrackRecordTransparencia();
