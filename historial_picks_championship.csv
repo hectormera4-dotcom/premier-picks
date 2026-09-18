@@ -55,6 +55,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-12 14:00:00,Swansea,Burnley,Under 11.5 corners,False,83.2,1.1,2026-09-12,3-1,True
 2026-09-12 14:00:00,Middlesbrough,Norwich,Over 7.5 corners,False,83.7,1.09,2026-09-12,4-3,True
 2026-09-13 11:00:00,Sheffield United,Wolves,Over 2.5 goles + Over 7.5 corners,True,80.0,1.15,2026-09-13,0-1,False
-2026-09-15 18:45:00,Middlesbrough,Millwall,Over 8.5 corners,False,82.3,1.12,2026-09-14,,
-2026-09-15 18:45:00,Bristol City,Lincoln,Over 8.5 corners,False,81.6,1.13,2026-09-14,,
+2026-09-15 18:45:00,Middlesbrough,Millwall,Over 8.5 corners,False,82.3,1.12,2026-09-14,2.0-2.0,True
+2026-09-15 18:45:00,Bristol City,Lincoln,Over 8.5 corners,False,81.6,1.13,2026-09-14,0.0-1.0,True
 2026-09-18 19:00:00,Bristol City,Watford,Under 12.5 corners,False,80.4,1.14,2026-09-17,,
