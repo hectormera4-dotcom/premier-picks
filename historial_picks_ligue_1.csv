@@ -26,3 +26,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-13 15:15:00,Le Mans,Lens,Over 9.5 corners,False,80.0,1.15,2026-09-13,2-2,True
 2026-09-13 18:45:00,Brest,Paris SG,Over 5.5 corners,False,80.4,1.14,2026-09-13,0-1,False
 2026-09-18 18:45:00,Monaco,Lens,Over 6.5 corners,False,82.1,1.12,2026-09-17,,
+2026-09-19 15:15:00,Paris FC,Strasbourg,Over 1.5 goles,False,81.2,1.13,2026-09-19,,
+2026-09-19 18:45:00,Le Mans,Lorient,Over 7.5 corners,False,80.7,1.14,2026-09-19,,
+2026-09-19 18:45:00,Toulouse,Le Havre,Under 12.5 corners,False,83.3,1.1,2026-09-19,,
+2026-09-19 18:45:00,Angers,Troyes,Under 11.5 corners,False,83.8,1.09,2026-09-19,,
+2026-09-19 18:45:00,Lyon,Rennes,Over 7.5 corners,False,80.8,1.14,2026-09-19,,
