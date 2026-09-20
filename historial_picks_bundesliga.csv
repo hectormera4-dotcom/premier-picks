@@ -30,4 +30,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-19 13:30:00,M'gladbach,Mainz,Under 11.5 corners,False,81.9,1.12,2026-09-19,,
 2026-09-19 13:30:00,Werder Bremen,Augsburg,Under 11.5 corners,False,80.6,1.14,2026-09-19,,
 2026-09-19 13:30:00,Ein Frankfurt,Freiburg,Under 11.5 corners,False,82.3,1.11,2026-09-19,,
-2026-09-19 16:30:00,Stuttgart,Dortmund,Hándicap asiático +1.5: Stuttgart,False,83.9,1.09,2026-09-19,,
+2026-09-19 16:30:00,Stuttgart,Dortmund,Hándicap asiático +1.5: Stuttgart,False,83.9,1.09,2026-09-19,0-1,True
+2026-09-20 13:30:00,Leverkusen,RB Leipzig,Over 6.5 corners,False,80.2,1.15,2026-09-20,,
+2026-09-20 15:30:00,Schalke 04,Elversberg,Doble oportunidad X2 + Over 9.5 corners,True,80.1,1.15,2026-09-20,,
+2026-09-20 17:30:00,Paderborn,Hoffenheim,Under 13.5 corners,False,81.6,1.13,2026-09-20,,

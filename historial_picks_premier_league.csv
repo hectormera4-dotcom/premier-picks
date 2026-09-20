@@ -41,7 +41,11 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-14 19:00:00,Leeds,Newcastle,Over 6.5 corners,False,84.2,1.09,2026-09-14,4-1,True
 2026-09-18 19:00:00,Brentford,Chelsea,Over 1.5 goles,False,81.1,1.13,2026-09-17,3.0-0.0,True
 2026-09-19 11:30:00,Tottenham,Aston Villa,Over 8.5 corners,False,80.7,1.14,2026-09-19,,
-2026-09-19 14:00:00,Everton,Ipswich,Over 1.5 goles,False,81.4,1.13,2026-09-19,,
+2026-09-19 14:00:00,Everton,Ipswich,Over 1.5 goles,False,81.4,1.13,2026-09-19,1.0-0.0,False
 2026-09-19 14:00:00,Brighton,Arsenal,Under 11.5 corners,False,82.9,1.11,2026-09-19,,
 2026-09-19 14:00:00,Newcastle,Hull,Over 8.5 corners,False,84.6,1.08,2026-09-19,,
 2026-09-19 16:30:00,Nott'm Forest,Coventry,Under 11.5 corners,False,81.5,1.13,2026-09-19,,
+2026-09-20 13:00:00,Bournemouth,Liverpool,Over 7.5 corners,False,82.1,1.12,2026-09-20,,
+2026-09-20 13:00:00,Leeds,Crystal Palace,Under 12.5 corners,False,82.1,1.12,2026-09-20,,
+2026-09-20 13:00:00,Man City,Sunderland,Doble oportunidad 1X + Under 13.5 corners,True,80.6,1.14,2026-09-20,,
+2026-09-20 15:30:00,Fulham,Man United,Under 13.5 corners,False,81.7,1.12,2026-09-20,,

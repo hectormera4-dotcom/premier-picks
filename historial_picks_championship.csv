@@ -62,8 +62,10 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-19 11:30:00,Millwall,West Ham,Más corners: West Ham,False,80.8,1.14,2026-09-19,,
 2026-09-19 11:30:00,Cardiff,Charlton,Under 13.5 corners,False,86.3,1.06,2026-09-19,,
 2026-09-19 14:00:00,Wrexham,Southampton,Over 1.5 goles + Over 5.5 corners,True,82.8,1.11,2026-09-19,,
-2026-09-19 14:00:00,Burnley,Derby,Doble oportunidad 1X,False,82.5,1.11,2026-09-19,,
+2026-09-19 14:00:00,Burnley,Derby,Doble oportunidad 1X,False,82.5,1.11,2026-09-19,1.0-1.0,True
 2026-09-19 14:00:00,QPR,Preston,Más tiros totales: QPR,False,81.1,1.13,2026-09-19,,
 2026-09-19 14:00:00,Portsmouth,Blackburn,Under 13.5 corners,False,80.9,1.14,2026-09-19,,
-2026-09-19 14:00:00,Birmingham,Middlesbrough,Hándicap asiático +1.5: Birmingham,False,81.3,1.13,2026-09-19,,
+2026-09-19 14:00:00,Birmingham,Middlesbrough,Hándicap asiático +1.5: Birmingham,False,81.3,1.13,2026-09-19,2.0-2.0,True
 2026-09-19 14:00:00,Lincoln,Swansea,Under 13.5 corners,False,82.0,1.12,2026-09-19,,
+2026-09-20 11:00:00,Wolves,West Brom,Doble oportunidad 1X,False,81.3,1.13,2026-09-20,,
+2026-09-20 12:30:00,Norwich,Bolton,Doble oportunidad 1X + Over 6.5 corners,True,80.2,1.15,2026-09-20,,
