@@ -20,12 +20,12 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-13 14:45:00,Zwolle,Feyenoord,Más tiros a puerta: Feyenoord,False,81.2,1.13,2026-09-13,0-7,True
 2026-09-13 18:00:00,PSV Eindhoven,Sparta Rotterdam,Doble oportunidad 1X + Over 7.5 corners,True,80.9,1.14,2026-09-13,4-1,True
 2026-09-15 18:00:00,Ajax,Willem II,Under 12.5 corners,False,80.0,1.15,2026-09-14,5-1,False
-2026-09-18 18:00:00,Groningen,Zwolle,Under 12.5 corners,False,80.3,1.15,2026-09-17,,
-2026-09-19 14:30:00,Den Haag,Cambuur,Over 1.5 goles + Under 13.5 corners,True,81.7,1.12,2026-09-19,,
-2026-09-19 16:45:00,Sparta Rotterdam,Heerenveen,Over 7.5 corners,False,85.4,1.07,2026-09-19,,
-2026-09-19 18:00:00,Ajax,Excelsior,Over 1.5 goles + Over 5.5 corners,True,80.3,1.15,2026-09-19,,
-2026-09-19 19:00:00,Willem II,For Sittard,Over 6.5 corners,False,81.4,1.13,2026-09-19,,
+2026-09-18 18:00:00,Groningen,Zwolle,Under 12.5 corners,False,80.3,1.15,2026-09-17,3-0,True
+2026-09-19 14:30:00,Den Haag,Cambuur,Over 1.5 goles + Under 13.5 corners,True,81.7,1.12,2026-09-19,1-1,True
+2026-09-19 16:45:00,Sparta Rotterdam,Heerenveen,Over 7.5 corners,False,85.4,1.07,2026-09-19,0-4,True
+2026-09-19 18:00:00,Ajax,Excelsior,Over 1.5 goles + Over 5.5 corners,True,80.3,1.15,2026-09-19,2-2,True
+2026-09-19 19:00:00,Willem II,For Sittard,Over 6.5 corners,False,81.4,1.13,2026-09-19,0-1,True
 2026-09-20 10:15:00,Feyenoord,Utrecht,Hándicap asiático +0.5: Feyenoord,False,80.0,1.15,2026-09-20,5-0,True
 2026-09-20 12:30:00,Twente,PSV Eindhoven,Over 1.5 goles,False,80.3,1.14,2026-09-20,3-2,True
 2026-09-20 12:30:00,AZ Alkmaar,Telstar,Doble oportunidad 1X,False,80.9,1.14,2026-09-20,1-0,True
-2026-09-20 14:45:00,Nijmegen,Go Ahead Eagles,Over 1.5 goles + Over 5.5 corners,True,80.0,1.15,2026-09-20,,
+2026-09-20 14:45:00,Nijmegen,Go Ahead Eagles,Over 1.5 goles + Over 5.5 corners,True,80.0,1.15,2026-09-20,1-1,True

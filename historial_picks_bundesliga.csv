@@ -25,12 +25,12 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-12 16:30:00,FC Koln,Werder Bremen,Over 1.5 goles,False,82.0,1.12,2026-09-12,1-1,True
 2026-09-13 13:30:00,RB Leipzig,Hamburg,Doble oportunidad 1X,False,86.0,1.06,2026-09-13,5-0,True
 2026-09-13 15:30:00,Elversberg,Bayern Munich,Doble oportunidad X2,False,80.5,1.14,2026-09-13,1-2,True
-2026-09-18 18:30:00,Bayern Munich,Union Berlin,Doble oportunidad 1X + Over 6.5 corners,True,80.7,1.14,2026-09-17,,
-2026-09-19 13:30:00,Hamburg,FC Koln,Under 13.5 corners,False,81.7,1.12,2026-09-19,,
-2026-09-19 13:30:00,M'gladbach,Mainz,Under 11.5 corners,False,81.9,1.12,2026-09-19,,
-2026-09-19 13:30:00,Werder Bremen,Augsburg,Under 11.5 corners,False,80.6,1.14,2026-09-19,,
-2026-09-19 13:30:00,Ein Frankfurt,Freiburg,Under 11.5 corners,False,82.3,1.11,2026-09-19,,
+2026-09-18 18:30:00,Bayern Munich,Union Berlin,Doble oportunidad 1X + Over 6.5 corners,True,80.7,1.14,2026-09-17,7-0,True
+2026-09-19 13:30:00,Hamburg,FC Koln,Under 13.5 corners,False,81.7,1.12,2026-09-19,2-1,True
+2026-09-19 13:30:00,M'gladbach,Mainz,Under 11.5 corners,False,81.9,1.12,2026-09-19,3-4,True
+2026-09-19 13:30:00,Werder Bremen,Augsburg,Under 11.5 corners,False,80.6,1.14,2026-09-19,3-2,True
+2026-09-19 13:30:00,Ein Frankfurt,Freiburg,Under 11.5 corners,False,82.3,1.11,2026-09-19,2-2,True
 2026-09-19 16:30:00,Stuttgart,Dortmund,Hándicap asiático +1.5: Stuttgart,False,83.9,1.09,2026-09-19,0-1,True
-2026-09-20 13:30:00,Leverkusen,RB Leipzig,Over 6.5 corners,False,80.2,1.15,2026-09-20,,
-2026-09-20 15:30:00,Schalke 04,Elversberg,Doble oportunidad X2 + Over 9.5 corners,True,80.1,1.15,2026-09-20,,
-2026-09-20 17:30:00,Paderborn,Hoffenheim,Under 13.5 corners,False,81.6,1.13,2026-09-20,,
+2026-09-20 13:30:00,Leverkusen,RB Leipzig,Over 6.5 corners,False,80.2,1.15,2026-09-20,2-0,True
+2026-09-20 15:30:00,Schalke 04,Elversberg,Doble oportunidad X2 + Over 9.5 corners,True,80.1,1.15,2026-09-20,0-0,False
+2026-09-20 17:30:00,Paderborn,Hoffenheim,Under 13.5 corners,False,81.6,1.13,2026-09-20,3-1,True

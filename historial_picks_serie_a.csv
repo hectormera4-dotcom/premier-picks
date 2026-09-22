@@ -29,13 +29,13 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-14 16:30:00,Como,Parma,Over 5.5 corners,False,82.2,1.12,2026-09-14,2-1,True
 2026-09-14 16:30:00,Torino,Roma,Over 5.5 corners,False,80.7,1.14,2026-09-14,0-2,True
 2026-09-14 18:45:00,Inter,Udinese,Over 1.5 goles + Over 5.5 corners,True,81.3,1.13,2026-09-14,5-3,True
-2026-09-18 18:45:00,Monza,Sassuolo,Over 6.5 corners,False,80.8,1.14,2026-09-17,,
-2026-09-19 13:00:00,Bologna,Torino,Under 11.5 corners,False,81.3,1.13,2026-09-19,,
-2026-09-19 13:00:00,Udinese,Cagliari,Over 6.5 corners,False,81.3,1.13,2026-09-19,,
-2026-09-19 16:00:00,Roma,Inter,Under 11.5 corners,False,84.3,1.09,2026-09-19,,
-2026-09-19 18:45:00,Venezia,Lazio,Under 12.5 corners,False,82.3,1.12,2026-09-19,,
-2026-09-20 10:30:00,Fiorentina,Napoli,Over 5.5 corners,False,83.8,1.09,2026-09-20,,
-2026-09-20 13:00:00,Frosinone,Como,Under 12.5 corners,False,80.3,1.15,2026-09-20,,
-2026-09-20 13:00:00,Parma,Genoa,Over 5.5 corners,False,83.6,1.1,2026-09-20,,
-2026-09-20 16:00:00,Juventus,Atalanta,Over 6.5 corners,False,81.8,1.12,2026-09-20,,
+2026-09-18 18:45:00,Monza,Sassuolo,Over 6.5 corners,False,80.8,1.14,2026-09-17,2.0-1.0,True
+2026-09-19 13:00:00,Bologna,Torino,Under 11.5 corners,False,81.3,1.13,2026-09-19,1.0-1.0,True
+2026-09-19 13:00:00,Udinese,Cagliari,Over 6.5 corners,False,81.3,1.13,2026-09-19,0.0-1.0,True
+2026-09-19 16:00:00,Roma,Inter,Under 11.5 corners,False,84.3,1.09,2026-09-19,2.0-2.0,True
+2026-09-19 18:45:00,Venezia,Lazio,Under 12.5 corners,False,82.3,1.12,2026-09-19,0.0-2.0,True
+2026-09-20 10:30:00,Fiorentina,Napoli,Over 5.5 corners,False,83.8,1.09,2026-09-20,1.0-1.0,True
+2026-09-20 13:00:00,Frosinone,Como,Under 12.5 corners,False,80.3,1.15,2026-09-20,2.0-0.0,False
+2026-09-20 13:00:00,Parma,Genoa,Over 5.5 corners,False,83.6,1.1,2026-09-20,2.0-1.0,True
+2026-09-20 16:00:00,Juventus,Atalanta,Over 6.5 corners,False,81.8,1.12,2026-09-20,2.0-0.0,True
 2026-09-20 18:45:00,Milan,Lecce,Doble oportunidad 1X,False,81.5,1.13,2026-09-20,3.0-0.0,True

@@ -21,10 +21,10 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-14 19:45:00,Sp Braga,Estoril,Over 1.5 goles + Under 13.5 corners,True,80.0,1.15,2026-09-14,1-0,False
 2026-09-19 14:30:00,Nacional,Famalicao,Hándicap asiático +1.5: Nacional,False,83.2,1.1,2026-09-19,0.0-4.0,False
 2026-09-19 14:30:00,Gil Vicente,Maritimo,Doble oportunidad 1X,False,80.3,1.14,2026-09-19,1.0-1.0,True
-2026-09-19 17:00:00,Alverca,Rio Ave,Over 5.5 corners,False,82.8,1.11,2026-09-19,,
+2026-09-19 17:00:00,Alverca,Rio Ave,Over 5.5 corners,False,82.8,1.11,2026-09-19,1.0-0.0,True
 2026-09-19 19:30:00,Sp Lisbon,Arouca,Doble oportunidad 1X + Over 1.5 goles,True,80.2,1.15,2026-09-19,2.0-2.0,True
-2026-09-20 14:30:00,Guimaraes,Moreirense,Más corners: Guimaraes,False,81.7,1.12,2026-09-20,,
+2026-09-20 14:30:00,Guimaraes,Moreirense,Más corners: Guimaraes,False,81.7,1.12,2026-09-20,1.0-1.0,True
 2026-09-20 14:30:00,Estrela,Academico Viseu,Over 1.5 goles,False,80.2,1.15,2026-09-20,0.0-2.0,True
-2026-09-20 17:00:00,Santa Clara,Sp Braga,Under 11.5 corners,False,84.6,1.08,2026-09-20,,
-2026-09-20 17:00:00,Estoril,Casa Pia,Over 7.5 corners,False,80.5,1.14,2026-09-20,,
-2026-09-20 19:30:00,Porto,Benfica,Over 6.5 corners,False,80.1,1.15,2026-09-20,,
+2026-09-20 17:00:00,Santa Clara,Sp Braga,Under 11.5 corners,False,84.6,1.08,2026-09-20,0.0-0.0,True
+2026-09-20 17:00:00,Estoril,Casa Pia,Over 7.5 corners,False,80.5,1.14,2026-09-20,1.0-2.0,True
+2026-09-20 19:30:00,Porto,Benfica,Over 6.5 corners,False,80.1,1.15,2026-09-20,3.0-1.0,False
