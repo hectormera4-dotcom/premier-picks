@@ -4,38 +4,38 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-09-20 19:00:00",
-        "local": "Valencia",
-        "visitante": "Sociedad",
-        "escudo_local": "https://crests.football-data.org/95.png",
-        "escudo_visitante": "https://crests.football-data.org/92.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 83.5,
+        "fecha": "2026-10-09 19:00:00",
+        "local": "Malaga",
+        "visitante": "Espanyol",
+        "escudo_local": "https://crests.football-data.org/84.png",
+        "escudo_visitante": "https://crests.football-data.org/80.png",
+        "pick_recomendado": "Hándicap asiático +0.5: Espanyol",
+        "pick_probabilidad": 85.1,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-09-20 18:45:00",
-        "local": "Marseille",
-        "visitante": "Paris SG",
-        "escudo_local": "https://crests.football-data.org/516.png",
-        "escudo_visitante": "https://crests.football-data.org/524.png",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 82.8,
-        "liga": "ligue_1"
+        "fecha": "2026-10-09 19:15:00",
+        "local": "Sp Braga",
+        "visitante": "Sp Lisbon",
+        "escudo_local": "https://crests.football-data.org/5613.png",
+        "escudo_visitante": "https://crests.football-data.org/498.png",
+        "pick_recomendado": "Over 5.5 corners",
+        "pick_probabilidad": 83.0,
+        "liga": "primeira_liga"
       },
       {
-        "fecha": "2026-09-20 15:15:00",
-        "local": "Nice",
-        "visitante": "Lille",
-        "escudo_local": "https://crests.football-data.org/522.png",
-        "escudo_visitante": "https://crests.football-data.org/521.png",
-        "pick_recomendado": "Hándicap asiático +1.5: Nice",
-        "pick_probabilidad": 82.6,
-        "liga": "ligue_1"
+        "fecha": "2026-10-09 19:00:00",
+        "local": "West Ham",
+        "visitante": "QPR",
+        "escudo_local": "https://crests.football-data.org/563.png",
+        "escudo_visitante": "https://crests.football-data.org/69.png",
+        "pick_recomendado": "Over 1.5 goles + Over 6.5 corners",
+        "pick_probabilidad": 82.0,
+        "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 57.1,
-    "cuota_combinada": 1.65,
+    "probabilidad_combinada": 57.9,
+    "cuota_combinada": 1.63,
     "liga": "mixta"
   },
   {
@@ -43,126 +43,38 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-09-20 14:15:00",
-        "local": "Ath Madrid",
-        "visitante": "Real Madrid",
-        "escudo_local": "https://crests.football-data.org/78.png",
-        "escudo_visitante": "https://crests.football-data.org/86.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 85.5,
-        "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-09-20 17:00:00",
-        "local": "Santa Clara",
-        "visitante": "Sp Braga",
-        "escudo_local": "https://crests.football-data.org/5530.png",
-        "escudo_visitante": "https://crests.football-data.org/5613.png",
-        "pick_recomendado": "Under 11.5 corners",
-        "pick_probabilidad": 84.6,
-        "liga": "primeira_liga"
-      },
-      {
-        "fecha": "2026-09-20 10:30:00",
-        "local": "Fiorentina",
-        "visitante": "Napoli",
-        "escudo_local": "https://crests.football-data.org/99.png",
-        "escudo_visitante": "https://crests.football-data.org/113.png",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 83.8,
-        "liga": "serie_a"
-      },
-      {
-        "fecha": "2026-09-20 13:00:00",
-        "local": "Parma",
-        "visitante": "Genoa",
-        "escudo_local": "https://crests.football-data.org/112.png",
-        "escudo_visitante": "https://crests.football-data.org/107.png",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 83.6,
-        "liga": "serie_a"
-      }
-    ],
-    "probabilidad_combinada": 50.7,
-    "cuota_combinada": 1.87,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-09-20 16:30:00",
-        "local": "La Coruna",
-        "visitante": "Betis",
-        "escudo_local": "https://crests.football-data.org/560.png",
-        "escudo_visitante": "https://crests.football-data.org/90.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.4,
-        "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-09-20 13:00:00",
-        "local": "Leeds",
-        "visitante": "Crystal Palace",
-        "escudo_local": "https://crests.football-data.org/341.png",
-        "escudo_visitante": "https://crests.football-data.org/354.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.1,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-09-20 13:00:00",
-        "local": "Bournemouth",
-        "visitante": "Liverpool",
-        "escudo_local": "https://crests.football-data.org/bournemouth.png",
-        "escudo_visitante": "https://crests.football-data.org/64.png",
+        "fecha": "2026-10-09 18:45:00",
+        "local": "Lens",
+        "visitante": "Lyon",
+        "escudo_local": "https://crests.football-data.org/546.png",
+        "escudo_visitante": "https://crests.football-data.org/523.png",
         "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 82.1,
-        "liga": "premier_league"
-      }
-    ],
-    "probabilidad_combinada": 55.5,
-    "cuota_combinada": 1.7,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #4",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-09-20 16:00:00",
-        "local": "Juventus",
-        "visitante": "Atalanta",
-        "escudo_local": "https://crests.football-data.org/109.png",
-        "escudo_visitante": "https://crests.football-data.org/102.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 81.8,
-        "liga": "serie_a"
+        "pick_probabilidad": 80.8,
+        "liga": "ligue_1"
       },
       {
-        "fecha": "2026-09-20 14:30:00",
-        "local": "Guimaraes",
-        "visitante": "Moreirense",
-        "escudo_local": "https://crests.football-data.org/5543.png",
-        "escudo_visitante": "https://crests.football-data.org/583.png",
-        "pick_recomendado": "Más corners: Guimaraes",
-        "pick_probabilidad": 81.7,
+        "fecha": "2026-10-09 17:45:00",
+        "local": "Moreirense",
+        "visitante": "Gil Vicente",
+        "escudo_local": "https://crests.football-data.org/583.png",
+        "escudo_visitante": "https://crests.football-data.org/5533.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 80.7,
         "liga": "primeira_liga"
       },
       {
-        "fecha": "2026-09-20 15:30:00",
-        "local": "Fulham",
-        "visitante": "Man United",
-        "escudo_local": "https://crests.football-data.org/63.png",
-        "escudo_visitante": "https://crests.football-data.org/66.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 81.7,
-        "liga": "premier_league"
+        "fecha": "2026-10-09 18:00:00",
+        "local": "PSV Eindhoven",
+        "visitante": "Heerenveen",
+        "escudo_local": "https://crests.football-data.org/674.png",
+        "escudo_visitante": "https://crests.football-data.org/673.png",
+        "pick_recomendado": "Over 8.5 corners",
+        "pick_probabilidad": 80.5,
+        "liga": "eredivisie"
       }
     ],
-    "probabilidad_combinada": 54.6,
-    "cuota_combinada": 1.73,
+    "probabilidad_combinada": 52.5,
+    "cuota_combinada": 1.81,
     "liga": "mixta"
   }
 ]
