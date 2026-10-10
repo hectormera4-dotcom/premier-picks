@@ -30,3 +30,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-20 12:30:00,AZ Alkmaar,Telstar,Doble oportunidad 1X,False,80.9,1.14,2026-09-20,1-0,True
 2026-09-20 14:45:00,Nijmegen,Go Ahead Eagles,Over 1.5 goles + Over 5.5 corners,True,80.0,1.15,2026-09-20,1-1,True
 2026-10-09 18:00:00,PSV Eindhoven,Heerenveen,Over 8.5 corners,False,80.5,1.14,2026-10-09,,
+2026-10-10 14:30:00,Go Ahead Eagles,Sparta Rotterdam,Over 8.5 corners,False,80.4,1.14,2026-10-10,,
+2026-10-10 16:45:00,Feyenoord,AZ Alkmaar,Más tiros totales: Feyenoord,False,82.5,1.11,2026-10-10,,
+2026-10-10 18:00:00,For Sittard,Twente,Más tiros totales: Twente,False,82.5,1.11,2026-10-10,,
+2026-10-10 19:00:00,Ajax,Nijmegen,Over 1.5 goles,False,80.7,1.14,2026-10-10,,

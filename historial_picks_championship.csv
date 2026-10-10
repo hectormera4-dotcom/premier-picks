@@ -70,3 +70,13 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-20 11:00:00,Wolves,West Brom,Doble oportunidad 1X,False,81.3,1.13,2026-09-20,1.0-0.0,True
 2026-09-20 12:30:00,Norwich,Bolton,Doble oportunidad 1X + Over 6.5 corners,True,80.2,1.15,2026-09-20,3.0-4.0,False
 2026-10-09 19:00:00,West Ham,QPR,Over 1.5 goles + Over 6.5 corners,True,82.0,1.12,2026-10-09,,
+2026-10-10 11:30:00,West Brom,Birmingham,Under 12.5 corners,False,81.9,1.12,2026-10-10,,
+2026-10-10 11:30:00,Swansea,Norwich,Under 12.5 corners,False,81.3,1.13,2026-10-10,,
+2026-10-10 11:30:00,Charlton,Bristol City,Under 12.5 corners,False,82.0,1.12,2026-10-10,,
+2026-10-10 14:00:00,Sheffield United,Lincoln,Hándicap asiático +0.5: Lincoln,False,81.7,1.12,2026-10-10,,
+2026-10-10 14:00:00,Watford,Burnley,Under 11.5 corners,False,83.1,1.1,2026-10-10,,
+2026-10-10 14:00:00,Derby,Wrexham,Under 12.5 corners,False,80.7,1.14,2026-10-10,,
+2026-10-10 14:00:00,Blackburn,Cardiff,Under 13.5 corners,False,86.6,1.05,2026-10-10,,
+2026-10-10 14:00:00,Bolton,Stoke,Over 7.5 corners,False,86.6,1.05,2026-10-10,,
+2026-10-10 14:00:00,Preston,Millwall,Hándicap asiático +1.5: Preston,False,82.4,1.11,2026-10-10,,
+2026-10-10 14:00:00,Middlesbrough,Wolves,Over 1.5 goles + Over 5.5 corners,True,80.4,1.14,2026-10-10,,
