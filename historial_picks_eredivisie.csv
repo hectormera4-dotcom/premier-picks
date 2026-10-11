@@ -33,4 +33,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-10 14:30:00,Go Ahead Eagles,Sparta Rotterdam,Over 8.5 corners,False,80.4,1.14,2026-10-10,,
 2026-10-10 16:45:00,Feyenoord,AZ Alkmaar,Más tiros totales: Feyenoord,False,82.5,1.11,2026-10-10,,
 2026-10-10 18:00:00,For Sittard,Twente,Más tiros totales: Twente,False,82.5,1.11,2026-10-10,,
-2026-10-10 19:00:00,Ajax,Nijmegen,Over 1.5 goles,False,80.7,1.14,2026-10-10,,
+2026-10-10 19:00:00,Ajax,Nijmegen,Over 1.5 goles,False,80.7,1.14,2026-10-10,1-1,True
+2026-10-11 10:15:00,Utrecht,Willem II,Over 7.5 corners,False,81.6,1.13,2026-10-11,,
+2026-10-11 12:30:00,Zwolle,Cambuur,Under 13.5 corners,False,86.3,1.06,2026-10-11,,
+2026-10-11 12:30:00,Telstar,Den Haag,Doble oportunidad 1X,False,80.7,1.14,2026-10-11,,
+2026-10-11 14:45:00,Excelsior,Groningen,Under 11.5 corners,False,83.6,1.1,2026-10-11,,
