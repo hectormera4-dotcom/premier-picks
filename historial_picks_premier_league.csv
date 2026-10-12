@@ -56,5 +56,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-10 14:00:00,Aston Villa,Brentford,Más tiros totales: Aston Villa,False,83.9,1.09,2026-10-10,,
 2026-10-10 16:30:00,Man United,Tottenham,Over 1.5 goles,False,80.1,1.15,2026-10-10,1.0-1.0,True
 2026-10-11 13:00:00,Hull,Everton,Ambos anotan - No + Under 11.5 corners,True,80.4,1.14,2026-10-11,,
-2026-10-11 13:00:00,Crystal Palace,Nott'm Forest,Hándicap asiático +1.5: Crystal Palace,False,80.5,1.14,2026-10-11,,
+2026-10-11 13:00:00,Crystal Palace,Nott'm Forest,Hándicap asiático +1.5: Crystal Palace,False,80.5,1.14,2026-10-11,3.0-1.0,True
 2026-10-11 15:30:00,Liverpool,Man City,Over 7.5 corners,False,80.4,1.14,2026-10-11,,
+2026-10-12 19:00:00,Coventry,Newcastle,Under 10.5 corners,False,80.1,1.15,2026-10-12,,

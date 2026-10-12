@@ -4,38 +4,28 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-11 13:00:00",
-        "local": "Lazio",
-        "visitante": "Monza",
-        "escudo_local": "https://crests.football-data.org/110.png",
-        "escudo_visitante": "https://crests.football-data.org/5911.png",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 82.7,
+        "fecha": "2026-10-12 16:30:00",
+        "local": "Atalanta",
+        "visitante": "Venezia",
+        "escudo_local": "https://crests.football-data.org/102.png",
+        "escudo_visitante": "https://crests.football-data.org/454.png",
+        "pick_recomendado": "Doble oportunidad 1X + Over 5.5 corners",
+        "pick_probabilidad": 80.2,
         "liga": "serie_a"
       },
       {
-        "fecha": "2026-10-11 19:00:00",
-        "local": "Santander",
-        "visitante": "Valencia",
-        "escudo_local": "https://crests.football-data.org/5335.png",
-        "escudo_visitante": "https://crests.football-data.org/95.png",
-        "pick_recomendado": "Over 1.5 goles + Over 7.5 corners",
-        "pick_probabilidad": 82.5,
-        "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-10-11 18:45:00",
-        "local": "Cagliari",
-        "visitante": "Juventus",
-        "escudo_local": "https://crests.football-data.org/104.png",
-        "escudo_visitante": "https://crests.football-data.org/109.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 82.2,
-        "liga": "serie_a"
+        "fecha": "2026-10-12 19:00:00",
+        "local": "Coventry",
+        "visitante": "Newcastle",
+        "escudo_local": "https://crests.football-data.org/1076.png",
+        "escudo_visitante": "https://crests.football-data.org/67.png",
+        "pick_recomendado": "Under 10.5 corners",
+        "pick_probabilidad": 80.1,
+        "liga": "premier_league"
       }
     ],
-    "probabilidad_combinada": 56.1,
-    "cuota_combinada": 1.68,
+    "probabilidad_combinada": 64.2,
+    "cuota_combinada": 1.46,
     "liga": "mixta"
   },
   {
@@ -43,126 +33,38 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-10-11 19:30:00",
-        "local": "Arouca",
-        "visitante": "Estrela",
-        "escudo_local": "https://crests.football-data.org/712.png",
-        "escudo_visitante": "https://crests.football-data.org/9136.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 87.2,
+        "fecha": "2026-10-12 19:15:00",
+        "local": "Famalicao",
+        "visitante": "Alverca",
+        "escudo_local": "https://crests.football-data.org/5531.png",
+        "escudo_visitante": "https://crests.football-data.org/7822.png",
+        "pick_recomendado": "Hándicap asiático +0.5: Famalicao",
+        "pick_probabilidad": 82.9,
         "liga": "primeira_liga"
       },
       {
-        "fecha": "2026-10-11 12:30:00",
-        "local": "Zwolle",
-        "visitante": "Cambuur",
-        "escudo_local": "https://crests.football-data.org/684.png",
-        "escudo_visitante": "https://crests.football-data.org/1909.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 86.3,
-        "liga": "eredivisie"
-      },
-      {
-        "fecha": "2026-10-11 14:45:00",
-        "local": "Excelsior",
-        "visitante": "Groningen",
-        "escudo_local": "https://crests.football-data.org/670.png",
-        "escudo_visitante": "https://crests.football-data.org/677.png",
-        "pick_recomendado": "Under 11.5 corners",
-        "pick_probabilidad": 83.6,
-        "liga": "eredivisie"
-      },
-      {
-        "fecha": "2026-10-11 13:00:00",
-        "local": "Lecce",
-        "visitante": "Bologna",
-        "escudo_local": "https://crests.football-data.org/5890.png",
-        "escudo_visitante": "https://crests.football-data.org/103.png",
-        "pick_recomendado": "Hándicap asiático +0.5: Bologna",
-        "pick_probabilidad": 83.0,
+        "fecha": "2026-10-12 18:45:00",
+        "local": "Torino",
+        "visitante": "Udinese",
+        "escudo_local": "https://crests.football-data.org/586.png",
+        "escudo_visitante": "https://crests.football-data.org/115.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 82.6,
         "liga": "serie_a"
-      }
-    ],
-    "probabilidad_combinada": 52.2,
-    "cuota_combinada": 1.82,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
+      },
       {
-        "fecha": "2026-10-11 14:15:00",
-        "local": "Sociedad",
-        "visitante": "La Coruna",
-        "escudo_local": "https://crests.football-data.org/92.png",
-        "escudo_visitante": "https://crests.football-data.org/560.png",
-        "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 82.0,
+        "fecha": "2026-10-12 19:00:00",
+        "local": "Levante",
+        "visitante": "Sevilla",
+        "escudo_local": "https://crests.football-data.org/88.png",
+        "escudo_visitante": "https://crests.football-data.org/559.png",
+        "pick_recomendado": "Hándicap asiático +1.5: Levante",
+        "pick_probabilidad": 81.4,
         "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-10-11 10:15:00",
-        "local": "Utrecht",
-        "visitante": "Willem II",
-        "escudo_local": "https://crests.football-data.org/676.png",
-        "escudo_visitante": "https://crests.football-data.org/672.png",
-        "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 81.6,
-        "liga": "eredivisie"
-      },
-      {
-        "fecha": "2026-10-11 17:00:00",
-        "local": "Benfica",
-        "visitante": "Guimaraes",
-        "escudo_local": "https://crests.football-data.org/1903.png",
-        "escudo_visitante": "https://crests.football-data.org/5543.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 81.3,
-        "liga": "primeira_liga"
       }
     ],
-    "probabilidad_combinada": 54.4,
-    "cuota_combinada": 1.74,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #4",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-10-11 14:30:00",
-        "local": "Rio Ave",
-        "visitante": "Nacional",
-        "escudo_local": "https://crests.football-data.org/496.png",
-        "escudo_visitante": "https://crests.football-data.org/5529.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 81.1,
-        "liga": "primeira_liga"
-      },
-      {
-        "fecha": "2026-10-11 15:30:00",
-        "local": "Freiburg",
-        "visitante": "Schalke 04",
-        "escudo_local": "https://crests.football-data.org/17.png",
-        "escudo_visitante": "https://crests.football-data.org/6.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 80.9,
-        "liga": "bundesliga"
-      },
-      {
-        "fecha": "2026-10-11 16:00:00",
-        "local": "Sassuolo",
-        "visitante": "Milan",
-        "escudo_local": "https://crests.football-data.org/471.png",
-        "escudo_visitante": "https://crests.football-data.org/98.png",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 80.7,
-        "liga": "serie_a"
-      }
-    ],
-    "probabilidad_combinada": 52.9,
-    "cuota_combinada": 1.79,
+    "probabilidad_combinada": 55.7,
+    "cuota_combinada": 1.69,
     "liga": "mixta"
   }
 ]

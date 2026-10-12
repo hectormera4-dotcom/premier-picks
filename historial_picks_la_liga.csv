@@ -59,5 +59,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-10 19:00:00,Real Madrid,Villarreal,Over 1.5 goles,False,80.8,1.14,2026-10-10,1-0,False
 2026-10-11 12:00:00,Elche,Celta,Under 10.5 corners,False,80.6,1.14,2026-10-11,,
 2026-10-11 14:15:00,Sociedad,La Coruna,Over 7.5 corners,False,82.0,1.12,2026-10-11,,
-2026-10-11 16:30:00,Betis,Osasuna,Doble oportunidad 1X,False,80.4,1.14,2026-10-11,,
+2026-10-11 16:30:00,Betis,Osasuna,Doble oportunidad 1X,False,80.4,1.14,2026-10-11,5-2,True
 2026-10-11 19:00:00,Santander,Valencia,Over 1.5 goles + Over 7.5 corners,True,82.5,1.11,2026-10-11,,
+2026-10-12 19:00:00,Levante,Sevilla,Hándicap asiático +1.5: Levante,False,81.4,1.13,2026-10-12,,
