@@ -4,67 +4,87 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-12 16:30:00",
-        "local": "Atalanta",
-        "visitante": "Venezia",
-        "escudo_local": "https://crests.football-data.org/102.png",
-        "escudo_visitante": "https://crests.football-data.org/454.png",
-        "pick_recomendado": "Doble oportunidad 1X + Over 5.5 corners",
-        "pick_probabilidad": 80.2,
-        "liga": "serie_a"
+        "fecha": "2026-10-13 18:45:00",
+        "local": "Millwall",
+        "visitante": "Swansea",
+        "escudo_local": "https://crests.football-data.org/384.png",
+        "escudo_visitante": "https://crests.football-data.org/72.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 80.9,
+        "liga": "championship"
       },
       {
-        "fecha": "2026-10-12 19:00:00",
-        "local": "Coventry",
-        "visitante": "Newcastle",
-        "escudo_local": "https://crests.football-data.org/1076.png",
-        "escudo_visitante": "https://crests.football-data.org/67.png",
-        "pick_recomendado": "Under 10.5 corners",
-        "pick_probabilidad": 80.1,
-        "liga": "premier_league"
+        "fecha": "2026-10-13 19:00:00",
+        "local": "Stoke",
+        "visitante": "Middlesbrough",
+        "escudo_local": "https://crests.football-data.org/70.png",
+        "escudo_visitante": "https://crests.football-data.org/343.png",
+        "pick_recomendado": "Hándicap asiático +1.5: Stoke",
+        "pick_probabilidad": 80.8,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-10-13 18:45:00",
+        "local": "Wolves",
+        "visitante": "Bolton",
+        "escudo_local": "https://crests.football-data.org/76.png",
+        "escudo_visitante": "https://crests.football-data.org/60.png",
+        "pick_recomendado": "Over 1.5 goles + Over 6.5 corners",
+        "pick_probabilidad": 80.6,
+        "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 64.2,
-    "cuota_combinada": 1.46,
-    "liga": "mixta"
+    "probabilidad_combinada": 52.7,
+    "cuota_combinada": 1.8,
+    "liga": "championship"
   },
   {
     "nombre": "Combinada #2",
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-10-12 19:15:00",
-        "local": "Famalicao",
-        "visitante": "Alverca",
-        "escudo_local": "https://crests.football-data.org/5531.png",
-        "escudo_visitante": "https://crests.football-data.org/7822.png",
-        "pick_recomendado": "Hándicap asiático +0.5: Famalicao",
-        "pick_probabilidad": 82.9,
-        "liga": "primeira_liga"
+        "fecha": "2026-10-13 18:45:00",
+        "local": "Bristol City",
+        "visitante": "Blackburn",
+        "escudo_local": "https://crests.football-data.org/387.png",
+        "escudo_visitante": "https://crests.football-data.org/59.png",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 86.1,
+        "liga": "championship"
       },
       {
-        "fecha": "2026-10-12 18:45:00",
-        "local": "Torino",
-        "visitante": "Udinese",
-        "escudo_local": "https://crests.football-data.org/586.png",
-        "escudo_visitante": "https://crests.football-data.org/115.png",
+        "fecha": "2026-10-13 19:00:00",
+        "local": "Birmingham",
+        "visitante": "Preston",
+        "escudo_local": "https://crests.football-data.org/332.png",
+        "escudo_visitante": "https://crests.football-data.org/1081.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 83.4,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-10-13 18:45:00",
+        "local": "Cardiff",
+        "visitante": "Watford",
+        "escudo_local": "https://crests.football-data.org/715.png",
+        "escudo_visitante": "https://crests.football-data.org/346.png",
         "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.6,
-        "liga": "serie_a"
+        "pick_probabilidad": 82.0,
+        "liga": "championship"
       },
       {
-        "fecha": "2026-10-12 19:00:00",
-        "local": "Levante",
-        "visitante": "Sevilla",
-        "escudo_local": "https://crests.football-data.org/88.png",
-        "escudo_visitante": "https://crests.football-data.org/559.png",
-        "pick_recomendado": "Hándicap asiático +1.5: Levante",
-        "pick_probabilidad": 81.4,
-        "liga": "la_liga"
+        "fecha": "2026-10-13 18:45:00",
+        "local": "Wrexham",
+        "visitante": "West Brom",
+        "escudo_local": "https://crests.football-data.org/404.png",
+        "escudo_visitante": "https://crests.football-data.org/74.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 81.8,
+        "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 55.7,
-    "cuota_combinada": 1.69,
-    "liga": "mixta"
+    "probabilidad_combinada": 48.2,
+    "cuota_combinada": 1.98,
+    "liga": "championship"
   }
 ]

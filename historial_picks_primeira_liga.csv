@@ -28,12 +28,12 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-09-20 17:00:00,Santa Clara,Sp Braga,Under 11.5 corners,False,84.6,1.08,2026-09-20,0.0-0.0,True
 2026-09-20 17:00:00,Estoril,Casa Pia,Over 7.5 corners,False,80.5,1.14,2026-09-20,1.0-2.0,True
 2026-09-20 19:30:00,Porto,Benfica,Over 6.5 corners,False,80.1,1.15,2026-09-20,3.0-1.0,False
-2026-10-09 17:45:00,Moreirense,Gil Vicente,Over 6.5 corners,False,80.7,1.14,2026-10-09,,
-2026-10-09 19:15:00,Sp Braga,Sp Lisbon,Over 5.5 corners,False,83.0,1.1,2026-10-09,,
-2026-10-10 14:30:00,Casa Pia,Santa Clara,Under 11.5 corners,False,82.0,1.12,2026-10-10,,
-2026-10-10 17:00:00,Maritimo,Porto,Over 6.5 corners,False,82.7,1.11,2026-10-10,,
-2026-10-10 19:30:00,Academico Viseu,Estoril,Under 8.5 corners,False,80.5,1.14,2026-10-10,,
-2026-10-11 14:30:00,Rio Ave,Nacional,Under 13.5 corners,False,81.1,1.13,2026-10-11,,
-2026-10-11 17:00:00,Benfica,Guimaraes,Under 12.5 corners,False,81.3,1.13,2026-10-11,,
-2026-10-11 19:30:00,Arouca,Estrela,Under 12.5 corners,False,87.2,1.05,2026-10-11,,
-2026-10-12 19:15:00,Famalicao,Alverca,Hándicap asiático +0.5: Famalicao,False,82.9,1.11,2026-10-12,,
+2026-10-09 17:45:00,Moreirense,Gil Vicente,Over 6.5 corners,False,80.7,1.14,2026-10-09,0.0-1.0,True
+2026-10-09 19:15:00,Sp Braga,Sp Lisbon,Over 5.5 corners,False,83.0,1.1,2026-10-09,1.0-3.0,True
+2026-10-10 14:30:00,Casa Pia,Santa Clara,Under 11.5 corners,False,82.0,1.12,2026-10-10,0.0-1.0,True
+2026-10-10 17:00:00,Maritimo,Porto,Over 6.5 corners,False,82.7,1.11,2026-10-10,1.0-2.0,True
+2026-10-10 19:30:00,Academico Viseu,Estoril,Under 8.5 corners,False,80.5,1.14,2026-10-10,2.0-1.0,True
+2026-10-11 14:30:00,Rio Ave,Nacional,Under 13.5 corners,False,81.1,1.13,2026-10-11,3.0-2.0,False
+2026-10-11 17:00:00,Benfica,Guimaraes,Under 12.5 corners,False,81.3,1.13,2026-10-11,2.0-0.0,False
+2026-10-11 19:30:00,Arouca,Estrela,Under 12.5 corners,False,87.2,1.05,2026-10-11,1.0-0.0,True
+2026-10-12 19:15:00,Famalicao,Alverca,Hándicap asiático +0.5: Famalicao,False,82.9,1.11,2026-10-12,1.0-4.0,False
