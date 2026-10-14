@@ -88,4 +88,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-13 18:45:00,Burnley,Charlton,Doble oportunidad 1X + Más corners: Burnley,True,80.3,1.14,2026-10-13,,
 2026-10-13 18:45:00,Bristol City,Blackburn,Under 13.5 corners,False,86.1,1.06,2026-10-13,,
 2026-10-13 19:00:00,Birmingham,Preston,Over 6.5 corners,False,83.4,1.1,2026-10-13,,
-2026-10-13 19:00:00,Stoke,Middlesbrough,Hándicap asiático +1.5: Stoke,False,80.8,1.14,2026-10-13,,
+2026-10-13 19:00:00,Stoke,Middlesbrough,Hándicap asiático +1.5: Stoke,False,80.8,1.14,2026-10-13,2.0-3.0,True
+2026-10-14 18:45:00,Portsmouth,Sheffield United,Over 8.5 corners,False,81.4,1.13,2026-10-14,,
+2026-10-14 18:45:00,Norwich,Southampton,Over 1.5 goles + Over 5.5 corners,True,80.3,1.15,2026-10-14,,
+2026-10-14 18:45:00,QPR,Derby,Under 12.5 corners,False,81.1,1.13,2026-10-14,,
+2026-10-14 19:00:00,Lincoln,West Ham,Doble oportunidad X2 + Over 5.5 corners,True,81.3,1.13,2026-10-14,,
