@@ -4,38 +4,77 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-14 18:45:00",
-        "local": "Portsmouth",
-        "visitante": "Sheffield United",
-        "escudo_local": "https://crests.football-data.org/325.png",
-        "escudo_visitante": "https://crests.football-data.org/356.png",
-        "pick_recomendado": "Over 8.5 corners",
-        "pick_probabilidad": 81.4,
-        "liga": "championship"
+        "fecha": "2026-10-16 19:00:00",
+        "local": "La Coruna",
+        "visitante": "Levante",
+        "escudo_local": "https://crests.football-data.org/560.png",
+        "escudo_visitante": "https://crests.football-data.org/88.png",
+        "pick_recomendado": "Over 7.5 corners",
+        "pick_probabilidad": 86.8,
+        "liga": "la_liga"
       },
       {
-        "fecha": "2026-10-14 19:00:00",
-        "local": "Lincoln",
-        "visitante": "West Ham",
-        "escudo_local": "https://crests.football-data.org/1126.png",
-        "escudo_visitante": "https://crests.football-data.org/563.png",
-        "pick_recomendado": "Doble oportunidad X2 + Over 5.5 corners",
-        "pick_probabilidad": 81.3,
-        "liga": "championship"
+        "fecha": "2026-10-16 18:00:00",
+        "local": "Heerenveen",
+        "visitante": "Excelsior",
+        "escudo_local": "https://crests.football-data.org/673.png",
+        "escudo_visitante": "https://crests.football-data.org/670.png",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 82.0,
+        "liga": "eredivisie"
       },
       {
-        "fecha": "2026-10-14 18:45:00",
-        "local": "QPR",
-        "visitante": "Derby",
-        "escudo_local": "https://crests.football-data.org/69.png",
-        "escudo_visitante": "https://crests.football-data.org/342.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 81.1,
-        "liga": "championship"
+        "fecha": "2026-10-16 18:30:00",
+        "local": "Ein Frankfurt",
+        "visitante": "FC Koln",
+        "escudo_local": "https://crests.football-data.org/19.png",
+        "escudo_visitante": "https://crests.football-data.org/1.png",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 80.3,
+        "liga": "bundesliga"
       }
     ],
-    "probabilidad_combinada": 53.7,
-    "cuota_combinada": 1.76,
-    "liga": "championship"
+    "probabilidad_combinada": 57.2,
+    "cuota_combinada": 1.65,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-10-16 18:45:00",
+        "local": "Le Mans",
+        "visitante": "Toulouse",
+        "escudo_local": "https://crests.football-data.org/535.png",
+        "escudo_visitante": "https://crests.football-data.org/511.png",
+        "pick_recomendado": "Más tiros totales: Toulouse",
+        "pick_probabilidad": 80.3,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-10-16 19:00:00",
+        "local": "Burnley",
+        "visitante": "Wolves",
+        "escudo_local": "https://crests.football-data.org/328.png",
+        "escudo_visitante": "https://crests.football-data.org/76.png",
+        "pick_recomendado": "Hándicap asiático +0.5: Burnley",
+        "pick_probabilidad": 80.3,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-10-16 18:45:00",
+        "local": "Frosinone",
+        "visitante": "Sassuolo",
+        "escudo_local": "https://crests.football-data.org/470.png",
+        "escudo_visitante": "https://crests.football-data.org/471.png",
+        "pick_recomendado": "Over 1.5 goles + Over 5.5 corners",
+        "pick_probabilidad": 80.2,
+        "liga": "serie_a"
+      }
+    ],
+    "probabilidad_combinada": 51.7,
+    "cuota_combinada": 1.83,
+    "liga": "mixta"
   }
 ]
