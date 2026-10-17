@@ -93,4 +93,15 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-14 18:45:00,Norwich,Southampton,Over 1.5 goles + Over 5.5 corners,True,80.3,1.15,2026-10-14,0.0-1.0,False
 2026-10-14 18:45:00,QPR,Derby,Under 12.5 corners,False,81.1,1.13,2026-10-14,4.0-1.0,True
 2026-10-14 19:00:00,Lincoln,West Ham,Doble oportunidad X2 + Over 5.5 corners,True,81.3,1.13,2026-10-14,0.0-6.0,True
-2026-10-16 19:00:00,Burnley,Wolves,Hándicap asiático +0.5: Burnley,False,80.3,1.15,2026-10-16,,
+2026-10-16 19:00:00,Burnley,Wolves,Hándicap asiático +0.5: Burnley,False,80.3,1.15,2026-10-16,1.0-2.0,False
+2026-10-17 11:30:00,Millwall,Lincoln,Under 2.5 goles,False,81.7,1.12,2026-10-17,,
+2026-10-17 11:30:00,Middlesbrough,Cardiff,Doble oportunidad 1X,False,81.1,1.13,2026-10-17,,
+2026-10-17 11:30:00,Watford,Charlton,Más corners: Watford,False,82.7,1.11,2026-10-17,,
+2026-10-17 14:00:00,Norwich,Portsmouth,Hándicap asiático +0.5: Norwich,False,80.5,1.14,2026-10-17,,
+2026-10-17 14:00:00,Southampton,Bolton,Doble oportunidad 1X + Over 5.5 corners,True,80.7,1.14,2026-10-17,,
+2026-10-17 14:00:00,Bristol City,Sheffield United,Hándicap asiático +1.5: Bristol City,False,84.6,1.08,2026-10-17,,
+2026-10-17 14:00:00,Birmingham,QPR,Over 7.5 corners,False,82.1,1.12,2026-10-17,,
+2026-10-17 14:00:00,Derby,Stoke,Under 13.5 corners,False,82.2,1.12,2026-10-17,,
+2026-10-17 14:00:00,Swansea,West Ham,Over 1.5 goles + Más corners: West Ham,True,81.6,1.13,2026-10-17,,
+2026-10-17 14:00:00,West Brom,Blackburn,Over 7.5 corners,False,80.8,1.14,2026-10-17,,
+2026-10-17 14:00:00,Wrexham,Preston,Under 11.5 corners,False,82.4,1.11,2026-10-17,,

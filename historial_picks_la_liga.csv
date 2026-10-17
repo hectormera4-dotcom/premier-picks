@@ -63,3 +63,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-11 19:00:00,Santander,Valencia,Over 1.5 goles + Over 7.5 corners,True,82.5,1.11,2026-10-11,2-2,True
 2026-10-12 19:00:00,Levante,Sevilla,Hándicap asiático +1.5: Levante,False,81.4,1.13,2026-10-12,3-3,True
 2026-10-16 19:00:00,La Coruna,Levante,Over 7.5 corners,False,86.8,1.05,2026-10-16,,
+2026-10-17 12:00:00,Espanyol,Ath Madrid,Hándicap asiático +1.5: Ath Madrid,False,92.2,1.01,2026-10-17,,
+2026-10-17 14:15:00,Villarreal,Elche,Over 6.5 corners,False,81.7,1.12,2026-10-17,,
+2026-10-17 16:30:00,Betis,Barcelona,Over 1.5 goles,False,81.0,1.14,2026-10-17,,
+2026-10-17 19:00:00,Valencia,Ath Bilbao,Under 12.5 corners,False,82.2,1.12,2026-10-17,,

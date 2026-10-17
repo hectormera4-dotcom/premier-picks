@@ -38,4 +38,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-11 12:30:00,Zwolle,Cambuur,Under 13.5 corners,False,86.3,1.06,2026-10-11,0-1,True
 2026-10-11 12:30:00,Telstar,Den Haag,Doble oportunidad 1X,False,80.7,1.14,2026-10-11,2-2,True
 2026-10-11 14:45:00,Excelsior,Groningen,Under 11.5 corners,False,83.6,1.1,2026-10-11,1-5,True
-2026-10-16 18:00:00,Heerenveen,Excelsior,Over 1.5 goles,False,82.0,1.12,2026-10-16,,
+2026-10-16 18:00:00,Heerenveen,Excelsior,Over 1.5 goles,False,82.0,1.12,2026-10-16,4-0,True
+2026-10-17 14:30:00,Den Haag,PSV Eindhoven,Doble oportunidad X2 + Over 2.5 goles,True,80.3,1.14,2026-10-17,,
+2026-10-17 18:00:00,Telstar,Feyenoord,Doble oportunidad X2 + Over 5.5 corners,True,80.8,1.14,2026-10-17,,
+2026-10-17 19:00:00,Sparta Rotterdam,Willem II,Under 13.5 corners,False,82.0,1.12,2026-10-17,,
