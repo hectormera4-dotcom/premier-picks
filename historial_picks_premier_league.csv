@@ -59,8 +59,12 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-11 13:00:00,Crystal Palace,Nott'm Forest,Hándicap asiático +1.5: Crystal Palace,False,80.5,1.14,2026-10-11,3.0-1.0,True
 2026-10-11 15:30:00,Liverpool,Man City,Over 7.5 corners,False,80.4,1.14,2026-10-11,0.0-3.0,True
 2026-10-12 19:00:00,Coventry,Newcastle,Under 10.5 corners,False,80.1,1.15,2026-10-12,4.0-1.0,True
-2026-10-17 11:30:00,Everton,Chelsea,Hándicap asiático +1.5: Everton,False,81.2,1.13,2026-10-17,,
+2026-10-17 11:30:00,Everton,Chelsea,Hándicap asiático +1.5: Everton,False,81.2,1.13,2026-10-17,0.0-2.0,False
 2026-10-17 14:00:00,Fulham,Hull,Over 8.5 corners,False,81.1,1.13,2026-10-17,,
 2026-10-17 14:00:00,Man City,Ipswich,Doble oportunidad 1X + Over 7.5 corners,True,80.1,1.15,2026-10-17,,
 2026-10-17 14:00:00,Brentford,Liverpool,Más corners: Liverpool,False,82.2,1.12,2026-10-17,,
-2026-10-17 16:30:00,Newcastle,Aston Villa,Over 1.5 goles,False,80.1,1.15,2026-10-17,,
+2026-10-17 16:30:00,Newcastle,Aston Villa,Over 1.5 goles,False,80.1,1.15,2026-10-17,0.0-1.0,False
+2026-10-18 13:00:00,Bournemouth,Sunderland,Under 13.5 corners,False,90.0,1.01,2026-10-18,,
+2026-10-18 13:00:00,Leeds,Man United,Hándicap asiático +1.5: Leeds,False,85.2,1.07,2026-10-18,,
+2026-10-18 13:00:00,Brighton,Crystal Palace,Under 13.5 corners,False,90.2,1.01,2026-10-18,,
+2026-10-18 15:30:00,Nott'm Forest,Arsenal,Under 12.5 corners,False,86.7,1.05,2026-10-18,,

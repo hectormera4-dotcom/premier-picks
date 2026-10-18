@@ -4,38 +4,58 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-17 14:00:00",
-        "local": "Wrexham",
-        "visitante": "Preston",
-        "escudo_local": "https://crests.football-data.org/404.png",
-        "escudo_visitante": "https://crests.football-data.org/1081.png",
-        "pick_recomendado": "Under 11.5 corners",
-        "pick_probabilidad": 82.4,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-10-17 19:00:00",
-        "local": "Valencia",
-        "visitante": "Ath Bilbao",
-        "escudo_local": "https://crests.football-data.org/95.png",
-        "escudo_visitante": "https://crests.football-data.org/77.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.2,
+        "fecha": "2026-10-18 16:30:00",
+        "local": "Malaga",
+        "visitante": "Sociedad",
+        "escudo_local": "https://crests.football-data.org/84.png",
+        "escudo_visitante": "https://crests.football-data.org/92.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 91.5,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-10-17 14:00:00",
-        "local": "Brentford",
-        "visitante": "Liverpool",
-        "escudo_local": "https://crests.football-data.org/402.png",
-        "escudo_visitante": "https://crests.football-data.org/64.png",
-        "pick_recomendado": "Más corners: Liverpool",
-        "pick_probabilidad": 82.2,
+        "fecha": "2026-10-18 10:30:00",
+        "local": "Udinese",
+        "visitante": "Lecce",
+        "escudo_local": "https://crests.football-data.org/115.png",
+        "escudo_visitante": "https://crests.football-data.org/5890.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 90.5,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-10-18 18:45:00",
+        "local": "Lyon",
+        "visitante": "Nice",
+        "escudo_local": "https://crests.football-data.org/523.png",
+        "escudo_visitante": "https://crests.football-data.org/522.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 90.4,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-10-18 13:00:00",
+        "local": "Brighton",
+        "visitante": "Crystal Palace",
+        "escudo_local": "https://crests.football-data.org/397.png",
+        "escudo_visitante": "https://crests.football-data.org/354.png",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 90.2,
+        "liga": "premier_league"
+      },
+      {
+        "fecha": "2026-10-18 13:00:00",
+        "local": "Bournemouth",
+        "visitante": "Sunderland",
+        "escudo_local": "https://crests.football-data.org/bournemouth.png",
+        "escudo_visitante": "https://crests.football-data.org/71.png",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 90.0,
         "liga": "premier_league"
       }
     ],
-    "probabilidad_combinada": 55.7,
-    "cuota_combinada": 1.7,
+    "probabilidad_combinada": 60.8,
+    "cuota_combinada": 1.55,
     "liga": "mixta"
   },
   {
@@ -43,48 +63,48 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-10-17 12:00:00",
-        "local": "Espanyol",
-        "visitante": "Ath Madrid",
-        "escudo_local": "https://crests.football-data.org/80.png",
-        "escudo_visitante": "https://crests.football-data.org/78.png",
-        "pick_recomendado": "Hándicap asiático +1.5: Ath Madrid",
-        "pick_probabilidad": 92.2,
+        "fecha": "2026-10-18 12:30:00",
+        "local": "Cambuur",
+        "visitante": "AZ Alkmaar",
+        "escudo_local": "https://crests.football-data.org/1909.png",
+        "escudo_visitante": "https://crests.football-data.org/682.png",
+        "pick_recomendado": "Más corners: AZ Alkmaar",
+        "pick_probabilidad": 87.5,
+        "liga": "eredivisie"
+      },
+      {
+        "fecha": "2026-10-18 18:00:00",
+        "local": "Twente",
+        "visitante": "Utrecht",
+        "escudo_local": "https://crests.football-data.org/666.png",
+        "escudo_visitante": "https://crests.football-data.org/676.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 87.4,
+        "liga": "eredivisie"
+      },
+      {
+        "fecha": "2026-10-18 14:15:00",
+        "local": "Celta",
+        "visitante": "Alaves",
+        "escudo_local": "https://crests.football-data.org/558.png",
+        "escudo_visitante": "https://crests.football-data.org/263.png",
+        "pick_recomendado": "Under 11.5 corners",
+        "pick_probabilidad": 87.2,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-10-17 14:00:00",
-        "local": "Bristol City",
-        "visitante": "Sheffield United",
-        "escudo_local": "https://crests.football-data.org/387.png",
-        "escudo_visitante": "https://crests.football-data.org/356.png",
-        "pick_recomendado": "Hándicap asiático +1.5: Bristol City",
-        "pick_probabilidad": 84.6,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-10-17 13:30:00",
-        "local": "Schalke 04",
-        "visitante": "Mainz",
-        "escudo_local": "https://crests.football-data.org/6.png",
-        "escudo_visitante": "https://crests.football-data.org/15.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.8,
-        "liga": "bundesliga"
-      },
-      {
-        "fecha": "2026-10-17 11:30:00",
-        "local": "Watford",
-        "visitante": "Charlton",
-        "escudo_local": "https://crests.football-data.org/346.png",
-        "escudo_visitante": "https://crests.football-data.org/348.png",
-        "pick_recomendado": "Más corners: Watford",
-        "pick_probabilidad": 82.7,
-        "liga": "championship"
+        "fecha": "2026-10-18 10:15:00",
+        "local": "Zwolle",
+        "visitante": "Go Ahead Eagles",
+        "escudo_local": "https://crests.football-data.org/684.png",
+        "escudo_visitante": "https://crests.football-data.org/718.png",
+        "pick_recomendado": "Hándicap asiático +1.5: Go Ahead Eagles",
+        "pick_probabilidad": 87.0,
+        "liga": "eredivisie"
       }
     ],
-    "probabilidad_combinada": 53.4,
-    "cuota_combinada": 1.77,
+    "probabilidad_combinada": 58.0,
+    "cuota_combinada": 1.62,
     "liga": "mixta"
   },
   {
@@ -92,38 +112,48 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-10-17 14:00:00",
-        "local": "Derby",
-        "visitante": "Stoke",
-        "escudo_local": "https://crests.football-data.org/342.png",
-        "escudo_visitante": "https://crests.football-data.org/70.png",
+        "fecha": "2026-10-18 15:30:00",
+        "local": "Nott'm Forest",
+        "visitante": "Arsenal",
+        "escudo_local": "https://crests.football-data.org/351.png",
+        "escudo_visitante": "https://crests.football-data.org/57.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 86.7,
+        "liga": "premier_league"
+      },
+      {
+        "fecha": "2026-10-18 13:00:00",
+        "local": "Fiorentina",
+        "visitante": "Como",
+        "escudo_local": "https://crests.football-data.org/99.png",
+        "escudo_visitante": "https://crests.football-data.org/7397.png",
+        "pick_recomendado": "Under 11.5 corners",
+        "pick_probabilidad": 86.5,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-10-18 19:00:00",
+        "local": "Real Madrid",
+        "visitante": "Sevilla",
+        "escudo_local": "https://crests.football-data.org/86.png",
+        "escudo_visitante": "https://crests.football-data.org/559.png",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 86.4,
+        "liga": "la_liga"
+      },
+      {
+        "fecha": "2026-10-18 14:45:00",
+        "local": "Groningen",
+        "visitante": "Ajax",
+        "escudo_local": "https://crests.football-data.org/677.png",
+        "escudo_visitante": "https://crests.football-data.org/678.png",
         "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 82.2,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-10-17 13:30:00",
-        "local": "Hamburg",
-        "visitante": "Stuttgart",
-        "escudo_local": "https://crests.football-data.org/7.png",
-        "escudo_visitante": "https://crests.football-data.org/10.png",
-        "pick_recomendado": "Over 1.5 goles",
-        "pick_probabilidad": 82.1,
-        "liga": "bundesliga"
-      },
-      {
-        "fecha": "2026-10-17 14:00:00",
-        "local": "Birmingham",
-        "visitante": "QPR",
-        "escudo_local": "https://crests.football-data.org/332.png",
-        "escudo_visitante": "https://crests.football-data.org/69.png",
-        "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 82.1,
-        "liga": "championship"
+        "pick_probabilidad": 86.0,
+        "liga": "eredivisie"
       }
     ],
-    "probabilidad_combinada": 55.4,
-    "cuota_combinada": 1.7,
+    "probabilidad_combinada": 55.7,
+    "cuota_combinada": 1.69,
     "liga": "mixta"
   },
   {
@@ -131,38 +161,48 @@
     "es_gratis": false,
     "partidos": [
       {
-        "fecha": "2026-10-17 13:30:00",
-        "local": "Elversberg",
-        "visitante": "Augsburg",
-        "escudo_local": "https://crests.football-data.org/719.png",
-        "escudo_visitante": "https://crests.football-data.org/16.png",
+        "fecha": "2026-10-18 18:45:00",
+        "local": "Juventus",
+        "visitante": "Lazio",
+        "escudo_local": "https://crests.football-data.org/109.png",
+        "escudo_visitante": "https://crests.football-data.org/110.png",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 82.1,
+        "pick_probabilidad": 85.9,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-10-18 13:30:00",
+        "local": "Leverkusen",
+        "visitante": "Freiburg",
+        "escudo_local": "https://crests.football-data.org/3.png",
+        "escudo_visitante": "https://crests.football-data.org/17.png",
+        "pick_recomendado": "Más corners: Leverkusen",
+        "pick_probabilidad": 85.9,
         "liga": "bundesliga"
       },
       {
-        "fecha": "2026-10-17 19:00:00",
-        "local": "Sparta Rotterdam",
-        "visitante": "Willem II",
-        "escudo_local": "https://crests.football-data.org/6806.png",
-        "escudo_visitante": "https://crests.football-data.org/672.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 82.0,
-        "liga": "eredivisie"
+        "fecha": "2026-10-18 13:00:00",
+        "local": "Angers",
+        "visitante": "Marseille",
+        "escudo_local": "https://crests.football-data.org/532.png",
+        "escudo_visitante": "https://crests.football-data.org/516.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 85.8,
+        "liga": "ligue_1"
       },
       {
-        "fecha": "2026-10-17 11:30:00",
-        "local": "Millwall",
-        "visitante": "Lincoln",
-        "escudo_local": "https://crests.football-data.org/384.png",
-        "escudo_visitante": "https://crests.football-data.org/1126.png",
-        "pick_recomendado": "Under 2.5 goles",
-        "pick_probabilidad": 81.7,
-        "liga": "championship"
+        "fecha": "2026-10-18 18:00:00",
+        "local": "Nijmegen",
+        "visitante": "For Sittard",
+        "escudo_local": "https://crests.football-data.org/1915.png",
+        "escudo_visitante": "https://crests.football-data.org/1920.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 85.8,
+        "liga": "eredivisie"
       }
     ],
-    "probabilidad_combinada": 55.0,
-    "cuota_combinada": 1.72,
+    "probabilidad_combinada": 54.3,
+    "cuota_combinada": 1.74,
     "liga": "mixta"
   }
 ]
