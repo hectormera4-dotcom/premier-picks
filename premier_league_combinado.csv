@@ -4999,13 +4999,13 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST,HF,AF,HS,AS,Referee
 11/10/2026,Hull,Everton,2.0,2.0,D,7.0,6.0,2.0,0.0,5.0,7.0,15.0,4.0,9.0,15.0,M Salisbury
 11/10/2026,Liverpool,Man City,0.0,3.0,A,5.0,6.0,4.0,2.0,6.0,4.0,19.0,14.0,13.0,15.0,C Kavanagh
 12/10/2026,Coventry,Newcastle,4.0,1.0,H,2.0,6.0,1.0,1.0,6.0,6.0,3.0,10.0,9.0,19.0,J Brooks
-17/10/2026,Brentford,Liverpool,1.0,2.0,A,,,,,,,,,,,
-17/10/2026,Everton,Chelsea,0.0,2.0,A,,,,,,,,,,,
-17/10/2026,Fulham,Hull,1.0,0.0,H,,,,,,,,,,,
-17/10/2026,Man City,Ipswich,3.0,2.0,H,,,,,,,,,,,
-17/10/2026,Newcastle,Aston Villa,0.0,1.0,A,,,,,,,,,,,
-18/10/2026,Bournemouth,Sunderland,2.0,0.0,H,,,,,,,,,,,
-18/10/2026,Brighton,Crystal Palace,5.0,0.0,H,,,,,,,,,,,
-18/10/2026,Leeds,Man United,1.0,1.0,D,,,,,,,,,,,
-18/10/2026,Nott'm Forest,Arsenal,0.0,1.0,A,,,,,,,,,,,
-19/10/2026,Tottenham,Coventry,3.0,1.0,H,,,,,,,,,,,
+17/10/2026,Brentford,Liverpool,1.0,2.0,A,3.0,9.0,4.0,3.0,2.0,5.0,7.0,13.0,10.0,21.0,J Brooks
+17/10/2026,Everton,Chelsea,0.0,2.0,A,5.0,7.0,3.0,4.0,5.0,7.0,8.0,15.0,6.0,18.0,P Tierney
+17/10/2026,Fulham,Hull,1.0,0.0,H,10.0,2.0,2.0,2.0,6.0,0.0,13.0,11.0,18.0,5.0,C Kavanagh
+17/10/2026,Man City,Ipswich,3.0,2.0,H,2.0,3.0,1.0,2.0,6.0,3.0,8.0,16.0,19.0,8.0,F Hallam
+17/10/2026,Newcastle,Aston Villa,0.0,1.0,A,4.0,5.0,6.0,2.0,1.0,3.0,14.0,11.0,16.0,15.0,J Gillett
+18/10/2026,Bournemouth,Sunderland,2.0,0.0,H,5.0,3.0,3.0,2.0,6.0,0.0,16.0,7.0,29.0,3.0,C Pawson
+18/10/2026,Brighton,Crystal Palace,5.0,0.0,H,8.0,5.0,2.0,1.0,9.0,1.0,13.0,11.0,17.0,5.0,R Jones
+18/10/2026,Leeds,Man United,1.0,1.0,D,2.0,3.0,2.0,2.0,5.0,3.0,16.0,5.0,12.0,13.0,D England
+18/10/2026,Nott'm Forest,Arsenal,0.0,1.0,A,8.0,6.0,1.0,1.0,2.0,1.0,14.0,8.0,14.0,9.0,M Oliver
+19/10/2026,Tottenham,Coventry,3.0,1.0,H,4.0,4.0,1.0,3.0,5.0,1.0,15.0,14.0,16.0,12.0,A Madley
