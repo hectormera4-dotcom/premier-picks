@@ -62,13 +62,14 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-11 16:30:00,Betis,Osasuna,Doble oportunidad 1X,False,80.4,1.14,2026-10-11,5-2,True
 2026-10-11 19:00:00,Santander,Valencia,Over 1.5 goles + Over 7.5 corners,True,82.5,1.11,2026-10-11,2-2,True
 2026-10-12 19:00:00,Levante,Sevilla,Hándicap asiático +1.5: Levante,False,81.4,1.13,2026-10-12,3-3,True
-2026-10-16 19:00:00,La Coruna,Levante,Over 7.5 corners,False,86.8,1.05,2026-10-16,,
+2026-10-16 19:00:00,La Coruna,Levante,Over 7.5 corners,False,86.8,1.05,2026-10-16,1-1,True
 2026-10-17 12:00:00,Espanyol,Ath Madrid,Hándicap asiático +1.5: Ath Madrid,False,92.2,1.01,2026-10-17,0-1,True
-2026-10-17 14:15:00,Villarreal,Elche,Over 6.5 corners,False,81.7,1.12,2026-10-17,,
+2026-10-17 14:15:00,Villarreal,Elche,Over 6.5 corners,False,81.7,1.12,2026-10-17,0-0,True
 2026-10-17 16:30:00,Betis,Barcelona,Over 1.5 goles,False,81.0,1.14,2026-10-17,2-5,True
-2026-10-17 19:00:00,Valencia,Ath Bilbao,Under 12.5 corners,False,82.2,1.12,2026-10-17,,
-2026-10-18 12:00:00,Osasuna,Santander,Doble oportunidad 1X + Over 5.5 corners,True,85.1,1.07,2026-10-18,,
-2026-10-18 14:15:00,Celta,Alaves,Under 11.5 corners,False,87.2,1.05,2026-10-18,,
-2026-10-18 16:30:00,Malaga,Sociedad,Over 6.5 corners,False,91.5,1.01,2026-10-18,,
+2026-10-17 19:00:00,Valencia,Ath Bilbao,Under 12.5 corners,False,82.2,1.12,2026-10-17,0-0,True
+2026-10-18 12:00:00,Osasuna,Santander,Doble oportunidad 1X + Over 5.5 corners,True,85.1,1.07,2026-10-18,2-0,True
+2026-10-18 14:15:00,Celta,Alaves,Under 11.5 corners,False,87.2,1.05,2026-10-18,2-1,True
+2026-10-18 16:30:00,Malaga,Sociedad,Over 6.5 corners,False,91.5,1.01,2026-10-18,2-5,True
 2026-10-18 19:00:00,Real Madrid,Sevilla,Doble oportunidad 1X,False,86.4,1.06,2026-10-18,4-1,True
 2026-10-19 19:00:00,Getafe,Vallecano,Under 2.5 goles,False,81.3,1.13,2026-10-19,1-1,True
+2026-10-21 18:00:00,Levante,Ath Bilbao,Under 12.5 corners,False,80.0,1.15,2026-10-21,,

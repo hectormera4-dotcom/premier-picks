@@ -49,13 +49,13 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-11 18:45:00,Cagliari,Juventus,Under 13.5 corners,False,82.2,1.12,2026-10-11,1.0-1.0,True
 2026-10-12 16:30:00,Atalanta,Venezia,Doble oportunidad 1X + Over 5.5 corners,True,80.2,1.15,2026-10-12,3.0-1.0,True
 2026-10-12 18:45:00,Torino,Udinese,Under 12.5 corners,False,82.6,1.11,2026-10-12,2.0-1.0,True
-2026-10-16 18:45:00,Frosinone,Sassuolo,Over 1.5 goles + Over 5.5 corners,True,80.2,1.15,2026-10-16,,
-2026-10-17 13:00:00,Venezia,Napoli,Doble oportunidad X2 + Under 13.5 corners,True,80.4,1.14,2026-10-17,,
-2026-10-17 16:00:00,Bologna,Inter,Over 6.5 corners,False,80.0,1.15,2026-10-17,,
-2026-10-17 18:45:00,Roma,Genoa,Doble oportunidad 1X + Under 13.5 corners,True,80.7,1.14,2026-10-17,,
-2026-10-18 10:30:00,Udinese,Lecce,Over 6.5 corners,False,90.5,1.01,2026-10-18,,
-2026-10-18 13:00:00,Fiorentina,Como,Under 11.5 corners,False,86.5,1.06,2026-10-18,,
+2026-10-16 18:45:00,Frosinone,Sassuolo,Over 1.5 goles + Over 5.5 corners,True,80.2,1.15,2026-10-16,4.0-2.0,True
+2026-10-17 13:00:00,Venezia,Napoli,Doble oportunidad X2 + Under 13.5 corners,True,80.4,1.14,2026-10-17,1.0-0.0,False
+2026-10-17 16:00:00,Bologna,Inter,Over 6.5 corners,False,80.0,1.15,2026-10-17,1.0-3.0,True
+2026-10-17 18:45:00,Roma,Genoa,Doble oportunidad 1X + Under 13.5 corners,True,80.7,1.14,2026-10-17,2.0-0.0,True
+2026-10-18 10:30:00,Udinese,Lecce,Over 6.5 corners,False,90.5,1.01,2026-10-18,0.0-3.0,False
+2026-10-18 13:00:00,Fiorentina,Como,Under 11.5 corners,False,86.5,1.06,2026-10-18,1.0-3.0,False
 2026-10-18 16:00:00,Milan,Atalanta,Hándicap asiático +1.5: Milan,False,85.5,1.07,2026-10-18,3.0-2.0,True
-2026-10-18 18:45:00,Juventus,Lazio,Over 6.5 corners,False,85.9,1.06,2026-10-18,,
-2026-10-19 16:30:00,Monza,Cagliari,Over 5.5 corners,False,84.9,1.08,2026-10-19,,
-2026-10-19 18:45:00,Parma,Torino,Over 5.5 corners,False,80.2,1.15,2026-10-19,,
+2026-10-18 18:45:00,Juventus,Lazio,Over 6.5 corners,False,85.9,1.06,2026-10-18,0.0-3.0,True
+2026-10-19 16:30:00,Monza,Cagliari,Over 5.5 corners,False,84.9,1.08,2026-10-19,4.0-0.0,True
+2026-10-19 18:45:00,Parma,Torino,Over 5.5 corners,False,80.2,1.15,2026-10-19,1.0-3.0,True
