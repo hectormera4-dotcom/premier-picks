@@ -1,1 +1,109 @@
-[]
+[
+  {
+    "nombre": "Combinada #1",
+    "es_gratis": true,
+    "partidos": [
+      {
+        "fecha": "2026-10-23 18:45:00",
+        "local": "Brest",
+        "visitante": "Nice",
+        "escudo_local": "https://crests.football-data.org/512.png",
+        "escudo_visitante": "https://crests.football-data.org/522.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 80.2,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-10-23 18:45:00",
+        "local": "Torino",
+        "visitante": "Monza",
+        "escudo_local": "https://crests.football-data.org/586.png",
+        "escudo_visitante": "https://crests.football-data.org/5911.png",
+        "pick_recomendado": "Hándicap asiático +0.5: Torino",
+        "pick_probabilidad": 80.1,
+        "liga": "serie_a"
+      }
+    ],
+    "probabilidad_combinada": 64.2,
+    "cuota_combinada": 1.46,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-10-23 19:00:00",
+        "local": "Bolton",
+        "visitante": "Middlesbrough",
+        "escudo_local": "https://crests.football-data.org/60.png",
+        "escudo_visitante": "https://crests.football-data.org/343.png",
+        "pick_recomendado": "Over 7.5 corners",
+        "pick_probabilidad": 86.1,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-10-23 19:00:00",
+        "local": "Alaves",
+        "visitante": "Malaga",
+        "escudo_local": "https://crests.football-data.org/263.png",
+        "escudo_visitante": "https://crests.football-data.org/84.png",
+        "pick_recomendado": "Doble oportunidad 1X + Over 6.5 corners",
+        "pick_probabilidad": 81.6,
+        "liga": "la_liga"
+      },
+      {
+        "fecha": "2026-10-23 19:45:00",
+        "local": "Guimaraes",
+        "visitante": "Maritimo",
+        "escudo_local": "https://crests.football-data.org/5543.png",
+        "escudo_visitante": "https://crests.football-data.org/5575.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 81.2,
+        "liga": "primeira_liga"
+      }
+    ],
+    "probabilidad_combinada": 57.0,
+    "cuota_combinada": 1.65,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #3",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-10-23 18:30:00",
+        "local": "Stuttgart",
+        "visitante": "M'gladbach",
+        "escudo_local": "https://crests.football-data.org/10.png",
+        "escudo_visitante": "https://crests.football-data.org/18.png",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 81.1,
+        "liga": "bundesliga"
+      },
+      {
+        "fecha": "2026-10-23 18:00:00",
+        "local": "Go Ahead Eagles",
+        "visitante": "Telstar",
+        "escudo_local": "https://crests.football-data.org/718.png",
+        "escudo_visitante": "https://crests.football-data.org/1912.png",
+        "pick_recomendado": "Más corners: Go Ahead Eagles",
+        "pick_probabilidad": 80.7,
+        "liga": "eredivisie"
+      },
+      {
+        "fecha": "2026-10-23 19:00:00",
+        "local": "Ipswich",
+        "visitante": "Nott'm Forest",
+        "escudo_local": "https://crests.football-data.org/349.png",
+        "escudo_visitante": "https://crests.football-data.org/351.png",
+        "pick_recomendado": "Doble oportunidad X2",
+        "pick_probabilidad": 80.5,
+        "liga": "premier_league"
+      }
+    ],
+    "probabilidad_combinada": 52.7,
+    "cuota_combinada": 1.8,
+    "liga": "mixta"
+  }
+]
