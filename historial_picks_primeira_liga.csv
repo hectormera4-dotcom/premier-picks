@@ -39,3 +39,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-12 19:15:00,Famalicao,Alverca,Hándicap asiático +0.5: Famalicao,False,82.9,1.11,2026-10-12,1.0-4.0,False
 2026-10-19 19:15:00,Sp Braga,Gil Vicente,Más tiros totales: Sp Braga,False,80.9,1.14,2026-10-19,1.0-2.0,True
 2026-10-23 19:45:00,Guimaraes,Maritimo,Over 6.5 corners,False,81.2,1.13,2026-10-23,,
+2026-10-24 14:30:00,Estrela,Casa Pia,Under 13.5 corners,False,85.7,1.07,2026-10-24,,
+2026-10-24 17:00:00,Alverca,Arouca,Under 10.5 corners,False,85.0,1.08,2026-10-24,,
+2026-10-24 19:30:00,Gil Vicente,Porto,Over 5.5 corners,False,80.6,1.14,2026-10-24,,
