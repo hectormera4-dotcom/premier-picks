@@ -61,6 +61,11 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-19 18:45:00,Parma,Torino,Over 5.5 corners,False,80.2,1.15,2026-10-19,1.0-3.0,True
 2026-10-23 18:45:00,Torino,Monza,Hándicap asiático +0.5: Torino,False,80.1,1.15,2026-10-23,3.0-2.0,True
 2026-10-24 13:00:00,Cagliari,Bologna,Under 11.5 corners,False,80.1,1.15,2026-10-24,,
-2026-10-24 13:00:00,Como,Sassuolo,Doble oportunidad 1X,False,81.5,1.13,2026-10-24,,
+2026-10-24 13:00:00,Como,Sassuolo,Doble oportunidad 1X,False,81.5,1.13,2026-10-24,2.0-0.0,True
 2026-10-24 16:00:00,Napoli,Roma,Under 11.5 corners,False,82.2,1.12,2026-10-24,,
 2026-10-24 18:45:00,Lazio,Parma,Under 12.5 corners,False,81.1,1.13,2026-10-24,,
+2026-10-25 11:30:00,Inter,Fiorentina,Doble oportunidad 1X + Under 13.5 corners,True,80.4,1.14,2026-10-25,,
+2026-10-25 14:00:00,Atalanta,Frosinone,Doble oportunidad 1X + Over 5.5 corners,True,80.8,1.14,2026-10-25,,
+2026-10-25 14:00:00,Genoa,Venezia,Over 6.5 corners,False,80.0,1.15,2026-10-25,,
+2026-10-25 17:00:00,Lecce,Juventus,Under 12.5 corners,False,80.5,1.14,2026-10-25,,
+2026-10-25 19:45:00,Udinese,Milan,Under 12.5 corners,False,82.8,1.11,2026-10-25,,
