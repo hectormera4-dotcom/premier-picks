@@ -71,8 +71,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-19 19:00:00,Tottenham,Coventry,Over 7.5 corners,False,80.7,1.14,2026-10-19,3.0-1.0,True
 2026-10-23 19:00:00,Ipswich,Nott'm Forest,Doble oportunidad X2,False,80.5,1.14,2026-10-23,1.0-1.0,True
 2026-10-24 11:30:00,Aston Villa,Man City,Under 12.5 corners,False,80.4,1.14,2026-10-24,,
-2026-10-24 14:00:00,Arsenal,Everton,Doble oportunidad 1X,False,84.4,1.08,2026-10-24,,
-2026-10-24 14:00:00,Coventry,Fulham,Over 1.5 goles,False,80.3,1.14,2026-10-24,,
+2026-10-24 14:00:00,Arsenal,Everton,Doble oportunidad 1X,False,84.4,1.08,2026-10-24,2.0-0.0,True
+2026-10-24 14:00:00,Coventry,Fulham,Over 1.5 goles,False,80.3,1.14,2026-10-24,0.0-1.0,False
 2026-10-24 16:30:00,Chelsea,Tottenham,Under 13.5 corners,False,81.4,1.13,2026-10-24,,
 2026-10-25 14:00:00,Liverpool,Brighton,Under 13.5 corners,False,81.0,1.13,2026-10-25,,
 2026-10-25 14:00:00,Crystal Palace,Newcastle,Hándicap asiático +1.5: Crystal Palace,False,84.5,1.08,2026-10-25,,
