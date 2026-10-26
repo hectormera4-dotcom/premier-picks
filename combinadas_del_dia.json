@@ -4,175 +4,38 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-25 14:00:00",
-        "local": "Hull",
-        "visitante": "Brentford",
-        "escudo_local": "https://crests.football-data.org/322.png",
-        "escudo_visitante": "https://crests.football-data.org/402.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 82.9,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-10-25 19:45:00",
-        "local": "Udinese",
-        "visitante": "Milan",
-        "escudo_local": "https://crests.football-data.org/115.png",
-        "escudo_visitante": "https://crests.football-data.org/98.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.8,
-        "liga": "serie_a"
-      },
-      {
-        "fecha": "2026-10-25 15:30:00",
-        "local": "Estoril",
-        "visitante": "Moreirense",
-        "escudo_local": "https://crests.football-data.org/582.png",
-        "escudo_visitante": "https://crests.football-data.org/583.png",
+        "fecha": "2026-10-26 20:00:00",
+        "local": "Sevilla",
+        "visitante": "Osasuna",
+        "escudo_local": "https://crests.football-data.org/559.png",
+        "escudo_visitante": "https://crests.football-data.org/79.png",
         "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 82.6,
-        "liga": "primeira_liga"
-      }
-    ],
-    "probabilidad_combinada": 56.7,
-    "cuota_combinada": 1.66,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #2",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-10-25 14:00:00",
-        "local": "Monaco",
-        "visitante": "Lille",
-        "escudo_local": "https://crests.football-data.org/548.png",
-        "escudo_visitante": "https://crests.football-data.org/521.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 87.1,
-        "liga": "ligue_1"
-      },
-      {
-        "fecha": "2026-10-25 18:00:00",
-        "local": "Rio Ave",
-        "visitante": "Famalicao",
-        "escudo_local": "https://crests.football-data.org/496.png",
-        "escudo_visitante": "https://crests.football-data.org/5531.png",
-        "pick_recomendado": "Over 7.5 corners",
-        "pick_probabilidad": 86.6,
-        "liga": "primeira_liga"
-      },
-      {
-        "fecha": "2026-10-25 17:30:00",
-        "local": "Sociedad",
-        "visitante": "Levante",
-        "escudo_local": "https://crests.football-data.org/92.png",
-        "escudo_visitante": "https://crests.football-data.org/88.png",
-        "pick_recomendado": "Más corners: Sociedad",
-        "pick_probabilidad": 84.7,
+        "pick_probabilidad": 84.6,
         "liga": "la_liga"
       },
       {
-        "fecha": "2026-10-25 18:00:00",
-        "local": "Nacional",
-        "visitante": "Sp Braga",
-        "escudo_local": "https://crests.football-data.org/5529.png",
-        "escudo_visitante": "https://crests.football-data.org/5613.png",
-        "pick_recomendado": "Hándicap asiático +0.5: Sp Braga",
-        "pick_probabilidad": 84.5,
-        "liga": "primeira_liga"
-      }
-    ],
-    "probabilidad_combinada": 54.0,
-    "cuota_combinada": 1.75,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #3",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-10-25 14:00:00",
-        "local": "Crystal Palace",
-        "visitante": "Newcastle",
-        "escudo_local": "https://crests.football-data.org/354.png",
-        "escudo_visitante": "https://crests.football-data.org/67.png",
-        "pick_recomendado": "Hándicap asiático +1.5: Crystal Palace",
-        "pick_probabilidad": 84.5,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-10-25 16:15:00",
-        "local": "Auxerre",
-        "visitante": "Le Mans",
-        "escudo_local": "https://crests.football-data.org/519.png",
-        "escudo_visitante": "https://crests.football-data.org/535.png",
-        "pick_recomendado": "Más tiros totales: Auxerre",
-        "pick_probabilidad": 83.6,
-        "liga": "ligue_1"
-      },
-      {
-        "fecha": "2026-10-25 16:30:00",
-        "local": "Sunderland",
-        "visitante": "Leeds",
-        "escudo_local": "https://crests.football-data.org/71.png",
-        "escudo_visitante": "https://crests.football-data.org/341.png",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 83.5,
-        "liga": "premier_league"
-      },
-      {
-        "fecha": "2026-10-25 16:15:00",
-        "local": "Toulouse",
-        "visitante": "Troyes",
-        "escudo_local": "https://crests.football-data.org/511.png",
-        "escudo_visitante": "https://crests.football-data.org/531.png",
+        "fecha": "2026-10-26 18:45:00",
+        "local": "Santa Clara",
+        "visitante": "Benfica",
+        "escudo_local": "https://crests.football-data.org/5530.png",
+        "escudo_visitante": "https://crests.football-data.org/1903.png",
         "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 83.1,
+        "pick_probabilidad": 82.4,
+        "liga": "primeira_liga"
+      },
+      {
+        "fecha": "2026-10-26 19:30:00",
+        "local": "Paris SG",
+        "visitante": "Lyon",
+        "escudo_local": "https://crests.football-data.org/524.png",
+        "escudo_visitante": "https://crests.football-data.org/523.png",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 80.7,
         "liga": "ligue_1"
       }
     ],
-    "probabilidad_combinada": 49.0,
-    "cuota_combinada": 1.94,
-    "liga": "mixta"
-  },
-  {
-    "nombre": "Combinada #4",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-10-25 13:30:00",
-        "local": "Nijmegen",
-        "visitante": "Groningen",
-        "escudo_local": "https://crests.football-data.org/1915.png",
-        "escudo_visitante": "https://crests.football-data.org/677.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 82.6,
-        "liga": "eredivisie"
-      },
-      {
-        "fecha": "2026-10-25 20:00:00",
-        "local": "Barcelona",
-        "visitante": "Real Madrid",
-        "escudo_local": "https://crests.football-data.org/81.png",
-        "escudo_visitante": "https://crests.football-data.org/86.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 82.2,
-        "liga": "la_liga"
-      },
-      {
-        "fecha": "2026-10-25 19:00:00",
-        "local": "AZ Alkmaar",
-        "visitante": "Twente",
-        "escudo_local": "https://crests.football-data.org/682.png",
-        "escudo_visitante": "https://crests.football-data.org/666.png",
-        "pick_recomendado": "Under 12.5 corners",
-        "pick_probabilidad": 81.7,
-        "liga": "eredivisie"
-      }
-    ],
-    "probabilidad_combinada": 55.5,
-    "cuota_combinada": 1.7,
+    "probabilidad_combinada": 56.3,
+    "cuota_combinada": 1.68,
     "liga": "mixta"
   }
 ]
