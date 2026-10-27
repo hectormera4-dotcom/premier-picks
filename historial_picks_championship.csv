@@ -106,15 +106,15 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-17 14:00:00,West Brom,Blackburn,Over 7.5 corners,False,80.8,1.14,2026-10-17,3.0-2.0,True
 2026-10-17 14:00:00,Wrexham,Preston,Under 11.5 corners,False,82.4,1.11,2026-10-17,4.0-1.0,True
 2026-10-20 18:45:00,Wolves,Portsmouth,Doble oportunidad 1X,False,80.1,1.15,2026-10-20,1.0-1.0,True
-2026-10-23 19:00:00,Bolton,Middlesbrough,Over 7.5 corners,False,86.1,1.06,2026-10-23,,
-2026-10-24 11:30:00,Sheffield United,Derby,Más tiros totales: Sheffield United,False,80.5,1.14,2026-10-24,,
+2026-10-23 19:00:00,Bolton,Middlesbrough,Over 7.5 corners,False,86.1,1.06,2026-10-23,1.0-5.0,True
+2026-10-24 11:30:00,Sheffield United,Derby,Más tiros totales: Sheffield United,False,80.5,1.14,2026-10-24,1.0-1.0,True
 2026-10-24 11:30:00,Charlton,Norwich,Hándicap asiático +1.5: Charlton,False,84.0,1.09,2026-10-24,1.0-3.0,False
-2026-10-24 11:30:00,Portsmouth,Millwall,Más tiros totales: Portsmouth,False,81.1,1.13,2026-10-24,,
-2026-10-24 14:00:00,Cardiff,Birmingham,Under 12.5 corners,False,83.0,1.1,2026-10-24,,
+2026-10-24 11:30:00,Portsmouth,Millwall,Más tiros totales: Portsmouth,False,81.1,1.13,2026-10-24,2.0-1.0,False
+2026-10-24 14:00:00,Cardiff,Birmingham,Under 12.5 corners,False,83.0,1.1,2026-10-24,1.0-0.0,True
 2026-10-24 14:00:00,QPR,Swansea,Hándicap asiático +1.5: QPR,False,83.2,1.1,2026-10-24,5.0-0.0,True
-2026-10-24 14:00:00,Stoke,Bristol City,Under 12.5 corners,False,80.8,1.14,2026-10-24,,
-2026-10-24 14:00:00,Preston,West Brom,Over 7.5 corners,False,80.8,1.14,2026-10-24,,
-2026-10-24 14:00:00,Lincoln,Burnley,Visitante gana + Under 13.5 corners,True,80.9,1.14,2026-10-24,,
+2026-10-24 14:00:00,Stoke,Bristol City,Under 12.5 corners,False,80.8,1.14,2026-10-24,0.0-0.0,True
+2026-10-24 14:00:00,Preston,West Brom,Over 7.5 corners,False,80.8,1.14,2026-10-24,1.0-1.0,True
+2026-10-24 14:00:00,Lincoln,Burnley,Visitante gana + Under 13.5 corners,True,80.9,1.14,2026-10-24,4.0-1.0,False
 2026-10-24 14:00:00,West Ham,Southampton,Over 2.5 goles,False,80.7,1.14,2026-10-24,2.0-3.0,True
 2026-10-24 14:00:00,Blackburn,Wrexham,Hándicap asiático +1.5: Blackburn,False,85.7,1.07,2026-10-24,2.0-0.0,True
-2026-10-24 14:00:00,Wolves,Watford,Más corners: Wolves,False,80.0,1.15,2026-10-24,,
+2026-10-24 14:00:00,Wolves,Watford,Más corners: Wolves,False,80.0,1.15,2026-10-24,1.0-0.0,True

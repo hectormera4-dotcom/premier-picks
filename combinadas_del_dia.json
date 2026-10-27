@@ -4,38 +4,38 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-26 20:00:00",
-        "local": "Sevilla",
-        "visitante": "Osasuna",
-        "escudo_local": "https://crests.football-data.org/559.png",
-        "escudo_visitante": "https://crests.football-data.org/79.png",
-        "pick_recomendado": "Over 5.5 corners",
-        "pick_probabilidad": 84.6,
-        "liga": "la_liga"
+        "fecha": "2026-10-27 17:30:00",
+        "local": "Sassuolo",
+        "visitante": "Lazio",
+        "escudo_local": "https://crests.football-data.org/471.png",
+        "escudo_visitante": "https://crests.football-data.org/110.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 81.6,
+        "liga": "serie_a"
       },
       {
-        "fecha": "2026-10-26 18:45:00",
-        "local": "Santa Clara",
-        "visitante": "Benfica",
-        "escudo_local": "https://crests.football-data.org/5530.png",
-        "escudo_visitante": "https://crests.football-data.org/1903.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 82.4,
-        "liga": "primeira_liga"
+        "fecha": "2026-10-27 19:45:00",
+        "local": "Roma",
+        "visitante": "Cagliari",
+        "escudo_local": "https://crests.football-data.org/100.png",
+        "escudo_visitante": "https://crests.football-data.org/104.png",
+        "pick_recomendado": "Más corners: Roma",
+        "pick_probabilidad": 81.1,
+        "liga": "serie_a"
       },
       {
-        "fecha": "2026-10-26 19:30:00",
-        "local": "Paris SG",
-        "visitante": "Lyon",
-        "escudo_local": "https://crests.football-data.org/524.png",
-        "escudo_visitante": "https://crests.football-data.org/523.png",
-        "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 80.7,
-        "liga": "ligue_1"
+        "fecha": "2026-10-27 19:45:00",
+        "local": "Torino",
+        "visitante": "Como",
+        "escudo_local": "https://crests.football-data.org/586.png",
+        "escudo_visitante": "https://crests.football-data.org/7397.png",
+        "pick_recomendado": "Hándicap europeo -1: Cubre Como",
+        "pick_probabilidad": 80.3,
+        "liga": "serie_a"
       }
     ],
-    "probabilidad_combinada": 56.3,
-    "cuota_combinada": 1.68,
-    "liga": "mixta"
+    "probabilidad_combinada": 53.1,
+    "cuota_combinada": 1.78,
+    "liga": "serie_a"
   }
 ]
