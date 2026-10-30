@@ -4,28 +4,77 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-10-29 17:30:00",
-        "local": "Frosinone",
-        "visitante": "Lecce",
-        "escudo_local": "https://crests.football-data.org/470.png",
-        "escudo_visitante": "https://crests.football-data.org/5890.png",
-        "pick_recomendado": "Over 8.5 corners",
-        "pick_probabilidad": 83.1,
-        "liga": "serie_a"
+        "fecha": "2026-10-30 18:00:00",
+        "local": "Nice",
+        "visitante": "Rennes",
+        "escudo_local": "https://crests.football-data.org/522.png",
+        "escudo_visitante": "https://crests.football-data.org/529.png",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 85.6,
+        "liga": "ligue_1"
       },
       {
-        "fecha": "2026-10-29 19:45:00",
-        "local": "Fiorentina",
-        "visitante": "Atalanta",
-        "escudo_local": "https://crests.football-data.org/99.png",
-        "escudo_visitante": "https://crests.football-data.org/102.png",
-        "pick_recomendado": "Under 11.5 corners",
-        "pick_probabilidad": 83.1,
-        "liga": "serie_a"
+        "fecha": "2026-10-30 20:00:00",
+        "local": "Sheffield United",
+        "visitante": "Wrexham",
+        "escudo_local": "https://crests.football-data.org/356.png",
+        "escudo_visitante": "https://crests.football-data.org/404.png",
+        "pick_recomendado": "Más tiros totales: Sheffield United",
+        "pick_probabilidad": 84.6,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-10-30 20:00:00",
+        "local": "Villarreal",
+        "visitante": "Espanyol",
+        "escudo_local": "https://crests.football-data.org/94.png",
+        "escudo_visitante": "https://crests.football-data.org/80.png",
+        "pick_recomendado": "Over 1.5 goles",
+        "pick_probabilidad": 81.2,
+        "liga": "la_liga"
       }
     ],
-    "probabilidad_combinada": 69.1,
-    "cuota_combinada": 1.35,
-    "liga": "serie_a"
+    "probabilidad_combinada": 58.8,
+    "cuota_combinada": 1.6,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-10-30 20:15:00",
+        "local": "Casa Pia",
+        "visitante": "Sp Lisbon",
+        "escudo_local": "https://crests.football-data.org/6618.png",
+        "escudo_visitante": "https://crests.football-data.org/498.png",
+        "pick_recomendado": "Doble oportunidad X2 + Más corners: Sp Lisbon",
+        "pick_probabilidad": 80.9,
+        "liga": "primeira_liga"
+      },
+      {
+        "fecha": "2026-10-30 19:30:00",
+        "local": "Elversberg",
+        "visitante": "Mainz",
+        "escudo_local": "https://crests.football-data.org/719.png",
+        "escudo_visitante": "https://crests.football-data.org/15.png",
+        "pick_recomendado": "Over 2.5 goles + Ambos anotan - Si",
+        "pick_probabilidad": 80.7,
+        "liga": "bundesliga"
+      },
+      {
+        "fecha": "2026-10-30 20:05:00",
+        "local": "Lille",
+        "visitante": "Lens",
+        "escudo_local": "https://crests.football-data.org/521.png",
+        "escudo_visitante": "https://crests.football-data.org/546.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 80.6,
+        "liga": "ligue_1"
+      }
+    ],
+    "probabilidad_combinada": 52.6,
+    "cuota_combinada": 1.8,
+    "liga": "mixta"
   }
 ]

@@ -69,13 +69,13 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-25 14:00:00,Genoa,Venezia,Over 6.5 corners,False,80.0,1.15,2026-10-25,1.0-0.0,True
 2026-10-25 17:00:00,Lecce,Juventus,Under 12.5 corners,False,80.5,1.14,2026-10-25,0.0-2.0,True
 2026-10-25 19:45:00,Udinese,Milan,Under 12.5 corners,False,82.8,1.11,2026-10-25,0.0-2.0,True
-2026-10-27 17:30:00,Sassuolo,Lazio,Under 12.5 corners,False,81.6,1.13,2026-10-27,,
-2026-10-27 19:45:00,Roma,Cagliari,Más corners: Roma,False,81.1,1.13,2026-10-27,,
+2026-10-27 17:30:00,Sassuolo,Lazio,Under 12.5 corners,False,81.6,1.13,2026-10-27,2.0-6.0,True
+2026-10-27 19:45:00,Roma,Cagliari,Más corners: Roma,False,81.1,1.13,2026-10-27,4.0-2.0,False
 2026-10-27 19:45:00,Torino,Como,Hándicap europeo -1: Cubre Como,False,80.3,1.14,2026-10-27,1.0-3.0,True
-2026-10-28 17:30:00,Milan,Bologna,Under 10.5 corners,False,81.0,1.13,2026-10-28,,
-2026-10-28 17:30:00,Venezia,Inter,Doble oportunidad X2 + Over 5.5 corners,True,83.2,1.1,2026-10-28,,
+2026-10-28 17:30:00,Milan,Bologna,Under 10.5 corners,False,81.0,1.13,2026-10-28,2.0-4.0,True
+2026-10-28 17:30:00,Venezia,Inter,Doble oportunidad X2 + Over 5.5 corners,True,83.2,1.1,2026-10-28,0.0-2.0,True
 2026-10-28 17:30:00,Parma,Udinese,Hándicap asiático +1.5: Parma,False,80.4,1.14,2026-10-28,0.0-0.0,True
 2026-10-28 19:45:00,Genoa,Juventus,Hándicap europeo -1: Cubre Juventus,False,81.0,1.13,2026-10-28,2.0-0.0,False
-2026-10-28 19:45:00,Monza,Napoli,Under 11.5 corners,False,84.5,1.08,2026-10-28,,
-2026-10-29 17:30:00,Frosinone,Lecce,Over 8.5 corners,False,83.1,1.1,2026-10-29,,
-2026-10-29 19:45:00,Fiorentina,Atalanta,Under 11.5 corners,False,83.1,1.1,2026-10-29,,
+2026-10-28 19:45:00,Monza,Napoli,Under 11.5 corners,False,84.5,1.08,2026-10-28,1.0-4.0,True
+2026-10-29 17:30:00,Frosinone,Lecce,Over 8.5 corners,False,83.1,1.1,2026-10-29,5.0-1.0,True
+2026-10-29 19:45:00,Fiorentina,Atalanta,Under 11.5 corners,False,83.1,1.1,2026-10-29,2.0-2.0,True
