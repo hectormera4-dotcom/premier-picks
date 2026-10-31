@@ -79,3 +79,11 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-25 14:00:00,Man United,Bournemouth,Over 8.5 corners,False,80.7,1.14,2026-10-25,0.0-3.0,True
 2026-10-25 14:00:00,Hull,Brentford,Over 6.5 corners,False,82.9,1.11,2026-10-25,1.0-1.0,True
 2026-10-25 16:30:00,Sunderland,Leeds,Over 5.5 corners,False,83.5,1.1,2026-10-25,0.0-0.0,True
+2026-10-31 12:30:00,Chelsea,Man United,Under 13.5 corners,False,80.8,1.14,2026-10-31,,
+2026-10-31 15:00:00,Man City,Brighton,Under 12.5 corners,False,81.2,1.13,2026-10-31,,
+2026-10-31 15:00:00,Bournemouth,Leeds,Más tiros totales: Bournemouth,False,82.5,1.11,2026-10-31,,
+2026-10-31 15:00:00,Coventry,Sunderland,Under 10.5 corners,False,87.3,1.05,2026-10-31,,
+2026-10-31 15:00:00,Hull,Ipswich,Under 11.5 corners,False,80.2,1.15,2026-10-31,,
+2026-10-31 15:00:00,Brentford,Nott'm Forest,Under 12.5 corners,False,80.0,1.15,2026-10-31,,
+2026-10-31 17:30:00,Tottenham,Crystal Palace,Over 7.5 corners,False,86.6,1.05,2026-10-31,,
+2026-10-31 20:00:00,Aston Villa,Fulham,Under 12.5 corners,False,81.3,1.13,2026-10-31,,

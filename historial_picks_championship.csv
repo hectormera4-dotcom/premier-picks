@@ -119,3 +119,14 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-24 14:00:00,Blackburn,Wrexham,Hándicap asiático +1.5: Blackburn,False,85.7,1.07,2026-10-24,2.0-0.0,True
 2026-10-24 14:00:00,Wolves,Watford,Más corners: Wolves,False,80.0,1.15,2026-10-24,1.0-0.0,True
 2026-10-30 20:00:00,Sheffield United,Wrexham,Más tiros totales: Sheffield United,False,84.6,1.08,2026-10-30,,
+2026-10-31 12:30:00,Stoke,Preston,Over 6.5 corners,False,83.1,1.1,2026-10-31,,
+2026-10-31 12:30:00,Norwich,Watford,Under 12.5 corners,False,82.2,1.12,2026-10-31,,
+2026-10-31 12:30:00,Lincoln,Birmingham,Over 6.5 corners,False,82.1,1.12,2026-10-31,,
+2026-10-31 15:00:00,Wolves,Cardiff,Over 8.5 corners,False,80.4,1.14,2026-10-31,,
+2026-10-31 15:00:00,West Ham,West Brom,Over 1.5 goles + Over 5.5 corners,True,82.5,1.11,2026-10-31,,
+2026-10-31 15:00:00,Swansea,Blackburn,Under 12.5 corners,False,83.3,1.1,2026-10-31,,
+2026-10-31 15:00:00,Bolton,Bristol City,Over 8.5 corners,False,80.6,1.14,2026-10-31,,
+2026-10-31 15:00:00,Middlesbrough,Charlton,Over 8.5 corners,False,80.5,1.14,2026-10-31,,
+2026-10-31 15:00:00,Burnley,Portsmouth,Más tiros totales: Burnley,False,80.9,1.14,2026-10-31,,
+2026-10-31 15:00:00,Millwall,Derby,Under 13.5 corners,False,85.4,1.07,2026-10-31,,
+2026-10-31 15:00:00,Southampton,QPR,Doble oportunidad 1X + Over 5.5 corners,True,80.5,1.14,2026-10-31,,

@@ -79,3 +79,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-28 19:45:00,Monza,Napoli,Under 11.5 corners,False,84.5,1.08,2026-10-28,1.0-4.0,True
 2026-10-29 17:30:00,Frosinone,Lecce,Over 8.5 corners,False,83.1,1.1,2026-10-29,5.0-1.0,True
 2026-10-29 19:45:00,Fiorentina,Atalanta,Under 11.5 corners,False,83.1,1.1,2026-10-29,2.0-2.0,True
+2026-10-31 14:00:00,Bologna,Monza,Doble oportunidad 1X,False,80.6,1.14,2026-10-31,,
+2026-10-31 17:00:00,Udinese,Roma,Hándicap europeo -1: Cubre Roma,False,80.8,1.14,2026-10-31,,
+2026-10-31 19:45:00,Milan,Inter,Under 11.5 corners,False,84.4,1.08,2026-10-31,,

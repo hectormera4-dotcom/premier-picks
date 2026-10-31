@@ -83,4 +83,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-25 17:30:00,Sociedad,Levante,Más corners: Sociedad,False,84.7,1.08,2026-10-25,2-1,False
 2026-10-25 20:00:00,Barcelona,Real Madrid,Under 13.5 corners,False,82.2,1.12,2026-10-25,1-2,True
 2026-10-26 20:00:00,Sevilla,Osasuna,Over 5.5 corners,False,84.6,1.08,2026-10-26,2-0,True
-2026-10-30 20:00:00,Villarreal,Espanyol,Over 1.5 goles,False,81.2,1.13,2026-10-30,,
+2026-10-30 20:00:00,Villarreal,Espanyol,Over 1.5 goles,False,81.2,1.13,2026-10-30,0-1,False
+2026-10-31 13:00:00,Levante,Ath Madrid,Under 12.5 corners,False,80.4,1.14,2026-10-31,,
+2026-10-31 15:15:00,Vallecano,Celta,Más tiros totales: Vallecano,False,80.2,1.15,2026-10-31,,
+2026-10-31 17:30:00,Betis,Malaga,Doble oportunidad 1X + Over 5.5 corners,True,83.0,1.1,2026-10-31,,
+2026-10-31 20:00:00,Barcelona,Alaves,Over 1.5 goles + Over 5.5 corners,True,80.2,1.15,2026-10-31,,

@@ -56,3 +56,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-25 13:30:00,PSV Eindhoven,Feyenoord,Over 1.5 goles + Over 5.5 corners,True,81.5,1.13,2026-10-25,1-1,True
 2026-10-25 15:45:00,Sparta Rotterdam,Ajax,Under 13.5 corners,False,80.5,1.14,2026-10-25,1-2,True
 2026-10-25 19:00:00,AZ Alkmaar,Twente,Under 12.5 corners,False,81.7,1.12,2026-10-25,0-2,True
+2026-10-31 15:30:00,Feyenoord,For Sittard,Doble oportunidad 1X + Over 6.5 corners,True,80.0,1.15,2026-10-31,,
+2026-10-31 17:45:00,Heerenveen,Nijmegen,Under 12.5 corners,False,80.7,1.14,2026-10-31,,
+2026-10-31 17:45:00,PSV Eindhoven,Willem II,Over 2.5 goles,False,80.9,1.14,2026-10-31,,
+2026-10-31 20:00:00,Cambuur,Go Ahead Eagles,Over 1.5 goles + Over 5.5 corners,True,80.2,1.15,2026-10-31,,
+2026-10-31 20:00:00,Ajax,AZ Alkmaar,Under 11.5 corners,False,81.0,1.13,2026-10-31,,
