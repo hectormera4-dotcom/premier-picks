@@ -65,3 +65,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-30 18:00:00,Nice,Rennes,Under 13.5 corners,False,85.6,1.07,2026-10-30,,
 2026-10-30 20:05:00,Lille,Lens,Over 6.5 corners,False,80.6,1.14,2026-10-30,,
 2026-10-31 19:45:00,Troyes,Le Mans,Más corners: Troyes,False,83.3,1.1,2026-10-31,,
+2026-11-01 14:00:00,Strasbourg,Auxerre,Over 1.5 goles,False,81.1,1.13,2026-11-01,,
+2026-11-01 16:15:00,Lyon,Angers,Doble oportunidad 1X,False,84.9,1.08,2026-11-01,,
+2026-11-01 16:15:00,Paris FC,Monaco,Hándicap asiático +1.5: Paris FC,False,81.2,1.13,2026-11-01,,
+2026-11-01 19:45:00,Marseille,Toulouse,Over 1.5 goles,False,81.7,1.12,2026-11-01,,
