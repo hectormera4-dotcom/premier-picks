@@ -84,12 +84,12 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-25 20:00:00,Barcelona,Real Madrid,Under 13.5 corners,False,82.2,1.12,2026-10-25,1-2,True
 2026-10-26 20:00:00,Sevilla,Osasuna,Over 5.5 corners,False,84.6,1.08,2026-10-26,2-0,True
 2026-10-30 20:00:00,Villarreal,Espanyol,Over 1.5 goles,False,81.2,1.13,2026-10-30,0-1,False
-2026-10-31 13:00:00,Levante,Ath Madrid,Under 12.5 corners,False,80.4,1.14,2026-10-31,,
-2026-10-31 15:15:00,Vallecano,Celta,Más tiros totales: Vallecano,False,80.2,1.15,2026-10-31,,
-2026-10-31 17:30:00,Betis,Malaga,Doble oportunidad 1X + Over 5.5 corners,True,83.0,1.1,2026-10-31,,
-2026-10-31 20:00:00,Barcelona,Alaves,Over 1.5 goles + Over 5.5 corners,True,80.2,1.15,2026-10-31,,
-2026-11-01 13:00:00,Getafe,Sevilla,Over 5.5 corners,False,83.6,1.1,2026-11-01,,
-2026-11-01 15:15:00,Santander,Real Madrid,Over 1.5 goles + Over 8.5 corners,True,81.2,1.13,2026-11-01,,
-2026-11-01 17:30:00,Elche,Valencia,Under 11.5 corners,False,82.9,1.11,2026-11-01,,
-2026-11-01 20:00:00,Ath Bilbao,Sociedad,Over 6.5 corners,False,83.4,1.1,2026-11-01,,
+2026-10-31 13:00:00,Levante,Ath Madrid,Under 12.5 corners,False,80.4,1.14,2026-10-31,0-2,True
+2026-10-31 15:15:00,Vallecano,Celta,Más tiros totales: Vallecano,False,80.2,1.15,2026-10-31,3-0,True
+2026-10-31 17:30:00,Betis,Malaga,Doble oportunidad 1X + Over 5.5 corners,True,83.0,1.1,2026-10-31,2-1,True
+2026-10-31 20:00:00,Barcelona,Alaves,Over 1.5 goles + Over 5.5 corners,True,80.2,1.15,2026-10-31,6-1,True
+2026-11-01 13:00:00,Getafe,Sevilla,Over 5.5 corners,False,83.6,1.1,2026-11-01,3-1,False
+2026-11-01 15:15:00,Santander,Real Madrid,Over 1.5 goles + Over 8.5 corners,True,81.2,1.13,2026-11-01,0-3,True
+2026-11-01 17:30:00,Elche,Valencia,Under 11.5 corners,False,82.9,1.11,2026-11-01,0-1,True
+2026-11-01 20:00:00,Ath Bilbao,Sociedad,Over 6.5 corners,False,83.4,1.1,2026-11-01,2-1,True
 2026-11-02 20:00:00,La Coruna,Osasuna,Under 12.5 corners,False,81.7,1.12,2026-11-02,,
