@@ -88,4 +88,4 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-01 17:00:00,Lecce,Genoa,Hándicap asiático +1.5: Lecce,False,84.2,1.09,2026-11-01,1.0-2.0,True
 2026-11-01 19:45:00,Juventus,Napoli,Under 11.5 corners,False,81.9,1.12,2026-11-01,2.0-0.0,False
 2026-11-02 17:30:00,Sassuolo,Fiorentina,Over 1.5 goles,False,80.9,1.14,2026-11-02,2.0-4.0,True
-2026-11-02 19:45:00,Atalanta,Parma,Doble oportunidad 1X + Over 5.5 corners,True,81.0,1.14,2026-11-02,,
+2026-11-02 19:45:00,Atalanta,Parma,Doble oportunidad 1X + Over 5.5 corners,True,81.0,1.14,2026-11-02,0.0-3.0,False
