@@ -89,3 +89,4 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-10-31 20:00:00,Aston Villa,Fulham,Under 12.5 corners,False,81.3,1.13,2026-10-31,1.0-1.0,False
 2026-11-01 16:30:00,Liverpool,Arsenal,Under 12.5 corners,False,82.6,1.11,2026-11-01,0.0-1.0,True
 2026-11-02 20:00:00,Newcastle,Everton,Más tiros totales: Newcastle,False,81.3,1.13,2026-11-02,0.0-1.0,True
+2026-11-06 20:00:00,Everton,Coventry,Doble oportunidad 1X + Under 13.5 corners,True,82.2,1.12,2026-11-06,,
