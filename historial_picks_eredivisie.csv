@@ -67,5 +67,10 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-01 15:45:00,Groningen,Sparta Rotterdam,Over 7.5 corners,False,85.8,1.06,2026-11-01,2-3,True
 2026-11-06 19:00:00,Willem II,Zwolle,Over 1.5 goles,False,80.3,1.15,2026-11-06,1-1,True
 2026-11-07 15:30:00,For Sittard,Telstar,Over 7.5 corners,False,87.2,1.05,2026-11-07,,
-2026-11-07 17:45:00,Den Haag,Sparta Rotterdam,Over 1.5 goles,False,82.7,1.11,2026-11-07,,
-2026-11-07 20:00:00,Excelsior,Go Ahead Eagles,Hándicap asiático +1.5: Excelsior,False,80.3,1.15,2026-11-07,,
+2026-11-07 17:45:00,Den Haag,Sparta Rotterdam,Over 1.5 goles,False,82.7,1.11,2026-11-07,3-1,True
+2026-11-07 20:00:00,Excelsior,Go Ahead Eagles,Hándicap asiático +1.5: Excelsior,False,80.3,1.15,2026-11-07,0-1,True
+2026-11-08 11:15:00,Heerenveen,Feyenoord,Más tiros totales: Feyenoord,False,80.2,1.15,2026-11-08,,
+2026-11-08 13:30:00,Twente,Ajax,Over 6.5 corners,False,80.5,1.14,2026-11-08,,
+2026-11-08 15:45:00,AZ Alkmaar,Groningen,Over 1.5 goles,False,81.6,1.12,2026-11-08,,
+2026-11-08 15:45:00,Cambuur,PSV Eindhoven,Over 2.5 goles + Over 5.5 corners,True,80.3,1.15,2026-11-08,,
+2026-11-08 19:00:00,Utrecht,Nijmegen,Hándicap asiático +1.5: Utrecht,False,83.7,1.1,2026-11-08,,

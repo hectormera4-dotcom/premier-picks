@@ -91,6 +91,11 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-02 19:45:00,Atalanta,Parma,Doble oportunidad 1X + Over 5.5 corners,True,81.0,1.14,2026-11-02,0.0-3.0,False
 2026-11-06 19:45:00,Venezia,Udinese,Over 6.5 corners,False,86.7,1.05,2026-11-06,,
 2026-11-07 14:00:00,Torino,Lecce,Over 6.5 corners,False,83.1,1.1,2026-11-07,,
-2026-11-07 14:00:00,Cagliari,Frosinone,Hándicap asiático +1.5: Cagliari,False,86.2,1.06,2026-11-07,,
+2026-11-07 14:00:00,Cagliari,Frosinone,Hándicap asiático +1.5: Cagliari,False,86.2,1.06,2026-11-07,1.0-0.0,True
 2026-11-07 17:00:00,Parma,Bologna,Under 10.5 corners,False,85.8,1.07,2026-11-07,,
-2026-11-07 19:45:00,Roma,Sassuolo,Over 1.5 goles,False,80.1,1.15,2026-11-07,,
+2026-11-07 19:45:00,Roma,Sassuolo,Over 1.5 goles,False,80.1,1.15,2026-11-07,3.0-0.0,True
+2026-11-08 11:30:00,Napoli,Lazio,Más tiros totales: Napoli,False,82.2,1.12,2026-11-08,,
+2026-11-08 14:00:00,Genoa,Milan,Under 11.5 corners,False,80.5,1.14,2026-11-08,,
+2026-11-08 14:00:00,Monza,Atalanta,Over 1.5 goles,False,80.3,1.15,2026-11-08,,
+2026-11-08 17:00:00,Inter,Como,Over 6.5 corners,False,81.3,1.13,2026-11-08,,
+2026-11-08 19:45:00,Fiorentina,Juventus,Hándicap asiático +1.5: Fiorentina,False,81.9,1.12,2026-11-08,,
