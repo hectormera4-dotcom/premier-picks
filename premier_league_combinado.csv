@@ -5029,13 +5029,13 @@ Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HC,AC,HY,AY,HST,AST,HF,AF,HS,AS,Referee
 31/10/2026,Tottenham,Crystal Palace,2.0,0.0,H,19.0,0.0,1.0,1.0,9.0,1.0,8.0,10.0,34.0,2.0,M Oliver
 01/11/2026,Liverpool,Arsenal,0.0,1.0,A,7.0,4.0,4.0,4.0,0.0,3.0,18.0,10.0,17.0,10.0,A Madley
 02/11/2026,Newcastle,Everton,0.0,1.0,A,4.0,5.0,4.0,2.0,2.0,5.0,13.0,9.0,17.0,16.0,J Brooks
-06/11/2026,Everton,Coventry,3.0,1.0,H,,,,,,,,,,,
-07/11/2026,Arsenal,Hull,1.0,0.0,H,,,,,,,,,,,
-07/11/2026,Fulham,Newcastle,1.0,1.0,D,,,,,,,,,,,
-07/11/2026,Leeds,Tottenham,1.0,0.0,H,,,,,,,,,,,
-07/11/2026,Nott'm Forest,Man City,3.0,1.0,H,,,,,,,,,,,
-08/11/2026,Brighton,Brentford,2.0,0.0,H,,,,,,,,,,,
-08/11/2026,Crystal Palace,Liverpool,1.0,3.0,A,,,,,,,,,,,
-08/11/2026,Ipswich,Bournemouth,1.0,2.0,A,,,,,,,,,,,
-08/11/2026,Man United,Aston Villa,4.0,4.0,D,,,,,,,,,,,
-08/11/2026,Sunderland,Chelsea,1.0,0.0,H,,,,,,,,,,,
+06/11/2026,Everton,Coventry,3.0,1.0,H,2.0,2.0,1.0,1.0,7.0,4.0,10.0,6.0,15.0,15.0,S Attwell
+07/11/2026,Arsenal,Hull,1.0,0.0,H,7.0,4.0,2.0,3.0,10.0,2.0,6.0,15.0,21.0,7.0,F Hallam
+07/11/2026,Fulham,Newcastle,1.0,1.0,D,3.0,3.0,0.0,5.0,5.0,5.0,9.0,13.0,11.0,9.0,R Jones
+07/11/2026,Leeds,Tottenham,1.0,0.0,H,6.0,4.0,1.0,2.0,4.0,4.0,11.0,16.0,16.0,7.0,J Brooks
+07/11/2026,Nott'm Forest,Man City,3.0,1.0,H,3.0,7.0,0.0,2.0,5.0,4.0,13.0,7.0,11.0,12.0,S Barrott
+08/11/2026,Brighton,Brentford,2.0,0.0,H,7.0,3.0,4.0,2.0,6.0,0.0,11.0,7.0,20.0,5.0,M Oliver
+08/11/2026,Crystal Palace,Liverpool,1.0,3.0,A,4.0,7.0,2.0,4.0,7.0,8.0,10.0,18.0,19.0,20.0,T Harrington
+08/11/2026,Ipswich,Bournemouth,1.0,2.0,A,2.0,7.0,2.0,3.0,2.0,4.0,6.0,20.0,10.0,15.0,S Hooper
+08/11/2026,Man United,Aston Villa,4.0,4.0,D,8.0,1.0,1.0,1.0,9.0,6.0,18.0,9.0,26.0,12.0,C Kavanagh
+08/11/2026,Sunderland,Chelsea,1.0,0.0,H,2.0,2.0,5.0,4.0,2.0,4.0,17.0,8.0,9.0,10.0,J Gillett
