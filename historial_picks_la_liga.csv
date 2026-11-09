@@ -98,7 +98,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-07 15:15:00,Espanyol,La Coruna,Hándicap asiático +1.5: La Coruna,False,88.1,1.03,2026-11-07,0-0,True
 2026-11-07 17:30:00,Osasuna,Ath Bilbao,Under 11.5 corners,False,81.6,1.13,2026-11-07,,
 2026-11-07 20:00:00,Valencia,Real Madrid,Hándicap asiático +0.5: Real Madrid,False,84.6,1.08,2026-11-07,0-3,True
-2026-11-08 13:00:00,Elche,Betis,Hándicap asiático +1.5: Elche,False,80.4,1.14,2026-11-08,,
+2026-11-08 13:00:00,Elche,Betis,Hándicap asiático +1.5: Elche,False,80.4,1.14,2026-11-08,0-2,False
 2026-11-08 15:15:00,Sociedad,Vallecano,Over 7.5 corners,False,84.5,1.08,2026-11-08,,
 2026-11-08 17:30:00,Celta,Levante,Under 11.5 corners,False,84.0,1.09,2026-11-08,,
 2026-11-08 17:30:00,Villarreal,Getafe,Over 6.5 corners,False,80.5,1.14,2026-11-08,,
