@@ -74,3 +74,8 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-08 15:45:00,AZ Alkmaar,Groningen,Over 1.5 goles,False,81.6,1.12,2026-11-08,4-3,True
 2026-11-08 15:45:00,Cambuur,PSV Eindhoven,Over 2.5 goles + Over 5.5 corners,True,80.3,1.15,2026-11-08,2-5,False
 2026-11-08 19:00:00,Utrecht,Nijmegen,Hándicap asiático +1.5: Utrecht,False,83.7,1.1,2026-11-08,2-3,True
+2026-11-21 15:30:00,Nijmegen,PSV Eindhoven,Over 1.5 goles + Over 5.5 corners,True,81.4,1.13,2026-11-21,,
+2026-11-21 17:45:00,Feyenoord,Excelsior,Over 1.5 goles + Más corners: Feyenoord,True,81.6,1.13,2026-11-21,,
+2026-11-21 17:45:00,Utrecht,Cambuur,Over 1.5 goles,False,80.6,1.14,2026-11-21,,
+2026-11-21 20:00:00,Telstar,Zwolle,Más tiros totales: Telstar,False,81.2,1.13,2026-11-21,,
+2026-11-21 20:00:00,Groningen,Heerenveen,Over 7.5 corners,False,82.0,1.12,2026-11-21,,
