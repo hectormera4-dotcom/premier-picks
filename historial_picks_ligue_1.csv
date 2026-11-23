@@ -85,6 +85,6 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-21 19:45:00,Lens,Toulouse,Over 6.5 corners,False,82.3,1.12,2026-11-21,,
 2026-11-21 19:45:00,Lille,Lyon,Under 12.5 corners,False,81.6,1.13,2026-11-21,,
 2026-11-21 19:45:00,Strasbourg,Brest,Over 6.5 corners,False,82.0,1.12,2026-11-21,,
-2026-11-22 14:00:00,Paris FC,Angers,Doble oportunidad 1X,False,82.9,1.11,2026-11-22,,
-2026-11-22 16:15:00,Lorient,Rennes,Hándicap asiático +1.5: Lorient,False,82.5,1.11,2026-11-22,,
+2026-11-22 14:00:00,Paris FC,Angers,Doble oportunidad 1X,False,82.9,1.11,2026-11-22,4.0-0.0,True
+2026-11-22 16:15:00,Lorient,Rennes,Hándicap asiático +1.5: Lorient,False,82.5,1.11,2026-11-22,1.0-1.0,True
 2026-11-22 19:45:00,Marseille,Le Mans,Doble oportunidad 1X + Under 12.5 corners,True,80.0,1.15,2026-11-22,,

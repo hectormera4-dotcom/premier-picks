@@ -111,4 +111,5 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-22 13:00:00,Barcelona,Villarreal,Over 1.5 goles + Over 5.5 corners,True,80.8,1.14,2026-11-22,,
 2026-11-22 15:15:00,Santander,Sociedad,Over 1.5 goles + Over 7.5 corners,True,81.7,1.12,2026-11-22,,
 2026-11-22 17:30:00,Osasuna,Malaga,Under 12.5 corners,False,82.3,1.12,2026-11-22,,
-2026-11-22 20:00:00,Getafe,Ath Madrid,Hándicap asiático +1.5: Getafe,False,81.8,1.12,2026-11-22,,
+2026-11-22 20:00:00,Getafe,Ath Madrid,Hándicap asiático +1.5: Getafe,False,81.8,1.12,2026-11-22,0-3,False
+2026-11-23 20:00:00,Levante,Elche,Over 6.5 corners,False,80.8,1.14,2026-11-23,,
