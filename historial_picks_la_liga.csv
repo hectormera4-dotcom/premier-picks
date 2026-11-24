@@ -104,12 +104,12 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-08 17:30:00,Villarreal,Getafe,Over 6.5 corners,False,80.5,1.14,2026-11-08,2-0,True
 2026-11-08 20:00:00,Ath Madrid,Barcelona,Under 12.5 corners,False,80.6,1.14,2026-11-08,1-2,True
 2026-11-20 20:00:00,Ath Bilbao,Espanyol,Hándicap asiático +1.5: Ath Bilbao,False,90.8,1.01,2026-11-20,0-1,True
-2026-11-21 13:00:00,Alaves,La Coruna,Over 7.5 corners,False,86.9,1.05,2026-11-21,,
-2026-11-21 15:15:00,Vallecano,Valencia,Over 7.5 corners,False,80.4,1.14,2026-11-21,,
+2026-11-21 13:00:00,Alaves,La Coruna,Over 7.5 corners,False,86.9,1.05,2026-11-21,3-1,True
+2026-11-21 15:15:00,Vallecano,Valencia,Over 7.5 corners,False,80.4,1.14,2026-11-21,0-1,True
 2026-11-21 17:30:00,Sevilla,Betis,Hándicap asiático +1.5: Sevilla,False,82.8,1.11,2026-11-21,1-1,True
-2026-11-21 20:00:00,Real Madrid,Celta,Over 6.5 corners,False,83.1,1.1,2026-11-21,,
-2026-11-22 13:00:00,Barcelona,Villarreal,Over 1.5 goles + Over 5.5 corners,True,80.8,1.14,2026-11-22,,
-2026-11-22 15:15:00,Santander,Sociedad,Over 1.5 goles + Over 7.5 corners,True,81.7,1.12,2026-11-22,,
-2026-11-22 17:30:00,Osasuna,Malaga,Under 12.5 corners,False,82.3,1.12,2026-11-22,,
+2026-11-21 20:00:00,Real Madrid,Celta,Over 6.5 corners,False,83.1,1.1,2026-11-21,2-1,True
+2026-11-22 13:00:00,Barcelona,Villarreal,Over 1.5 goles + Over 5.5 corners,True,80.8,1.14,2026-11-22,3-2,True
+2026-11-22 15:15:00,Santander,Sociedad,Over 1.5 goles + Over 7.5 corners,True,81.7,1.12,2026-11-22,3-2,True
+2026-11-22 17:30:00,Osasuna,Malaga,Under 12.5 corners,False,82.3,1.12,2026-11-22,1-0,True
 2026-11-22 20:00:00,Getafe,Ath Madrid,Hándicap asiático +1.5: Getafe,False,81.8,1.12,2026-11-22,0-3,False
-2026-11-23 20:00:00,Levante,Elche,Over 6.5 corners,False,80.8,1.14,2026-11-23,,
+2026-11-23 20:00:00,Levante,Elche,Over 6.5 corners,False,80.8,1.14,2026-11-23,1-1,False

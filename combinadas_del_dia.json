@@ -4,38 +4,87 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-11-23 20:00:00",
-        "local": "Brentford",
-        "visitante": "Everton",
-        "escudo_local": "https://crests.football-data.org/402.png",
-        "escudo_visitante": "https://crests.football-data.org/62.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 86.4,
-        "liga": "premier_league"
+        "fecha": "2026-11-24 19:45:00",
+        "local": "Portsmouth",
+        "visitante": "West Ham",
+        "escudo_local": "https://crests.football-data.org/325.png",
+        "escudo_visitante": "https://crests.football-data.org/563.png",
+        "pick_recomendado": "Over 1.5 goles + Over 6.5 corners",
+        "pick_probabilidad": 80.6,
+        "liga": "championship"
       },
       {
-        "fecha": "2026-11-23 19:45:00",
-        "local": "Monza",
-        "visitante": "Fiorentina",
-        "escudo_local": "https://crests.football-data.org/5911.png",
-        "escudo_visitante": "https://crests.football-data.org/99.png",
-        "pick_recomendado": "Under 10.5 corners",
-        "pick_probabilidad": 85.0,
-        "liga": "serie_a"
+        "fecha": "2026-11-24 19:45:00",
+        "local": "Middlesbrough",
+        "visitante": "Swansea",
+        "escudo_local": "https://crests.football-data.org/343.png",
+        "escudo_visitante": "https://crests.football-data.org/72.png",
+        "pick_recomendado": "Hándicap asiático +0.5: Middlesbrough",
+        "pick_probabilidad": 80.4,
+        "liga": "championship"
       },
       {
-        "fecha": "2026-11-23 20:00:00",
-        "local": "Levante",
-        "visitante": "Elche",
-        "escudo_local": "https://crests.football-data.org/88.png",
-        "escudo_visitante": "https://crests.football-data.org/285.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 80.8,
-        "liga": "la_liga"
+        "fecha": "2026-11-24 19:45:00",
+        "local": "Charlton",
+        "visitante": "Lincoln",
+        "escudo_local": "https://crests.football-data.org/348.png",
+        "escudo_visitante": "https://crests.football-data.org/1126.png",
+        "pick_recomendado": "Over 8.5 corners",
+        "pick_probabilidad": 80.4,
+        "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 59.3,
-    "cuota_combinada": 1.59,
-    "liga": "mixta"
+    "probabilidad_combinada": 52.1,
+    "cuota_combinada": 1.82,
+    "liga": "championship"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-11-24 19:45:00",
+        "local": "Bristol City",
+        "visitante": "Wrexham",
+        "escudo_local": "https://crests.football-data.org/387.png",
+        "escudo_visitante": "https://crests.football-data.org/404.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 86.5,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-11-24 19:45:00",
+        "local": "Norwich",
+        "visitante": "QPR",
+        "escudo_local": "https://crests.football-data.org/68.png",
+        "escudo_visitante": "https://crests.football-data.org/69.png",
+        "pick_recomendado": "Under 13.5 corners",
+        "pick_probabilidad": 85.0,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-11-24 19:45:00",
+        "local": "Cardiff",
+        "visitante": "Preston",
+        "escudo_local": "https://crests.football-data.org/715.png",
+        "escudo_visitante": "https://crests.football-data.org/1081.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 82.1,
+        "liga": "championship"
+      },
+      {
+        "fecha": "2026-11-24 20:00:00",
+        "local": "Wolves",
+        "visitante": "Derby",
+        "escudo_local": "https://crests.football-data.org/76.png",
+        "escudo_visitante": "https://crests.football-data.org/342.png",
+        "pick_recomendado": "Doble oportunidad 1X",
+        "pick_probabilidad": 81.0,
+        "liga": "championship"
+      }
+    ],
+    "probabilidad_combinada": 48.9,
+    "cuota_combinada": 1.95,
+    "liga": "championship"
   }
 ]
