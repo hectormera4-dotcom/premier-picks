@@ -4,87 +4,38 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-11-24 19:45:00",
-        "local": "Portsmouth",
-        "visitante": "West Ham",
-        "escudo_local": "https://crests.football-data.org/325.png",
-        "escudo_visitante": "https://crests.football-data.org/563.png",
-        "pick_recomendado": "Over 1.5 goles + Over 6.5 corners",
-        "pick_probabilidad": 80.6,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-11-24 19:45:00",
-        "local": "Middlesbrough",
-        "visitante": "Swansea",
-        "escudo_local": "https://crests.football-data.org/343.png",
-        "escudo_visitante": "https://crests.football-data.org/72.png",
-        "pick_recomendado": "Hándicap asiático +0.5: Middlesbrough",
-        "pick_probabilidad": 80.4,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-11-24 19:45:00",
-        "local": "Charlton",
-        "visitante": "Lincoln",
-        "escudo_local": "https://crests.football-data.org/348.png",
-        "escudo_visitante": "https://crests.football-data.org/1126.png",
-        "pick_recomendado": "Over 8.5 corners",
-        "pick_probabilidad": 80.4,
-        "liga": "championship"
-      }
-    ],
-    "probabilidad_combinada": 52.1,
-    "cuota_combinada": 1.82,
-    "liga": "championship"
-  },
-  {
-    "nombre": "Combinada #2",
-    "es_gratis": false,
-    "partidos": [
-      {
-        "fecha": "2026-11-24 19:45:00",
-        "local": "Bristol City",
-        "visitante": "Wrexham",
-        "escudo_local": "https://crests.football-data.org/387.png",
-        "escudo_visitante": "https://crests.football-data.org/404.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 86.5,
-        "liga": "championship"
-      },
-      {
-        "fecha": "2026-11-24 19:45:00",
-        "local": "Norwich",
-        "visitante": "QPR",
-        "escudo_local": "https://crests.football-data.org/68.png",
-        "escudo_visitante": "https://crests.football-data.org/69.png",
+        "fecha": "2026-11-25 19:45:00",
+        "local": "Watford",
+        "visitante": "Blackburn",
+        "escudo_local": "https://crests.football-data.org/346.png",
+        "escudo_visitante": "https://crests.football-data.org/59.png",
         "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 85.0,
+        "pick_probabilidad": 86.0,
         "liga": "championship"
       },
       {
-        "fecha": "2026-11-24 19:45:00",
-        "local": "Cardiff",
-        "visitante": "Preston",
-        "escudo_local": "https://crests.football-data.org/715.png",
-        "escudo_visitante": "https://crests.football-data.org/1081.png",
-        "pick_recomendado": "Over 6.5 corners",
-        "pick_probabilidad": 82.1,
+        "fecha": "2026-11-25 19:45:00",
+        "local": "Bolton",
+        "visitante": "West Brom",
+        "escudo_local": "https://crests.football-data.org/60.png",
+        "escudo_visitante": "https://crests.football-data.org/74.png",
+        "pick_recomendado": "Over 8.5 corners",
+        "pick_probabilidad": 83.5,
         "liga": "championship"
       },
       {
-        "fecha": "2026-11-24 20:00:00",
-        "local": "Wolves",
-        "visitante": "Derby",
-        "escudo_local": "https://crests.football-data.org/76.png",
-        "escudo_visitante": "https://crests.football-data.org/342.png",
+        "fecha": "2026-11-25 19:45:00",
+        "local": "Burnley",
+        "visitante": "Birmingham",
+        "escudo_local": "https://crests.football-data.org/328.png",
+        "escudo_visitante": "https://crests.football-data.org/332.png",
         "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 81.0,
+        "pick_probabilidad": 80.9,
         "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 48.9,
-    "cuota_combinada": 1.95,
+    "probabilidad_combinada": 58.1,
+    "cuota_combinada": 1.62,
     "liga": "championship"
   }
 ]
