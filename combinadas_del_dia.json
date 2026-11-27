@@ -4,38 +4,106 @@
     "es_gratis": true,
     "partidos": [
       {
-        "fecha": "2026-11-25 19:45:00",
-        "local": "Watford",
-        "visitante": "Blackburn",
-        "escudo_local": "https://crests.football-data.org/346.png",
-        "escudo_visitante": "https://crests.football-data.org/59.png",
-        "pick_recomendado": "Under 13.5 corners",
-        "pick_probabilidad": 86.0,
-        "liga": "championship"
+        "fecha": "2026-11-27 20:00:00",
+        "local": "Levante",
+        "visitante": "Santander",
+        "escudo_local": "https://crests.football-data.org/88.png",
+        "escudo_visitante": "https://crests.football-data.org/5335.png",
+        "pick_recomendado": "Doble oportunidad 1X + Over 1.5 goles",
+        "pick_probabilidad": 80.5,
+        "liga": "la_liga"
       },
       {
-        "fecha": "2026-11-25 19:45:00",
-        "local": "Bolton",
-        "visitante": "West Brom",
-        "escudo_local": "https://crests.football-data.org/60.png",
-        "escudo_visitante": "https://crests.football-data.org/74.png",
-        "pick_recomendado": "Over 8.5 corners",
-        "pick_probabilidad": 83.5,
-        "liga": "championship"
-      },
+        "fecha": "2026-11-27 19:30:00",
+        "local": "Werder Bremen",
+        "visitante": "M'gladbach",
+        "escudo_local": "https://crests.football-data.org/12.png",
+        "escudo_visitante": "https://crests.football-data.org/18.png",
+        "pick_recomendado": "Over 6.5 corners",
+        "pick_probabilidad": 80.0,
+        "liga": "bundesliga"
+      }
+    ],
+    "probabilidad_combinada": 64.4,
+    "cuota_combinada": 1.45,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #2",
+    "es_gratis": false,
+    "partidos": [
       {
-        "fecha": "2026-11-25 19:45:00",
-        "local": "Burnley",
-        "visitante": "Birmingham",
-        "escudo_local": "https://crests.football-data.org/328.png",
-        "escudo_visitante": "https://crests.football-data.org/332.png",
+        "fecha": "2026-11-27 19:00:00",
+        "local": "Groningen",
+        "visitante": "Willem II",
+        "escudo_local": "https://crests.football-data.org/677.png",
+        "escudo_visitante": "https://crests.football-data.org/672.png",
         "pick_recomendado": "Doble oportunidad 1X",
-        "pick_probabilidad": 80.9,
+        "pick_probabilidad": 84.4,
+        "liga": "eredivisie"
+      },
+      {
+        "fecha": "2026-11-27 19:45:00",
+        "local": "Venezia",
+        "visitante": "Bologna",
+        "escudo_local": "https://crests.football-data.org/454.png",
+        "escudo_visitante": "https://crests.football-data.org/103.png",
+        "pick_recomendado": "Más tiros totales: Bologna",
+        "pick_probabilidad": 81.9,
+        "liga": "serie_a"
+      },
+      {
+        "fecha": "2026-11-27 20:00:00",
+        "local": "Southampton",
+        "visitante": "Middlesbrough",
+        "escudo_local": "https://crests.football-data.org/340.png",
+        "escudo_visitante": "https://crests.football-data.org/343.png",
+        "pick_recomendado": "Over 7.5 corners",
+        "pick_probabilidad": 81.8,
         "liga": "championship"
       }
     ],
-    "probabilidad_combinada": 58.1,
-    "cuota_combinada": 1.62,
-    "liga": "championship"
+    "probabilidad_combinada": 56.5,
+    "cuota_combinada": 1.67,
+    "liga": "mixta"
+  },
+  {
+    "nombre": "Combinada #3",
+    "es_gratis": false,
+    "partidos": [
+      {
+        "fecha": "2026-11-27 19:45:00",
+        "local": "Brest",
+        "visitante": "Paris FC",
+        "escudo_local": "https://crests.football-data.org/512.png",
+        "escudo_visitante": "https://crests.football-data.org/1045.png",
+        "pick_recomendado": "Under 11.5 corners",
+        "pick_probabilidad": 81.6,
+        "liga": "ligue_1"
+      },
+      {
+        "fecha": "2026-11-27 20:15:00",
+        "local": "Maritimo",
+        "visitante": "Nacional",
+        "escudo_local": "https://crests.football-data.org/5575.png",
+        "escudo_visitante": "https://crests.football-data.org/5529.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 81.4,
+        "liga": "primeira_liga"
+      },
+      {
+        "fecha": "2026-11-27 20:00:00",
+        "local": "Nott'm Forest",
+        "visitante": "Chelsea",
+        "escudo_local": "https://crests.football-data.org/351.png",
+        "escudo_visitante": "https://crests.football-data.org/61.png",
+        "pick_recomendado": "Under 12.5 corners",
+        "pick_probabilidad": 81.3,
+        "liga": "premier_league"
+      }
+    ],
+    "probabilidad_combinada": 54.0,
+    "cuota_combinada": 1.75,
+    "liga": "mixta"
   }
 ]

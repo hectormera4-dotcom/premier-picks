@@ -166,15 +166,16 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-21 15:00:00,West Ham,Preston,Over 1.5 goles + Over 6.5 corners,True,81.5,1.13,2026-11-21,1.0-1.0,True
 2026-11-21 15:00:00,Wolves,Charlton,Doble oportunidad 1X + Más corners: Wolves,True,80.7,1.14,2026-11-21,2.0-1.0,True
 2026-11-22 12:00:00,Burnley,Blackburn,Under 12.5 corners,False,81.5,1.13,2026-11-22,2.0-2.0,True
-2026-11-24 19:45:00,Cardiff,Preston,Over 6.5 corners,False,82.1,1.12,2026-11-24,,
+2026-11-24 19:45:00,Cardiff,Preston,Over 6.5 corners,False,82.1,1.12,2026-11-24,0.0-4.0,True
 2026-11-24 19:45:00,Middlesbrough,Swansea,Hándicap asiático +0.5: Middlesbrough,False,80.4,1.14,2026-11-24,2.0-1.0,True
-2026-11-24 19:45:00,Portsmouth,West Ham,Over 1.5 goles + Over 6.5 corners,True,80.6,1.14,2026-11-24,,
+2026-11-24 19:45:00,Portsmouth,West Ham,Over 1.5 goles + Over 6.5 corners,True,80.6,1.14,2026-11-24,1.0-0.0,False
 2026-11-24 19:45:00,Sheffield United,Southampton,Over 1.5 goles,False,80.2,1.15,2026-11-24,1.0-1.0,True
-2026-11-24 19:45:00,Charlton,Lincoln,Over 8.5 corners,False,80.4,1.14,2026-11-24,,
-2026-11-24 19:45:00,Bristol City,Wrexham,Over 6.5 corners,False,86.5,1.06,2026-11-24,,
-2026-11-24 19:45:00,Norwich,QPR,Under 13.5 corners,False,85.0,1.08,2026-11-24,,
+2026-11-24 19:45:00,Charlton,Lincoln,Over 8.5 corners,False,80.4,1.14,2026-11-24,4.0-0.0,True
+2026-11-24 19:45:00,Bristol City,Wrexham,Over 6.5 corners,False,86.5,1.06,2026-11-24,1.0-1.0,True
+2026-11-24 19:45:00,Norwich,QPR,Under 13.5 corners,False,85.0,1.08,2026-11-24,1.0-1.0,True
 2026-11-24 20:00:00,Wolves,Derby,Doble oportunidad 1X,False,81.0,1.13,2026-11-24,3.0-0.0,True
-2026-11-25 19:45:00,Watford,Blackburn,Under 13.5 corners,False,86.0,1.06,2026-11-25,,
-2026-11-25 19:45:00,Bolton,West Brom,Over 8.5 corners,False,83.5,1.1,2026-11-25,,
+2026-11-25 19:45:00,Watford,Blackburn,Under 13.5 corners,False,86.0,1.06,2026-11-25,0.0-1.0,True
+2026-11-25 19:45:00,Bolton,West Brom,Over 8.5 corners,False,83.5,1.1,2026-11-25,1.0-3.0,False
 2026-11-25 19:45:00,Burnley,Birmingham,Doble oportunidad 1X,False,80.9,1.14,2026-11-25,0.0-2.0,False
-2026-11-25 20:00:00,Stoke,Millwall,Under 13.5 corners,False,80.5,1.14,2026-11-25,,
+2026-11-25 20:00:00,Stoke,Millwall,Under 13.5 corners,False,80.5,1.14,2026-11-25,2.0-1.0,True
+2026-11-27 20:00:00,Southampton,Middlesbrough,Over 7.5 corners,False,81.8,1.12,2026-11-27,,
