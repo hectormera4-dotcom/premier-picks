@@ -83,4 +83,7 @@ fecha_partido,local,visitante,pick_recomendado,es_combo,pick_probabilidad,pick_c
 2026-11-22 13:30:00,Sparta Rotterdam,AZ Alkmaar,Más corners: AZ Alkmaar,False,82.6,1.11,2026-11-22,1-5,False
 2026-11-22 13:30:00,Ajax,Den Haag,Más tiros a puerta: Ajax,False,80.1,1.15,2026-11-22,3-0,True
 2026-11-22 15:45:00,Go Ahead Eagles,For Sittard,Hándicap asiático +0.5: Go Ahead Eagles,False,81.0,1.13,2026-11-22,0-1,False
-2026-11-27 19:00:00,Groningen,Willem II,Doble oportunidad 1X,False,84.4,1.08,2026-11-27,,
+2026-11-27 19:00:00,Groningen,Willem II,Doble oportunidad 1X,False,84.4,1.08,2026-11-27,1-1,True
+2026-11-28 15:30:00,Excelsior,Telstar,Hándicap asiático +1.5: Excelsior,False,80.9,1.14,2026-11-28,,
+2026-11-28 17:45:00,PSV Eindhoven,Go Ahead Eagles,Over 1.5 goles + Over 7.5 corners,True,80.5,1.14,2026-11-28,,
+2026-11-28 20:00:00,Cambuur,Sparta Rotterdam,Under 12.5 corners,False,83.3,1.1,2026-11-28,,
